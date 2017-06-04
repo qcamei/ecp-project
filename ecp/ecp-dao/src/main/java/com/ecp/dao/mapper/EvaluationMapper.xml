@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.EvaluationMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Evaluation" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="by_user_id" property="byUserId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="resource" property="resource" jdbcType="VARCHAR" />
+    <result column="sku_id" property="skuId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, by_user_id, content, create_time, item_id, modify_time, order_id, resource, sku_id, 
+    user_id
+  </sql>
+</mapper>

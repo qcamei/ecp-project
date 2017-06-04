@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.CategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Category" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="cid" property="cid" jdbcType="BIGINT" />
+    <result column="c_name" property="cName" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="has_leaf" property="hasLeaf" jdbcType="INTEGER" />
+    <result column="home_show" property="homeShow" jdbcType="INTEGER" />
+    <result column="lev" property="lev" jdbcType="INTEGER" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="parent_cid" property="parentCid" jdbcType="BIGINT" />
+    <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    cid, c_name, created, has_leaf, home_show, lev, modified, parent_cid, sort_number, 
+    status
+  </sql>
+  
+  <select id="getCategoryByKeywords" resultMap="BaseResultMap">
+  	select * from item_category 
+  	<where>
+  		<foreach collection="keywords" item="keyword" index="index" open="(" close=")" separator=" or ">
+				c_name like  CONCAT('%',#{keyword},'%' )
+		</foreach>      
+  	</where>
+  	AND lev=3
+  </select>
+  
+  
+  
+  
+</mapper>

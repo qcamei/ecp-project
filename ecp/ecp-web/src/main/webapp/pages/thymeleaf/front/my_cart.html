@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>我的购物车</title>
+<meta name="context-path" th:content="@{/}" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
+	rel="stylesheet" />
+
+<script type="text/javascript"
+	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+
+<style>
+/* 购物车条目未选定时 */
+.cartItem {
+	background: white
+}
+
+/* 购物车条目选定时  */
+.cartItem.selected {
+	background: lightgray;
+}
+</style>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column" style="font-size: 20px; height: 50px">
+				<h3>我的购物车</h3>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-12 column" style="height: 50px">
+				<h4>
+					全部商品(<span th:text="${itemNum}"></span>)
+				</h4>
+				<!-- 商品类型数量  -->
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<table class="table">
+					<thead>
+						<tr>
+							<th><input type="checkbox" class="select_all" /> <label
+								for="1">全选</label></th>
+							<th>商品</th>
+							<th>规格</th>
+							<th>单价</th>
+							<th>数量</th>
+							<th>小计</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="cartItem:${cartItemList}"
+							th:attr="id='cartitem_'+${cartItem.itemId}+'-'+${cartItem.skuId}"
+							class="cartItem">
+							<td><input type="checkbox"
+								th:attr="data-bind=${cartItem.itemId}+'-'+${cartItem.skuId},
+							data-order=${cartItem.cid}+'|'+${cartItem.itemId}+'|'+${cartItem.skuId}+'|'+${cartItem.skuName} +'|'+${cartItem.skuPrice}"
+								class="cart_item_selector" /></td>
+							<td><div class="col-md-4 column">
+									<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
+										target="_blank"
+									>
+							
+									<img alt="80x80" height=80 weight=80
+										th:src="@{${cartItem.skuPicture}}" />
+										
+									</a>	
+										
+								</div>
+								<div class="col-md-8 column">
+									<dl>
+										<!-- <dt>产品名称</dt> -->
+										<a  th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
+											target="_blank" >
+											<dd th:text="${cartItem.itemName}">此处放置产品名称</dd>
+										</a>
+									</dl>
+								</div></td>
+							<td>
+								<!-- 规格说明 --> <span
+								th:each="skuAttrValueName:${cartItem.skuAttrValueNames}">
+									<span th:text="${skuAttrValueName}">销售属性值</span><br>
+							</span>
+							</td>
+							<td th:text="'￥'+${cartItem.skuPrice}"></td>
+							<td>
+								<!-- <div class="quantity-form" promoid="199666805">
+									<a href="javascript:void(0);" clstag="clickcart|keycount|xincart|cart_num_down" class="decrement " id="decrement_8888_1178877_2_13_199666805">-</a>
+										<input autocomplete="off" class="itxt" value="2" id="changeQuantity_8888_1178877_2_13_0_199666805" minnum="1" type="text">
+									<a href="javascript:void(0);" clstag="clickcart|keycount|xincart|cart_num_up" class="increment" id="increment_8888_1178877_2_13_0_199666805">+</a>
+								</div> --> <input
+								th:attr="id='num_'+${cartItem.itemId}+'-'+${cartItem.skuId}"
+								type="text" name="数量" th:value="${cartItem.quantity}" /></br> <span>有货</span>
+							</td>
+							<td><label
+								th:text="'￥'+${cartItem.skuPrice}* ${cartItem.quantity}">小计：5188</label></br>
+								<span
+								th:text="${cartItem.skuWeight}*${cartItem.quantity}+${cartItem.weightUnit}">小计：重量：5.6kg</span>
+							</td>
+							<td><a href="#">删除</a></br> <a href="#">移到我的关注</a></br> <a href="#">加到我的关注</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!--  -->
+
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row clearfix">
+					<div class="col-md-6 column">
+						<div class="row clearfix">
+							<div class="col-md-4 column">
+								<input type="checkbox" class="select_all" /> <label>全选</label>
+							</div>
+							<div class="col-md-8 column">
+
+								<a href="#none"
+									clstag="clickcart|keycount|xincart|cart_somesku_del"
+									class="remove-batch">删除选中的商品</a> <a href="#none"
+									class="follow-batch"
+									clstag="clickcart|keycount|xincart|cart_somesku_guanzhu">移到我的关注</a>
+								<a class="J_clr_nosale" href="#none"
+									clstag="pageclick|keycount|201508251|23">清除下柜商品</a>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6 column">
+						<div class="row clearfix">
+							<div class="col-md-4 column">
+								已选择<strong id="selected_count" style="font-size: 20px">0</strong>件商品<b
+									class="up"
+									clstag="clickcart|keycount|xincart|cart_thumbnailOpen"></b>
+
+							</div>
+							<div class="col-md-4 column">
+
+								<span class="txt txt-new">总价：</span> <span
+									class="price sumPrice"><strong id="amount">0</strong></span>
+								<!-- <b	class="ml5 price-tips"></b>  <br> <span class="txt">已节省：</span>
+										<span class="price totalRePrice">-¥0.00</span> -->
+
+							</div>
+							<div class="col-md-4 column">
+								<a href="javascript:void(0);" onclick="return false;"
+									clstag="clickcart|keycount|xincart|cart_gotoOrder"
+									id="BtnAddOrder" class="submit-btn btn btn-primary"
+									data-bind="1">去结算<b></b></a>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		//上下文信息  
+		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
+		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
+				BASE_CONTEXT_PATH.length - 1);
+
+		
+
+		function myFunction() {
+			return "我在这写点东西...";
+		}
+
+		/*
+			设置己选数量
+		 */
+		function selectedCount() {
+			//已选商品计数
+			var selectedCounter = 0;
+			$(".cart_item_selector").each(function(index, val) {
+				if (this.checked)
+					selectedCounter = selectedCounter + 1;
+			});
+			$("#selected_count").text(selectedCounter); //设置已选数
+		}
+
+		/*
+			计算所选sku的总金额
+			返回总金额
+		 */
+		function calcAmount() {
+
+			var itemArr = new Array();
+			var amount = 0.0;
+
+			//扫描用户己选SKU
+			$(".cart_item_selector").each(function(index, val) {
+				if (this.checked) { //对于己选商品
+					var surfix = $(this).attr("data-bind");
+					var prefix = "num_";
+
+					var dataOrder = $(this).attr("data-order");
+					var dataArr = dataOrder.split("|");
+					var item = new Object();
+					item.cid = dataArr[0];
+					item.itemId = dataArr[1];
+					item.skuId = dataArr[2];
+					item.skuName = dataArr[3];
+					item.skuPrice = dataArr[4];
+
+					var numId = prefix + surfix;
+					item.skuNum = $('#' + numId).val(); //sku 个数
+
+					amount = amount + item.skuPrice * item.skuNum;
+
+				}
+
+			}); //end of .cart_item_selector		
+
+			return amount; //返回总金额
+		}
+
+		function displayAmount(amount) {
+			$("#amount").text(amount);
+		}
+
+		/*
+			订单：增加条目
+			itemArr:条目数组
+		 */
+		function addtoOrder(itemArr) {
+			var logined = false;
+			var urlStr = BASE_CONTEXT_PATH + "/front/order/add"; // 需要提交的 url
+
+			//alert("url is:"+urlStr);
+			$.ajax({
+				type : "POST", // 提交方式 get/post
+				url : urlStr,
+				contentType : "application/json", //必须有  
+				/* dataType: "json", *///表示返回值类型，不必须			
+				data : JSON.stringify(itemArr),
+				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+					console.log(res);
+					if (res != null) {
+						var obj = $.parseJSON(res);
+						alert("message:" + obj.message);
+						if (obj.message == "added") {
+							alert("已形成订单");
+						} else {
+							//处理其它标志
+						}
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					/*弹出jqXHR对象的信息*/
+					alert(jqXHR.responseText);
+					alert(jqXHR.status);
+					alert(jqXHR.readyState);
+					alert(jqXHR.statusText);
+					/*弹出其他两个参数的信息*/
+					alert(textStatus);
+					alert(errorThrown);
+
+				}
+			});
+		}
+
+		$(function() {
+
+			//当用户点击前面的checkbox时处理
+			//checkbox默认值为未选状态
+			$(".cart_item_selector").on('click', function(e) {
+				var prefix = "cartitem_"
+				var surfix = $(this).attr("data-bind");
+				var rowId = prefix + surfix;
+
+				if (this.checked) {
+					$('#' + rowId).addClass("selected");
+				} else {
+					$('#' + rowId).removeClass("selected");
+				} //end of else
+
+				selectedCount(); //己选商品计数
+
+				var amount = calcAmount();
+				displayAmount(amount);
+
+			});
+
+			/*
+				有两个select all checkbox，需要做同步处理
+			 */
+			$(".select_all").on('click', function(e) {
+				var prefix = "cartitem_";
+
+				if (this.checked) {
+					$(".cart_item_selector").each(function(index, val) {
+						this.checked = true;
+						var surfix = $(this).attr("data-bind");
+						var rowId = prefix + surfix;
+						$('#' + rowId).addClass("selected");
+					});
+
+					//置另一个全选checkbox为 true
+					$(".select_all").each(function(index, val) {
+						this.checked = true;
+					});
+				} else {
+					$(".cart_item_selector").each(function(index, val) {
+						this.checked = false;
+						var surfix = $(this).attr("data-bind");
+						var rowId = prefix + surfix;
+						$('#' + rowId).removeClass("selected");
+					});
+
+					//置另一个全选checkbox为 false
+					$(".select_all").each(function(index, val) {
+						this.checked = false;
+					});
+
+				} //end of else
+
+				selectedCount(); //己选商品计数	
+
+				var amount = calcAmount();
+				displayAmount(amount);
+
+			});
+
+			/*
+				【结算】按钮处理
+			 */
+			$("#BtnAddOrder").on('click', function(e) {
+				var itemArr = new Array();
+
+				//扫描用户己选SKU
+				$(".cart_item_selector").each(function(index, val) {
+					if (this.checked) { //对于己选商品
+						var surfix = $(this).attr("data-bind");
+						var prefix = "num_";
+
+						var dataOrder = $(this).attr("data-order");
+						var dataArr = dataOrder.split("|");
+						var item = new Object();
+						item.cid = dataArr[0];
+						item.itemId = dataArr[1];
+						item.skuId = dataArr[2];
+						item.skuName = dataArr[3];
+						item.skuPrice = dataArr[4];
+
+						var numId = prefix + surfix;
+						item.skuNum = $('#' + numId).val(); //sku 个数
+
+						itemArr.push(item);
+					}
+
+				}); //end of .cart_item_selector
+
+				addtoOrder(itemArr); //send request
+
+			});
+
+		}); //end of document ready
+	</script>
+
+
+
+
+
+
+
+</body>
+</html>

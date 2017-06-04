@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.BrandMapper">
+	<resultMap id="BaseResultMap" type="com.ecp.entity.Brand">
+		<!-- WARNING - @mbggenerated -->
+		<id column="brand_id" property="brandId" jdbcType="BIGINT" />
+		<result column="brand_key" property="brandKey" jdbcType="VARCHAR" />
+		<result column="brand_logo_url" property="brandLogoUrl"
+			jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="brand_status" property="brandStatus" jdbcType="INTEGER" />
+		<result column="created" property="created" jdbcType="TIMESTAMP" />
+		<result column="modified" property="modified" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		<!-- WARNING - @mbggenerated -->
+		brand_id, brand_key, brand_logo_url, brand_name, brand_status,
+		created, modified
+	</sql>
+
+	<select id="getBrandByKeywords" resultMap="BaseResultMap">
+	
+		select * from item_brand
+		<where>
+			<foreach collection="keywords" item="keyword" index="index"
+				open="(" close=")" separator=" or ">
+				brand_name like CONCAT('%',#{keyword},'%' )
+			</foreach>
+		</where>
+		and brand_status=1
+		
+	</select>
+
+
+
+</mapper>

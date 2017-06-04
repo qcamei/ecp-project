@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户订单</title>
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
+	rel="stylesheet" />
+
+<script type="text/javascript"
+	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<style>
+a {
+	color: black;
+}
+
+.goods-item {
+	float: left;
+	width: 550px;
+	inline: true;
+	padding-right: 20px;
+}
+
+.goods-number {
+	/* float:right;  */
+	overflow: auto;
+	width: 50px;
+	margin-right: 20px;
+	margin-top: 50px;
+}
+
+.tr-th{
+	background: #EEEEEE ;
+}
+
+</style>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<span style="font-size: 20px">我的订单</span>
+			</div>
+		</div>
+		<br>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<ul class="extra-l" style="list-style: none;">
+					<li style="float: left; margin: auto 10px;"><a href="#"
+						class="txt curr">全部订单</a></li>
+					<li style="float: left; margin: auto 10px;">
+						<a href="#"	id="ordertoPay" clstag="click|keycount|orderinfo|waitPay"	class="txt">待付款</a>
+					</li>
+					<li style="float: left; margin: auto 10px;"><a href="#"
+						id="ordertoReceive" clstag="click|keycount|orderinfo|waitReceive"
+						class="txt">待收货</a></li>
+					<li style="float: left; margin: auto 10px;"><a href="#"
+						id="ordertoComment" target="_blank" class="txt"
+						clstag="click|keycount|orderinfo|daipingjia">待评价</a></li>
+				</ul>
+			</div>
+		</div>
+		<br>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<table class="table" border="1" cellspacing="10">
+					<thead>
+						<tr>
+							<th><div class="ordertime-cont">
+									<div class="time-txt" style="float: left">
+										近三个月订单<b></b><span class="blank"></span>
+									</div>
+									<div class="time-list">
+										<ul>
+											<!-- <li><a href="#none" _val="1&amp;s=4096"
+												clstag="click|keycount|orderlist|zuijinsangeyue"><b></b>近三个月订单</a></li>
+											 <li><a href="#none" _val="2&amp;s=4096"
+												clstag="click|keycount|orderlist|jinniannei"><b></b>今年内订单</a></li>
+											<li><a href="#none" _val="2016&amp;s=4096"
+												clstag="click|keycount|orderlist|2016"><b></b>2016年订单</a></li>
+											<li><a href="#none" _val="2015&amp;s=4096"
+												clstag="click|keycount|orderlist|2015"><b></b>2015年订单</a></li>
+											<li><a href="#none" _val="2014&amp;s=4096"
+												clstag="click|keycount|orderlist|2014"><b></b>2014年订单</a></li>
+											<li><a href="#none" _val="3&amp;s=4096"
+												clstag="click|keycount|orderlist|before_2014"><b></b>2014年以前订单</a></li> -->
+										</ul>
+									</div>
+								</div>
+								<div class="order-detail-txt ac" style="float: right; margin-right:150px">订单详情</div></th>
+							<th>收货人</th>
+							<th>金额</th>
+							<th>
+								<div class="deal-state-cont" id="orderState">
+									<div class="state-txt">
+										全部状态<b></b><span class="blank"></span>
+									</div>
+									<div class="state-list">
+										<ul>
+											<!-- <li value="4096"><a href="#none"
+												clstag="click|keycount|orderlist|quanbuzhuangtai"
+												class="curr"><b></b>全部状态</a></li>
+											 <li value="1"><a href="#none"
+												clstag="click|keycount|orderlist|dengdaifukuan"><b></b>等待付款</a>
+											</li>
+											<li value="128"
+												clstag="click|keycount|orderlist|dengdaishouhuo"><a
+												href="#none"><b></b>等待收货</a></li>
+											<li value="1024"><a href="#none"
+												clstag="click|keycount|orderlist|yiwancheng"><b></b>已完成</a>
+											</li>
+											<li value="-1"><a href="#none"
+												clstag="click|keycount|orderlist|yiquxiao"><b></b>已取消</a></li> -->
+										</ul>
+									</div>
+								</div>
+							</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+
+					<!-------------- 每种订单一个tbody ---------->
+					<tbody  th:each="orderx:${orderList}" id="tb-53853319081">
+						<!-- <tr class="sep-row">
+							<td colspan="5"></td>
+						</tr> -->
+
+						<tr  class="tr-th" >
+							<td colspan="5"><span class="gap"></span> <span th:text="${#calendars.format(orderx.order.createTime,'yyyy-MM-dd HH:mm:ss')}"
+								class="dealtime" title="2017-05-08 12:12:27">订单时间</span> <input id="datasubmit-53848251722"
+								value="2017-05-08 12:12:27" type="hidden"> <span
+								class="number"> 订单号： <a name="orderIdLinks"
+									id="idUrl53848251722" target="_blank"
+									href="#" th:text="${orderx.order.orderId}"
+									clstag="click|keycount|orderinfo|order_num" >订单号</a>
+
+							</span>
+
+								<div class="tr-operate" style="float: right">
+									<span class="order-shop"> <a class="btn-im btn-im-jd"
+										href="#none" title="联系客服"
+										clstag="click|keycount|orderlist|ziyingchatim">联系客服</a>
+									</span> <a href="#none"
+										clstag="click|keycount|orderlist|dingdanshanchu"
+										class="order-del" _orderid="53848251722"
+										_passkey="5897A7FF86B3E2A8B5B7A8E16E8DFF7F" title="删除">删除</a>
+
+								</div></td>
+						</tr>
+												
+						<tr th:each="orderItem,iterStat:${orderx.orderItems}"    class="tr-bd" id="track53853319081" oty="0,4,70">
+							<!--  测试数据<span th:text="${iterStat.index}"></span> -->
+							<!-- 测试数据循环：<span th:text="${orderItem.sku_name}"></span> -->
+							
+							<!-- 如果是第一个元素时 -->	
+							<td th:if="${iterStat.index==0}">
+								<!-- sku图片  -->
+								<div class="goods-item p-2538742">
+									<div class="p-img">
+										<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
+											target="_blank"
+											clstag="click|keycount|orderinfo|order_product"
+											>
+											 
+											<img class=""
+											th:src="@{${orderItem.picture_url}}"
+											th:title="${orderItem.sku_name}"											
+											data-lazy-img="done" height="60" width="60">
+
+										</a>
+									</div>
+									<!-- sku名称 -->
+									<div class="p-msg">
+										<div class="p-name">
+											<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
+												target="_blank" 
+												class="a-link"
+												clstag="click|keycount|orderinfo|order_product"												
+												th:title="${orderItem.sku_name}" th:text="${orderItem.sku_name}"></a>
+										</div>
+									</div>
+								</div>
+								<div class="goods-number"  th:text="'x'+${orderItem.num}">数量</div>
+							</td>
+
+							<!-- buyer's name -->
+							<td th:if="${iterStat.index==0}"  th:attr="rowspan=${#lists.size(orderx.orderItems)}" >
+								<div class="">
+									<div class="prompt-01 prompt-02">
+										<div class="pc">
+											<strong th:text="${orderx.order.name}">购物者名称</strong>											
+										</div>
+										<div class="p-arrow p-arrow-left"></div>
+									</div>
+								</div>
+							</td>
+							
+							<!-- 实际支付金额  及支付方式-->
+							<td th:if="${iterStat.index==0}"  th:attr="rowspan=${#lists.size(orderx.orderItems)}" >
+								<div class="amount">
+									<span th:text="${orderx.order.paymentPrice}"></span> <br> <span class="ftx-13">在线支付</span>
+								</div>
+							</td>
+							<!-- 订单状态  及订单详情-->
+							<td th:if="${iterStat.index==0}" th:attr="rowspan=${#lists.size(orderx.orderItems)}">
+								<div class="status">
+									<span class="order-status ftx-03"> 已取消 </span> <br> <a
+										href="//details.jd.com/normal/item.action?orderid=53853319081&amp;PassKey=782FEEEA93394ACDF41675FD840AA5DF"
+										clstag="click|keycount|orderlist|dingdanxiangqing"
+										target="_blank">订单详情</a>
+								</div>
+							</td>
+							
+							<!-- 操作区，根据订单的状态显示不同的操作 -->
+							<td th:if="${iterStat.index==0}" th:attr="rowspan=${#lists.size(orderx.orderItems)}"  id="operate53853319081">
+								<div class="operate">
+									<div id="pay-button-53853319081" _baina="0"></div>
+									<a
+										href="//cart.jd.com/reBuyForOrderCenter.action?wids=2538742,3597549,3230620&amp;nums=1,1,1&amp;rid=1495354641816"
+										class="btn-again btn-again-show" target="_blank"
+										clstag="click|keycount|orderlist|buy"><b></b> 立即购买 </a><br>
+								</div>
+							</td>
+							
+							<!-- 非第一个元素 -->
+							<td th:if="${iterStat.index!=0}">
+								<!-- 非第一个元素  -->
+								<div class="goods-item p-3597549">
+									<!--  sku图片 -->
+									<div class="p-img">
+										<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
+											target="_blank"
+											clstag="click|keycount|orderinfo|order_product"	> 
+											<img class=""
+											th:src="@{${orderItem.picture_url}}"
+											th:title="${orderItem.sku_name}"
+											data-lazy-img="done" height="60" width="60">
+
+										</a>
+									</div>
+									<!-- sku 名称 -->
+									<div class="p-msg">
+										<div class="p-name">
+											<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
+												target="_blank"
+												class="a-link"
+												clstag="click|keycount|orderinfo|order_product"												
+												th:title="${orderItem.sku_name}"
+												th:text="${orderItem.sku_name}"></a>
+										</div>
+									</div>
+								</div>
+								<div class="goods-number"  th:text="'x'+${orderItem.num}">数量</div>
+
+							</td>
+							
+						</tr>
+
+
+						
+
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

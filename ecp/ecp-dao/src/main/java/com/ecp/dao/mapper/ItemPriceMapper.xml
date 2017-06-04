@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.ItemPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.ItemPrice" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="max_num" property="maxNum" jdbcType="BIGINT" />
+    <result column="min_num" property="minNum" jdbcType="BIGINT" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="price_status" property="priceStatus" jdbcType="INTEGER" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="step_index" property="stepIndex" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, area_id, area_name, created, item_id, max_num, min_num, modified, price_status, 
+    sell_price, seller_id, shop_id, step_index
+  </sql>
+</mapper>

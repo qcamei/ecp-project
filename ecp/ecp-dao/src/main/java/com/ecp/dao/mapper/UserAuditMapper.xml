@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.UserAuditMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.UserAudit" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
+    <result column="context_id" property="contextId" jdbcType="BIGINT" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, auditor_id, context_id, remarks, result, time
+  </sql>
+</mapper>

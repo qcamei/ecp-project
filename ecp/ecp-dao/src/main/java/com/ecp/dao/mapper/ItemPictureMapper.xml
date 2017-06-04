@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.ItemPictureMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.ItemPicture" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="picture_id" property="pictureId" jdbcType="BIGINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="picture_status" property="pictureStatus" jdbcType="TINYINT" />
+    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="sort_number" property="sortNumber" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    picture_id, created, item_id, modified, picture_status, picture_url, sort_number
+  </sql>
+</mapper>

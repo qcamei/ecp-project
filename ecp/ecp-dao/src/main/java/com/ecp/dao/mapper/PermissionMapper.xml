@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Permission" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="resource_id" property="resourceId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, created, resource_id, user_id, user_name, user_type
+  </sql>
+</mapper>

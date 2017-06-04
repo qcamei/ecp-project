@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="context-path" th:content="@{/}"/>
+
+<title>产品详情</title>
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
+	rel="stylesheet" />
+
+<script type="text/javascript"
+	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+	
+	
+
+<style>
+	li[class~=attrValue] {
+		float: left;
+		margin-right: 10px;
+		list-style-type: none;
+	}
+	
+	li[class~=selected] {
+		display: block;
+		width: 80px;
+		height: 20px;
+		border: 1px solid red;
+	}
+</style>
+
+</head>
+<body>
+
+	<div class="container">
+		<!-- 登录窗口 -->
+		<div class="row clearfix">
+		<div class="col-md-12 column">
+			 <!-- <a hidden="true" id="modal-273078" href="#modal-container-273078" role="button" class="btn" data-toggle="modal">触发遮罩窗体</a> -->
+			<input  id="modal-273078"  type="hidden" class="btn btn-primary" value="用户登录"  data-toggle="modal"  data-target="#modal-container-273078" />
+			<div class="modal " id="modal-container-273078" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							<h4 class="modal-title" id="myModalLabel">
+								登录
+							</h4>
+						</div>
+						<div class="modal-body">
+								<div class="loginBox">
+									<label for="loginName">帐号</label> <input type="text"
+										id="loginName" name="loginName" placeholder="邮箱/会员帐号/手机号"
+										autofocus required>
+								</div>
+								<div class="password">
+									<label for="password">密码 </label> <input type="password"
+										id="password" name="password" placeholder="请输入密码" required>
+								</div>
+						</div>
+						<div class="modal-footer">
+							 <button id="btnClose" type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button id="btnLogin" type="button" class="btn btn-primary">登录</button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		</div>  <!-- end of 弹出窗口 -->
+		
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row clearfix">
+					<div class="col-md-5 column">
+						<div class="row clearfix">
+							<div th:if="${not #lists.isEmpty(skuPicts)}"
+								class="col-md-12 column">
+								<img alt="140x140" th:src="@{${skuPicts[0].pictureUrl}}" />
+							</div>
+						</div>
+						</br>
+						<div class="row clearfix">
+							<div class="col-md-12 column">
+								<ul>
+									<li th:each="pict : ${skuPicts}"
+										style="float: left; margin-right: 10px" class=""
+										th:attr="data-bind=${pict.pictureId}+':'+${pict.skuId}">
+										<img widh="50" height="50" th:src="@{${pict.pictureUrl}}" />
+									</li>
+
+								</ul>
+
+							</div>
+						</div>
+						</br>
+						<div class="row clearfix">
+							<div class="col-md-12 column">
+								<a class="follow J-follow" id="myFavourite"  th:attr="data-id=${item.itemId}" href="#none"
+									clstag="shangpin|keycount|product|guanzhushangpin_1"> <em>关注</em>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-7 column">
+						<span id="itemName" style="font-size: 18px" th:text="${item.itemName}">产品名称：Apple
+							iPhone 6s Plus (A1699) 32G 玫瑰金色 移动联通电信4G手机</span> <br>
+						<div class="row clearfix">
+							<div class="col-md-12 column">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>类型</th>
+											<th>类型值</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="">
+											<td>价 格</td>
+											<td th:text="${sku.sell_price}"></td>
+										</tr>
+										<tr class="">
+											<td>体积</td>
+											<td th:text="${sku.volume}"></td>
+										</tr>
+										<tr class="">
+											<td>重量</td>
+											<td th:text="${sku.weight}">3.8kg</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row clearfix">
+							<div class="col-md-12 column">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>类型</th>
+											<th>类型值</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="" th:each="attrValue : ${attrValueList}">
+											<td th:text="${attrValue.attrName}">选择颜色</td>
+											<td><ul>
+													<li th:each="value : ${attrValue.valueList}"
+														class="attrValue"
+														th:attr="data-bind=${value.attr_id}+':'+${value.value_id}"><span
+														th:text="${value.value_name}">属性值</span></li>
+												</ul></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<br>
+						<div class="row clearfix">
+							<div class="col-md-12 column">
+								<label for="amount">数量</label> <input type="text" name="amount"
+									id="amount" value="1" /> <a href="javascript:void(0);"
+									onclick="return false;" class="submit-btn btn btn-primary"
+									data-bind="1" id="cartAdd"> 加入购物车<b></b></a> <a
+									href="javascript:void(0);" onclick="return false;"
+									class="submit-btn btn btn-primary" data-bind="1"> 一键购<b></b></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				</br>
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<div class="tabbable" id="tabs-1">
+							<ul class="nav nav-tabs">
+								<li class="active" style="background: #6699CC"><a
+									href="#panel-1" data-toggle="tab">商品介绍</a></li>
+								<li style="background: #00CC99"><a href="#panel-2"
+									data-toggle="tab">规格与包装</a></li>
+								<li style="background: #FFFFCC"><a href="#panel-3"
+									data-toggle="tab">售后保障</a></li>
+								<li style="background: #CCCCFF"><a href="#panel-4"
+									data-toggle="tab">商品评价</a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="panel-1">
+									<ul class="parameter1 p-parameter-list">
+										<div class="detail">
+											<p title="1920*1080(FHD)">分辨率：1920*1080(FHD)</p>
+										</div>
+										</li>
+										<div class="detail">
+											<p title="1200万像素">后置摄像头：1200万像素</p>
+											<p title="500万像素">前置摄像头：500万像素</p>
+										</div>
+										</li>
+										<div class="detail">
+											<p title="其他">核&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数：其他</p>
+											<p title="以官网信息为准">频&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率：以官网信息为准</p>
+										</div>
+										</li>
+									</ul>
+									<ul class="parameter2 p-parameter-list">
+										<li title="AppleiPhone6s Plus">商品名称：AppleiPhone6s Plus</li>
+										<li title="3726830">商品编号：3726830</li>
+										<li title="0.51kg">商品毛重：0.51kg</li>
+										<li title="中国大陆">商品产地：中国大陆</li>
+										<li title="苹果（IOS）">系统：苹果（IOS）</li>
+										<li title="1200万-1999万">后置摄像头像素：1200万-1999万</li>
+										<li title="32GB">机身内存：32GB</li>
+									</ul>
+								</div>
+								<div class="tab-pane" id="panel-2">
+									<ul class="parameter1 p-parameter-list">
+										<div class="detail">
+											<p title="1920*1080(FHD)">分辨率：1920*1080(FHD)</p>
+										</div>
+										</li>
+										<div class="detail">
+											<p title="1200万像素">后置摄像头：1200万像素</p>
+											<p title="500万像素">前置摄像头：500万像素</p>
+										</div>
+										</li>
+										<div class="detail">
+											<p title="其他">核&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数：其他</p>
+											<p title="以官网信息为准">频&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率：以官网信息为准</p>
+										</div>
+										</li>
+									</ul>
+									<ul class="parameter2 p-parameter-list">
+										<li title="AppleiPhone6s Plus">商品名称：AppleiPhone6s Plus</li>
+										<li title="3726830">商品编号：3726830</li>
+										<li title="0.51kg">商品毛重：0.51kg</li>
+										<li title="中国大陆">商品产地：中国大陆</li>
+										<li title="苹果（IOS）">系统：苹果（IOS）</li>
+										<li title="1200万-1999万">后置摄像头像素：1200万-1999万</li>
+										<li title="32GB">机身内存：32GB</li>
+									</ul>
+
+								</div>
+								<div class="tab-pane" id="panel-3">
+									<dl>
+										<dt>
+											<strong>厂家服务</strong>
+										</dt>
+										<dd>
+											本产品全国联保，享受三包服务，质保期为：一年质保（已激活的iPhone无质量问题不支持7天无理由退换货）<br>
+											如因质量问题或故障，凭厂商维修中心或特约维修点的质量检测证明，享受7日内退货，15日内换货，15日以上在质保期内享受免费保修等三包服务！<br>(注:如厂家在商品介绍中有售后保障的说明,则此商品按照厂家说明执行售后保障服务。)
+											您可以查询本品牌在各地售后服务中心的联系方式，<br> 售后服务电话：400-666-8800
+										</dd>
+										<dt>
+											<strong>正品行货</strong>
+										</dt>
+										<dd>京东商城向您保证所售商品均为正品行货，京东自营商品开具机打发票或电子发票。</dd>
+
+									</dl>
+								</div>
+								<div class="tab-pane" id="panel-4">
+									<p>此处加入用户评价</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+		
+	</div>
+		
+		
+		
+	</div>
+
+	<input type="hidden" id="SkuAttribute" th:value="${sku.attributes}" />
+
+	
+	<form th:action="@{/front/product/sku/detail}" method="post"
+		id="testform">
+		<!-- SPU id -->
+		<input type="hidden" name="itemId" id="itemId"	th:value="${item.itemId}" /> 
+		<input type="hidden" name="skuAttribute" id="skuAttribute" th:value="${sku.attributes}" />
+	</form>
+
+	<!-- 增加到购物车时使用的表单（隐藏表单）  -->
+	<form th:action="@{/front/cart/add}" method="post" id="addToCartForm">
+		<!-- SPU id -->		
+		<input type="hidden" name="itemId" id="itemId"	th:value="${item.itemId}" /> 
+		<input type="hidden" name="skuId"  id="skuId" th:value="${sku.sku_id}" /> 
+		<input type="hidden" name="quantity" id="quantity" value="" />
+		<input type="hidden" name="skuName" id="skuName" value="" />
+	</form>
+
+
+	<script>
+	
+		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
+		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0, BASE_CONTEXT_PATH.length - 1);
+	
+		/*
+			在加入购物车前
+			查询用户登录状态  （采用ajax方式）
+			
+			return： 已经登录：true
+					未登录：false
+		*/
+		function getLoginState(){
+			var logined=false;
+			var urlStr=BASE_CONTEXT_PATH+"/front/agent/state/login"; // 需要提交的 url
+			//alert("url is:"+urlStr);
+			$.ajax({
+				type : "post", // 提交方式 get/post
+				url : urlStr,  
+				// dataType: "json",
+				data : {},
+				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+					console.log(res);
+					if (res != null) {
+						var obj = $.parseJSON(res);
+						//alert(obj.message=="login");
+						if (obj.message == "login") {
+							logined=true;
+							addtoCart();  //如果已经登录，则直接加入购物车
+						}
+						else{
+							displayLoginWindow();  //在此处显示窗口
+						}
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					/*弹出jqXHR对象的信息*/
+		            alert(jqXHR.responseText);
+		            alert(jqXHR.status);
+		            alert(jqXHR.readyState);
+		            alert(jqXHR.statusText); 
+		            /*弹出其他两个参数的信息*/
+		            alert(textStatus);
+		            alert(errorThrown); 
+		            
+				}
+			});
+		
+			return logined;
+		}
+		
+	/*
+		查询用户登录状态  （采用ajax方式）
+		
+		return： 已经登录：true
+				未登录：false
+	*/
+	function getLoginState_favourite(){
+		var logined=false;
+		
+		var urlStr=BASE_CONTEXT_PATH+"/front/agent/state/login"; // 需要提交的 url
+		//alert("url is:"+urlStr);
+		$.ajax({
+			type : "post", // 提交方式 get/post
+			url : urlStr,  
+			// dataType: "json",
+			data : {},
+			success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+				console.log(res);
+				if (res != null) {
+					var obj = $.parseJSON(res);
+					//alert(obj.message=="login");
+					if (obj.message == "login") {
+						logined=true;
+						addtoFavourite();  //如果已经登录，则直接加入我的收藏
+					}
+					else{
+						displayLoginWindow();  //在此处显示窗口
+					}
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				/*弹出jqXHR对象的信息*/
+	            alert(jqXHR.responseText);
+	            alert(jqXHR.status);
+	            alert(jqXHR.readyState);
+	            alert(jqXHR.statusText); 
+	            /*弹出其他两个参数的信息*/
+	            alert(textStatus);
+	            alert(errorThrown); 
+	            
+			}
+		});
+	
+		return logined;
+	}
+		
+		
+		
+	
+		/*
+			加入购物车
+		*/
+		function addtoCart(){
+			var amount = $("#amount").val(); //取得输入的数量
+			var skuName=$("#itemName").text(); //获取sku名称
+			
+			$("#skuName").val(skuName);
+			$("#quantity").val(amount);
+			
+			$("#addToCartForm").submit();  //提交 
+		}
+		
+		/*
+		 	加关注 此处采用AJAX提交请求
+		*/
+		function addtoFavourite(){
+			var logined=false;
+			var urlStr=BASE_CONTEXT_PATH+"/front/favourite/add"; // 需要提交的 url
+			var itemId=$("#myFavourite").attr("data-id");
+			//alert("url is:"+urlStr);
+			$.ajax({
+				type : "post", // 提交方式 get/post
+				url : urlStr,  
+				// dataType: "json",
+				data : {
+					favouriteId:itemId
+				},
+				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+					console.log(res);
+					if (res != null) {
+						var obj = $.parseJSON(res);
+						//alert("message:"+obj.message);
+						if (obj.message == "added") {							
+							alert("已经加入收藏");							
+						}
+						else{
+							displayLoginWindow();  //在此处显示窗口
+						}
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					/*弹出jqXHR对象的信息*/
+		            alert(jqXHR.responseText);
+		            alert(jqXHR.status);
+		            alert(jqXHR.readyState);
+		            alert(jqXHR.statusText); 
+		            /*弹出其他两个参数的信息*/
+		            alert(textStatus);
+		            alert(errorThrown); 
+		            
+				}
+			});
+		}
+		
+		
+		
+		/*
+			显示登录窗口
+		*/
+		function displayLoginWindow(){			
+			//alert("在此处显示窗口");
+			$("#modal-273078").click();
+		}
+	
+		/*
+			设置当前sku 属性值 为已选标记
+		*/
+		function setCurrSkuAttrFlag() {
+			var attribute = $("#SkuAttribute").val();
+			var attrArr = attribute.split(",");
+			for (var i = 0; i < attrArr.length; i++) {
+				//alert(attrArr[i]);
+				$(".attrValue").each(function(index, val) {
+					/* console.log(index, val, this);
+					if (index === 1) {
+						return false;
+					} */			
+					
+					if (attrArr[i] == $(this).attr("data-bind")) {
+						$(this).addClass("selected");
+						return true;
+					}
+				});
+			}
+		}
+		
+		/*
+			根据item名称及销售属性修改sku的名称
+			将item的名称与销售属性值组合起来
+		*/
+		function dispSkuName(){
+			
+			var attrPart=""
+			$(".attrValue.selected").each(function(index, val) {
+				//alert("index"+index);
+				if(index==0){
+					attrPart=attrPart+$(this).text();
+				}
+				else{
+					attrPart=attrPart+"|"+$(this).text();
+				}
+				
+			});
+			
+			var itemName=$("#itemName").text();
+			var skuName=itemName+"("+attrPart+")";
+			$("#itemName").text(skuName);  //在界面显示sku 名称
+		}
+
+		/*
+			根据 attribute 查询  sku
+		*/
+		function search_sku_normal(attrVal) {			
+			$("#skuAttribute").val(attrVal);
+			$("#testform").submit();
+		}
+		
+		/*
+			关闭登录窗口
+		*/
+		function closeLoginWindow(){
+			$("#btnClose").click();
+		}
+
+		$(function() {
+
+			setCurrSkuAttrFlag();  //选定当前销售属性值
+			dispSkuName();  //显示sku名称
+
+			/*
+				选择SKU属性时---提交
+			*/
+			$(".attrValue").on('click', function(e) {
+				var seleAttrValue = $(this).attr("data-bind");
+				var oldAttrValue = $("#skuAttribute").val();
+				if (oldAttrValue.indexOf(seleAttrValue) >= 0) {
+
+				} else {					
+					var attrArr = seleAttrValue.split(":");
+					var pattern = attrArr[0] + ':' + '\\d+';					
+					var reg = new RegExp(pattern, "g");  //采用正则进行替换
+					var ret = oldAttrValue.replace(reg, seleAttrValue);
+					search_sku_normal(ret);
+				}
+
+			});
+			
+			/*
+				用户登录(AJAX方式)
+			*/			
+			$("#btnLogin").on("click",function(e){
+				var urlStr=BASE_CONTEXT_PATH+"/front/agent/ajaxLogin"; // 需要提交的 url
+				
+				var loginName = $('#loginName').val();
+				var loginPass = $('#password').val();
+				
+				//alert("start login");
+				//ajax登录
+				$.ajax({
+					type : "post", 	// 提交方式 get/post
+					url : urlStr, 	// 需要提交的 url
+					// dataType: "json",
+					data : {
+						'loginName' : loginName,
+						'password' : loginPass						
+					},
+					success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+						console.log(res);
+						if (res != null) {
+							var obj = $.parseJSON(res);
+							if (obj.status == "success") {
+								if(obj.message=="login"){
+									closeLoginWindow();
+								} 
+								else{
+									alert("用户名或口令错误");	
+								}
+									
+							} else {
+								//show_err_msg(obj.result_err_msg);
+								alert("用户名或口令错误1");
+							} 
+							//alert("request ok!");
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						/*弹出jqXHR对象的信息*/
+			            alert(jqXHR.responseText);
+			            alert(jqXHR.status);
+			            alert(jqXHR.readyState);
+			            alert(jqXHR.statusText);
+			            /*弹出其他两个参数的信息*/
+			            alert(textStatus);
+			            alert(errorThrown);
+					}
+				});
+				
+			});
+			
+
+			/*
+				增加到购物车按钮---提交
+			*/
+			$("#cartAdd").on('click', function(e) {
+				getLoginState();				
+			});
+			
+			/*
+				增加到 我的收藏---提交				
+			*/
+			$("#myFavourite").on('click', function(e) {
+				getLoginState_favourite();				
+			});
+
+		});
+	</script>
+
+</body>
+</html>

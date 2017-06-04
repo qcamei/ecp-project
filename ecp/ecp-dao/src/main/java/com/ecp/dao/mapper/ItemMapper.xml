@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.ItemMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Item" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="ad" property="ad" jdbcType="VARCHAR" />
+    <result column="after_service" property="afterService" jdbcType="VARCHAR" />
+    <result column="attr_sale" property="attrSale" jdbcType="VARCHAR" />
+    <result column="attributes" property="attributes" jdbcType="VARCHAR" />
+    <result column="brand" property="brand" jdbcType="BIGINT" />
+    <result column="cid" property="cid" jdbcType="BIGINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="delisting_time" property="delistingTime" jdbcType="TIMESTAMP" />
+    <result column="guide_price" property="guidePrice" jdbcType="DECIMAL" />
+    <result column="has_price" property="hasPrice" jdbcType="INTEGER" />
+    <result column="inventory" property="inventory" jdbcType="INTEGER" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="item_status" property="itemStatus" jdbcType="INTEGER" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="listting_time" property="listtingTime" jdbcType="TIMESTAMP" />
+    <result column="market_price" property="marketPrice" jdbcType="DECIMAL" />
+    <result column="market_price2" property="marketPrice2" jdbcType="DECIMAL" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="INTEGER" />
+    <result column="origin" property="origin" jdbcType="VARCHAR" />
+    <result column="packing_list" property="packingList" jdbcType="VARCHAR" />
+    <result column="plat_link_status" property="platLinkStatus" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="status_change_reason" property="statusChangeReason" jdbcType="VARCHAR" />
+    <result column="timing_listing" property="timingListing" jdbcType="TIMESTAMP" />
+    <result column="volume" property="volume" jdbcType="DECIMAL" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="weight_unit" property="weightUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ecp.entity.Item" extends="BaseResultMap" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="describe_url" property="describeUrl" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    item_id, ad, after_service, attr_sale, attributes, brand, cid, created, delisting_time, 
+    guide_price, has_price, inventory, item_name, item_status, keywords, listting_time, 
+    market_price, market_price2, modified, operator, origin, packing_list, plat_link_status, 
+    product_id, status_change_reason, timing_listing, volume, weight, weight_unit
+  </sql>
+  <sql id="Blob_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    describe_url
+  </sql>
+  
+  <!-- 通过品牌及类目属性查询 -->
+  <select id="getItemByBrandAndAttr" resultMap="BaseResultMap">
+  	select * from item where cid=#{cid} 
+  		<if test="brands!=null">  		  
+  			AND brand IN 
+  			<foreach collection="brands" item="item" index="index" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test="attrValPairs!=null">     
+            AND             
+  			<foreach collection="attrValPairs" item="item" index="index" open="(" close=")" separator=" or ">
+				find_in_set(#{item},attributes)
+			</foreach>      
+        </if> 
+  		
+  </select>
+  
+  <!-- 通过关键字查询 查询字段：SPU关键字，SPU名称 -->
+  <select id="getItemByKeywords" resultMap="BaseResultMap">
+  	select * from item 
+  	<where>
+  		<foreach collection="keywords" item="keyword" index="index" open="(" close=")" separator=" or ">
+				item_name like  CONCAT('%',#{keyword},'%' )
+		</foreach>
+		<if test="keywords!=null">
+			OR
+			<foreach collection="keywords" item="keyword" index="index" open="(" close=")" separator=" or ">
+				keywords like  CONCAT('%',#{keyword},'%' )
+			</foreach>
+		</if>
+  	</where>
+  </select>
+  
+  <select id="getItemByBrandIds" resultMap="BaseResultMap">
+  	select * from item
+  	<where>  		
+  		brand in
+  		<foreach collection="ids" item="id" index="index" open="(" close=")" separator=" , ">
+				#{id}
+		</foreach>
+  	</where>
+  </select>
+  
+  <select id="selectItemsByCondition" parameterType="map" resultType="map">
+		SELECT * FROM item
+  </select>
+  
+  
+  
+  
+</mapper>

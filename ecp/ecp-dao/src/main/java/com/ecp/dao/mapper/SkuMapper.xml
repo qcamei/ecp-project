@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.SkuMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Sku" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="sku_id" property="skuId" jdbcType="BIGINT" />
+    <result column="ad" property="ad" jdbcType="VARCHAR" />
+    <result column="attributes" property="attributes" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="product_id" property="productId" jdbcType="VARCHAR" />
+    <result column="sku_status" property="skuStatus" jdbcType="INTEGER" />
+    <result column="sku_type" property="skuType" jdbcType="INTEGER" />
+    <result column="volume" property="volume" jdbcType="DECIMAL" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    sku_id, ad, attributes, created, item_id, modified, product_id, sku_status, sku_type, 
+    volume, weight
+  </sql>
+  
+  <!-- getSkuByIdAndType -->
+  
+  <select id="getSkuByIdAndType" resultMap="skuPriceMap">
+  	select  	 	
+  	 	s.attributes,
+		s.item_id,
+		s.sku_id,
+		s.volume,
+		s.weight,
+		p.sell_price
+  	 from item_sku s left join trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
+  	 where s.item_id=#{itemId} and s.sku_type=#{skuType}  
+  
+  </select>
+  
+  <select id="getSkuByIdAndAttr" resultMap="skuPriceMap">
+  	select  	 	
+  	 	s.attributes,
+		s.item_id,
+		s.sku_id,
+		s.volume,
+		s.weight,
+		p.sell_price
+  	 from item_sku s left join trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
+  	 where s.item_id=#{itemId} and s.attributes=#{skuAttribute}  
+  
+  </select>
+  
+  <select id="getSkuBySkuId" resultMap="skuPriceMap">
+  	SELECT  	 	
+  	 	s.attributes,
+		s.item_id,
+		s.sku_id,
+		s.volume,
+		s.weight,
+		p.sell_price
+  	 FROM item_sku s left JOIN trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
+  	 WHERE s.sku_id=#{skuId} 
+  
+  </select>
+  
+  
+  
+  
+  <resultMap id="skuPriceMap" type="com.ecp.bean.SkuPriceBean" >
+  	<result column="attributes" property="attributes" jdbcType="VARCHAR" />
+  	<result column="item_id" property="item_id" jdbcType="BIGINT" />
+  	<result column="sku_id" property="sku_id" jdbcType="BIGINT" />
+  	<result column="volume" property="volume" jdbcType="DECIMAL" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="sell_price" property="sell_price" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  
+</mapper>

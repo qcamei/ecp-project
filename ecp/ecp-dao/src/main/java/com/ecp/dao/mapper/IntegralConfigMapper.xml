@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.IntegralConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.IntegralConfig" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="config_id" property="configId" jdbcType="BIGINT" />
+    <result column="end_price" property="endPrice" jdbcType="DECIMAL" />
+    <result column="exchange_rate" property="exchangeRate" jdbcType="DECIMAL" />
+    <result column="get_integral" property="getIntegral" jdbcType="BIGINT" />
+    <result column="insert_by" property="insertBy" jdbcType="BIGINT" />
+    <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="integral_type" property="integralType" jdbcType="TINYINT" />
+    <result column="start_price" property="startPrice" jdbcType="DECIMAL" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="update_by" property="updateBy" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="use_integral" property="useIntegral" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    config_id, end_price, exchange_rate, get_integral, insert_by, insert_time, integral_type, 
+    start_price, state, update_by, update_time, use_integral
+  </sql>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.CategoryAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.CategoryAttr" >
+    <!--
+      WARNING - @mbggenerated  
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="attr_id" property="attrId" jdbcType="BIGINT" />
+    <result column="attr_type" property="attrType" jdbcType="TINYINT" />
+    <result column="cid" property="cid" jdbcType="BIGINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="features" property="features" jdbcType="VARCHAR" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="option_type" property="optionType" jdbcType="TINYINT" />
+    <result column="input_type" property="inputType" jdbcType="TINYINT" />
+    <result column="sort_number" property="sortNumber" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, attr_id, attr_type, cid, created, features, modified, option_type, input_type, 
+    sort_number, status
+  </sql>
+  
+  <!-- <select id="findByCid" parameterType="java.lang.Long"  resultMap="BaseResultMap" >
+  	select * from item_category_attr 
+  </select> -->
+  
+  <select id="findByCid" parameterType="java.lang.Long"
+	resultType="com.ecp.entity.CategoryAttr">
+		select * from item_category_attr where cid=#{cid}
+  </select>
+  
+  
+  <select id="getCategoryAttrListByCid1" parameterType="java.lang.Long" resultType="map" >
+  	select c.id,c.cid,a.attr_id,a.attr_name, from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id)
+      where c.cid=#{cid}  	
+  </select>
+  
+  <!-- 按cid读取类目属性 -->
+  <select id="getCategoryAttrListByCid" parameterType="java.lang.Long" resultMap="CategoryAttrResult" >
+  	select
+  	 	c.id,
+  	 	c.cid,
+  	 	c.attr_type,
+  	 	c.option_type,
+  	 	c.input_type,
+  	 	c.sort_number,
+  	 	c.attr_id,
+  	 	a.attr_name
+  	 from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id) 
+  	 where c.cid=#{cid}  	
+  </select>
+  
+  
+  <!-- 按cid,attr_type读取类目属性 --> 
+  <select id="getCategoryAttrByCidAndType"  resultMap="CategoryAttrResult" >
+  	select
+  	 	c.id,
+  	 	c.cid,
+  	 	c.attr_type,
+  	 	c.option_type,
+  	 	c.input_type,
+  	 	c.sort_number,
+  	 	c.attr_id,
+  	 	a.attr_name
+  	 from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id) 
+  	 where c.cid=#{cid} and c.attr_type=#{attr_type} 	
+  </select>
+  
+  
+  <resultMap id="CategoryAttrResult" type="com.ecp.bean.CategoryAttrBean" >    
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="cid" property="cid" jdbcType="BIGINT" />
+    <result column="attr_id" property="attr_id" jdbcType="BIGINT" />
+    <result column="attr_type" property="attr_type" jdbcType="TINYINT" />    
+    <result column="option_type" property="option_type" jdbcType="TINYINT" />
+    <result column="input_type" property="input_type" jdbcType="TINYINT" />
+    <result column="sort_number" property="sort_number" jdbcType="BIGINT" />
+    <result column="attr_name" property="attr_name" jdbcType="VARCHAR" />    
+  </resultMap>
+  
+  <!-- getCategoryAttrValList 读取属性值列表 -->
+  <select id="getCategoryAttrValList"  resultType="hashmap" >
+  	SELECT  	 	
+  	 	c.cid,  	 	
+  	 	c.attr_id,
+  	 	v.value_id,
+  	 	v.value_name
+  	 FROM item_attribute_value v  LEFT JOIN item_category_attr c  ON(c.attr_id=v.attr_id) 
+  	 WHERE c.cid=#{cid} and c.attr_id=#{attrId}  	
+  </select>
+  
+  
+</mapper>

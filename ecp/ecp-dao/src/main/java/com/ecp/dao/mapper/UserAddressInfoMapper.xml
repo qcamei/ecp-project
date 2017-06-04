@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.UserAddressInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.UserAddressInfo" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="attach_address" property="attachAddress" jdbcType="VARCHAR" />
+    <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
+    <result column="contack_person" property="contackPerson" jdbcType="VARCHAR" />
+    <result column="contack_phone" property="contackPhone" jdbcType="VARCHAR" />
+    <result column="contack_tel" property="contackTel" jdbcType="VARCHAR" />
+    <result column="country_code" property="countryCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="emergency_person" property="emergencyPerson" jdbcType="VARCHAR" />
+    <result column="emergency_phone" property="emergencyPhone" jdbcType="VARCHAR" />
+    <result column="full_address" property="fullAddress" jdbcType="VARCHAR" />
+    <result column="is_default" property="isDefault" jdbcType="TINYINT" />
+    <result column="postal_code" property="postalCode" jdbcType="VARCHAR" />
+    <result column="province_code" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="town_code" property="townCode" jdbcType="VARCHAR" />
+    <result column="updte_time" property="updteTime" jdbcType="TIMESTAMP" />
+    <result column="village_code" property="villageCode" jdbcType="VARCHAR" />
+    <result column="yn" property="yn" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, attach_address, buyer_id, city_code, contact_email, contack_person, contack_phone, 
+    contack_tel, country_code, create_time, emergency_person, emergency_phone, full_address, 
+    is_default, postal_code, province_code, town_code, updte_time, village_code, yn
+  </sql>
+</mapper>

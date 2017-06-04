@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="context-path" th:content="@{/}" />
+
+<title>关键字查询-结果页</title>
+
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
+	rel="stylesheet" />
+<script type="text/javascript"
+	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+
+<style type="text/css">
+li {
+	list-style-type: none;
+}
+</style>
+
+
+</head>
+<body>
+	<div class="container">
+		<h3 style="font-size: 18px;">筛选条件列表-用于多条件选择</h3>
+		<br>
+		<div class="row clearfix">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<ul class="breadcrumb">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Library</a></li>
+						<li class="active">Data</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 类目信息 查询结果个数 -->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<span>手机 商品筛选 共xxxx个</span>
+				</div>
+			</div>
+			<div class="col-md-12 column">
+				<br>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>条件名称</th>
+							<th>条件值列表</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${not #lists.isEmpty(brandList)}">
+							<td>品牌</td>
+							<td>
+								<ul>
+									<li th:each="brand : ${brandList}" style="float: left"><a
+										class='brand'
+										th:attr="id='brand_'+${brand.brandId},data-bind=${brand.brandId}">
+											<img alt="" th:src="@{${brand.brandLogoUrl}}">
+									</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr th:each="cateCond : ${filterList}">
+							<td th:text="${cateCond.secondCategory.cName}">条件名称</td>
+							<td><ul>
+									<li th:each="thirdCate : ${cateCond.thirdCategoryList}"
+										style="float: left; margin-right: 10px" class="attrValue"
+										th:attr="data-bind=${thirdCate.cid}"><span
+										th:text="${thirdCate.cName}">属性值</span></li>
+								</ul></td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- 查询结果列表 -->
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row">					
+					<div class="col-md-3" th:each="item : ${itemList}">
+						<div class="thumbnail">
+							<a
+								th:href="@{/front/product/detail/{itemId}(itemId=${item.item.itemId})}"
+								target="_blank"> <img th:src="@{${item.pict[0].pictureUrl}}" />
+							</a>
+							<div class="">
+								<p th:text="${item.item.itemName}"></p>
+								<p th:text="${item.item.marketPrice}"></p>
+								<p th:text="${item.item.itemId}"></p>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <input type="button" value="test" id="BtnTest" /> -->
+	
+	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
+	<!-- <form th:action="@{/front/search/categorycond}" method="post"
+		id="testform">
+		<input type="hidden" name="cid" id="cid" th:value="${cid}" />
+		用于保存上次查询的条件  初始值为空字符串
+		<input type="hidden" name="brands" id="brandCond"
+			th:value="${brandCond}" /> <input type="hidden" name="attrs"
+			id="attrCond" th:value="${attrCond}" />
+	</form> -->
+
+	<script>
+		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
+		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
+				BASE_CONTEXT_PATH.length - 1);
+
+		function search_ajax() {
+			$.ajax({
+
+				url : BASE_CONTEXT_PATH + '/front/search/categorycond',
+				type : 'post',
+				contentType : 'application/json', // 这句不加出现415错误:Unsupported Media Type
+				data : JSON.stringify(g_params), // 以json字符串方式传递
+				success : function(data) {
+					console.log("success...");
+				},
+				error : function(data) {
+					console.log("error...");
+				}
+			});
+		}
+
+		function search_normal() {
+			$("#attrCond").val(g_params.attrs);
+			$("#brandCond").val(g_params.brands);
+			$("#testform").submit();
+			g_params.brands = "";
+			g_params.attrs = "";
+
+		}
+
+		var g_params = null; //查询条件JSON对象
+
+		//alert("243");
+		g_params = new Object();
+		//初始化查询条件的值
+		g_params.cid = $("#cid").val();
+		g_params.brands = $("#brandCond").val();
+		g_params.attrs = $("#attrCond").val();
+
+		$(function() {
+
+			//当点击品牌时,获取品牌的id
+			$(".brand").on(
+					'click',
+					function(e) {
+						if (g_params.brands == "") {
+							g_params.brands = $(this).attr('data-bind');
+						} else {
+							g_params.brands = g_params.brands + ","
+									+ $(this).attr('data-bind');
+						}
+						search_normal();
+					});
+
+			//当点击属性条件时，获取相应的值    	
+			$(".attrValue").on(
+					'click',
+					function(e) {
+						if (g_params.attrs == "") {
+							g_params.attrs = $(this).attr('data-bind');
+						} else {
+							g_params.attrs = g_params.attrs + ","
+									+ $(this).attr('data-bind');
+						}
+						search_normal();
+					});
+
+		});
+	</script>
+
+
+
+
+</body>
+</html>

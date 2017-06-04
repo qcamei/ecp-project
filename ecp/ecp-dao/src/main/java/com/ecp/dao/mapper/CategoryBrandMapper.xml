@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.CategoryBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.CategoryBrand" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="category_brand_id" property="categoryBrandId" jdbcType="BIGINT" />
+    <result column="brand_id" property="brandId" jdbcType="BIGINT" />
+    <result column="cbrand_status" property="cbrandStatus" jdbcType="INTEGER" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
+    <result column="third_lev_cid" property="thirdLevCid" jdbcType="BIGINT" />
+    <result column="second_lev_cid" property="secondLevCid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    category_brand_id, brand_id, cbrand_status, created, modified, sort_num, third_lev_cid, 
+    second_lev_cid
+  </sql>
+  
+  <select id="getBrandByCid"  resultType="map" >
+  	select  		
+  		c.brand_id,
+  		b.brand_logo_url,
+  		b.brand_name
+  	from item_category_brand c left join item_brand b on(c.brand_id=b.brand_id) 
+  	where c.third_lev_cid=#{cid} 
+  		 
+  </select>
+  
+  <select id="getCategoryByBrand"  resultMap="CategoryBrandMap">
+ 	select 
+ 		c.brand_id,
+ 		c.third_lev_cid,
+ 		c.second_lev_cid,
+ 		b.brand_logo_url,
+ 		b.brand_name  
+ 	from item_category_brand as c left join item_brand as b on(c.brand_id=b.brand_id) 
+ 	where  
+ 	<foreach collection="brands" item="brand" index="index" open="(" close=")" separator=" or ">
+			brand_name like  CONCAT('%',#{brand},'%' )
+	</foreach>
+  </select>
+  
+  <!-- 通过品牌获取类目 -->
+  <select id="getCategoryByBrandIds" resultMap="CategoryBrandMap">
+  	select 
+ 		c.brand_id,
+ 		c.third_lev_cid,
+ 		c.second_lev_cid,
+ 		b.brand_logo_url,
+ 		b.brand_name  
+ 	from item_category_brand as c left join item_brand as b on (c.brand_id=b.brand_id)  
+ 	where c.brand_id in
+ 	<foreach collection="ids" item="brandId" index="index" open="(" close=")" separator=",">
+			#{brandId}
+	</foreach>
+  </select>
+  
+  
+  
+  
+  <resultMap id="CategoryBrandMap" type="com.ecp.bean.CategoryBrandBean" >    
+    <result column="brand_id" property="brandId" jdbcType="BIGINT" />    
+    <result column="third_lev_cid" property="thirdLevCid" jdbcType="BIGINT" />
+    <result column="second_lev_cid" property="secondLevCid" jdbcType="BIGINT" />
+    <result column="brand_logo_url" property="brandLogoUrl" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  
+  
+</mapper>

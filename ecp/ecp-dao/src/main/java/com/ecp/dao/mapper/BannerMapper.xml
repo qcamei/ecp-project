@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.BannerMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Banner" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="banner_link" property="bannerLink" jdbcType="VARCHAR" />
+    <result column="banner_type" property="bannerType" jdbcType="TINYINT" />
+    <result column="banner_url" property="bannerUrl" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="integral" property="integral" jdbcType="INTEGER" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="sku_id" property="skuId" jdbcType="BIGINT" />
+    <result column="sort_number" property="sortNumber" jdbcType="SMALLINT" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="theme_id" property="themeId" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, banner_link, banner_type, banner_url, created, integral, modified, sku_id, sort_number, 
+    start_time, status, theme_id, title
+  </sql>
+</mapper>
