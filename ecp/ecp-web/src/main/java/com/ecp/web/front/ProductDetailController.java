@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ecp.bean.AttributeType;
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.SkuPriceBean;
 import com.ecp.bean.SkuType;
+import com.ecp.bean.constants.AttributeType;
 import com.ecp.entity.Item;
 import com.ecp.entity.SkuPicture;
 import com.ecp.service.front.ICategoryAttrService;

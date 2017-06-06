@@ -1,4 +1,4 @@
-package com.ecp.bean;
+package com.ecp.bean.constants;
 
 /**
  * @ClassName AttributeType

@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryBrandBean;
 import com.ecp.bean.SearchCondBean;
+import com.ecp.bean.constants.AttributeType;
 import com.ecp.entity.Category;
 import com.ecp.entity.Item;
 import com.ecp.entity.ItemPicture;
@@ -28,6 +29,8 @@ import com.ecp.service.front.ICategoryBrandService;
 import com.ecp.service.front.ICategoryService;
 import com.ecp.service.front.IItemPictureService;
 import com.ecp.service.front.IItemService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @ClassName ProductSearchController
@@ -76,14 +79,15 @@ public class SearchController {
 		String url = RESPONSE_THYMELEAF + "search_no_result";
 		
 		// 读取关键字  分词
-				List<Word> words = WordSegmenter.seg(keywords);
-				
-				for(Word word:words){ System.out.println("---------------分词结果是："+word.toString()); }
-				
-				List<String> keywordList = new ArrayList<String>();
-				for (Word word : words) {
-					keywordList.add(word.toString());
-				}
+		//以下程序段为调试程序，可以屏蔽
+		List<Word> words = WordSegmenter.seg(keywords);
+		
+		for(Word word:words){ System.out.println("---------------分词结果是："+word.toString()); }
+		
+		List<String> keywordList = new ArrayList<String>();
+		for (Word word : words) {
+			keywordList.add(word.toString());
+		}
 		
 
 		if(keywords.trim()=="")
@@ -405,21 +409,15 @@ public class SearchController {
 		 * 采用数据进行模拟： 三个数据列表： 品牌列表 类目其它属性列表（包括属性名称及属性值列表） SPU列表
 		 */
 
-		/**
-		 * ------------------------------ 筛选条件数据
-		 * --------------------------------
-		 */
+		/**---------------------- 筛选条件--------------------- */
 		// （1）类目-品牌列表
 		List<Map<String, String>> brandList = cateBrandService.getBrandByCid(categoryId);
 		model.addAttribute("brandList", brandList);
 
 		// (2)属性-属性值列表
-		List<Map<String, Object>> attrValueList = new ArrayList<Map<String, Object>>();
-
-		// List<CategoryAttrBean>
-		// cateAttrList=categoryAttrService.getCategoryAttrListByCid(categoryId);
-		// //read类目属性列表
-		List<CategoryAttrBean> cateAttrList = categoryAttrService.getCategoryAttrByCidAndType(categoryId, 1); // read类目属性列表
+		List<Map<String, Object>> attrValueList = new ArrayList<Map<String, Object>>();		
+		//read类目属性列表
+		List<CategoryAttrBean> cateAttrList = categoryAttrService.getCategoryAttrByCidAndType(categoryId, AttributeType.KEYED_ATTR); // read类目属性列表
 		for (CategoryAttrBean attrBean : cateAttrList) {
 			// 属性名称
 			HashMap<String, Object> attrValMap = new HashMap<String, Object>();
@@ -438,17 +436,32 @@ public class SearchController {
 
 		/**
 		 * ----------------------------- 查询类目下的SPU -----------------------------
-		 */
+		 */				
+		
 		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的数据
 
+		PageHelper.startPage(2, 1);  //PageHelper
 		List<Long> brands = new ArrayList<Long>(); // (1)品牌ID列表 条件列表
 		List<String> params = new ArrayList<String>();// (2)属性-属性值 条件列表
-		List<Item> itemList = itemService.getItemByBrandAndAttr(categoryId, null, null); // 查询spu
+		List<Item> itemList = itemService.getItemByBrandAndAttr(categoryId, null, null); // 查询spu (使用了拦截器或是AOP进行查询的再次处理)		
+		
+		PageInfo<Item> pageInfo=new PageInfo<>(itemList);
+		 //获得当前页
+        model.addAttribute("pageNum", pageInfo.getPageNum());
+        //获得一页显示的条数
+        model.addAttribute("pageSize", pageInfo.getPageSize());
+        //是否是第一页
+        model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
+        //获得总页数
+        model.addAttribute("totalPages", pageInfo.getPages());
+        //是否是最后一页
+        model.addAttribute("isLastPage", pageInfo.isIsLastPage());
+		
+		
 		// System.out.println("-------list size is:"+itemList.size());
 
 		/**
-		 * --------------------------- 按SPU查询SPU的picture
-		 * -----------------------------
+		 * --------- 按SPU查询SPU的picture -------------
 		 */
 		for (Item item : itemList) {
 			List<ItemPicture> pictList = itemPictureService.getItemPictureByItemId(item.getItemId());

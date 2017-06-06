@@ -101,6 +101,34 @@ li {
 				</div>
 			</div>
 		</div>
+		<!-- 加入分页处理 -->
+		<nav style="float:right;">			
+            <ul class="pagination">
+                <li><a href="">&laquo;</a></li>
+
+                <li>
+                    <a th:if="${not isFirstPage}" th:href="@{${'/user'}(pageNum=${pageNum-1},pageSize=${pageSize})}">Previous</a>
+                    <a th:if="${isFirstPagee}" href="javascript:void(0);">Previous</a>
+                </li>
+
+                <li th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${pageNum eq pageNo}" href="javascript:void(0);">
+                         <span th:text="${pageNo}"></span>
+                    </a>
+
+                    <a th:if="${not (pageNum eq pageNo)}" th:href="@{${'/user'}(pageNum=${pageNo},size=${pageSize})}">
+                        <span th:text="${pageNo}"></span>
+                    </a>
+                </li>
+                <li>
+                        <a th:if="${not isLastPage}" th:href="@{${'/user'}(pageNum=${pageNum+1},size=${pageSize})}">Next</a>
+                        <a th:if="${isLastPage}" href="javascript:void(0);">Next</a>
+                    </li>
+
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </nav>		
+		
 	</div>
 	<!-- <input type="button" value="test" id="BtnTest" /> -->
 	
