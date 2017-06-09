@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="context-path" th:content="@{/}" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>关键字查询-结果页</title>
+
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	th:href="@{/static/bootstrap/3.3.5/css/font-awesome.css}">
+<link rel="stylesheet" th:href="@{/static/css/crumb/reset.css}">
+<link rel="stylesheet" th:href="@{/static/css/crumb/style.css}">
+
+<script type="text/javascript"
+	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+
+<style type="text/css">
+li {
+	list-style-type: none;
+}
+
+.brandrow li:hover {
+	border: 1px solid blue;
+	margin: -1px;
+}
+
+.categoryrow li:hover {
+	border: 1px solid blue;
+	margin: -1px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h3 style="font-size: 18px;">筛选条件列表-用于多条件选择</h3>
+		<br>
+		<div class="row clearfix">
+			<div class="row clearfix ">
+				<div class="col-md-12 column  breadcrumb">
+
+					<p class="shaixuan-tj floatLeft clearfix ">
+						<span class=""><a href="#">全部结果</a></span> <i
+							class="icon-angle-right"></i> <span><em
+							th:text="'“'+${keywords}+'”'">查询关键字</em></span> <i
+							class="icon-angle-right"></i>
+
+						<!-- <span class="crumb-select-item">
+							<a href="/">
+								<b>品牌：</b>
+								<em>苹果</em>
+								<i class="icon-remove"></i>
+							</a>
+						</span>	 -->
+
+					</p>
+
+				</div>
+			</div>
+			<!-- 类目信息 查询结果个数 -->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<span>手机 商品筛选 共xxxx个</span>
+				</div>
+			</div>
+			<div class="col-md-12 column">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>条件名称</th>
+							<th>条件值列表</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="brandrow" th:if="${not #lists.isEmpty(brandList)}">
+							<td>品牌</td>
+							<td>
+								<ul>
+									<li th:each="brand : ${brandList}"
+										style="float: left; margin-right: 1px"><a class="brand"
+										th:attr="id='brand_'+${brand.brandId},data-bind=${brand.brandId},data-brand-name=${brand.brandName}">
+											<img th:alt="${brand.brandName}"
+											th:src="@{${brand.brandLogoUrl}}">
+									</a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr class="categoryrow" th:each="cateCond : ${filterList}">
+							<td th:text="${cateCond.secondCategory.cName}">条件名称</td>
+							<td><ul>
+									<li th:each="thirdCate : ${cateCond.thirdCategoryList}"
+										class="category" style="float: left; margin-right: 10px"
+										th:attr="data-bind=${cateCond.secondCategory.cid}+'|'+${thirdCate.cid},data-category-name=${thirdCate.cName}"><span
+										th:text="${thirdCate.cName}">属性值</span></li>
+								</ul></td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- 查询结果列表 -->
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row">
+					<div class="col-md-3" th:each="item : ${itemList}">
+						<div class="thumbnail">
+							<a
+								th:href="@{/front/product/detail/{itemId}(itemId=${item.item.itemId})}"
+								target="_blank"> <img th:src="@{${item.pict[0].pictureUrl}}" />
+							</a>
+							<div class="">
+								<p th:text="${item.item.itemName}"></p>
+								<p th:text="${item.item.marketPrice}"></p>
+								<p th:text="${item.item.itemId}"></p>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 加入分页处理 -->
+		<nav th:if="${not #lists.isEmpty(itemList)}" style="float: right;">
+			<ul class="pagination">
+				<li><a href="#">&laquo;</a></li>
+
+				<li><a th:if="${not isFirstPage}" href="javascript:void(0);"
+					th:attr="data-bind=${pageNum-1}+'-'+${pageSize}">上一页</a> <a
+					th:if="${isFirstPagee}" href="javascript:void(0);" data-bind="">上一页</a>
+				</li>
+
+				<li th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
+					th:if="${pageNum eq pageNo}" href="javascript:void(0);"
+					data-bind=""> <span th:text="${pageNo}"></span>
+				</a> <a th:if="${not (pageNum eq pageNo)}" href="javascript:void(0);"
+					th:attr="data-bind=${pageNo}+'-'+${pageSize}"> <span
+						th:text="${pageNo}"></span>
+				</a></li>
+				<li><a th:if="${not isLastPage}" href="javascript:void(0);"
+					th:attr="data-bind=${pageNum+1}+'-'+${pageSize}">下一页</a> <a
+					th:if="${isLastPage}" href="javascript:void(0);" data-bind="">下一页</a>
+				</li>
+
+				<li><a href="#">&raquo;</a></li>
+			</ul>
+		</nav>
+
+
+	</div>
+	<!-- <input type="button" value="test" id="BtnTest" /> -->
+
+	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
+	<form th:action="@{/front/search/keywordscond}" method="get"
+		id="testform">
+		<input type="hidden" name="keywords" id="keywords"
+			th:value="${keywords}" />
+		<!-- 品牌条件 -->
+		<!-- 用于保存上次查询的条件  初始值为空字符串 -->
+		<input type="hidden" name="brandCond" id="brandCond"
+			th:value="${brandCond}" />
+		<!-- 品牌条件 -->
+		<input type="hidden" name="categoryCond" id="categoryCond"
+			th:value="${categoryCond}" />
+		<!-- 类目条件 -->
+		<!-- 保存页号与页大小 -->
+		<input type="hidden" name="pageNum" id="pageNum" value="0"> <input
+			type="hidden" name="pageSize" id="pageSize" value="0">
+
+		<!-- 用户选择的条件列表 -->
+		<input type="hidden" name="searchCond" id="searchCond"
+			th:value="${searchCond}">
+
+	</form>
+
+	<script>
+		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
+		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
+				BASE_CONTEXT_PATH.length - 1);
+
+		/* function search_ajax() {
+			$.ajax({
+
+				url : BASE_CONTEXT_PATH + '/front/search/categorycond',
+				type : 'post',
+				contentType : 'application/json', // 这句不加出现415错误:Unsupported Media Type
+				data : JSON.stringify(g_params), // 以json字符串方式传递
+				success : function(data) {
+					console.log("success...");
+				},
+				error : function(data) {
+					console.log("error...");
+				}
+			});
+		} */
+		
+		Array.prototype.indexOf = function(val) {
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] == val) return i;
+			}
+				return -1;
+			};
+			
+		Array.prototype.remove = function(val) {
+				var index = this.indexOf(val);
+				if (index > -1) {
+					this.splice(index, 1);
+				}
+			};
+		
+		
+
+		/* 置页号为0 */
+		function resetPageInfo() {
+			$("#pageNum").val('0');
+			$("#pageSize").val('0');
+		}
+
+		/* 置查询条件值 */
+		function setSearchCond(brands, category) {
+			//置隐藏表单中的值
+			$("#brandCond").val(brands);
+			$("#categoryCond").val(category);
+		}
+
+		/*
+			通过隐藏表单进行提交
+		 */
+		function search_normal() {
+			setSearchCond(g_params.brands, g_params.category);
+			$("#testform").submit();
+
+			g_params.brands = "";
+			g_params.category = "";
+			g_searchCondArr=new Array();
+
+		}
+		
+		/*
+			显示查询条件  (bread crumb)
+		*/
+		function displaySearchCond(searchCond){
+			//var searchCond=$("#searchCond").val();  
+			var condItemArr=new Array();
+			if(searchCond!="")
+				condItemArr=searchCond.split(",");
+			//alert(condItemArr.length);
+			for(var i = 0; i < condItemArr.length; i++){
+				
+				var condName="";
+				var condArr=condItemArr[i].split(":");
+				
+				if(condArr[0]=='品牌'){
+					condName="brand";
+				}
+				else{
+					condName="category";	
+				}
+				
+				var condStr="<span class='crumb-select-item'"+" data-bind='"+condArr[2]+"'"+" data-cond-name='"+  condName+ "'"+  " data-cond-value='"+  condArr[1]+ "'"+  "><a href='/'><b>"+condArr[0]+":"+"</b><em>"+condArr[1]+"</em><i class='icon-remove'></i></a></span>"
+				$(".shaixuan-tj").children().last().after(condStr);
+			}			
+		}
+		
+		/*
+			查询条件（bread crumb）
+		*/
+		function initSearchCond(searchCond){
+			var condItemArr=new Array();
+			if(searchCond!="")
+				condItemArr=searchCond.split(",");
+			for(var i=0;i<condItemArr.length;i++){
+				g_searchCondArr.push(condItemArr[i]);
+			}
+			
+		}
+		
+		
+		
+		/*
+			加入查询条件			
+		*/
+		function addSearchCond(condName,condValue,condId){
+			g_searchCondArr.push(condName+":"+condValue+":"+condId);							
+			$("#searchCond").val(g_searchCondArr.toString());			
+		}
+		
+		/*
+			移除查询条件
+		*/
+		function removeSearchCond(condName,condValue,condId){
+			var condStr=condName+":"+condValue+":"+condId;
+			g_searchCondArr.remove(condStr);
+			$("#searchCond").val(g_searchCondArr.toString());
+			
+			
+		}
+		
+		//常量定义
+		var COND_NAME_BRAND="brand";
+		var COND_NAME_CATEGORY="category";
+
+		//全局量定义
+		var g_params = null; //查询条件JSON对象
+		var g_searchCondArr=new Array();  //查询条件
+		g_params = new Object();
+
+		//初始化查询条件的值		
+		g_params.brands = $("#brandCond").val();
+		g_params.category = $("#categoryCond").val();
+		
+		
+
+		$(function() {
+			
+			displaySearchCond($("#searchCond").val());  //显示查询条件
+			initSearchCond($("#searchCond").val());  //初始化查询条件
+
+			/*
+				当用户MOUSE移动到已经选择的条件上时（crumb-面包渣）
+			*/
+			$(".shaixuan-tj span.crumb-select-item").hover(function(event) {
+				if (event.type == 'mouseenter') {
+					$(this).addClass("crumb-select-itemon");
+				} else {
+					$(this).removeClass("crumb-select-itemon");
+				}
+			});
+			
+			/*
+				移除条件
+			*/
+			$(".shaixuan-tj span.crumb-select-item").on('click',
+					function(event) {
+						event.preventDefault();					
+						
+						if($(this).attr("data-cond-name")==COND_NAME_BRAND){  //如果是品牌条件							
+							g_params.brands="";
+							removeSearchCond("品牌",$(this).attr("data-cond-value"),$(this).attr("data-bind"))
+						}
+						if($(this).attr("data-cond-name")==COND_NAME_CATEGORY){  //如果是类目条件							
+							g_params.category="";
+							removeSearchCond("类目",$(this).attr("data-cond-value"),$(this).attr("data-bind"))
+						}
+						
+						$(this).remove();
+						
+						resetPageInfo();
+						search_normal();
+						
+						
+						
+					});
+
+			//当点击品牌时,获取品牌的id  增加条件
+			$(".brand").on(
+					'click',
+					function(e) {
+						if (g_params.brands == "") {
+							g_params.brands = $(this).attr('data-bind');
+						} else {
+							g_params.brands = g_params.brands + ","
+									+ $(this).attr('data-bind');
+						}
+						
+						addSearchCond("品牌",$(this).attr('data-brand-name'),$(this).attr('data-bind'));
+						//alert(g_searchCondArr.toString());
+						
+						resetPageInfo();
+						search_normal();
+					});
+
+			//当点击类目条件时，获取相应的值    	增加条件
+			$(".category").on(
+					'click',
+					function(e) {
+						if (g_params.category == "") {
+							g_params.category = $(this).attr('data-bind');
+						} else {
+							g_params.category = g_params.category + ","
+									+ $(this).attr('data-bind');
+						}
+						
+						
+						addSearchCond("类目",$(this).attr('data-category-name'),$(this).attr('data-bind'));
+						
+						//alert(g_searchCondArr.toString());
+						
+						resetPageInfo();
+						search_normal();
+					});
+
+			/*
+			分页导航：
+			当点击页号时读取需要导航到的页码及每页记录数（pageNum,pageSize）
+			data-bind:pageNum-pageSize形式
+			如果data-bind为空字符串，则不做动作
+			当用户点击某页时，则发送与筛选相同的请求
+			 */
+
+			$(".pagination li a").on('click', function(e) {
+				//alert($(this).attr("data-bind"));
+				var dataBind = $(this).attr("data-bind");
+				//当dataBind有数据时处理
+				if (dataBind != "") {
+					var pageArr = new Array();
+					pageArr = dataBind.split("-");
+					//置隐藏表单数据
+					$("#pageNum").val(pageArr[0]);
+					$("#pageSize").val(pageArr[1]);
+					//发送请求
+					search_normal();
+				}
+
+			});
+
+		});
+	</script>
+
+
+
+
+</body>
+</html>
