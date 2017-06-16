@@ -316,6 +316,12 @@
 		<!-- <table tableName="user_integral_trajectory" domainObjectName="UserIntegralTrajectory" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
 			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
 		</table> -->	
+		
+		<!-- company_info  -->
+		<!-- <table tableName="company_info" domainObjectName="CompanyInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table> -->
+		
 			
 				
 	</context>

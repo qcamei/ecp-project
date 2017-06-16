@@ -29,6 +29,7 @@ import com.ecp.service.front.ICategoryService;
 @RequestMapping("/front/home")
 public class HomeController {
 	final String RESPONSE_THYMELEAF = "thymeleaf/front/";
+	final String RESPONSE_THYMELEAF_BACK = "thymeleaf/back/";
 	final String RESPONSE_JSP = "jsps/";
 
 	@Autowired
@@ -132,6 +133,8 @@ public class HomeController {
 
 		return RESPONSE_THYMELEAF + "product_detail";
 	}
+	
+	
 	
 
 	/**
