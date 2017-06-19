@@ -158,7 +158,8 @@ public class FileUploadUtil {
 		try {
 			String realPath = request.getSession().getServletContext().getRealPath("/");
 			String temp = realPath.substring(0, realPath.lastIndexOf(File.separator));
-			temp = temp.substring(0, temp.lastIndexOf(File.separator));
+			//TODO DEBUG 屏蔽以下代码后，为当前项目所在目录，否则为webapp目录
+			//temp = temp.substring(0, temp.lastIndexOf(File.separator));
 			return temp + savePath;
 		} catch (Exception e) {
 			log.error("获取文件存储的真实文件夹路径异常", e);

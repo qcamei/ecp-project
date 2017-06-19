@@ -322,6 +322,11 @@
 			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
 		</table> -->
 		
+		<!-- user_extends  -->
+		<!-- <table tableName="user_extends" domainObjectName="UserExtends" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="extend_id" sqlStatement="MySql" identity="true"/>
+		</table>  -->
+		
 			
 				
 	</context>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head th:include="/thymeleaf/common/_head::head('客户资料详情')">
+<meta charset="UTF-8">
+</head>
+<body>
+<div class="container">
+		<div th:include="thymeleaf/common/_header::header" class="header"></div>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<h3>签约客户-详情</h3>
+				<form role="form" id="user-agent-form">
+					<div class="form-group">
+						<label for="companyName">企业名称</label><input class="form-control"
+							id="companyName" name="companyName" th:value="${agent.companyName}" type="text" />
+					</div>
+					<div class="form-group">
+						<label for="artificialPersonName">企业负责人姓名</label><input
+							class="form-control" id="artificialPersonName" name="artificialPersonName" th:value="${agent.artificialPersonName}"  type="text" />
+					</div>
+					<div class="form-group">
+						<label for="contactPhone">手机号码</label><input class="form-control"
+							id="contactPhone" name="contactPhone" th:value="${agent.contactPhone}" type="text" />
+					</div>
+					<div class="form-group">
+						<label for="contactEmail">企业邮箱</label><input class="form-control"
+							id="contactEmail" name="contactEmail" th:value="${agent.contactEmail}"  type="text" />
+					</div>
+					<div class="form-group">
+						<label for="contactAddress">联系地址</label><input
+							class="form-control" id="contactAddress" name="contactAddress" th:value="${agent.contactAddress}"  type="text" />
+					</div>
+
+					<div class="form-group">
+						<!-- <img alt="营业执照" id="businessLicencePicSrc_prev" src=""> -->
+						<div>
+							<label for="businessLicencePicSrc">营业执照</label>
+						</div>
+						<div class="col-sm-10" id="businessLicencePicSrc_prev">
+							<img  style="height:150px;"  th:src="@{${agent.businessLicencePicSrc}}">
+						</div>
+						
+						<input id="businessLicencePicSrc" name="businessLicencePic_Src" type="file"
+							onchange="javascript:preview(this);"
+							accept="image/*" />
+
+					</div>
+
+					<div class="form-group">
+						<div>
+							<label for="taxRegistrationCertificatePicSrc">税务登记证</label>
+						</div>
+						<div class="col-sm-10" id="taxRegistrationCertificatePicSrc_prev">
+							<img  style="height:150px;" th:src="@{${agent.taxRegistrationCertificatePicSrc}}">
+						</div>
+						
+						<input id="taxRegistrationCertificatePicSrc" name="taxRegistrationCertificatePic_Src" type="file"
+							onchange="javascript:preview(this);"
+							accept="image/*" />
+					</div>
+
+					<div class="form-group">
+						<div>
+							<label for="organizationPicSrc">组织机构代码证</label>
+						</div>
+						<div class="col-sm-10" id="organizationPicSrc_prev">
+							<img style="height:150px;" th:src="@{${agent.organizationPicSrc}}">
+						</div>
+						<input id="organizationPicSrc" name="organizationPic_Src" type="file"
+							onchange="javascript:preview(this);"
+							accept="image/*" />
+					</div>
+
+
+					<button type="button" id="btnSave"  class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+		<div th:include="/thymeleaf/common/_footer::footer" class="footer"></div>
+	</div>
+
+
+	<!-- 特化JS -->
+	<script type="text/javascript">
+		
+		//上下文信息  
+		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
+		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
+				BASE_CONTEXT_PATH.length - 1);
+	
+	
+	
+		/*
+		 * 上传前预览图片
+		 */
+		function preview(file) {
+			//alert(file.id);
+			if (isAllowUploadFile(file, 5120, '上传logo图不能大于5M！')) {
+				showPreview(file, file.id+'_prev');
+				//$("#save-content-submit-btn").attr("disabled", false);
+			} else {
+				//$("#save-content-submit-btn").attr("disabled", true);
+			}
+		}
+		
+		/*
+		 * 保存内容
+		 */
+		function saveFun(){
+			var url = null;
+			
+			url = BASE_CONTEXT_PATH+"/back/agent/insert";
+			
+			
+			//util.loading();
+			$("#user-agent-form").ajaxSubmit({
+				type:"post",
+				url:url,
+				success : function(res) {
+					console.log(res);
+					if(res!=null){
+						var obj = $.parseJSON(res);
+						if(obj.result_code=="success"){
+							//$("#update-menu-modal-div").modal("hide");//隐藏修改菜单对话框
+							util.message(obj.result_msg);
+							//window.location.href="loginSubmit";
+							
+							//操作成功后重新加载当前菜单内容
+							//reloadInfoFun();
+						}else{
+							util.message(obj.result_err_msg);
+						}
+					}
+				},
+			});
+		}
+		
+		
+		$(function() {
+			
+			
+			/*
+				保存签约用户
+			*/
+			$("#btnSave").on('click', function(e){
+				saveFun();	
+			});
+			
+			
+		});
+	</script>
+
+
+</body>
+</html>

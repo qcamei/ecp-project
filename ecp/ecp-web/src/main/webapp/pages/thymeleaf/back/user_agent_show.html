@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="context-path" th:content="@{/}" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
+	rel="stylesheet" />
+<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
+	rel="stylesheet" />
+
+<script type="text/javascript"
+	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+
+<title>签约客户维护</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<h3>签约客户维护</h3>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>企业名称</th>
+							<th>企业负责人</th>
+							<th>手机号码</th>
+							<th>帐号</th>
+							<th>状态</th>
+							<th>有效性</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="agent:${userAgents}">
+							<td th:text="${agent.companyName}">北京XXX科技有限责任公司</td>
+							<td th:text="${agent.artificialPersonName}">张XX</td>
+							<td th:text="${agent.contactPhone}">138xxxxxxxx</td>
+							<span th:switch="${agent.userId}" th:remove="tag">
+								<td th:case="0">未分配</td>
+								<td th:case="*">已分配</td>
+							</span>
+							<span th:switch="${agent.accountState}" th:remove="tag">
+								<td th:case="'1'">有效</td>
+								<td th:case="'2'">无效</td>
+							</span>
+							
+							<td>
+								<button type="button" th:attr="data-bind=${agent.extendId}" class="btn btn-primary set-valid">有效</button>
+								<button type="button" th:attr="data-bind=${agent.extendId}" class="btn btn-primary set-invalid">无效</button>
+							</td>
+							<td>
+								<a type="button"  th:href="@{/back/agent/detail/{id}(id=${agent.extendId})}" target="_blank"  th:attr="data-bind=${agent.extendId}"  class="btn btn-primary show-detail">详情</a>
+								<button type="button" th:attr="data-bind=${agent.extendId}"  class="btn btn-primary dispatch-account">分配帐号</button>
+							</td>
+
+						</tr>
+						
+					</tbody>
+				</table>
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<a th:href="@{/back/agent/add}" class="btn btn-primary"  target="_blank" >增加</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	
+		$(function(){
+			
+			
+			/*
+				显示【详情】按钮-click
+			*/
+			$(".show-detail").on("click",function(e){
+				
+			});
+			
+			
+			
+			
+			
+		});
+	
+	</script>
+	
+	
+</body>
+</html>
