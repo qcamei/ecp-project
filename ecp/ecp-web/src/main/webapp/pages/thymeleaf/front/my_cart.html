@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>我的购物车</title>
-<meta name="context-path" th:content="@{/}" />
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
-	rel="stylesheet" />
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
-	rel="stylesheet" />
-
-<script type="text/javascript"
-	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<div th:include="/thymeleaf/common/_head2::headx('我的购物车')"
+	th:remove="tag"></div>
 
 <style>
 /* 购物车条目未选定时 */
@@ -66,21 +56,20 @@
 							data-order=${cartItem.cid}+'|'+${cartItem.itemId}+'|'+${cartItem.skuId}+'|'+${cartItem.skuName} +'|'+${cartItem.skuPrice}"
 								class="cart_item_selector" /></td>
 							<td><div class="col-md-4 column">
-									<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
-										target="_blank"
-									>
-							
-									<img alt="80x80" height=80 weight=80
-										th:src="@{${cartItem.skuPicture}}" />
-										
-									</a>	
-										
+									<a
+										th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
+										target="_blank"> <img alt="80x80" height=80
+										weight=80 th:src="@{${cartItem.skuPicture}}" />
+
+									</a>
+
 								</div>
 								<div class="col-md-8 column">
 									<dl>
 										<!-- <dt>产品名称</dt> -->
-										<a  th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
-											target="_blank" >
+										<a
+											th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
+											target="_blank">
 											<dd th:text="${cartItem.itemName}">此处放置产品名称</dd>
 										</a>
 									</dl>
@@ -154,9 +143,9 @@
 
 							</div>
 							<div class="col-md-4 column">
-								<a th:href="@{/front/cart/settle}" 
+								<a 
 									clstag="clickcart|keycount|xincart|cart_gotoOrder"
-									id="BtnAddOrder" class="submit-btn btn btn-primary"
+									id="BtnSettle" class="submit-btn btn btn-primary"
 									data-bind="1" target="_blank">去结算<b></b></a>
 
 							</div>
@@ -169,13 +158,6 @@
 	</div>
 
 	<script type="text/javascript">
-		//上下文信息  
-		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
-		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
-				BASE_CONTEXT_PATH.length - 1);
-
-		
-
 		function myFunction() {
 			return "我在这写点东西...";
 		}
@@ -234,30 +216,31 @@
 		}
 
 		/*
-			订单：增加条目
+			购物车：结算
 			itemArr:条目数组
 		 */
-		function addtoOrder(itemArr) {
+		function settle(itemArr) {
 			var logined = false;
-			var urlStr = BASE_CONTEXT_PATH + "/front/order/add"; // 需要提交的 url
+			var urlStr = BASE_CONTEXT_PATH + "/front/cart/settle"; // 需要提交的 url
 
 			//alert("url is:"+urlStr);
 			$.ajax({
 				type : "POST", // 提交方式 get/post
 				url : urlStr,
 				contentType : "application/json", //必须有  
-				/* dataType: "json", *///表示返回值类型，不必须			
+				dataType: "html", //表示返回值类型，不必须,如果返回的是面页，则必须		
 				data : JSON.stringify(itemArr),
 				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
 					console.log(res);
 					if (res != null) {
-						var obj = $.parseJSON(res);
+						$("body").html(res);
+						/* var obj = $.parseJSON(res);
 						alert("message:" + obj.message);
 						if (obj.message == "added") {
 							alert("已形成订单");
 						} else {
 							//处理其它标志
-						}
+						} */
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -339,7 +322,7 @@
 			/*
 				【结算】按钮处理
 			 */
-			/* $("#BtnAddOrder").on('click', function(e) {
+			$("#BtnSettle").on('click', function(e) {
 				var itemArr = new Array();
 
 				//扫描用户己选SKU
@@ -365,9 +348,9 @@
 
 				}); //end of .cart_item_selector
 
-				addtoOrder(itemArr); //send request
+				settle(itemArr); //send request
 
-			}); */
+			});   //end of settle
 
 		}); //end of document ready
 	</script>

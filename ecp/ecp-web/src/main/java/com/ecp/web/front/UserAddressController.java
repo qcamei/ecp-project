@@ -21,15 +21,15 @@ import com.ecp.service.front.ICartService;
 
 
 /**
- * @ClassName CartController
- * @Description  购物车-控制器
+ * @ClassName UserAddressController
+ * @Description 用户地址前端控制器
  * @author Administrator
- * @Date 2017年5月5日 下午4:34:20
+ * @Date 2017年6月23日 下午12:41:21
  * @version 1.0.0
  */
 @Controller
-@RequestMapping("/front/cart")
-public class CartController {
+@RequestMapping("/front/useraddress")
+public class UserAddressController {
 	final String RESPONSE_THYMELEAF="thymeleaf/front/";
 	final String RESPONSE_JSP="jsps/front/";	
 	
