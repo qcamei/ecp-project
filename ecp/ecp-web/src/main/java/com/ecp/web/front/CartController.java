@@ -63,6 +63,20 @@ public class CartController {
 	}
 	
 	
+	/**
+	 * @Description 导航--->结算页面
+	 * @param model
+	 * @param request
+	 * @return 结算页面（settle_account）
+	 */
+	@RequestMapping("/settle")
+	public String cart_settlement(Model model,HttpServletRequest request){
+		
+		
+		
+		return RESPONSE_THYMELEAF+"settle_account";
+	}
+	
 	
 
 }

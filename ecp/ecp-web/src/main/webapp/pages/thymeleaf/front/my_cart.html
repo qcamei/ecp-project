@@ -154,10 +154,10 @@
 
 							</div>
 							<div class="col-md-4 column">
-								<a href="javascript:void(0);" onclick="return false;"
+								<a th:href="@{/front/cart/settle}" 
 									clstag="clickcart|keycount|xincart|cart_gotoOrder"
 									id="BtnAddOrder" class="submit-btn btn btn-primary"
-									data-bind="1">去结算<b></b></a>
+									data-bind="1" target="_blank">去结算<b></b></a>
 
 							</div>
 						</div>
@@ -339,7 +339,7 @@
 			/*
 				【结算】按钮处理
 			 */
-			$("#BtnAddOrder").on('click', function(e) {
+			/* $("#BtnAddOrder").on('click', function(e) {
 				var itemArr = new Array();
 
 				//扫描用户己选SKU
@@ -367,7 +367,7 @@
 
 				addtoOrder(itemArr); //send request
 
-			});
+			}); */
 
 		}); //end of document ready
 	</script>

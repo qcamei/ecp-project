@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head th:include="/thymeleaf/common/_head::head('结算')">
+<meta charset="UTF-8">
+</head>
+<body>
+	<div class="container">
+		<!-- 增加/编辑用户地址对话框 -->
+		<div th:replace="thymeleaf/common/_user_address_dialog::dialog" class="header"></div>		
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<h3>结算页</h3>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							收货地址 <a onclick="$('#modal-273078').click();" style="float: right">增加收货地址</a>
+						</h3>
+
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>编号</th>
+									<th>选择</th>
+									<th>姓名</th>
+									<th>地址</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
+									<td>张女士</td>
+									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
+									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
+									<td>张女士</td>
+									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
+									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
+									<td>张女士</td>
+									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
+									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
+									<td>张女士</td>
+									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
+									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- <div class="panel-footer">Panel footer</div> -->
+				</div>
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+						<h3 class="panel-title">支付</h3>
+					</div>
+					<div class="panel-body">线下议价未完成，提交订单后请等待客服电话联系。</div>
+					<!-- <div class="panel-footer">Panel footer</div> -->
+				</div>
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">送货清单</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>序号</th>
+									<th>图片</th>
+									<th>产品名称</th>
+									<th>单价</th>
+									<th>数量</th>
+									<th>状态</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>1</th>
+									<td><img alt="80x80" height=80 weight=80
+										th:src="@{/static/images/computer1.png}" /></td>
+									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
+									<td>￥12.00</td>
+									<td>x1</td>
+									<td>有货</td>
+								</tr>
+								<tr>
+									<th>2</th>
+									<td><img alt="80x80" height=80 weight=80
+										th:src="@{/static/images/computer1.png}" /></td>
+									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
+									<td>￥12.00</td>
+									<td>x1</td>
+									<td>有货</td>
+								</tr>
+								<tr>
+									<th>3</th>
+									<td><img alt="80x80" height=80 weight=80
+										th:src="@{/static/images/computer1.png}" /></td>
+									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
+									<td>￥12.00</td>
+									<td>x1</td>
+									<td>有货</td>
+								</tr>
+								<tr>
+									<th>4</th>
+									<td><img alt="80x80" height=80 weight=80
+										th:src="@{/static/images/computer1.png}" /></td>
+									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
+									<td>￥12.00</td>
+									<td>x1</td>
+									<td>有货</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- <div class="panel-footer">Panel footer</div> -->
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">订单备注</h3>
+					</div>
+					<div class="panel-body">填写您的订单的要求和疑问，我们会详细审核，在线下交流时给您回复...</div>
+					<!-- <div class="panel-footer">Panel footer</div> -->
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-12 column" >
+						<span style="margin-left:900px">2 件商品</span><br>
+						<span style="margin-left:900px">应付总额：<strong style="color:red;font-size:20px"> ￥42.80 </strong></span><br>
+						<span style="float:right">寄送至： 河北 石家庄市 长安区 城区 胜利北大街318号石纺小区22号楼2单元201 收货人：张女士
+							139****4365</span>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<hr />
+						<button style="float:right" type="button" class="btn btn-primary">提交订单</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
