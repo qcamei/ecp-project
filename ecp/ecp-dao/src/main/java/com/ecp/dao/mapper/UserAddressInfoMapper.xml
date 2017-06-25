@@ -10,9 +10,9 @@
     <result column="buyer_id" property="buyerId" jdbcType="BIGINT" />
     <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
     <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
-    <result column="contack_person" property="contackPerson" jdbcType="VARCHAR" />
-    <result column="contack_phone" property="contackPhone" jdbcType="VARCHAR" />
-    <result column="contack_tel" property="contackTel" jdbcType="VARCHAR" />
+    <result column="contact_person" property="contactPerson" jdbcType="VARCHAR" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="contact_tel" property="contactTel" jdbcType="VARCHAR" />
     <result column="country_code" property="countryCode" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="emergency_person" property="emergencyPerson" jdbcType="VARCHAR" />
@@ -30,8 +30,8 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, attach_address, buyer_id, city_code, contact_email, contack_person, contack_phone, 
-    contack_tel, country_code, create_time, emergency_person, emergency_phone, full_address, 
+    id, attach_address, buyer_id, city_code, contact_email, contact_person, contact_phone, 
+    contact_tel, country_code, create_time, emergency_person, emergency_phone, full_address, 
     is_default, postal_code, province_code, town_code, updte_time, village_code, yn
   </sql>
 </mapper>

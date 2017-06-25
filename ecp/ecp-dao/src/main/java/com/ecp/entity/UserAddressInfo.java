@@ -21,14 +21,14 @@ public class UserAddressInfo {
     @Column(name = "contact_email")
     private String contactEmail;
 
-    @Column(name = "contack_person")
-    private String contackPerson;
+    @Column(name = "contact_person")
+    private String contactPerson;
 
-    @Column(name = "contack_phone")
-    private String contackPhone;
+    @Column(name = "contact_phone")
+    private String contactPhone;
 
-    @Column(name = "contack_tel")
-    private String contackTel;
+    @Column(name = "contact_tel")
+    private String contactTel;
 
     @Column(name = "country_code")
     private String countryCode;
@@ -136,45 +136,45 @@ public class UserAddressInfo {
     }
 
     /**
-     * @return contack_person
+     * @return contact_person
      */
-    public String getContackPerson() {
-        return contackPerson;
+    public String getContactPerson() {
+        return contactPerson;
     }
 
     /**
-     * @param contackPerson
+     * @param contactPerson
      */
-    public void setContackPerson(String contackPerson) {
-        this.contackPerson = contackPerson == null ? null : contackPerson.trim();
+    public void setContactPerson(String contactPerson) {
+        this.contactPerson = contactPerson == null ? null : contactPerson.trim();
     }
 
     /**
-     * @return contack_phone
+     * @return contact_phone
      */
-    public String getContackPhone() {
-        return contackPhone;
+    public String getContactPhone() {
+        return contactPhone;
     }
 
     /**
-     * @param contackPhone
+     * @param contactPhone
      */
-    public void setContackPhone(String contackPhone) {
-        this.contackPhone = contackPhone == null ? null : contackPhone.trim();
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone == null ? null : contactPhone.trim();
     }
 
     /**
-     * @return contack_tel
+     * @return contact_tel
      */
-    public String getContackTel() {
-        return contackTel;
+    public String getContactTel() {
+        return contactTel;
     }
 
     /**
-     * @param contackTel
+     * @param contactTel
      */
-    public void setContackTel(String contackTel) {
-        this.contackTel = contackTel == null ? null : contackTel.trim();
+    public void setContactTel(String contactTel) {
+        this.contactTel = contactTel == null ? null : contactTel.trim();
     }
 
     /**
@@ -356,9 +356,9 @@ public class UserAddressInfo {
         sb.append(", buyerId=").append(buyerId);
         sb.append(", cityCode=").append(cityCode);
         sb.append(", contactEmail=").append(contactEmail);
-        sb.append(", contackPerson=").append(contackPerson);
-        sb.append(", contackPhone=").append(contackPhone);
-        sb.append(", contackTel=").append(contackTel);
+        sb.append(", contactPerson=").append(contactPerson);
+        sb.append(", contactPhone=").append(contactPhone);
+        sb.append(", contactTel=").append(contactTel);
         sb.append(", countryCode=").append(countryCode);
         sb.append(", createTime=").append(createTime);
         sb.append(", emergencyPerson=").append(emergencyPerson);

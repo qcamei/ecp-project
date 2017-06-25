@@ -15,5 +15,17 @@ import com.ecp.service.IBaseService;
  * @version 1.0.0
  */
 public interface IUserAddressInfoService extends IBaseService<UserAddressInfo, Long> {
-		
+	/**
+	 * @Description 藜取指定用户地址列表
+	 * @param userId
+	 * @return
+	 */
+	public List<UserAddressInfo> selectByBuyerId(long buyerId);	
+	
+	/**
+	 * @Description 获取指定用户默认地址
+	 * @param buyerId
+	 * @return 如果有默认地址，则返回，否则返回null;
+	 */
+	public UserAddressInfo selectBuyerDefaultAddress(long buyerId);
 }

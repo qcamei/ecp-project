@@ -6,60 +6,19 @@
 <body>
 	<div class="container">
 		<!-- 增加/编辑用户地址对话框 -->
-		<div th:replace="thymeleaf/common/_user_address_dialog::dialog" class="header"></div>		
+		<div th:include="thymeleaf/common/_user_address_dialog::dialog"
+			class=""></div>
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<h3>结算页</h3>
 				<div class="panel panel-info">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							收货地址 <a onclick="$('#modal-273078').click();" style="float: right">增加收货地址</a>
+							收货地址 <a id="addUserAddress" style="float: right">增加收货地址</a>
 						</h3>
 
 					</div>
-					<div class="panel-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th>编号</th>
-									<th>选择</th>
-									<th>姓名</th>
-									<th>地址</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>1</td>
-									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
-									<td>张女士</td>
-									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
-									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
-								</tr>
-								<tr>
-									<td>2</td>
-									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
-									<td>张女士</td>
-									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
-									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
-								</tr>
-								<tr>
-									<td>3</td>
-									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
-									<td>张女士</td>
-									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
-									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
-								</tr>
-								<tr>
-									<td>4</td>
-									<td><input type="checkbox" name="name2" id="1" value="a" /></td>
-									<td>张女士</td>
-									<td>张女士 河北 石家庄市 长安区 城区胜利北大街318号石纺小区22号楼2单元201 139****4365 </td>
-									<td><input type="button" value="编辑" /><input type="button" value="删除" /><input type="button" value="设为默认" /></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+					<div id="userAddressInofTable" class="panel-body"></div>
 					<!-- <div class="panel-footer">Panel footer</div> -->
 				</div>
 				<div class="panel panel-warning">
@@ -86,40 +45,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th>1</th>
+								<tr th:each="cartItem,cartItemState:${cartItemList}">
+									<th th:text="${cartItemState.count}">序号</th>
 									<td><img alt="80x80" height=80 weight=80
-										th:src="@{/static/images/computer1.png}" /></td>
-									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
-									<td>￥12.00</td>
-									<td>x1</td>
-									<td>有货</td>
-								</tr>
-								<tr>
-									<th>2</th>
-									<td><img alt="80x80" height=80 weight=80
-										th:src="@{/static/images/computer1.png}" /></td>
-									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
-									<td>￥12.00</td>
-									<td>x1</td>
-									<td>有货</td>
-								</tr>
-								<tr>
-									<th>3</th>
-									<td><img alt="80x80" height=80 weight=80
-										th:src="@{/static/images/computer1.png}" /></td>
-									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
-									<td>￥12.00</td>
-									<td>x1</td>
-									<td>有货</td>
-								</tr>
-								<tr>
-									<th>4</th>
-									<td><img alt="80x80" height=80 weight=80
-										th:src="@{/static/images/computer1.png}" /></td>
-									<td>【京东超市】全无敌 杀蚊气雾剂 无香配方600ml 杀虫剂 喷雾 专杀蚊子杀虫水 </td>
-									<td>￥12.00</td>
-									<td>x1</td>
+										th:src="@{${cartItem.skuPicture}}" /></td>
+									<td th:text="${cartItem.skuName}">商品名称</td>
+									<td th:text="'￥'+${cartItem.skuPrice}">价格</td>
+									<td th:text="${cartItem.skuNum}">数量</td>
 									<td>有货</td>
 								</tr>
 							</tbody>
@@ -135,21 +67,345 @@
 					<!-- <div class="panel-footer">Panel footer</div> -->
 				</div>
 				<div class="row clearfix">
-					<div class="col-md-12 column" >
-						<span style="margin-left:900px">2 件商品</span><br>
-						<span style="margin-left:900px">应付总额：<strong style="color:red;font-size:20px"> ￥42.80 </strong></span><br>
-						<span style="float:right">寄送至： 河北 石家庄市 长安区 城区 胜利北大街318号石纺小区22号楼2单元201 收货人：张女士
-							139****4365</span>
+					<div class="col-md-12 column">
+						<span style="margin-left: 900px" th:text="${cartItemNumAmount}">2</span>件商品<br> 
+						<span style="margin-left: 900px">应付总额：￥<strong style="color: red; font-size: 20px" th:text="${totalPayable}"> 42.80 </strong></span><br> 
+						<span style="float: right">
+							寄送至： <span id="selected-address">河北 石家庄市 长安区 城区</span> 
+							收货人：<span id="selected-person">张女士 139****4365 </span>
+						</span>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 column">
 						<hr />
-						<button style="float:right" type="button" class="btn btn-primary">提交订单</button>
+						<button style="float: right" type="button" class="btn btn-primary">提交订单</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<script>
+		
+		var OPERATE_ADD="add",OPERATE_EDIT="edit"; 用户地址操作类型常量
+		var g_userAddressOperate="";  //add | edit 用户地址操作类型
+	
+		/*
+			加载用户地址列表
+		 */
+
+		function loadAddressTableFun() {
+			var parms = null;
+			url = BASE_CONTEXT_PATH + "/front/useraddress/show";
+			$("#userAddressInofTable").load(url, parms, function() {
+				setAddressAndPerson();
+			});  
+		}
+		
+		/*
+			获取默认地址信息
+		*/
+		function getSelectedAddress(){
+			var addr="";
+			//迭代地址选择checkbox
+			$(".addrSelector").each(function(index, val){
+				if(this.checked){
+					addr= $(this).attr("data-address");
+					return addr;
+				}
+			});
+			return addr;
+			
+		}
+		
+		/*
+		获取默认地址信息
+		*/
+		function getSelectedPerson(){
+			var person="";
+			//迭代地址选择checkbox
+			$(".addrSelector").each(function(index, val){
+				if(this.checked){
+					person= $(this).attr("data-person");
+					return person;
+				}
+			});
+			return person;
+		}
+		
+		/*
+			设置地址信息及用户信息 
+		*/
+		function setAddressAndPerson(){
+			var addr=getSelectedAddress();
+			var person=getSelectedPerson();
+			$("#selected-address").text(addr);
+			$("#selected-person").text(person);
+		}
+		
+		/* 地址选择-click处理函数 */
+		function selectorFunc(e){
+			$(".addrSelector").each(function(index, val){
+				if(e!=this){
+					this.checked=false;
+				}
+			});
+			
+			setAddressAndPerson();
+		}
+		
+		/*  reset dialog  */
+		function resetDialog(){
+			$("#user-address-form")[0].reset();
+		}
+		
+		/*
+			设置需要编辑的地址id
+			参数：
+				addrObj:js地址对象
+		*/
+		function setEditValue(addrObj){
+			$("#editId").val(addrObj.id);
+			$("#contactPerson").val(addrObj.contactPerson);
+			$("#contactPhone").val(addrObj.contactPhone);
+			$("#fullAddress").val(addrObj.fullAddress);
+			
+			//TODO: set other input's value
+			
+		}
+		
+		
+		/* 编辑地址 */
+		function editFunc(e){
+			var addrId=$(e).attr("data-bind");
+			
+			//获取当前地址对象（AJAX方式,返回需要编辑的送货地址（JSON格式））
+			getEditAddr(addrId);
+		}
+		
+		/* 
+			采用AJAX请求，获取指定地址  
+		*/
+		function getEditAddr(addrId){
+			var url=BASE_CONTEXT_PATH + "/front/useraddress/get";
+			
+			$.ajax({
+				type : "post", // 提交方式 get/post
+				url : url, // 需要提交的 url
+				//dataType: "application/json",
+				data : {
+					'id' : addrId,
+				},
+				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+					console.log(res);
+					if (res != null && res != "") {
+						//console.log(res);
+						var obj = $.parseJSON(res);
+						if (obj.result_code == "success") {
+							//util.message(obj.result_msg);
+							var addrObj=$.parseJSON(obj.result_msg);
+							//show edit dialog
+							resetDialog();
+							setEditValue(addrObj);
+							setDialogTitleAndOperate('修改-收货地址',OPERATE_EDIT);  //设置为编辑操作
+							showDialog();  //显示编辑对话框
+							
+						} else {
+							util.message(obj.result_err_msg);
+							return "";
+						}
+					}
+				}
+
+			});
+		}
+		
+
+		/*
+		 * 增加用户收货地址-保存 （ajax请求）
+		 */
+		function saveFun() {
+			var url = null;
+			
+			if(g_userAddressOperate==OPERATE_ADD)
+				url = BASE_CONTEXT_PATH + "/front/useraddress/insert";
+			else
+				url=BASE_CONTEXT_PATH + "/front/useraddress/update";
+
+			//util.loading();
+			$("#user-address-form").ajaxSubmit({
+				type : "post",
+				url : url,
+				success : function(res) {
+					console.log(res);
+					if (res != null) {
+						var obj = $.parseJSON(res);
+						if (obj.result_code == "success") {
+							util.message(obj.result_msg);
+							loadAddressTableFun(); //操作成功后重新加载用户地址列表
+
+						} else {
+							util.message(obj.result_err_msg);
+						}
+					}
+				},
+			});
+		}
+		
+		/*
+			采用ajax 删除用户地址
+		*/
+		function  deleteInfoAjaxRequest(id){
+			var url = BASE_CONTEXT_PATH + "/front/useraddress/delete"; // 需要提交的 url
+			
+			$.ajax({
+				type : "post", // 提交方式 get/post
+				url : url, // 需要提交的 url
+				//dataType: "application/json",
+				data : {
+					'id' : id,
+				},
+				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+					console.log(res);
+					if (res != null && res != "") {
+						var obj = $.parseJSON(res);
+						if (obj.result_code == "success") {
+							util.message(obj.result_msg);
+							loadAddressTableFun(); //操作成功后重新加载用户地址列表
+						} else {
+							util.message(obj.result_err_msg);
+						}
+					}
+				}
+
+			});
+		}
+		
+		
+		/*
+			采用ajax 设置默认用户地址
+		*/
+		function  setDefaultAjaxRequest(id){
+			var url = BASE_CONTEXT_PATH + "/front/useraddress/setdefault"; // 需要提交的 url
+			
+			$.ajax({
+				type : "post", // 提交方式 get/post
+				url : url, // 需要提交的 url
+				//dataType: "application/json",
+				data : {
+					'id' : id,
+				},
+				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+					console.log(res);
+					if (res != null && res != "") {
+						var obj = $.parseJSON(res);
+						if (obj.result_code == "success") {
+							util.message(obj.result_msg);
+							loadAddressTableFun(); //操作成功后重新加载用户地址列表
+						} else {
+							util.message(obj.result_err_msg);
+						}
+					}
+				}
+	
+			});
+		}
+		
+		
+		/*
+			设置默认地址
+		*/
+		function setDefaultFunc(e){
+			var addrId = $(e).attr("data-bind");  //新的默认地址ID
+			var isDefault=$(e).attr("data-is-default");
+			if(isDefault==1) {   //如果已经是默认地址，则提示用户。
+				util.message("已经是默认地址！");
+			}
+			else  //设置默认地址
+			{
+				setDefaultAjaxRequest(addrId);
+			}
+		}
+		
+
+		/*
+			delete user address  ajax
+		 */
+		function deleteFunc(e) {
+			var userAddressId = $(e).attr("data-bind");
+			util.delConfirm("确认删除？", userAddressId, "deleteInfoAjaxRequest");
+			
+			//设置参数
+			/* var params = {"loginName":loginName,
+							"password":password,
+							"agentId":agentId
+						};
+			
+			//util.loading();
+			//此种方式更加的简洁
+			$.post(url, params, function(res){
+				console.log(res);
+				if(res!=null && res!=""){
+					var obj = $.parseJSON(res);
+					if(obj.result_code=="success"){
+						util.message(obj.result_msg);
+					}else{
+						util.message(obj.result_err_msg);
+					}
+				}
+				
+			}); */
+		}
+
+		/*
+			显示增加用户地址对话框
+		 */
+		function showDialog() {
+			$('#modal-container-273078').modal({
+				backdrop : 'static',
+				keyboard : false
+			});
+		}
+		
+		/* close dialog */
+		function closeDialog() {
+			$("#modal-container-273078").modal("hide");
+		}
+		
+		/* set dialog's title and operate */
+		function setDialogTitleAndOperate(title,operate){
+			$("#myModalLabel").text(title);
+			g_userAddressOperate=operate;
+		}
+		
+
+		/*
+			初始化
+		 */
+		$(function() {
+			loadAddressTableFun(); //加载买家收货地址
+
+			/*
+				地址编辑对话框：【保存】用户地址
+			 */
+			$("#btnSave").on('click', function(e) {
+				closeDialog(); //close dialog(add buyer's delivery address dialog)
+				saveFun();
+			});
+
+			/*
+				【增加】用户地址
+			 */
+			$("#addUserAddress").on('click', function(e) {
+				resetDialog();  //reset the edit dialog
+				setDialogTitleAndOperate('增加-用户地址',OPERATE_ADD);
+				showDialog();
+			});
+
+		});
+	</script>
+
+
 </body>
 </html>
