@@ -85,6 +85,16 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 获取用户已经选商品列表  -->
+	<script th:inline="javascript">  
+			/*<![CDATA[*/  
+      
+			var cartItemList = [[${cartItemList}]];  
+			console.log("买家已选商品类型数量:"+cartItemList.length);  
+      
+			/*]]>*/  
+		</script>  
 
 	<script>
 		
@@ -379,6 +389,118 @@
 			g_userAddressOperate=operate;
 		}
 		
+		
+		/*
+			获取所选地址id
+		*/
+		function getSelectedAddressId(){
+			var addrId="";
+			//迭代地址选择checkbox
+			$(".addrSelector").each(function(index, val){
+				if(this.checked){
+					addrId= $(this).attr("data-id");
+					return addrId;
+				}
+			});
+			return addrId;
+		}
+		
+		/**
+		 * 是否选择了地址
+		 * return:
+		 * 	如果选择了则返回true,否则返回false
+		 */
+		function isSelectedAddr(){
+			var flag=false;
+			//迭代地址选择checkbox
+			$(".addrSelector").each(function(index, val){
+				if(this.checked){
+					flag=true;
+					return flag;
+				}
+			});
+			return flag;
+		}
+		
+		/**
+		 *提交订单 
+		 */
+		function commitOrder(){
+			//判定用户是否已经选择了送货地址
+			var flag=isSelectedAddr();
+			if(!flag){
+				util.message("尚未选择送货地址！");
+				return;
+			}
+			else{
+				var url = BASE_CONTEXT_PATH + "/front/order/add"; // 需要提交的 url
+				var addrId=getSelectedAddressId();
+				createFormAndCommit(url,cartItemList,addrId);  //确认订单
+			}
+		}
+		
+		
+		/**
+		 * 生成隐藏表单域函数
+		 * @param {Object} name  
+		 * 	input's name
+		 * @param {Object} value
+		 * 	value:inptu's value
+		 */
+		var generateHideElement = function(name, value) {
+			var tempInput = document.createElement("input");
+			tempInput.type = "hidden";
+			tempInput.name = name;
+			tempInput.value = value;
+			return tempInput;
+		}
+		
+		/**
+		 * 创建form并提交
+		 * * @param {Object} url
+		 * 	提交的地址
+		 * @param {Object} cartItemList
+		 * 	用户已选商品列表
+		 * @param {Object} addrId
+		 * 	送货地址id
+		 */
+		function createFormAndCommit(url,cartItemList,addrId){
+			var form = document.createElement("form");
+			form.id="test";
+			form.name="test";
+			document.body.appendChild(form);
+	
+			//生成隐藏表单中的内容
+			//商品列表
+			cartItemList.forEach(function(item, index) {
+				
+						var cid = generateHideElement("cartItemList["+index+"]."+"cid", item.cid), 
+							itemId = generateHideElement("cartItemList["+index+"]."+"itemId", item.itemId), 
+							skuId = generateHideElement("cartItemList["+index+"]."+"skuId", item.skuId), 
+							skuName = generateHideElement("cartItemList["+index+"]."+"skuName", item.skuName),
+							skuPrice = generateHideElement("cartItemList["+index+"]."+"skuPrice", item.skuPrice),
+							skuPicture = generateHideElement("cartItemList["+index+"]."+"skuPicture", item.skuPicture),
+							skuNum = generateHideElement("cartItemList["+index+"]."+"skuNum", item.skuNum),
+							id = generateHideElement("cartItemList["+index+"]."+"id", item.id);
+	
+						form.appendChild(cid);
+						form.appendChild(itemId);
+						form.appendChild(skuId);
+						form.appendChild(skuName);
+						form.appendChild(skuPrice);
+						form.appendChild(skuPicture);
+						form.appendChild(skuNum);
+						form.appendChild(id);
+						
+					});
+			//用户所选地址id
+			var addrId = generateHideElement("addrId", addrId);
+			form.appendChild(addrId);
+	
+			form.method = "post";
+			form.action = url;
+			form.submit();
+		}
 
 		/*
 			初始化
@@ -407,7 +529,7 @@
 				【提交订单】按钮 -click消息处理
 			 */
 			$("#commitOrder").on('click', function(e) {
-				
+				commitOrder();
 			});
 			
 			

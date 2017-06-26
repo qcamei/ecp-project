@@ -5,7 +5,7 @@ import java.util.List;
 import com.ecp.entity.Favourite;
 import com.ecp.service.IBaseService;
 
-public interface ICartService extends IBaseService<Favourite, Long> {	
+public interface ICartService extends IBaseService<Favourite,Integer>{	
 	
 	/**
 	 * @Description 将sku加入cart

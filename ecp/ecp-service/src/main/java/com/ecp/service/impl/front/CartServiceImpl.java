@@ -11,7 +11,7 @@ import com.ecp.service.front.ICartService;
 import com.ecp.service.impl.AbstractBaseService;
 
 @Service
-public class CartServiceImpl extends AbstractBaseService<Favourite, Long> implements ICartService {
+public class CartServiceImpl extends AbstractBaseService<Favourite, Integer> implements ICartService {
 	
 	FavouriteMapper favouriteMapper;
 	

@@ -158,7 +158,8 @@ public class PersonalCenterController {
 			cartItemList.add(itemBean); // add into cartItemList
 
 			// userid quantity skuId itemId
-			itemBean.setUserId(userId);
+			itemBean.setId(cartItem.getId());
+			itemBean.setUserId(userId);			
 			itemBean.setQuantity(cartItem.getQuantity());
 			itemBean.setSkuId(cartItem.getSkuId());
 			itemBean.setItemId(cartItem.getItemId());
