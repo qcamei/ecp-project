@@ -136,7 +136,6 @@
 
 							</div>
 							<div class="col-md-4 column">
-
 								<span class="txt txt-new">总价：</span> <span
 									class="price sumPrice"><strong id="amount" style="font-size:20px">0</strong></span>
 								<!-- <b	class="ml5 price-tips"></b>  <br> <span class="txt">已节省：</span>
@@ -207,12 +206,19 @@
 			return amount; //返回总金额
 		}
 
+		/**
+		 * 显示SKU总金额
+		 * @param {Object} amount
+		 */
 		function displayAmount(amount) {
 			$("#amount").text(amount);
 		}
 
 		/*
-		生成隐藏表单域函数
+			生成隐藏表单域函数
+			params:
+				name:input's name
+				value:inptu's value
 		 */
 		var generateHideElement = function(name, value) {
 			var tempInput = document.createElement("input");
@@ -227,6 +233,13 @@
 		 */
 		function settle(itemArr) {
 			var url = BASE_CONTEXT_PATH + "/front/cart/settle"; // 需要提交的 url
+			
+			//如果未选择购物车条目则提示用户 来自于hbuilder
+			if(itemArr.length<=0){
+				util.message("请在购物车中选择商品!");
+				return;
+			}
+			
 	
 			var form = document.createElement("form");
 			form.id="test";
@@ -235,15 +248,8 @@
 	
 			//生成隐藏表单中的内容
 			itemArr.forEach(function(item, index) {
-						/* var cid = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"cid", item.cid), 
-							itemId = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"itemId", item.itemId), 
-							skuId = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"skuId", item.skuId), 
-							skuName = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"skuName", item.skuName),
-							skuPrice = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"skuPrice", item.skuPrice),
-							skuPicture = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"skuPicture", item.skuPicture),
-							skuNum = generateHideElement("cartToOrderItemList.cartItemList["+index+"]."+"skuNum", item.skuNum); */
-							
-							var cid = generateHideElement("cartItemList["+index+"]."+"cid", item.cid), 
+				
+						var cid = generateHideElement("cartItemList["+index+"]."+"cid", item.cid), 
 							itemId = generateHideElement("cartItemList["+index+"]."+"itemId", item.itemId), 
 							skuId = generateHideElement("cartItemList["+index+"]."+"skuId", item.skuId), 
 							skuName = generateHideElement("cartItemList["+index+"]."+"skuName", item.skuName),
