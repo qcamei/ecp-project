@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.ContractMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Contract" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="contract_template_id" property="contractTemplateId" jdbcType="BIGINT" />
+    <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="confirm_date_second_party" property="confirmDateSecondParty" jdbcType="TIMESTAMP" />
+    <result column="confirm_user_second_party" property="confirmUserSecondParty" jdbcType="BIGINT" />
+    <result column="confirm_date_first_party" property="confirmDateFirstParty" jdbcType="TIMESTAMP" />
+    <result column="confirm_user_first_party" property="confirmUserFirstParty" jdbcType="BIGINT" />
+    <result column="confirm_status" property="confirmStatus" jdbcType="BIT" />
+    <result column="contract_status" property="contractStatus" jdbcType="BIT" />
+    <result column="agent_id" property="agentId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, contract_template_id, contract_no, order_no, order_id, create_date, create_user, 
+    confirm_date_second_party, confirm_user_second_party, confirm_date_first_party, confirm_user_first_party, 
+    confirm_status, contract_status, agent_id
+  </sql>
+</mapper>

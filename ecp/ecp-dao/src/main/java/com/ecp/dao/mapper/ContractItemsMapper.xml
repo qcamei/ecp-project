@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecp.dao.ContractItemsMapper" >
+  <resultMap id="BaseResultMap" type="com.ecp.entity.ContractItems" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="activites_detail_id" property="activitesDetailId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="cid" property="cid" jdbcType="BIGINT" />
+    <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+    <result column="coupon_discount" property="couponDiscount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="delivery_type" property="deliveryType" jdbcType="TINYINT" />
+    <result column="integral" property="integral" jdbcType="BIGINT" />
+    <result column="integral_discount" property="integralDiscount" jdbcType="DECIMAL" />
+    <result column="item_id" property="itemId" jdbcType="BIGINT" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="pay_price" property="payPrice" jdbcType="DECIMAL" />
+    <result column="pay_price_total" property="payPriceTotal" jdbcType="DECIMAL" />
+    <result column="primitive_price" property="primitivePrice" jdbcType="DECIMAL" />
+    <result column="promotion_discount" property="promotionDiscount" jdbcType="DECIMAL" />
+    <result column="promotion_id" property="promotionId" jdbcType="VARCHAR" />
+    <result column="promotion_type" property="promotionType" jdbcType="VARCHAR" />
+    <result column="shop_freight_template_id" property="shopFreightTemplateId" jdbcType="BIGINT" />
+    <result column="sku_id" property="skuId" jdbcType="BIGINT" />
+    <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="discount_price" property="discountPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    id, activites_detail_id, area_id, cid, contract_no, coupon_discount, create_time, 
+    delivery_type, integral, integral_discount, item_id, num, order_id, pay_price, pay_price_total, 
+    primitive_price, promotion_discount, promotion_id, promotion_type, shop_freight_template_id, 
+    sku_id, sku_name, update_time, discount_price
+  </sql>
+</mapper>
