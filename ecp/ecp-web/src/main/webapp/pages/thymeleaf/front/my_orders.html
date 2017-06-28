@@ -202,14 +202,14 @@ a {
 							<!-- 实际支付金额  及支付方式-->
 							<td th:if="${iterStat.index==0}"  th:attr="rowspan=${#lists.size(orderx.orderItems)}" >
 								<div class="amount">
-									<span th:text="${orderx.order.paymentPrice}"></span> <br> <span class="ftx-13">在线支付</span>
+									<span th:text="'￥'+${orderx.order.totalPrice}"></span> <br> <span class="ftx-13">线下支付</span>
 								</div>
 							</td>
 							<!-- 订单状态  及订单详情-->
 							<td th:if="${iterStat.index==0}" th:attr="rowspan=${#lists.size(orderx.orderItems)}">
 								<div class="status">
 									<span class="order-status ftx-03"> 已取消 </span> <br> <a
-										href="//details.jd.com/normal/item.action?orderid=53853319081&amp;PassKey=782FEEEA93394ACDF41675FD840AA5DF"
+										href="#"
 										clstag="click|keycount|orderlist|dingdanxiangqing"
 										target="_blank">订单详情</a>
 								</div>
@@ -220,7 +220,7 @@ a {
 								<div class="operate">
 									<div id="pay-button-53853319081" _baina="0"></div>
 									<a
-										href="//cart.jd.com/reBuyForOrderCenter.action?wids=2538742,3597549,3230620&amp;nums=1,1,1&amp;rid=1495354641816"
+										href="#"
 										class="btn-again btn-again-show" target="_blank"
 										clstag="click|keycount|orderlist|buy"><b></b> 立即购买 </a><br>
 								</div>

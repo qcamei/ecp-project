@@ -1,18 +1,14 @@
 package com.ecp.web.back;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-import com.ecp.entity.CompanyInfo;
-import com.ecp.service.back.ICompanyInfoService;
+import com.ecp.service.front.IOrderItemService;
 
 
 
@@ -31,6 +27,8 @@ public class ContractController {
 	
 	/*@Autowired
 	ICompanyInfoService companyInfoService;*/
+	@Autowired
+	IOrderItemService orderItemService;	
 	
 	/**
 	 * @Description 合同详情
@@ -44,12 +42,19 @@ public class ContractController {
 	
 	
 	/**
-	 * @Description 增加合同
+	 * @Description 创建合同
+	 * @param id  订单主键:id
+	 * @param orderId 订单编号 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/add")
-	public String contract_add(Model model){
+	public String contract_add(long id,String orderId,Model model){
+		//（1）获取关于订单中详细条目
+		List<Map<String,String>> orderItemList = orderItemService.selectItemsByOrderId(orderId);
+		
+		model.addAttribute("orderItemList", orderItemList);
+		
 		return RESPONSE_THYMELEAF_BACK+"contract_add";
 	}
 	

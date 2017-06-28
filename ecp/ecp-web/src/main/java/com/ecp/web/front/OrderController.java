@@ -1,5 +1,6 @@
 package com.ecp.web.front;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -74,6 +75,19 @@ public class OrderController {
 	}
 	
 	/**
+	 * @Description 计算应付总金额（优惠前）
+	 * @param cartItemList  己选购物车中商品列表
+	 * @return
+	 */
+	private BigDecimal calcCartItemTotalPayable(List<AddSkuToOrderBean> cartItemList){
+		BigDecimal total=new BigDecimal(0.00);
+		for(AddSkuToOrderBean cartItem:cartItemList){
+			total=total.add(cartItem.getSkuPrice().multiply(new BigDecimal(cartItem.getSkuNum())));
+		}
+		return total;
+	}
+	
+	/**
 	 * @Description 增加订单
 	 * @param cartItemList  用户所选商品列表
 	 * @param addr  收货地址
@@ -83,14 +97,18 @@ public class OrderController {
 		String orderId = OrderIdGenerator.getOrderIdByUUId();  //生成订单号
 		Orders order=new Orders();
 		
-		order.setOrderId(orderId);
-		order.setCreateTime(new Date());
-		order.setBuyerId(addr.getBuyerId());
-		order.setName(addr.getContactPerson());
-		order.setPhone(addr.getContactTel());
-		order.setMobile(addr.getContactPhone());
-		order.setEmail(addr.getContactEmail());
-		order.setFullAddress(addr.getFullAddress());
+		order.setOrderId(orderId);        //订单号
+		order.setCreateTime(new Date());  //订单创建时间
+		order.setOrderTime(new Date());   //下单时间
+		order.setBuyerId(addr.getBuyerId());  //买家id
+		order.setName(addr.getContactPerson());  //收货人姓名
+		order.setPhone(addr.getContactTel());    //收货人固定电话
+		order.setMobile(addr.getContactPhone());  //收货人手机号码
+		order.setEmail(addr.getContactEmail());   //收货人邮件
+		order.setFullAddress(addr.getFullAddress());  //收货全地址
+		BigDecimal totalPrice=calcCartItemTotalPayable(cartItemList);  //calc total_price  计算优惠前总金额
+		order.setTotalPrice(totalPrice); //优惠前总金额
+		
 		
 		//TODO set other field's value
 		
@@ -99,6 +117,10 @@ public class OrderController {
 		return orderId;
 	}
 	
+	/**
+	 * @Description 删除购物车中已经加入订单中的商品
+	 * @param cartItemList
+	 */
 	private void delSelectedCartItem(List<AddSkuToOrderBean> cartItemList){
 		for(AddSkuToOrderBean item:cartItemList){
 			String idStr=Long.toString(item.getId());

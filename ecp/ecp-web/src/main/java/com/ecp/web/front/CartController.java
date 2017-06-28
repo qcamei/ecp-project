@@ -130,6 +130,11 @@ public class CartController {
 		return amount;
 	}
 	
+	/**
+	 * @Description 计算应付总金额（优惠前）
+	 * @param cartItemList  己选购物车中商品列表
+	 * @return
+	 */
 	private BigDecimal calcCartItemTotalPayable(List<AddSkuToOrderBean> cartItemList){
 		BigDecimal total=new BigDecimal(0.00);
 		for(AddSkuToOrderBean cartItem:cartItemList){

@@ -327,6 +327,30 @@
 			<generatedKey column="extend_id" sqlStatement="MySql" identity="true"/>
 		</table>  -->
 		
+		<!-- contract  -->
+		<table tableName="contract" domainObjectName="Contract" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table> 
+		
+		<!-- contract_attribute  -->
+		<table tableName="contract_attribute" domainObjectName="ContractAttribute" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- contract_attribute_value  -->
+		<table tableName="contract_attribute_value" domainObjectName="ContractAttrValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- contract_items  -->
+		<table tableName="contract_items" domainObjectName="ContractAttrValue" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
+		
+		<!-- contract_template  -->
+		<table tableName="contract_template" domainObjectName="ContractTemplate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+		</table>
 			
 				
 	</context>
