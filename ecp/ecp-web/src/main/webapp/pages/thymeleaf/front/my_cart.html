@@ -163,7 +163,7 @@
 		function selectedCount() {
 			//已选商品计数
 			var selectedCounter = 0;
-			$(".cart_item_selector").each(function(index, val) {
+			$(".cart_item_selector").each(function(index, elem) {
 				if (this.checked)
 					selectedCounter = selectedCounter + 1;
 			});
@@ -180,7 +180,7 @@
 			var amount = 0.0;
 
 			//扫描用户己选SKU
-			$(".cart_item_selector").each(function(index, val) {
+			$(".cart_item_selector").each(function(index, elem) {
 				if (this.checked) { //对于己选商品
 					var surfix = $(this).attr("data-bind");
 					var prefix = "num_";
@@ -345,7 +345,7 @@
 				var prefix = "cartitem_";
 
 				if (this.checked) {
-					$(".cart_item_selector").each(function(index, val) {
+					$(".cart_item_selector").each(function(index, elem) {
 						this.checked = true;
 						var surfix = $(this).attr("data-bind");
 						var rowId = prefix + surfix;
@@ -353,11 +353,11 @@
 					});
 
 					//置另一个全选checkbox为 true
-					$(".select_all").each(function(index, val) {
+					$(".select_all").each(function(index, elem) {
 						this.checked = true;
 					});
 				} else {
-					$(".cart_item_selector").each(function(index, val) {
+					$(".cart_item_selector").each(function(index, elem) {
 						this.checked = false;
 						var surfix = $(this).attr("data-bind");
 						var rowId = prefix + surfix;
@@ -365,7 +365,7 @@
 					});
 
 					//置另一个全选checkbox为 false
-					$(".select_all").each(function(index, val) {
+					$(".select_all").each(function(index, elem) {
 						this.checked = false;
 					});
 
@@ -385,7 +385,7 @@
 				var itemArr = new Array();
 
 				//扫描用户己选SKU
-				$(".cart_item_selector").each(function(index, val) {
+				$(".cart_item_selector").each(function(index, elem) {
 					if (this.checked) { //对于己选商品
 						var surfix = $(this).attr("data-bind");
 						var prefix = "num_";

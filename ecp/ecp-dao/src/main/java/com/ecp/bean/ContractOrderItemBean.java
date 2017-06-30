@@ -40,7 +40,7 @@ public class ContractOrderItemBean {
 	private BigDecimal pay_price;
 	private BigDecimal pay_price_total;
 	
-	private String create_time;
+	private Date create_time;
 	private String picture_url;
 	private Long picture_id;
 	private Integer picture_status;
@@ -124,12 +124,13 @@ public class ContractOrderItemBean {
 	public void setPicture_status(Integer picture_status) {
 		this.picture_status = picture_status;
 	}
-	public String getCreate_time() {
+	public Date getCreate_time() {
 		return create_time;
 	}
-	public void setCreate_time(String create_time) {
+	public void setCreate_time(Date create_time) {
 		this.create_time = create_time;
 	}
+	
 	
 	
 }
