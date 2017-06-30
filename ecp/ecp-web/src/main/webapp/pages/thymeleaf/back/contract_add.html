@@ -193,7 +193,7 @@
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 column">
-						<button type="button" class="btn btn-primary"  style="float:right;margin-right:50px" >合同确认</button>
+						<button type="button" class="btn btn-primary btn-create"  style="float:right;margin-right:50px" >合同确认</button>
 						<a  class="btn btn-primary btn-preview" style="float:right;margin-right:10px" target="_blank">合同预览</a>
 					</div>
 				</div>
@@ -458,6 +458,36 @@
 		}
 		
 		
+		/* 合同确认 */
+		function contractCreate(){
+			var url = BASE_CONTEXT_PATH + "/back/contract/create"; // 需要提交的 url
+			
+			var contractAttrList=getContractAttrList();  //合同属性列表
+			var contractAttrValList=getContractAttrValue(contractAttrList);  //合同属性值
+			
+			var orderItemList=getOrderItemList();    //订单列表行
+			
+			var form = document.createElement("form");  //生成表单
+			form.id="test";
+			form.name="test";
+			form.target="_blank";
+			document.body.appendChild(form);
+			
+			//请求参数
+			var attrVals = generateHideElement("contractAttrVals", JSON.stringify(contractAttrValList)), 
+				orderItems = generateHideElement("orderItems", JSON.stringify(orderItemList)); 
+			form.appendChild(attrVals);  //合同属性列表
+			form.appendChild(orderItems);  //订单列表行
+
+			//发送请求
+			form.method = "post";
+			form.action = url;
+			form.submit();
+			
+		}
+		
+		
+		
 		//========================================
 		/*
 			生成隐藏表单域函数
@@ -533,7 +563,10 @@
 				
 			});
 			
-			
+			/* 【合同确认】 按钮 click process */
+			$(".btn-create").on('click', function(e){
+				contractCreate();
+			});
 			
 			
 			

@@ -13,4 +13,10 @@ import com.ecp.service.IBaseService;
  */
 public interface IContractService extends IBaseService<Contract, Long> {
 	
+	/**
+	 * @Description 获取合同号
+	 * @return 合同号
+	 */
+	public String getContractNo();
+	
 }

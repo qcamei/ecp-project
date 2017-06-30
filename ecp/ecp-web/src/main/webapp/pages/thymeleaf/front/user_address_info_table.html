@@ -29,7 +29,7 @@
 				
 				<td th:text="${addr.contactPerson}">联系人姓名</td>
 				<td th:text="${addr.contactPhone}">联系人手机</td>
-				<td style="width:600px" th:text="${addr.fullAddress}">X女士 河北 石家庄市 长安区
+				<td style="width:500px" th:text="${addr.fullAddress}">X女士 河北 石家庄市 长安区
 					城区胜利北大街XXX号XX小区XX号楼XX单元201 139****1234</td>
 				<span th:switch="${addr.isDefault}" th:remove="tag">
 					<td th:case="1">默认</td>

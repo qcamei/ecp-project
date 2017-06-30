@@ -1,11 +1,13 @@
 package com.ecp.web.back;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,13 +15,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.ecp.bean.AddSkuToOrderBean;
 import com.ecp.bean.ContractAttrValueBean;
 import com.ecp.bean.ContractOrderItemBean;
+import com.ecp.common.SessionConstants;
 import com.ecp.common.util.NumberToCN;
+import com.ecp.entity.Contract;
+import com.ecp.entity.ContractAttrValue;
 import com.ecp.entity.ContractAttribute;
+import com.ecp.entity.ContractItems;
+import com.ecp.entity.User;
+import com.ecp.service.front.IContractAttrValueService;
 import com.ecp.service.front.IContractAttributeService;
+import com.ecp.service.front.IContractItemsService;
+import com.ecp.service.front.IContractService;
 import com.ecp.service.front.IOrderItemService;
 
 
@@ -37,12 +45,16 @@ public class ContractController {
 	final String RESPONSE_THYMELEAF_BACK="thymeleaf/back/";
 	final String RESPONSE_JSP="jsps/front/";	
 	
-	/*@Autowired
-	ICompanyInfoService companyInfoService;*/
 	@Autowired
 	IOrderItemService orderItemService;	
 	@Autowired
 	IContractAttributeService contractAttributeService;
+	@Autowired
+	IContractService contractService;
+	@Autowired
+	IContractItemsService contractItemsService;
+	@Autowired
+	IContractAttrValueService contractAttrValueService;
 	
 	/**
 	 * @Description 合同详情
@@ -76,7 +88,6 @@ public class ContractController {
 		return RESPONSE_THYMELEAF_BACK+"contract_add";
 	}
 	
-	
 	/**
 	 * @Description 合同预览
 	 * @param model
@@ -101,6 +112,168 @@ public class ContractController {
 		
 		
 		return RESPONSE_THYMELEAF_BACK+"contract_preview";
+	}
+	
+	/**
+	 * @Description 创建新合同
+	 * @param contractAttrVals  合同属性（JSON格式）
+	 * @param orderItems  合同商品列表（JSON格式）
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/create")
+	/*@ResponseBody*/
+	public Object contract_create(String contractAttrVals,String orderItems,Model model,HttpServletRequest request){
+		
+		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
+		Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
+		
+		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);  //合同商品列表
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		
+		//(1)创建合同
+		String orderNo=getOrderNo(contractOrderItemBeanList.get(0));   //获取订单号
+		long contractTemplateId=getTemplateId(contractAttrValueList.get(0));  //获取合同模板ID
+		
+		String contractNo=getContractNo();  //生成合同号
+		Long contractId=createContract(contractNo,contractTemplateId,orderNo,user.getId());  
+		//(2)插入合同属性值
+		addContractAttrValues(contractId,contractAttrValueList);
+		
+		//(3)插入合同商品条目
+		addContractItems(contractOrderItemBeanList,contractNo);
+		
+		return RESPONSE_THYMELEAF_BACK+"contract_create_success";
+	}
+	
+	/**
+	 * @Description 增加合同属性
+	 * @param contractId  合同ID
+	 * @param contractAttrValueList 合同属性列表
+	 */
+	private void addContractAttrValues(Long contractId,List<ContractAttrValueBean> contractAttrValueList){
+		for(ContractAttrValueBean attrValue:contractAttrValueList){
+			
+			ContractAttrValue record=new ContractAttrValue();
+			
+			record.setTemplateId(attrValue.getTemplateId());  //模板id
+			record.setAttrId(attrValue.getId());  //属性id
+			record.setAttrValue(attrValue.getAttrValue());  //属性值			
+			record.setContractId(contractId);  //合同id(非合同号)
+			
+			
+			contractAttrValueService.insertSelective(record);
+		}
+	}
+	
+	
+	
+	/**
+	 * @Description 增加合同行项目（商品列表）
+	 * @param orderItemList 商品列表
+	 * @param contractNo  合同号
+	 */
+	private void addContractItems(List<ContractOrderItemBean> orderItemList,String contractNo){
+		for(ContractOrderItemBean orderItem:orderItemList){
+			
+			
+			/*
+			 "create_time":"2017-06-27T17:45:12.000+08:00",
+							"picture_url":"/static/images/iphone_index.png",
+							"item_id":1,
+							"num":2,
+							"sku_id":2,
+							"picture_id":2,
+							"picture_status":1,
+							"primitive_price":222,
+							"sort_number":1,
+							"sku_name":"Apple8新品颜色:RED版本:V2","id":59,
+							"order_id":"1000000937189443",
+							"cid":13,
+							"discount_price":0,
+							"pay_price":222,
+							"pay_price_total":444}, 
+			 */
+			
+			
+			ContractItems record=new ContractItems();
+			
+			record.setCid(orderItem.getCid());
+			record.setItemId(orderItem.getItem_id());
+			record.setSkuId(orderItem.getSku_id());
+			record.setSkuName(orderItem.getSku_name());
+			record.setOrderId(orderItem.getOrder_id());
+			record.setContractNo(contractNo);
+			
+			record.setPrimitivePrice(orderItem.getPrimitive_price());  //原始价
+			record.setDiscountPrice(orderItem.getDiscount_price());  //价格折减
+			record.setPayPrice(orderItem.getPay_price());  //实际支付价格
+			record.setNum(orderItem.getNum());  //商品数量
+			record.setPayPriceTotal(orderItem.getPay_price_total());  //小计
+			
+			
+			record.setCreateTime(new Date());
+			
+			contractItemsService.insertSelective(record);
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * @Description 取得合同号
+	 * @param contractItem  合同条目对象
+	 * @return  合同编号
+	 */
+	private String getOrderNo(ContractOrderItemBean contractItem){
+		return contractItem.getOrder_id();
+	}
+	
+	/**
+	 * @Description  取得合同模板ID
+	 * @param attrValue  合同属性值对象
+	 * @return 合同模板ID
+	 */
+	private long getTemplateId(ContractAttrValueBean attrValue){
+		return attrValue.getTemplateId();
+	}
+	
+	/**
+	 * @Description 创建合同
+	 * @param contractNo 合同号
+	 * @param contractTemplateId  合同模板id
+	 * @param orderNo 订单号
+	 * @param createUserId 合同创建者id
+	 * @return  合同id
+	 */
+	private Long createContract(String contractNo,Long contractTemplateId,String orderNo,Long createUserId){
+		//生成合同对象
+		Contract contract=new Contract();
+		
+		//设置合同属性
+		contract.setContractTemplateId(contractTemplateId);
+		contract.setOrderNo(orderNo);
+		contract.setContractNo(contractNo);
+		//创建用户及时间
+		contract.setCreateDate(new Date());
+		contract.setCreateUser(createUserId);
+		
+		//插入记录
+		contractService.insertSelective(contract);
+		
+		return contract.getId();
+	}
+	
+	/**
+	 * @Description 生成合同号
+	 * 	合同编号格式为：LM-年（四位）-月（两位）-序号（四位）
+	 * @return  返回合同号
+	 */
+	private String getContractNo(){
+		return contractService.getContractNo();
 	}
 	
 	/**
@@ -160,43 +333,6 @@ public class ContractController {
 	public String contract_show(Model model){
 		return RESPONSE_THYMELEAF_BACK+"contract_show";
 	}
-	
-	/**
-	 * @Description 显示公司信息维护页面
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	
-	/*@RequestMapping(value="/show" ,method=RequestMethod.GET)
-	public String companyInfo_Show(Model model){
-			
-		CompanyInfo company=companyInfoService.selectByPrimaryKey((long)1);
-		model.addAttribute("company", company);		
-		
-		return RESPONSE_THYMELEAF_BACK+"company_info";
-	}*/
-	
-	/**
-	 * @Description 修改客户信息
-	 * @param company
-	 * @param request
-	 * @return
-	 */
-	/*@RequestMapping(value="/modify" ,method=RequestMethod.POST)
-	@ResponseBody
-	public Object companyInfo_modify(@RequestBody CompanyInfo company,HttpServletRequest request){
-		
-		company.setId((long)1);		
-		companyInfoService.updateByPrimaryKeySelective(company);
-		
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("message", "updated");
-		jsonObject.put("status", "success");
-		return jsonObject;
-	}
-*/
-	
 	
 	
 }

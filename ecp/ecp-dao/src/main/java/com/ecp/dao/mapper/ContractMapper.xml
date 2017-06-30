@@ -28,4 +28,12 @@
     confirm_date_second_party, confirm_user_second_party, confirm_date_first_party, confirm_user_first_party, 
     confirm_status, contract_status, agent_id
   </sql>
+  
+  <select id="getMaxContractNo"  resultType="string">
+  	 select max(contract_no)  contractNo from contract where contract_no like CONCAT('%',#{monthCond},'%' )
+  </select>
+  
+  
+  
+  
 </mapper>
