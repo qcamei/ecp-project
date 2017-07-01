@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +24,15 @@ import com.ecp.entity.Contract;
 import com.ecp.entity.ContractAttrValue;
 import com.ecp.entity.ContractAttribute;
 import com.ecp.entity.ContractItems;
+import com.ecp.entity.Orders;
 import com.ecp.entity.User;
 import com.ecp.service.front.IContractAttrValueService;
 import com.ecp.service.front.IContractAttributeService;
 import com.ecp.service.front.IContractItemsService;
 import com.ecp.service.front.IContractService;
 import com.ecp.service.front.IOrderItemService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 
 
@@ -43,7 +47,11 @@ import com.ecp.service.front.IOrderItemService;
 @RequestMapping("/back/contract")
 public class ContractController {
 	final String RESPONSE_THYMELEAF_BACK="thymeleaf/back/";
-	final String RESPONSE_JSP="jsps/front/";	
+	final String RESPONSE_JSP="jsps/front/";
+	
+	private final int PAGE_SIZE = 5;
+
+	private final Logger log = Logger.getLogger(getClass());
 	
 	@Autowired
 	IOrderItemService orderItemService;	
@@ -64,6 +72,51 @@ public class ContractController {
 	@RequestMapping(value="/detail")
 	public String contract_detail(Model model){
 		return RESPONSE_THYMELEAF_BACK+"contract_detail";
+	}
+	
+	/**
+	 * @Description 显示-合同列表
+	 * @param model
+	 * @param pageNum  页号
+	 * @param pageSize 页大小
+	 * @return  
+	 */
+	@RequestMapping(value = "/show")
+	public String contract_show(Model model, Integer pageNum, Integer pageSize) {
+		
+		if(pageNum==null || pageNum==0)
+		{
+			pageNum=1;
+			pageSize=PAGE_SIZE;
+		}
+		
+		// 查询 并分页		
+		PageHelper.startPage(pageNum, pageSize); // PageHelper			
+
+		List<Contract> contractList = contractService.selectAll();
+		PageInfo<Contract> pageInfo = new PageInfo<Contract>(contractList);// (使用了拦截器或是AOP进行查询的再次处理)
+		
+		setPageInfo(model, pageInfo); // 向前台传递分页信息
+
+		model.addAttribute("contractList", contractList);
+
+		return RESPONSE_THYMELEAF_BACK + "contract_show";
+	}
+	
+	
+	
+	
+	private void setPageInfo(Model model, PageInfo pageInfo) {
+		// 获得当前页
+		model.addAttribute("pageNum", pageInfo.getPageNum());
+		// 获得一页显示的条数
+		model.addAttribute("pageSize", pageInfo.getPageSize());
+		// 是否是第一页
+		model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
+		// 获得总页数
+		model.addAttribute("totalPages", pageInfo.getPages());
+		// 是否是最后一页
+		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
 	}
 	
 	
@@ -323,16 +376,5 @@ public class ContractController {
 		List<ContractOrderItemBean> list =JSONArray.parseArray(resp,ContractOrderItemBean.class);    
         return list;
 	} 
-	
-	/**
-	 * @Description 合同列表
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value="/show")
-	public String contract_show(Model model){
-		return RESPONSE_THYMELEAF_BACK+"contract_show";
-	}
-	
 	
 }

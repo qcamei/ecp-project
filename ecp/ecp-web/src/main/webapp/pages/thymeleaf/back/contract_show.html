@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
 <head th:include="/thymeleaf/common/_head::head('合同管理')">
 <meta charset="UTF-8">
 </head>
 <body>
 	<div class="container">
+		<!-- header -->
+		<div th:include="thymeleaf/common/_header::header" class="header"></div>
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<h3>合同管理</h3>
@@ -24,66 +25,87 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td><a>LM_2017_06-22-0001</a></td>
-									<td><a>1000000533146723</a></td>
-									<td>2017/06/22 12:12:12</td>
-									<td>北京XXX科技有限公司</td>
-									<td>乙：Y｜甲：N</td>
-									<td>新建</td>
+								<tr th:each="contract:${contractList}">
+									<td><a th:text="${contract.contractNo}">合同号LM_2017-06-22-0001</a></td>
+									<td><a th:text="${contract.orderNo}">订单号1000000533146723</a></td>
+									<td th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd HH:mm:ss')}">订单日期：2017/06/22 12:12:12</td>
+									<td>代理商名称：北京XXX科技有限公司</td>
+									<td>确认状态：乙：Y｜甲：N</td>
+									<td>合同状态：新建</td>
 									<td>
 										<a class="btn btn-primary">详情</a>
 										<a class="btn btn-primary">完结</a>
 										
 									</td>
 								</tr>
-								<tr>
-									<td><a>LM_2017_06-22-0001</a></td>
-									<td><a>1000000533146723</a></td>
-									<td>2017/06/22 12:12:12</td>
-									<td>北京XXX科技有限公司</td>
-									<td>乙：Y｜甲：N</td>
-									<td>新建</td>
-									<td>
-										<a class="btn btn-primary">详情</a>
-										<a class="btn btn-primary">完结</a>
-									</td>
-								</tr>
-								<tr>
-									<td><a>LM_2017_06-22-0001</a></td>
-									<td><a>1000000533146723</a></td>
-									<td>2017/06/22 12:12:12</td>
-									<td>北京XXX科技有限公司</td>
-									<td>乙：Y｜甲：N</td>
-									<td>新建</td>
-									<td>
-										<a class="btn btn-primary">详情</a>
-										<a class="btn btn-primary">完结</a>
-									</td>
-								</tr>
-								<tr>
-									<td><a>LM_2017_06-22-0001</a></td>
-									<td><a>1000000533146723</a></td>
-									<td>2017/06/22 12:12:12</td>
-									<td>北京XXX科技有限公司</td>
-									<td>乙：Y｜甲：N</td>
-									<td>新建</td>
-									<td>
-										<a class="btn btn-primary">详情</a>
-										<a class="btn btn-primary">完结</a>
-									</td>
-								</tr>
 							</tbody>
 						</table>
+						<!-- 加入 分页 -->
+						<div th:include="/thymeleaf/common/_pager::pager(contractList)" class="pagerx"></div>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 column">
-						<button type="button" class="btn btn-default">按钮</button>
+						<!-- <button type="button" class="btn btn-default">按钮</button> -->
 					</div>
 				</div>
 			</div>
 		</div>
+		<!-- footer -->
+		<div th:include="/thymeleaf/common/_footer::footer" class="footer"></div>
+		<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
+		<form th:action="@{/back/contract/show}" method="post"	id="searchform">
+			
+			<!-- 保存页号与页大小 -->
+			<input type="hidden" name="pageNum" id="pageNum" value=""> <input
+				type="hidden" name="pageSize" id="pageSize" value="">
+	
+			<!-- 用户选择的查询条件列表 -->
+			<!-- <input type="hidden" name="searchCond" id="searchCond"
+				th:value="${searchCond}"> -->
+		</form>
+		
 	</div>
 </body>
+
+<script>
+	//==============分页通用================
+	/*查询-合同 */
+	function search_normal() {
+		$("#searchform").submit(); //提交表单		
+	}
+	
+	$(function(){
+		/*
+		【分页】导航：
+		当点击页号时读取需要导航到的页码及每页记录数（pageNum,pageSize）
+		data-bind:pageNum-pageSize形式
+		如果data-bind为空字符串，则不做动作
+		当用户点击某页时，则发送与筛选相同的请求
+	 	*/
+
+		$(".pagination li a").on('click', function(e) {
+			//alert($(this).attr("data-bind"));
+			var dataBind = $(this).attr("data-bind");
+			//当dataBind有数据时处理
+			if (dataBind != "") {
+				var pageArr = new Array();
+				pageArr = dataBind.split("-");
+				//置隐藏表单数据
+				$("#pageNum").val(pageArr[0]);
+				$("#pageSize").val(pageArr[1]);
+				//发送请求
+				search_normal();
+			}
+	
+		});
+		
+		
+	});   //end of $();
+	
+	
+	
+</script>
+
+
 </html>
