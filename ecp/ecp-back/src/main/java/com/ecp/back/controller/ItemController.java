@@ -1,5 +1,6 @@
 package com.ecp.back.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,12 +20,14 @@ import com.ecp.back.commons.SessionConstants;
 import com.ecp.back.commons.StaticConstants;
 import com.ecp.bean.PageBean;
 import com.ecp.bean.UserBean;
+import com.ecp.common.util.FileUploadUtil;
 import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.Attribute;
 import com.ecp.entity.AttributeValue;
 import com.ecp.entity.Brand;
 import com.ecp.entity.Category;
 import com.ecp.entity.Item;
+import com.ecp.entity.ItemPicture;
 import com.ecp.service.back.IAttributeValueService;
 import com.ecp.service.back.IAttributeService;
 import com.ecp.service.back.IBrandService;
@@ -131,16 +135,18 @@ public class ItemController {
 	 */
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Item item) {
+	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson) {
 		
 		UserBean userBean = (UserBean)request.getSession().getAttribute(SessionConstants.USER);
 		
 		log.info("insert item:"+item);
 		
 		if(userBean!=null){
-			int rows = iItemService.insertSelective(item);
+			int rows = iItemService.saveItem(request, item, skuJson, skuPriceJson);
 			if(rows>0){
 				return RequestResultUtil.getResultAddSuccess();
+			}else if(rows<0){
+				return RequestResultUtil.getResultUploadWarn();
 			}
 		}
 		return RequestResultUtil.getResultAddWarn();
@@ -202,5 +208,35 @@ public class ItemController {
 		}
 		return RequestResultUtil.getResultDeleteWarn();
 	}
-	
+	/**
+	 * 方法功能：处理上传文件
+	 * @param request
+	 * @param gwContent
+	 * @return
+	 * <hr>
+	 * <b>描述：</b>
+	 * <p>Description:方法功能详细说明</p> 
+	 * <p>Version: 1.0</p>
+	 * <p>Author: srd </p>
+	 * <p>Date: 2017年1月11日 下午6:09:34</p>
+	 */
+	private boolean processUploadFile(HttpServletRequest request, ItemPicture picture){
+		boolean flag = false;
+		try {
+			//获取上传背景图文件
+			String backImgPath = FileUploadUtil.getFile2Upload(request, "item", "pictureImg");
+			if(StringUtils.isNotBlank(backImgPath)){
+				if(!FileUploadUtil.deleteFile(request, picture.getPictureUrl())){
+					log.error("文件不存在或已删除 缩略图路径："+picture.getPictureUrl());
+				}
+				picture.setPictureUrl(backImgPath);
+			}
+			flag = true;
+		} catch (IOException e) {
+			log.error("上传文件异常", e);
+		} catch (Exception e) {
+			log.error("删除上传文件异常", e);
+		}
+		return flag;
+	}
 }

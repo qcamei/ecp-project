@@ -30,7 +30,20 @@
 		and brand_status=1
 		
 	</select>
-
+	<select id="getBrandByCategoryid" resultType="map" parameterType="map">
+	
+		SELECT 
+			b.brand_key,b.brand_name,b.brand_logo_url,cb.* 
+		FROM 
+			item_brand b 
+		INNER JOIN 
+			item_category_brand cb 
+		ON 
+			b.brand_id=cb.brand_id 
+		WHERE 
+			cb.third_lev_cid=#{categoryId}
+		
+	</select>
 
 
 </mapper>

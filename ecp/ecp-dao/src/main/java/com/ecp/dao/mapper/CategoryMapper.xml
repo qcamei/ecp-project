@@ -34,7 +34,9 @@
   	AND lev=3
   </select>
   
-  
+  <select id="getAllCategory" resultType="map">
+  	select * from item_category 
+  </select>
   
   
 </mapper>

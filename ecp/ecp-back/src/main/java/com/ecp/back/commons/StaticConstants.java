@@ -7,6 +7,8 @@ public class StaticConstants {
 	public static String MAIN = "/main";//系统首页面
 	
 	public static String CATEGORY_MANAGE_PAGE = "back/jsp/category/categoryManage";//商品分类管理页面
+	public static String CATEGORY_BRAND_MANAGE_PAGE = "back/jsp/category/categoryBrandManage";//类目品牌管理页面
+	public static String CATEGORY_BRAND_MANAGE_ITEMS_PAGE = "back/jsp/category/categoryBrandItems";//类目品牌管理品牌列表页面
 	
 	public static String ITEM_MANAGE_PAGE = "back/jsp/item/itemManage";//商品管理页面
 	public static String ITEM_MANAGE_TABLE_PAGE = "back/jsp/item/itemManageTable";//商品管理页面

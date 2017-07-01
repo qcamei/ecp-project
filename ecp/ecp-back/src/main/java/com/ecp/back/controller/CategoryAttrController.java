@@ -143,7 +143,7 @@ public class CategoryAttrController {
 	@ResponseBody
 	public Object LoadCategoryAttr(Model model) {
 
-		List<Category> categoryList = categoryService.getAllCategory();
+		List<Map<String, Object>> categoryList = categoryService.getAllCategory();
 
 		return categoryList;
 	}

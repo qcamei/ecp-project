@@ -2,6 +2,7 @@ package com.ecp.service.impl.back;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,11 +63,11 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 			if(rows>0){
 				rows = categoryMapper.deleteByPrimaryKey(cate.getCid());
 				if(rows<=0){
-					TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return 0;
 				}
 			}else{
-				TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 				return 0;
 			}
 		}
@@ -159,9 +160,9 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	}
 
 	@Override
-	public List<Category> getAllCategory() {
+	public List<Map<String, Object>> getAllCategory() {
 		
-		return categoryMapper.selectAll();
+		return categoryMapper.getAllCategory();
 		
 	}
 

@@ -3,6 +3,8 @@ package com.ecp.service.back;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.ecp.entity.Item;
 import com.ecp.service.IBaseService;
 
@@ -21,4 +23,14 @@ public interface IItemService extends IBaseService<Item, Long> {
 	 * @return
 	 */
 	public int deleteByIds(String ids);
+	
+	/**
+	 * 保存商品
+	 * @param request
+	 * @param item
+	 * @param skuJson
+	 * @param skuPriceJson
+	 * @return
+	 */
+	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson);
 }

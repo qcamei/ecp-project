@@ -172,25 +172,13 @@ public class Category {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", cid=").append(cid);
-        sb.append(", cName=").append(cName);
-        sb.append(", created=").append(created);
-        sb.append(", hasLeaf=").append(hasLeaf);
-        sb.append(", homeShow=").append(homeShow);
-        sb.append(", lev=").append(lev);
-        sb.append(", modified=").append(modified);
-        sb.append(", parentCid=").append(parentCid);
-        sb.append(", sortNumber=").append(sortNumber);
-        sb.append(", status=").append(status);
-        sb.append("]");
-        return sb.toString();
-    }
+
+	@Override
+	public String toString() {
+		return "Category [cid=" + cid + ", cName=" + cName + ", created=" + created + ", hasLeaf=" + hasLeaf
+				+ ", homeShow=" + homeShow + ", lev=" + lev + ", modified=" + modified + ", parentCid=" + parentCid
+				+ ", sortNumber=" + sortNumber + ", status=" + status + "]";
+	}
 
 	@Override
 	public int hashCode() {

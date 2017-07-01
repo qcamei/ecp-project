@@ -290,11 +290,11 @@ function createCategoryHtmlStr(category, index){	//debugger;
 function loadAttrPage(cid, cname){
 	//alert("选择的类目是 "+cname);
 	$("#item-cid").val(cid);
-	var url = "back/category/selectAttrAndValue";
+	/*var url = "back/category/selectAttrAndValue";
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");
-	});
+	});*/
 }
 
 /*
@@ -369,6 +369,14 @@ function saveFun(){
 		console.log(err);
 	}
 	
+	//sku
+	var skuObj = getSkuInfo();
+	var sku = skuObj.sku;
+	var skuPrice = skuObj.skuPrice;
+	console.log("insert sku:"+JSON.stringify(sku));
+	console.log("insert sku price:"+JSON.stringify(skuPrice));
+	params.skuJson = JSON.stringify(sku);
+	params.skuPriceJson = JSON.stringify(skuPrice);
 	
 	//util.loading();
 	$("#save-form").ajaxSubmit({
@@ -438,6 +446,18 @@ function clickPageBtnRequestFun(params){
 	$("#item-div").load(action, params, function(){
 		
 	});
+}
+
+/*
+ * 验证图片文件大小
+ */
+function validateImgFileSizeFun(file){
+	if(isAllowUploadFile(file, 5120, '上传缩略图不能大于5M！')){
+		showPreview(file, 'thumbnail-portrait');
+		$("#save-submit-btn").attr("disabled", false);
+	}else{
+		$("#save-submit-btn").attr("disabled", true);
+	}
 }
 
 /*

@@ -4,9 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 
-<div class=" fieldset" id="sale-attr">
-	<div class=" legend">sku</div>
-	<div id="sale-attr-body">
+<div class="fieldset" id="sku">
+	<div class="legend" onclick="getSkuInfo();">sku</div>
+	<div id="sku-content">
 		<table class="table table-striped table-bordered table-hover " id="sku-table"
 	style="width: 100%;"center">
 	<thead id="sku-head" style="width: 98%; padding-top: 80px;">
@@ -18,7 +18,7 @@
 </table>
 	</div>
 </div>
-<script>
+<!-- <script>
 /* 如果商品属性为空时不显示标题 */
 var itemAttrBody = $("#item-attr-body").html().trim();
 console.log("itemAttrBody:"+itemAttrBody);
@@ -56,4 +56,4 @@ function getSaleAttr(){
 	console.log("销售属性："+attrArr);
 	return attrArr;
 }
-</script>
+</script> -->

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.ecp.back.commons.SessionConstants;
 import com.ecp.back.commons.StaticConstants;
 import com.ecp.bean.PageBean;
@@ -24,6 +25,7 @@ import com.ecp.common.util.FileUploadUtil;
 import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.Brand;
 import com.ecp.service.back.IBrandService;
+import com.ecp.service.back.ICategoryService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -42,6 +44,9 @@ public class BrandController {
 	//@Autowired
 	@Resource(name="brandServiceBean")
 	private IBrandService iBrandService;
+	
+	@Resource(name="categoryServiceBean")
+	private ICategoryService iCategoryService;// 类目
 
 	/**
 	 * 方法功能：查询列表

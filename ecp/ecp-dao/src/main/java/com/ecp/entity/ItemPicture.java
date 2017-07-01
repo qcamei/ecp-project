@@ -26,7 +26,22 @@ public class ItemPicture {
     @Column(name = "sort_number")
     private Byte sortNumber;
 
-    /**
+    public ItemPicture() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public ItemPicture(Long itemId, String pictureUrl) {
+		super();
+		this.created = new Date();
+		this.itemId = itemId;
+		this.modified = new Date();
+		this.pictureStatus = 1;
+		this.pictureUrl = pictureUrl;
+		this.sortNumber = 1;
+	}
+
+	/**
      * @return picture_id
      */
     public Long getPictureId() {

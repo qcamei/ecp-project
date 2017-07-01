@@ -23,11 +23,11 @@
     			simpleData: {
     				enable: true,
     				idKey: "cid",
-    				pIdKey: "parentCid",
+    				pIdKey: "parent_cid",
     				rootPId: 0
     			},
     			key: {
-    				name: "cName"
+    				name: "c_name"
     			}
     		},
     		callback:{                 
@@ -45,7 +45,7 @@
 
  function show(event, treeId, treeNode) {
 	 console.log("treeNode:"+JSON.stringify(treeNode));
-	 console.log(treeNode.cid + ", " + treeNode.cName+" ,"+treeNode.level);
+	 console.log(treeNode.cid + ", " + treeNode.c_name+" ,"+treeNode.level);
 	 //alert("在此处发送ajax请求并打开一个新窗口对节点的属性进行编辑。");
 	 //在此处发送ajax请求并打开一个新窗口对节点的属性进行编辑。
 	 g_cid=treeNode.cid;

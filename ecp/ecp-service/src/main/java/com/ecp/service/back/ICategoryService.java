@@ -1,6 +1,7 @@
 package com.ecp.service.back;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryTreeNode;
@@ -27,7 +28,7 @@ public interface ICategoryService extends IBaseService<Category, Integer> {
 	 */
 	public List<CategoryTreeNode> getCategoryTree();
 	
-	public List<Category> getAllCategory();
+	public List<Map<String, Object>> getAllCategory();
 	
 	public List<CategoryAttrBean> getCategoryAttrListByCid(Long cid);
 	

@@ -57,6 +57,12 @@
 					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">类目属性</span>
 			</a></li>
 			<li class="line dk"></li>
+			<li><a class="J_menuItem" href="javascript:void(0);"
+				title="类目品牌"
+				onclick="javascript:iframeLoading('back/category-brand/getCategotyItems');">
+					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">类目品牌</span>
+			</a></li>
+			<li class="line dk"></li>
 			<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
 				<span class="ng-scope">配置管理</span>
 			</li>

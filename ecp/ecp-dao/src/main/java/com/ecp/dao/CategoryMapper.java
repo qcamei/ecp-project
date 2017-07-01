@@ -1,6 +1,7 @@
 package com.ecp.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -16,5 +17,7 @@ public interface CategoryMapper extends Mapper<Category> {
 	 * @return  类目列表
 	 */
 	public List<Category> getCategoryByKeywords(@Param("keywords") List<String> keywords);
+	
+	public List<Map<String, Object>> getAllCategory();
 	
 }

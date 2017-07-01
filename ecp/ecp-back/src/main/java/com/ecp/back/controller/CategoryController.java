@@ -201,8 +201,8 @@ public class CategoryController {
 			Long cid) {
 		ModelAndView mav = new ModelAndView();
 		// 品牌
-		List<Brand> brandList = iBrandService.selectAll();
-		mav.addObject("brandList", brandList);
+		List<Map<String, Object>> brandMapList = iBrandService.getBrandByCategoryId(cid);
+		mav.addObject("brandMapList", brandMapList);
 
 		// 属性和属性值
 		List<Map<String, Object>> attrList = iAttributeService.selectByCid(cid);
