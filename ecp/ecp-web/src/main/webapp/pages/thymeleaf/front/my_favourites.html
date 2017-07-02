@@ -2,20 +2,27 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>用户收藏</title>
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
-	rel="stylesheet" />
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
-	rel="stylesheet" />
+<div th:include="/thymeleaf/common/_head2::headx('我的收藏')"	th:remove="tag"></div>
 
-<!-- <link th:href="@{/static/css/main1.css}" rel="stylesheet" /> -->
+<style type="text/css">
 
-<script type="text/javascript"
-	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+.thumbnail img{
+	width:220px;
+	height:220px;
+}
+
+
+</style>
+
 </head>
 <body>
+
+	<!-- header -->
+	<div class="row clearfix">
+		<div id="header" class="col-md-12 column">
+		</div>
+	</div>
+
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-12 column" >
@@ -47,7 +54,7 @@
 				
 					<div  th:each="favouriteItem:${favouriteItems}" class="col-md-3">
 						<div class="thumbnail">
-							<img alt="300x200" th:src="@{${favouriteItem.pictureUrl}}" />
+							<img alt="300x200" th:src="@{${favouriteItem.pictureUrl}}"   />
 								<div class="caption">
 									<div>
 										<span th:text="${favouriteItem.ItemName}" >产品名称</span><br>
@@ -64,5 +71,12 @@
 			</div>
 		</div>
 	</div>
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column">
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	
 </body>
 </html>

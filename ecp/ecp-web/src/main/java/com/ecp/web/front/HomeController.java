@@ -45,63 +45,32 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Model model) {
-
-		// 此处模拟了自数据库读取类目信息并与前叶接口的情形。应该是自应用层读取类目信息，将功能向后端延伸。
-		// 模拟数据
-
-		/*
-		 * ArrayList<CategoryTreeNode> categoryList = new
-		 * ArrayList<CategoryTreeNode>(); //返回第一级类目结点列表
-		 * 
-		 * 
-		 * //增加一级类目 for (int i = 1; i <=3; i++) { //一级类目 Category category1 =
-		 * new Category(); category1.setCid((long) i); category1.setcName("类目" +
-		 * i);
-		 * 
-		 * CategoryTreeNode categoryTreeNode1=new CategoryTreeNode(); //生成类目树结点
-		 * ArrayList<CategoryTreeNode> subCategoryList2 = new
-		 * ArrayList<CategoryTreeNode>(); //生成当前结点的子结点
-		 * 
-		 * categoryTreeNode1.setCategory(category1); //加入当前结点
-		 * categoryTreeNode1.setSubCategoryList(subCategoryList2);
-		 * 
-		 * categoryList.add(categoryTreeNode1);
-		 * 
-		 * for(int j=1;j<=3;j++){ //二级类目 Category category2 = new Category();
-		 * category2.setCid((long) i*10+j); category2.setcName("类目" + (i*10+j));
-		 * 
-		 * CategoryTreeNode categoryTreeNode2=new CategoryTreeNode(); //生成类目结点
-		 * ArrayList<CategoryTreeNode> subCategoryList3 = new
-		 * ArrayList<CategoryTreeNode>(); //生成当前结点的子结点
-		 * 
-		 * categoryTreeNode2.setCategory(category2); //加入当前结点
-		 * categoryTreeNode2.setSubCategoryList(subCategoryList3);
-		 * //设置当前结点的子结点列表
-		 * 
-		 * subCategoryList2.add(categoryTreeNode2);
-		 * 
-		 * for(int k=1;k<=3;k++){ Category category3 = new Category();
-		 * category3.setCid((long) i*100+j*10+k); category3.setcName("类目" +
-		 * (i*100+j*10+k));
-		 * 
-		 * CategoryTreeNode categoryTreeNode3=new CategoryTreeNode(); //生成类目树结点
-		 * categoryTreeNode3.setCategory(category3);
-		 * categoryTreeNode3.setSubCategoryList(null);
-		 * 
-		 * subCategoryList3.add(categoryTreeNode3); }
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
-
-		List<CategoryTreeNode> categoryList = categoryService.getCategoryTree();
-
+		/*List<CategoryTreeNode> categoryList = categoryService.getCategoryTree();
 		model.addAttribute("categoryList", categoryList); // 返回类目树列表
-
-		return RESPONSE_THYMELEAF + "home";
+*/		return RESPONSE_THYMELEAF + "home";
+	}
+	
+	/**
+	 * @Description 加载页头
+	 * @return
+	 */
+	@RequestMapping(value = "/header")
+	public String header(Model model){
+		List<CategoryTreeNode> categoryList = categoryService.getCategoryTree();
+		model.addAttribute("categoryList", categoryList); // 返回类目树列表
+		
+		return RESPONSE_THYMELEAF + "header";
 	}
 
+	/**
+	 * @Description 加载页尾
+	 * @return
+	 */
+	@RequestMapping(value = "/footer")
+	public String footer(){
+		return RESPONSE_THYMELEAF + "footer";
+	}
+	
 	/** 
 	 * @Description 显示购物车中的商品列表
 	 * @param model
@@ -133,9 +102,6 @@ public class HomeController {
 
 		return RESPONSE_THYMELEAF + "product_detail";
 	}
-	
-	
-	
 
 	/**
 	 * @Description ajaxtest  导航-->ajax测试页
@@ -171,9 +137,6 @@ public class HomeController {
 
 		return jsonObject;
 	}
-	
-	
-	
 	
 	
 	/**

@@ -8,7 +8,7 @@
 <style>
 /* 购物车条目未选定时 */
 .cartItem {
-	background: white
+	background: auto;
 }
 
 /* 购物车条目选定时  */
@@ -19,6 +19,12 @@
 
 </head>
 <body>
+	<!-- header -->
+	<div class="row clearfix">
+		<div id="header" class="col-md-12 column">
+		</div>
+	</div>
+	<!--content  -->
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-12 column" style="font-size: 20px; height: 50px">
@@ -38,8 +44,8 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th><input type="checkbox" class="select_all" /> <label
-								for="1">全选</label></th>
+							<th><input id="select_all_top" type="checkbox" class="select_all" /> <label
+								for="select_all_top">全选</label></th>
 							<th>商品</th>
 							<th>规格</th>
 							<th>单价</th>
@@ -87,9 +93,10 @@
 									<a href="javascript:void(0);" clstag="clickcart|keycount|xincart|cart_num_down" class="decrement " id="decrement_8888_1178877_2_13_199666805">-</a>
 										<input autocomplete="off" class="itxt" value="2" id="changeQuantity_8888_1178877_2_13_0_199666805" minnum="1" type="text">
 									<a href="javascript:void(0);" clstag="clickcart|keycount|xincart|cart_num_up" class="increment" id="increment_8888_1178877_2_13_0_199666805">+</a>
-								</div> --> <input
+								</div> --> 
+								<input
 								th:attr="id='num_'+${cartItem.itemId}+'-'+${cartItem.skuId}"
-								type="text" name="数量" th:value="${cartItem.quantity}" /></br> <span>有货</span>
+								type="number" name="数量" th:value="${cartItem.quantity}" /></br> <span>有货</span>
 							</td>
 							<td><label
 								th:text="'￥'+${cartItem.skuPrice}* ${cartItem.quantity}">小计：5188</label></br>
@@ -103,15 +110,15 @@
 			</div>
 		</div>
 
+		<hr>
 		<!--  -->
-
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<div class="row clearfix">
 					<div class="col-md-6 column">
 						<div class="row clearfix">
 							<div class="col-md-4 column">
-								<input type="checkbox" class="select_all" /> <label>全选</label>
+								<input type="checkbox" id="select_all_bottom" class="select_all" /> <label for="select_all_bottom">全选</label>
 							</div>
 							<div class="col-md-8 column">
 
@@ -137,25 +144,28 @@
 							</div>
 							<div class="col-md-4 column">
 								<span class="txt txt-new">总价：</span> <span
-									class="price sumPrice"><strong id="amount" style="font-size:20px">0</strong></span>
-								<!-- <b	class="ml5 price-tips"></b>  <br> <span class="txt">已节省：</span>
-										<span class="price totalRePrice">-¥0.00</span> -->
-
+									class="price sumPrice">￥<strong id="amount" style="font-size:20px">0</strong></span>
 							</div>
 							<div class="col-md-4 column">
 								<a clstag="clickcart|keycount|xincart|cart_gotoOrder"
 									id="BtnSettle" class="submit-btn btn btn-primary" data-bind="1"
 									target="_blank">去结算<b></b></a>
-
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
-
+	<br><br>
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column">
+		</div>
+	</div>
+	<!-- load header and footer  -->
+	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	
 	<script type="text/javascript">
 		/*
 			设置己选数量

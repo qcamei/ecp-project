@@ -2,25 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="context-path" th:content="@{/}" />
-
-<title>分类查询-结果页</title>
-
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
-	rel="stylesheet" />
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
-	rel="stylesheet" />
-
-<link rel="stylesheet"
-	th:href="@{/static/bootstrap/3.3.5/css/font-awesome.css}">
+<div th:include="/thymeleaf/common/_head2::headx('分类-查询结果')"
+	th:remove="tag"></div>
+<!--字符图标  -->
 <link rel="stylesheet" th:href="@{/static/css/crumb/reset.css}">
 <link rel="stylesheet" th:href="@{/static/css/crumb/style.css}">
-
-<script type="text/javascript"
-	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-
 
 <style type="text/css">
 li {
@@ -36,14 +22,25 @@ li {
 	width:220px;
 	height:220px;
 } */
+
+.shaixuan-tj i{
+	color:black;
+}
+
+
 </style>
 
 
 </head>
 <body>
+	<!-- header -->
+	<div class="row clearfix">
+		<div id="header" class="col-md-12 column">
+		</div>
+	</div>
 	<div class="container">
-		<h3 style="font-size: 18px;">筛选条件列表-用于多条件选择</h3>
-		<br>
+		<!-- <h3 style="font-size: 18px;">筛选条件列表-用于多条件选择</h3>
+		<br> -->
 		<div class="row clearfix">
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -155,6 +152,16 @@ li {
 		</nav>
 
 	</div>
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column">
+		</div>
+	</div>
+	<!-- load header and footer  -->
+	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	
+	
+	
 	<!-- <input type="button" value="test" id="BtnTest" /> -->
 
 	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->

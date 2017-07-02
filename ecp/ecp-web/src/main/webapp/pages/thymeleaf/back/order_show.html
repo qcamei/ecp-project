@@ -6,7 +6,7 @@
 <body>
 	<div class="container">
 		<!-- header -->
-		<div th:include="thymeleaf/common/_header::header" class="header"></div>
+		<!-- <div th:include="thymeleaf/common/_header::header" class="header"></div> -->
 		<!-- content -->
 		<!-- 对话框 -->
 		<!-- <div th:replace="thymeleaf/common/_dispatch_account_dialog::dialog" class="header"></div> -->
@@ -51,7 +51,7 @@
 		</div>
 		
 		<!-- footer -->
-		<div th:include="/thymeleaf/common/_footer::footer" class="footer"></div>
+		<!-- <div th:include="/thymeleaf/common/_footer::footer" class="footer"></div> -->
 		
 		<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
 		<form th:action="@{/back/order/show}" method="post"	id="searchform">

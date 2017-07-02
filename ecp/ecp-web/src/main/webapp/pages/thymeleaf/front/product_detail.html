@@ -2,20 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="context-path" th:content="@{/}" />
-
-<title>产品详情</title>
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
-	rel="stylesheet" />
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
-	rel="stylesheet" />
-
-<script type="text/javascript"
-	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-
-
+<div th:include="/thymeleaf/common/_head2::headx('商品详情')" th:remove="tag"></div>
 
 <style>
 li {
@@ -38,7 +25,11 @@ li[class~=selected] {
 
 </head>
 <body>
-
+	<!-- header -->
+	<div class="row clearfix">
+		<div id="header" class="col-md-12 column">
+		</div>
+	</div>
 	<div class="container">
 		<!-- 登录窗口 -->
 		<div class="row clearfix">
@@ -284,6 +275,14 @@ li[class~=selected] {
 
 
 	</div>
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column">
+		</div>
+	</div>
+	<!-- load header and footer  -->
+	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	
 
 	<input type="hidden" id="SkuAttribute" th:value="${sku.attributes}" />
 
@@ -291,19 +290,17 @@ li[class~=selected] {
 	<form th:action="@{/front/product/sku/detail}" method="post"
 		id="testform">
 		<!-- SPU id -->
-		<input type="hidden" name="itemId" id="itemId"
-			th:value="${item.itemId}" /> <input type="hidden"
-			name="skuAttribute" id="skuAttribute" th:value="${sku.attributes}" />
+		<input type="hidden" name="itemId" id="itemId"	th:value="${item.itemId}" /> 
+		<input type="hidden" name="skuAttribute" id="skuAttribute" th:value="${sku.attributes}" />
 	</form>
 
 	<!-- 增加到购物车时使用的表单（隐藏表单）  -->
 	<form th:action="@{/front/cart/add}" method="post" id="addToCartForm">
 		<!-- SPU id -->
-		<input type="hidden" name="itemId" id="itemId"
-			th:value="${item.itemId}" /> <input type="hidden" name="skuId"
-			id="skuId" th:value="${sku.sku_id}" /> <input type="hidden"
-			name="quantity" id="quantity" value="" /> <input type="hidden"
-			name="skuName" id="skuName" value="" />
+		<input type="hidden" name="itemId" id="itemId"	th:value="${item.itemId}" /> 
+		<input type="hidden" name="skuId"	id="skuId" th:value="${sku.sku_id}" /> 
+		<input type="hidden" name="quantity" id="quantity" value="" />
+		<input type="hidden" name="skuName" id="skuName" value="" />
 	</form>
 
 
