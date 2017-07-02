@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>project</title>
+    <!-- <link rel="stylesheet" type="text/css" th:href="@{/static/css/header/bootstrap.min.css}">  -->
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/header/css.css}">
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script> -->
+    <!-- <script th:src="@{/static/jquery/1.11.3/jquery-1.11.3.js}"></script> -->
+    <script type="text/javascript" th:src="@{/static/js/header/js.js}"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="top">
+            <nav class="header-wrap">
+                <ul class="leftul">
+                    <li class="topContent">
+                        <div>收藏我们</div>
+                    </li>
+                    <li>
+                        <div>联系我们：<span></span>0311-89292627</div>
+                    </li>
+                </ul>
+                <ul class="centerul">
+                    <li class="login">
+                        <div>您好，欢迎来到</div>
+                        <div id="reg"><a th:href="@{/front/home/login}">[请登录]</a></div>
+                    </li>
+                </ul>
+                <ul class="rightul">
+                    <li>
+                        <div><a th:href="@{/front/personalcenter/favourites}" target="_blank">我的收藏</a></div>
+                    </li>
+                    <i>|</i>
+                    <li>
+                        <div><a th:href="@{/front/personalcenter/cart}" target="_blank">我的购物车</a></div>
+                    </li>
+                    <i>|</i>
+                    <li>
+                        <div><a th:href="@{/front/personalcenter/orders}" target="_blank">我的订单</a></div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="top-banner">
+            <div class="banner-img">
+                <img th:src="@{/static/images/hengfu.jpg}" style="width:auto">
+                <div class="closeAd">X</div>
+            </div>
+        </div>
+        <div class="searchLine">
+            <div class="logo">
+                <img th:src="@{/static/images/JD.png}">
+            </div>
+            <div class="search">
+                <div>
+                	<form  target="_blank"  method="get" role="search" th:action="@{/front/search/keywords}">
+                    	<input id="searchbox" name="keywords" type="text">
+                    	<input id="searchbutton" type="submit" value="搜索">
+                    </form>
+                </div>
+                <div class="hotSearch">热门搜索：<span class="red">抄底价格</span><span>抄底价格</span><span>抄底价格</span><span>抄底价格</span></div>
+            </div>
+            <div id="myCart" class="quick quickRight">
+                <div class="cart"><a th:href="@{/front/personalcenter/cart}" target="_blank"><i class="icon-shopping-cart icon-large" style="margin-right:3px;color:red"></i>购物车</a></div>
+                <div class="popover bottom dropdownCart">
+                    <div class="arrow"></div>
+                    <h3 class="popover-title">最新加入的商品<span>共7件</span></h3>
+                    <div class="popover-content">
+                        <div class="cartProduct">
+                            <div class="productName">
+                                <img src="http://placekitten.com/g/50/50">
+                                <h6>商品名称商品名称商品名称商品名称</h6>
+                            </div>
+                            <div class="productPrice">
+                                <p>￥14532</p>
+                                <p>*88</p>
+                                <a>删除</a>
+                            </div>
+                        </div>
+                        <div class="cartProduct">
+                            <div class="productName">
+                                <img src="http://placekitten.com/g/50/50">
+                                <h6>商品名称商品名称商品名称商品名称</h6>
+                            </div>
+                            <div class="productPrice">
+                                <p>￥14532</p>
+                                <p>*88</p>
+                                <a>删除</a>
+                            </div>
+                        </div>
+                        <div class="cartProduct">
+                            <div class="productName">
+                                <img src="http://placekitten.com/g/50/50">
+                                <h6>商品名称商品名称商品名称商品名称</h6>
+                            </div>
+                            <div class="productPrice">
+                                <p>￥14532</p>
+                                <p>*88</p>
+                                <a>删除</a>
+                            </div>
+                        </div>
+                        <div class="cartProduct">
+                            <div class="productName">
+                                <img src="http://placekitten.com/g/50/50">
+                                <h6>商品名称商品名称商品名称商品名称</h6>
+                            </div>
+                            <div class="productPrice">
+                                <p>￥14532</p>
+                                <p>*88</p>
+                                <a>删除</a>
+                            </div>
+                        </div>
+                        <div class="cartProduct">
+                            <div class="productName">
+                                <img src="http://placekitten.com/g/50/50">
+                                <h6>商品名称商品名称商品名称商品名称</h6>
+                            </div>
+                            <div class="productPrice">
+                                <p>￥14532</p>
+                                <p>*88</p>
+                                <a>删除</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="popover-footer">
+                        <p>共计：<span>88.88 元</span></p>
+                        <button class="btn btn-sm">购物车</button>
+                    </div>
+                </div>
+            </div>
+            <div class="quick">
+                <div class="cart"><a th:href="@{/front/personalcenter/favourites}" target="_blank">我的收藏</a></div>
+            </div>
+            <div class="quick">
+                <div class="cart"><a th:href="@{/front/home/login}">点击登录</a></div>
+            </div>
+        </div>
+        <div id="sort">
+            <div class="main-sort">
+                <div class="all-sort">
+                    <a href="#">全部商品分类</a>
+                    <div id="classification" class="classification">
+                    	<!-- 一级类目 -->
+                        <div th:each="level1 : ${categoryList}" class="firstClass">
+                            <h3>
+                            	<a th:href="@{/front/search/category/{categoryId}(categoryId=${level1.category.cid})}" target="_blank"><span th:text="${level1.category.cName}" th:remove="tag">3C外设</span></a><span>&gt;</span></h3>
+                        </div>
+                    </div>
+                    <!-- detail list start-->
+                    <div id="details" class="details">
+                        <div th:each="level1,iter1 : ${categoryList}" class="item-sub" th:attr="id='classList'+${iter1.index}">
+                            <div class="subitem">
+                                <dl th:each="level2,iter2 : ${level1.subCategoryList}" th:attr="class='force'+${iter2.count}">
+                                    <dt>
+                                        <a th:href="@{/front/search/category/{categoryId}(categoryId=${level2.category.cid})}" target="_blank"><span th:text="${level2.category.cName}" th:remove="tag">电视</span>
+                                        	<i>></i>
+                                    	</a>
+                                    </dt>
+                                    <dd>
+                                        <a th:each="level3 : ${level2.subCategoryList}" th:href="@{/front/search/category/{categoryId}(categoryId=${level3.category.cid})}" target="_blank"><span th:text="${level3.category.cName}" th:remove="tag">电视</span></a>
+                                    </dd>
+                                </dl>
+                                
+                            </div>
+                        </div>  <!-- item-sub end -->
+                    </div>
+                    <!-- detail list end-->
+                </div>
+                <div class="minor-sort">
+                    <ul>
+                        <li class="active"><a href="#">首页推荐</a></li>
+                        <li><a href="#">电脑整机</a></li>
+                        <li><a href="#">外设</a></li>
+                        <li><a href="#">玩具</a></li>
+                        <li><a th:href="@{/back/agent/show}" target="_blank">签约用户维护</a></li>
+                        <li><a th:href="@{/back/order/show}" target="_blank">订单管理</a></li>
+                        <li><a th:href="@{/back/contract/show}" target="_blank">合同管理</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 占位图片 不属于header  -->
+    <!-- <div>
+        <img src="http://via.placeholder.com/1200x330" style="display: block;width: auto;margin:0 auto">
+    </div> -->
+    <!-- 占位图片 不属于header end  -->
+</body>
+
+</html>
