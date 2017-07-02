@@ -223,7 +223,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-2 control-label">密度</label>
+									<label class="col-sm-2 control-label">重量单位</label>
 
 									<div class="col-sm-10">
 										<input type="text" id="weight-unit" name="weightUnit"

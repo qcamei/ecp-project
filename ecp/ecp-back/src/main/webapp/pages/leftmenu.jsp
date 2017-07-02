@@ -75,7 +75,7 @@
 			</a></li>
 			<li class="line dk"></li>
 
-			<li><a class="J_menuItem" href="javascript:void(0);"
+			<!-- <li><a class="J_menuItem" href="javascript:void(0);"
 				title="角色管理"
 				onclick="javascript:iframeLoading('front/role/selectItem?pagehelperFun=clickPageBtnRequestFun');">
 					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">角色管理</span>
@@ -101,7 +101,7 @@
 				onclick="javascript:iframeLoading('pages/shopdmp/scrm/wxSet.jsp');">
 					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">公众号配置</span>
 			</a></li>
-			<li class="line dk"></li>
+			<li class="line dk"></li> -->
 
 		</ul>
 	</div>
