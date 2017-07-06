@@ -135,8 +135,8 @@ public class PersonalCenterController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/cart", method = RequestMethod.GET)
-	public String cart(Model model, HttpServletRequest request) {
+	@RequestMapping(value = "/cart")
+	public String cart(Integer cartItemId,Model model, HttpServletRequest request) {
 
 		// 自session读取用户信息
 		// 如果用户在此处没有登录时
@@ -203,6 +203,7 @@ public class PersonalCenterController {
 		}
 
 		model.addAttribute("cartItemList", cartItemList); // 加入到model
+		model.addAttribute("cartItemId", cartItemId);  //需要自动选定的cart item
 
 		return RESPONSE_THYMELEAF + "my_cart";
 	}

@@ -13,8 +13,9 @@ public interface ICartService extends IBaseService<Favourite,Integer>{
 	 * @param skuId   sku id
 	 * @param quantity  数量
 	 * @param userId    用户 id
+	 * @return 返回所插入的购物车条目id
 	 */
-	public void addToCart(int itemId,int skuId,int quantity,int userId);
+	public int addToCart(int itemId,int skuId,int quantity,int userId);
 	
 	/**
 	 * @Description 获取指定用户购物车中商品数量

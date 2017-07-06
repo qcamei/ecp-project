@@ -381,7 +381,7 @@
 		function getGuaranteePeriod(){
 			var val=0;
 			$("input[name='guarantee_period']").each(function(index,elem){
-				if ($(this).attr("checked")) { 
+				if (this.checked) { 
 					val=$(this).val();
 					return false;
 				}
@@ -557,7 +557,7 @@
 			
 			/* 【合同预览】 按钮 click process */
 			$(".btn-preview").on('click', function(e){
-				//alert("质保期："+getGuaranteePeriod());
+				alert("质保期："+getGuaranteePeriod());
 				//alert("付款类型:"+getPayType());
 				contractPreview();
 				

@@ -6,6 +6,7 @@
 	th:remove="tag"></div>
 <link rel="stylesheet" th:href="@{/static/css/crumb/reset.css}">
 <link rel="stylesheet" th:href="@{/static/css/crumb/style.css}">
+<link rel="stylesheet" th:href="@{/static/css/wu/default.css}">
 <style type="text/css">
 li {
 	list-style-type: none;
@@ -102,23 +103,36 @@ li {
 		<!-- 查询结果列表 -->
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<div class="row">
-					<div class="col-md-3" th:each="item : ${itemList}">
-						<div class="thumbnail">
-							<a
-								th:href="@{/front/product/detail/{itemId}(itemId=${item.item.itemId})}"
-								target="_blank"> <img th:src="@{${item.pict[0].pictureUrl}}" />
-							</a>
-							<div class="">
-								<p th:text="${item.item.itemName}"></p>
-								<p th:text="${item.item.marketPrice}"></p>
-								<p th:text="${item.item.itemId}"></p>
-
-							</div>
+				<div class="tabbable tablist" id="tabs-822513">
+					<h5><span class="glyphicon glyphicon glyphicon-search" aria-hidden="true"></span>查询结果</h5>
+					<!-- <span class="more"><a href="#">more</a></span> -->
+					<ul class="nav nav-pills titletab">
+						<li class="active">
+							 <!-- <a href="#panel-416853" data-toggle="tab">办公</a> -->
+						</li>					
+					</ul>
+					
+					<div class="tab-content">
+						<div class="tab-pane active  prolist" id="panel-416853">
+							<ul>
+								<li th:each="item : ${itemList}">
+									<a
+										th:href="@{/front/product/detail/{itemId}(itemId=${item.item.itemId})}"
+										target="_blank"> <img th:src="@{${item.pict[0].pictureUrl}}" />
+									</a>
+									<p class="proname" th:text="${item.item.itemName}">产品名称</p>
+									<!-- <p class="prointr" th:text="${item.item.itemId}">商品简介</p> -->
+									<p class="price" th:text="${item.item.marketPrice}">999.00</p>
+								</li>
+								
+							</ul>
+							<div style="clear: both;"></div>
 						</div>
+						
 					</div>
 				</div>
 			</div>
+				
 		</div>
 		<!-- 加入分页处理 -->
 		<nav th:if="${not #lists.isEmpty(itemList)}" style="float: right;">

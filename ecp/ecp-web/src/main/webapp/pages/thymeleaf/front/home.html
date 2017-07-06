@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <div th:include="/thymeleaf/common/_head2::headx('智慧教育-电子商务平台')"	th:remove="tag"></div>
 <!-- other css -->
+<link th:href="@{/static/css/wu/default.css}"	rel="stylesheet" />
 <!-- other style -->
 <!-- other script -->
 </head>
@@ -17,11 +18,13 @@
 		<div id="content" class="row clearfix">
 			<div id="content" class="col-md-12 column content">
 				<!-- 在此处加入频道内容 -->
-				<!-- 占位图片 不属于header  -->
-			    <div>
-			        <img src="http://via.placeholder.com/1200x330" style="display: block;width: auto;margin:0 auto">
-			    </div>
-    			<!-- 占位图片 不属于header end  -->
+				
+				<!-- 主页商品展示1 -->
+			    <div  id="channel-one" ></div>
+			    
+			    <!-- 主页商品展示2 -->
+			    <div  id="channel-two" ></div>
+    			
 			</div>
 		</div>
 		
@@ -32,6 +35,31 @@
 	</div>
 	<!-- load header and footer -->
 	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
-	
+	<script type="text/javascript">
+		/* 加载channel-one */
+		function loadChannelOne() {
+			var url = "/front/home/channelone";
+			var parms = null;
+			var callbackFunc = null; //load页面 完毕后加调函数
+			var containerId = "#channel-one";
+			loadPage(containerId, url, parms, callbackFunc);
+		}
+		
+		/* 加载channel-two */
+		function loadChannelTwo() {
+			var url = "/front/home/channelone";
+			var parms = null;
+			var callbackFunc = null; //load页面 完毕后加调函数
+			var containerId = "#channel-two";
+			loadPage(containerId, url, parms, callbackFunc);
+		}
+		
+		$(function(){
+			loadChannelOne();	
+			loadChannelTwo();
+		});
+		
+		
+	</script>
 </body>
 </html>

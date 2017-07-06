@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>购物车</title>
+</head>
+<body>
+
+	<div th:each="cartItem:${cartItemList}" class="cartProduct">
+		<div class="productName">
+			<a
+				th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
+				target="_blank"> <img alt="50X50" height=50 weight=50
+				th:src="@{${cartItem.skuPicture}}" />
+			</a>
+			<h6 th:text="${cartItem.skuName}">商品名称商品名称商品名称商品名称</h6>
+		</div>
+		<div class="productPrice">
+			<p th:text="'￥'+${cartItem.skuPrice}">￥14532</p>
+			<p th:text="${cartItem.quantity}">*88</p>
+			<a class="delete-cart-item" th:attr="data-bind=${cartItem.id}" onclick="deleteFunc(this)">删除</a>
+		</div>
+	</div>
+
+	<!-- 获取用户已经选商品列表  -->
+	<script th:inline="javascript"> 
+		/*<![CDATA[*/  
+     
+		var g_cartItemList = [[${cartItemList}]];  //购物车中商品行项目
+		var g_cartItemNum=[[${itemNum}]];  //购物车中商品行项目
+		var g_cartItemTotalPrice=[[${cartItemTotalPrice}]];  //购物车中总金额
+		//console.log("商品数量1:"+g_cartItemList.length);
+		//console.log("商品数量2:"+g_cartItemNum);
+		//console.log("总金额:"+g_cartItemTotalPrice);
+		/*]]>*/  
+	</script>
+	
+	<script type="text/javascript">
+	/* 删除购物车中的条目 */
+	function deleteFunc(e){
+		//console.log("delete cart item!");
+		var cartItemId = $(e).attr("data-bind");  //获取需要删除的购物车条目
+		//util.delConfirm("确认删除？", cartItemId, "deleteInfoAjaxRequest");
+		deleteInfoAjaxRequest(cartItemId);
+		
+		
+		//console.log("delete cart item after confirm!");
+	}
+
+	/*
+		采用ajax 删除购物车条目
+	*/
+	function  deleteInfoAjaxRequest(id){
+		var url = BASE_CONTEXT_PATH + "/front/cart/delete"; // 需要提交的 url
+		
+		$.ajax({
+			type : "post", // 提交方式 get/post
+			url : url, // 需要提交的 url
+			//dataType: "application/json",
+			data : {
+				'id' : id,
+			},
+			success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+				console.log(res);
+				if (res != null && res != "") {
+					var obj = $.parseJSON(res);
+					if (obj.result_code == "success") {
+						//util.message(obj.result_msg);  //显示删除成功能对话框，此处省略
+						loadQuickCart(); //操作成功后重新加载购物车列表
+					} else {
+						util.message(obj.result_err_msg);
+					}
+				}
+			}
+
+		});
+	}
+		
+		$(function(){
+			
+		});
+	
+	</script>
+
+
+</body>
+</html>

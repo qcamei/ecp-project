@@ -1,46 +1,93 @@
 /**
  * 
  * @authors Wang
- * @date    2017-6-16
- * @version 
- **/
+ * @date 2017-6-16
+ * @version
+ */
 
-$(function(){
-	//购物车
-	$("#myCart").hover(function() {
-    	$(".dropdownCart").stop(true, true).slideDown();
-	}, function() {
-    	$(".dropdownCart").stop(true, true).delay(200).slideUp();
-	});
+//==================动态加载购物车===================
 
-	//分类
+/* 加载购物车 */
+function loadQuickCart() {
+	var url = "/front/cart/quickcart";
+	var parms = null;
+	var callbackFunc = loadQuickCartSuccess; // 加载完毕后 显示数量及金额
+	var containerId = "#popover-content";
+	loadPage(containerId, url, parms, callbackFunc);
+}
+
+/* 显示购物车商品数量及总金额 */
+function loadQuickCartSuccess() {
+	displayCartItemNum();
+	displayCartItemTotalPrice();
+}
+
+/*显示购物车中商品数量*/
+function displayCartItemNum(){
+	$("#itemNum").text(g_cartItemNum);
+}
+
+/*显示购物车中总价格*/
+function displayCartItemTotalPrice(){
+	$("#cartItemTotalPrice").text(g_cartItemTotalPrice);
+}
+
+//===============global variables=======================
+
+//var g_opened=false;
+
+/* page loaded ready */
+$(function() {
+
+	// 购物车
+	$("#myCart").hover(
+		function() { // hover in
+			console.log("triggered,load cart items");
+			loadQuickCart();
+			//$(".dropdownCart").stop(true, true).slideDown(); // 下拉
+			$(".dropdownCart").show();
+		}, 
+		function() { // hover out
+			//$(".dropdownCart").stop(true, false).delay(0).slideUp();
+			$(".dropdownCart").hide();
+		}
+	);
+
+	// 分类
 	$("#sort .all-sort").hover(function() {
-    	$("#classification").slideDown();
+		$("#classification").slideDown();
 	}, function() {
-    	$("#classification").stop(true, true).slideUp();
-    	$(".item-sub").hide();
+		$("#classification").stop(true, true).slideUp();
+		$(".item-sub").hide();
 	});
 
-	$(".firstClass").each(function(index){
-		$(this).hover(function(){
+	$(".firstClass").each(function(index) {
+		$(this).hover(function() {
 			$(".item-sub").hide();
 			$("#details").show();
-			$("#classList"+index).show();
-		},function(){
-			
+			$("#classList" + index).show();
+		}, function() {
+
 		});
 	});
 
-	$("#classList1").hover(function(){
+	$("#classList1").hover(function() {
 		$("#detail").show();
 		$("#classList1").show();
-	},function(){
+	}, function() {
 		$("#classList1").hide();
 	});
 
+	$(".footerContent .row>div").each(function() {
+		$(this).height($(".footerContent .row").height())
+	});
 	
-	$(".footerContent .row>div").each(function(){$(this).height($(".footerContent .row").height())});
+	//==============业务逻辑=============
+	
+	/* 打开购物车 */
+	$("#btnCart").on("click",function(){
+		var url = BASE_CONTEXT_PATH + "/front/personalcenter/cart";
+		window.open(url,"_blank");  
+	})
 
 });
-
-

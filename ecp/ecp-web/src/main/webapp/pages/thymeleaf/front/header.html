@@ -24,8 +24,10 @@
                 </ul>
                 <ul class="centerul">
                     <li class="login">
-                        <div>您好，欢迎来到</div>
-                        <div id="reg"><a th:href="@{/front/home/login}">[请登录]</a></div>
+                        <div><span  th:text="${user} ? ${user.nickname}:'尚未登录'  "></span>您好，欢迎来到</div>
+                        <div id="reg">
+                        	<a th:href="${user} ?  @{/front/home/unRegister}:@{/front/home/login}" 
+                        	   th:text="${user} ?  '[退出登录]': '[请登录]'" > [请登录]</a></div>
                     </li>
                 </ul>
                 <ul class="rightul">
@@ -43,6 +45,7 @@
                 </ul>
             </nav>
         </div>
+        <!-- banner -->
         <div id="top-banner">
             <div class="banner-img">
                 <img th:src="@{/static/images/hengfu.jpg}" style="width:auto">
@@ -51,7 +54,7 @@
         </div>
         <div class="searchLine">
             <div class="logo">
-                <img th:src="@{/static/images/JD.png}">
+                <a th:href="@{/front/home/home}"><img th:src="@{/static/images/lmxx.jpg}" style="width:270px;height:60px"></a>
             </div>
             <div class="search">
                 <div>
@@ -64,70 +67,21 @@
             </div>
             <div id="myCart" class="quick quickRight">
                 <div class="cart"><a th:href="@{/front/personalcenter/cart}" target="_blank"><i class="icon-shopping-cart icon-large" style="margin-right:3px;color:red"></i>购物车</a></div>
-                <div class="popover bottom dropdownCart">
-                    <div class="arrow"></div>
-                    <h3 class="popover-title">最新加入的商品<span>共7件</span></h3>
-                    <div class="popover-content">
-                        <div class="cartProduct">
-                            <div class="productName">
-                                <img src="http://placekitten.com/g/50/50">
-                                <h6>商品名称商品名称商品名称商品名称</h6>
-                            </div>
-                            <div class="productPrice">
-                                <p>￥14532</p>
-                                <p>*88</p>
-                                <a>删除</a>
-                            </div>
-                        </div>
-                        <div class="cartProduct">
-                            <div class="productName">
-                                <img src="http://placekitten.com/g/50/50">
-                                <h6>商品名称商品名称商品名称商品名称</h6>
-                            </div>
-                            <div class="productPrice">
-                                <p>￥14532</p>
-                                <p>*88</p>
-                                <a>删除</a>
-                            </div>
-                        </div>
-                        <div class="cartProduct">
-                            <div class="productName">
-                                <img src="http://placekitten.com/g/50/50">
-                                <h6>商品名称商品名称商品名称商品名称</h6>
-                            </div>
-                            <div class="productPrice">
-                                <p>￥14532</p>
-                                <p>*88</p>
-                                <a>删除</a>
-                            </div>
-                        </div>
-                        <div class="cartProduct">
-                            <div class="productName">
-                                <img src="http://placekitten.com/g/50/50">
-                                <h6>商品名称商品名称商品名称商品名称</h6>
-                            </div>
-                            <div class="productPrice">
-                                <p>￥14532</p>
-                                <p>*88</p>
-                                <a>删除</a>
-                            </div>
-                        </div>
-                        <div class="cartProduct">
-                            <div class="productName">
-                                <img src="http://placekitten.com/g/50/50">
-                                <h6>商品名称商品名称商品名称商品名称</h6>
-                            </div>
-                            <div class="productPrice">
-                                <p>￥14532</p>
-                                <p>*88</p>
-                                <a>删除</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="popover-footer">
-                        <p>共计：<span>88.88 元</span></p>
-                        <button class="btn btn-sm">购物车</button>
-                    </div>
+                <!-- 暂时去掉了指示三角形，去掉了一个class bottom -->
+                <div class="popover  dropdownCart">
+                   <!-- <div class="arrow"></div> -->
+					<h3 class="popover-title">
+						最新加入的商品<span>共<span id="itemNum">X</span>件</span>
+					</h3>
+					<div class="popover-content" id="popover-content" >
+						请先登录！
+					</div>
+					<div class="popover-footer">
+						<p>
+							共计：<span id="cartItemTotalPrice">X</span>元
+						</p>
+						<button class="btn btn-sm" id="btnCart">购物车</button>
+					</div> 
                 </div>
             </div>
             <div class="quick">
@@ -187,6 +141,12 @@
         <img src="http://via.placeholder.com/1200x330" style="display: block;width: auto;margin:0 auto">
     </div> -->
     <!-- 占位图片 不属于header end  -->
+    
+    <!--  -->
+    
+    
+    
+    
 </body>
 
 </html>

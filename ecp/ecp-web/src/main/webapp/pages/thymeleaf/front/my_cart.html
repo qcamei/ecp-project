@@ -166,6 +166,19 @@
 	<!-- load header and footer  -->
 	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
 	
+	<!-- 获取用户已经选商品列表  -->
+	<script th:inline="javascript">  
+			/*<![CDATA[*/  
+      
+			var g_cartItemId = [[${cartItemId}]];  
+			console.log("买家已选商品类型数量:"+cartItemList.length);  
+      
+			/*]]>*/  
+	</script>
+	
+	
+	
+	
 	<script type="text/javascript">
 		/*
 			设置己选数量
@@ -325,8 +338,34 @@
 				}
 			});
 		}
+		
+		/*
+			功能：选择其中的一项
+			参数：cartItemId 购物车行项目id
+		*/
+		function selectOne(cartItemId){
+			if(cartItemId==null){
+				return;
+			}
+			
+			//扫描用户己选SKU
+			$(".cart_item_selector").each(function(index, elem) {
+					var id = $(this).attr("data-id");
+					if(id==cartItemId){
+						$(this).trigger("click");
+						return false;
+					}
 
+			}); //end of .cart_item_selector		
+			
+		}
+		
+		
+		// page loaded ready
 		$(function() {
+			
+			
+			
 
 			//当用户点击前面的checkbox时处理
 			//checkbox默认值为未选状态
@@ -347,6 +386,8 @@
 				displayAmount(amount);
 
 			});
+			
+			selectOne(g_cartItemId);  //自动选择某项
 
 			/*
 				有两个select all checkbox，需要做同步处理

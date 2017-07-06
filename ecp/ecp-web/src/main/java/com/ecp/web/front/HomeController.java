@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.CategoryTreeNode;
+import com.ecp.common.SessionConstants;
 import com.ecp.entity.Favourite;
+import com.ecp.entity.User;
 import com.ecp.service.front.ICategoryAttrService;
 import com.ecp.service.front.ICategoryService;
 
@@ -55,9 +58,17 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/header")
-	public String header(Model model){
+	public String header(Model model,HttpServletRequest request){
 		List<CategoryTreeNode> categoryList = categoryService.getCategoryTree();
 		model.addAttribute("categoryList", categoryList); // 返回类目树列表
+		
+		//查询用户是否已经登录
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		model.addAttribute("user", user);
+		
+		
+		
 		
 		return RESPONSE_THYMELEAF + "header";
 	}
@@ -69,6 +80,16 @@ public class HomeController {
 	@RequestMapping(value = "/footer")
 	public String footer(){
 		return RESPONSE_THYMELEAF + "footer";
+	}
+	
+	
+	/**
+	 * @Description 加载channel-one
+	 * @return channel_one页面
+	 */
+	@RequestMapping(value = "/channelone")
+	public String channel_one(){
+		return RESPONSE_THYMELEAF + "channel_one";
 	}
 	
 	/** 
