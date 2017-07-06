@@ -10,6 +10,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +43,7 @@ public class LoginController {
 	 */
 	@RequestMapping("/goLogin")
 	public String backLogin(HttpServletRequest request, HttpServletResponse response, String error) {
+		request.setAttribute("error", error);
 		return StaticConstants.LOGIN;
 	}
 
@@ -55,7 +59,7 @@ public class LoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/login")
+	/*@RequestMapping("/login")
 	@ResponseBody
 	public Map<String, Object> loginSubmit(HttpServletRequest request, HttpServletResponse response, String username,
 			String password, String kaptcha) {
@@ -76,6 +80,42 @@ public class LoginController {
     	respMap.put("result_code", "fail");
     	respMap.put("result_err_msg", TipInfoConstants.VERIFY_CODE_ERROR_INFO);
 		return respMap;
+	}*/
+	
+	@RequestMapping("/login")
+	public String loginSubmit(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> respMap = new HashMap<String, Object>();
+    	
+		String error_msg = null;
+		
+		//如果登陆失败从request中获取认证异常信息，shiroLoginFailure(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME)就是shiro异常类的全限定名
+		String exceptionClassName = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
+		//根据shiro返回的异常类路径判断，抛出指定异常信息
+		if(exceptionClassName!=null){
+			if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
+				//最终会抛给异常处理器
+				System.out.println("账号不存在");
+				request.setAttribute("error", "账号不存在");
+				error_msg = "账号不存在";
+			} else if (IncorrectCredentialsException.class.getName().equals(
+					exceptionClassName)) {
+				System.out.println("用户名/密码错误");
+				request.setAttribute("error", "用户名/密码错误");
+				error_msg = "用户名/密码错误";
+			} else if("randomCodeError".equals(exceptionClassName)){
+				System.out.println("验证码错误");
+				request.setAttribute("error", "验证码错误");
+				error_msg = "验证码错误";
+			}else {
+				//最终在异常处理器生成未知错误
+				System.out.println("未知错误");
+				request.setAttribute("error", "未知错误");
+				error_msg = "未知错误";
+			}
+		}
+		//此方法不处理登陆成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
+		//登陆失败还到login页面
+		return "redirect:goLogin?error="+error_msg;
 	}
 	
 	/**
@@ -139,10 +179,10 @@ public class LoginController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("logout")
+	/*@RequestMapping("logout")
 	public String logout(HttpServletRequest request) {
 		request.getSession().invalidate();// session 无效
 		return "redirect:/login";
-	}
+	}*/
 
 }

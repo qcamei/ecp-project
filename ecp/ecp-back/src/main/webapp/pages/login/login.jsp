@@ -37,19 +37,16 @@
 	<div class="signinpanel">
 		<div class="row">
 			<div class="col-sm-12">
-				<form id="login_form" method="post">
+				<form id="login_form" action="login" method="post">
 					<h4 class="no-margins">登录</h4>
-					<p class="m-t-md">登录到...</p>
+					<p class="m-t-md">${empty error ? "登录到..." : error}</p>
 					<input type="text" class="form-control uname" id="username" name="username" placeholder="用户名" />
 					<input type="password" class="form-control pword m-b" id="password" name="password" placeholder="密码" /> 
 					<!-- <a href="">忘记密码了？</a> -->
 					<div style="position:relative;">
-						<input id="kaptcha" value="" name="j_captcha" type="text" class="form-control x164 in" placeholder="请输入验证码" /> 
+						<input id="kaptcha" value="" name="kaptcha_code" type="text" class="form-control x164 in" placeholder="请输入验证码" /> 
 						<img  id="kaptchaImage" class="" style="position:absolute;right:0;top:0;height:30px;" onclick="javascript:changeKaptchaImageFun();" alt="点击更换" title="看不清，点击换一张" src="kaptcha.jpg" class="m">
 					</div>
-					
-					
-					
 					<button type="button" class="btn btn-success btn-block" id="submit_btn">登录</button>
 				</form>
 			</div>

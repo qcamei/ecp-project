@@ -19,6 +19,8 @@ import com.ecp.entity.CategoryAttrValue;
 import com.ecp.service.back.ICategoryAttrService;
 import com.ecp.service.impl.AbstractBaseService;
 
+import tk.mybatis.mapper.entity.Example;
+
 @Service("categoryAttrServiceBean")
 public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, Long> implements ICategoryAttrService {
 
@@ -122,6 +124,21 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 		categoryAttrValue.setSortNumber((long)1);
 		categoryAttrValueMapper.insert(categoryAttrValue);		
 		
+	}
+
+	/**
+	 * @see com.ecp.service.back.ICategoryAttrService#getByAttrId(java.lang.Long)
+	 * 根据属性ID查询类目属性表
+	 */
+	@Override
+	public CategoryAttr getByAttrId(Long attrId) {
+		Example example = new Example(CategoryAttr.class);
+		example.createCriteria().andEqualTo("attrId", attrId);
+		List<CategoryAttr> list = categoryAttrMapper.selectByExample(example);
+		if(!list.isEmpty() && list.size()==1){
+			return list.get(0);
+		}
+		return null;
 	}
 
 }

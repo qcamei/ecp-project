@@ -44,4 +44,11 @@ public interface ICategoryAttrService extends IBaseService<CategoryAttr, Long> {
 	 */
 	public void saveCategoryAttrValue(Long cid,Long attrId,String valueName);
 	
+	/**
+	 * 根据属性ID查询类目属性表
+	 * @param attrId
+	 * @return
+	 */
+	public CategoryAttr getByAttrId(Long attrId);
+	
 }

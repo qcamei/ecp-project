@@ -17,11 +17,17 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.alibaba.fastjson.JSONArray;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.dao.ItemMapper;
+import com.ecp.entity.CategoryAttr;
+import com.ecp.entity.CategoryAttrValue;
 import com.ecp.entity.Item;
+import com.ecp.entity.ItemAttrValue;
 import com.ecp.entity.ItemPicture;
 import com.ecp.entity.Sku;
 import com.ecp.entity.SkuPicture;
 import com.ecp.entity.SkuPrice;
+import com.ecp.service.back.ICategoryAttrService;
+import com.ecp.service.back.ICategoryAttrValueService;
+import com.ecp.service.back.IItemAttrValueService;
 import com.ecp.service.back.IItemPictureService;
 import com.ecp.service.back.IItemService;
 import com.ecp.service.back.ISkuPictureService;
@@ -56,7 +62,16 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	
 	@Resource(name="skuPriceServiceBean")
 	private ISkuPriceService skuPriceService;//SKU价格
-
+	
+	@Resource(name="categoryAttrServiceBean")
+	private ICategoryAttrService categoryAttrService;//类目属性
+	
+	@Resource(name="categoryAttrValueServiceBean")
+	private ICategoryAttrValueService categoryAttrValueService;//类目属性值
+	
+	@Resource(name="itemAttrValueServiceBean")
+	private IItemAttrValueService itemAttrValueService;//商品-属性值关系
+	
 	/** 
 	 * (non-Javadoc)
 	 * @see com.ecp.service.IProductService#selectItemsByCondition(java.util.Map)
@@ -108,61 +123,129 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			if(!this.processUploadFile(request, picture)){
 				return -1;
 			}
+			
 			rows = itemPictureService.insertSelective(picture);
 			if(rows>0){
-				//TODO 添加sku item_sku
-				List<Sku> skuList = JSONArray.parseArray(skuJson, Sku.class);
-				int size = skuList.size();
-				for(int i=0; i<size; i++){
-					Sku sku = skuList.get(i);
-					sku.setCreated(new Date());
-					sku.setModified(new Date());
-					sku.setItemId(item.getItemId());
-					sku.setSkuStatus(1);
-					sku.setSkuType(1);
-					rows = skuService.insertSelective(sku);
+				//TODO 添加商品属性值关系表
+				rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
+				if(rows>0){
+					rows = this.processSkuRelate(item.getItemId(), picture.getPictureUrl(), skuJson, skuPriceJson);
 					if(rows>0){
-						//TODO 添加sku价格 item_sku_price
-						List<SkuPrice> skuPriceList = JSONArray.parseArray(skuPriceJson, SkuPrice.class);
-						SkuPrice skuPrice = skuPriceList.get(i);
-						skuPrice.setCreateTime(new Date());
-						skuPrice.setUpdateTime(new Date());
-						skuPrice.setItemId(item.getItemId());
-						skuPrice.setSkuId(sku.getSkuId());
-						rows = skuPriceService.insertSelective(skuPrice);
-						if(rows>0){
-							//TODO 添加sku图片 item_sku_picture
-							SkuPicture skuPicture = new SkuPicture();
-							skuPicture.setCreated(new Date());
-							skuPicture.setModified(new Date());
-							skuPicture.setPictureStatus((byte)1);
-							skuPicture.setSortNumber((byte)1);
-							skuPicture.setPictureUrl(picture.getPictureUrl());
-							skuPicture.setSkuId(sku.getSkuId());
-							rows = skuPictureService.insertSelective(skuPicture);
-							if(rows>0){
-								//continue;
-							}else{
-								log.error("添加SKU图片 item_sku_picture 异常");
-							}
-						}else{
-							log.error("添加SKU价格 item_sku_price 异常");
-						}
+						return rows;
 					}else{
-						log.error("添加SKU item_sku_price 异常");
+						log.error("保存SKU相关数据异常");
 					}
+				}else{
+					log.error("保存商品属性值关系 item_attr_value_item 异常");
 				}
 			}else{
 				log.error("添加商品图片 item_picture 异常");
-			}
-			if(rows>0){
-				return rows;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("保存商品异常，事务回滚！", e);
 		}
 		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
+	}
+	
+	/**
+	 * 处理SKU相关表
+	 * @param itemId
+	 * @param pictureUrl
+	 * @param skuJson
+	 * @param skuPriceJson
+	 * @return
+	 */
+	@Transactional
+	private int processSkuRelate(Long itemId, String pictureUrl, String skuJson, String skuPriceJson){
+		try {
+			int rows = 0;
+			//TODO 添加sku item_sku
+			List<Sku> skuList = JSONArray.parseArray(skuJson, Sku.class);
+			int size = skuList.size();
+			for(int i=0; i<size; i++){
+				Sku sku = skuList.get(i);
+				sku.setCreated(new Date());
+				sku.setModified(new Date());
+				sku.setItemId(itemId);
+				sku.setSkuStatus(1);
+				sku.setSkuType(1);
+				rows = skuService.insertSelective(sku);
+				if(rows>0){
+					//TODO 添加sku价格 item_sku_price
+					List<SkuPrice> skuPriceList = JSONArray.parseArray(skuPriceJson, SkuPrice.class);
+					SkuPrice skuPrice = skuPriceList.get(i);
+					skuPrice.setCreateTime(new Date());
+					skuPrice.setUpdateTime(new Date());
+					skuPrice.setItemId(itemId);
+					skuPrice.setSkuId(sku.getSkuId());
+					rows = skuPriceService.insertSelective(skuPrice);
+					if(rows>0){
+						//TODO 添加sku图片 item_sku_picture
+						SkuPicture skuPicture = new SkuPicture();
+						skuPicture.setCreated(new Date());
+						skuPicture.setModified(new Date());
+						skuPicture.setPictureStatus((byte)1);
+						skuPicture.setSortNumber((byte)1);
+						skuPicture.setPictureUrl(pictureUrl);
+						skuPicture.setSkuId(sku.getSkuId());
+						rows = skuPictureService.insertSelective(skuPicture);
+						if(rows>0){
+							continue;
+						}else{
+							log.error("添加SKU图片 item_sku_picture 异常");
+						}
+					}else{
+						log.error("添加SKU价格 item_sku_price 异常");
+					}
+				}else{
+					log.error("添加SKU item_sku_price 异常");
+				}
+			}
+			return rows;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("保存SKU相关数据异常", e);
+		}
+		return 0;
+	}
+	
+	/**
+	 * 保存类目属性值关系
+	 * @param itemId
+	 * @param attrSale
+	 * @return
+	 */
+	@Transactional
+	private int saveItemAttrValue(Long itemId, String attrSale){
+		
+		try {
+			int rows = 0;
+			String[] attrSaleArrStr = attrSale.split(",");
+			for(int i=0; i<attrSaleArrStr.length; i++){
+				String str = attrSaleArrStr[i];
+				String[] attrSaleStr = str.split(":");
+				Long attrId = Long.valueOf(attrSaleStr[0].toString());
+				Long valueId = Long.valueOf(attrSaleStr[0].toString());
+				CategoryAttr attr = categoryAttrService.getByAttrId(attrId);
+				CategoryAttrValue value = categoryAttrValueService.getByValueId(valueId);
+				ItemAttrValue temp = new ItemAttrValue();
+				temp.setAttrId(attrId);
+				temp.setAttrType(attr.getAttrType().intValue());
+				temp.setCreated(new Date());
+				temp.setItemId(itemId);
+				temp.setModified(new Date());
+				temp.setSortNumber(value.getSortNumber().intValue());
+				temp.setStatus(value.getStatus().intValue());
+				temp.setValueId(valueId);
+				rows = itemAttrValueService.insertSelective(temp);
+			}
+			return rows;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("保存类目属性值关系异常", e);
+		}
 		return 0;
 	}
 	

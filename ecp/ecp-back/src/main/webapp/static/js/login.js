@@ -24,7 +24,8 @@ $(function() {
 			util.message('验证码还没填呢！');
 			$('#kaptcha').focus();
 		} else {
-			// window.location.href="index.html";
+			$('#login_form').submit();
+			/*// window.location.href="index.html";
 			var username = $('#username').val();
 			var password = $('#password').val();
 			var kaptcha = $('#kaptcha').val();
@@ -46,8 +47,7 @@ $(function() {
 						util.message(obj.result_err_msg);
 					}
 				}
-			});
-
+			});*/
 		}
 	});
 });
