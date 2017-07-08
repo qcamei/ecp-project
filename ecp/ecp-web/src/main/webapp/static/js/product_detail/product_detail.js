@@ -1,10 +1,6 @@
 	var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
 		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
 				BASE_CONTEXT_PATH.length - 1);
-		
-		
-	//==============输入检查===============
-		
 
 		/*
 			在加入购物车前
@@ -131,7 +127,7 @@
 						var obj = $.parseJSON(res);
 						//alert("message:"+obj.message);
 						if (obj.message == "added") {
-							util.message("已经加入收藏");
+							util.message("成功加入收藏");
 						} else {
 							//displayLoginWindow(); //在此处显示窗口
 							util.message("加入收藏时发生错误！");
