@@ -95,8 +95,13 @@
 									<a href="javascript:void(0);" clstag="clickcart|keycount|xincart|cart_num_up" class="increment" id="increment_8888_1178877_2_13_0_199666805">+</a>
 								</div> --> 
 								<input
-								th:attr="id='num_'+${cartItem.itemId}+'-'+${cartItem.skuId}"
-								type="number" name="数量" th:value="${cartItem.quantity}" /></br> <span>有货</span>
+									th:attr="id='num_'+${cartItem.itemId}+'-'+${cartItem.skuId}"
+									type="number" name="数量" th:value="${cartItem.quantity}"  
+									onkeyup="onkeyup_check(this)" 
+									onchange="onkeyup_check(this)" 
+    								onafterpaste="paste_check(this)"  
+								/>
+								</br> <span>有货</span>
 							</td>
 							<td><label
 								th:text="'￥'+${cartItem.skuPrice}* ${cartItem.quantity}">小计：5188</label></br>
@@ -176,8 +181,7 @@
 			/*]]>*/  
 	</script>
 	
-	
-	
+	<script type="text/javascript" th:src="@{/static/js/quantityInputCheck.js}"></script>
 	
 	<script type="text/javascript">
 		/*
