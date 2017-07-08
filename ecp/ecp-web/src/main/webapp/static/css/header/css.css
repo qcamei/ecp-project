@@ -8,14 +8,10 @@
 **/
 body {
     /* background-color: #f7f7f7; */
-    background-color: #fff;
+    background-color: #fFF;
 }
-
 
 /*  header  */
-.header{
-	background-color: #f7f7f7;
-}
 .header,.footer {
     width: 100%;
 }
@@ -63,6 +59,16 @@ body {
 
 .leftul .topContent {
     margin-right: 20px;
+}
+
+.leftul  span{
+	color: #b8b8b8;
+	padding-right: 4px;
+}
+
+.leftul .topContent span{
+    color: #f8b600;
+    font-size: 12px;
 }
 
 i {
@@ -191,8 +197,9 @@ i {
     cursor: pointer;
 }
 
-.quick .cart:hover {
+.quick .cart:hover,.quick .cart.hover {
     border-color: #318cd2;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
 }
 
 .cart .shoppingcart img {
@@ -232,12 +239,31 @@ i {
     color: #f6f6f6;
 }
 .popover.bottom.dropdownCart>.arrow{
-	left:75%;
-	border-bottom-color: rgba(65,65,65,.8);
+    left:75%;
+    border-bottom-color: rgba(65,65,65,.8);
 }
 .popover.bottom.dropdownCart>.arrow:after{
-	border-bottom-color: rgba(65,65,65,.8);
+    border-bottom-color: rgba(65,65,65,.8);
 }
+
+
+.dropdownCart{
+    top: 22px;
+    border: 2px solid #318cd2;
+    padding: 0;
+}
+.popover.bottom.dropdownCart>.popMask{
+    width: 122px;
+    height: 2px;
+    right: 0px;
+    background: #484848;
+    top: -2px;
+    position: absolute;
+}
+.popover.bottom.dropdownCart>.popover-title{
+    border-radius: 0;
+}
+
 .dropdownCart h3{
 	background-color: rgba(65,65,65,.8);
 	border-bottom: 0;
@@ -536,6 +562,9 @@ i {
 .contactUs ul{
 	list-style: none;
 	padding-left: 0;
+}
+.contactUs ul li{
+	margin-bottom: 6px;
 }
 .joinUs input,.joinUs textarea{
     background-color: #616161;

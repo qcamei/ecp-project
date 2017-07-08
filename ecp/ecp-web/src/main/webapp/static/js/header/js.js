@@ -53,10 +53,12 @@ $(function() {
 			console.log("triggered,load cart items");
 			loadQuickCart();
 			//$(".dropdownCart").stop(true, true).slideDown(); // 下拉
+			$("#myCart .cart").addClass("hover");
 			$(".dropdownCart").show();
 		}, 
 		function() { // hover out
 			//$(".dropdownCart").stop(true, false).delay(0).slideUp();
+			$("#myCart .cart").removeClass("hover");
 			$(".dropdownCart").hide();
 		}
 	);
