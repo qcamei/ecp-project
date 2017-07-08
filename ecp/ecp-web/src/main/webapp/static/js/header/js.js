@@ -46,6 +46,8 @@ function displayCartItemTotalPrice(){
 
 /* page loaded ready */
 $(function() {
+	
+	$("a").focus(function(){this.blur()});
 
 	// 购物车
 	$("#myCart").hover(

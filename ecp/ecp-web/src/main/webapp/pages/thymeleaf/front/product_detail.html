@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" th:href="@{/static/css/slideImg/base.css}">
 <div th:include="/thymeleaf/common/_head2::headx('商品详情')"	th:remove="tag"></div>
-<script type="text/javascript" th:src="@{/static/js/slideImg/jquery.jqzoom.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/slideImg/base.js}"></script>
-
 
 <style>
 li {
@@ -26,6 +23,9 @@ li {
 	height: 20px;
 	border: 1px solid red;
 }
+
+a:hover { text-decoration:none; } 
+
 </style>
 
 </head>
@@ -248,34 +248,9 @@ li {
 			</div>
 
 		</div>
-
-
-
 	</div>
-	<!-- footer -->
-	<div class="row clearfix">
-		<div id="footer" class="col-md-12 column"></div>
-	</div>
-
-	<!-- 获取用户已经选商品列表  -->
-	<script th:inline="javascript">  
-			/*<![CDATA[*/  
-      
-			var g_skuSpec = [[${skuIntroduce.sku_spec}]];  
-			console.log("SKU技术参数");  
-      
-			/*]]>*/  
-	</script>
-
-
-
-	<!-- load header and footer  -->
-	<script type="text/javascript"
-		th:src="@{/static/js/loadHeaderFooter.js}"></script>
-
-
+	
 	<input type="hidden" id="SkuAttribute" th:value="${sku.attributes}" />
-
 
 	<form th:action="@{/front/product/sku/detail}" method="post"
 		id="testform">
@@ -293,12 +268,30 @@ li {
 		<input type="hidden" name="quantity" id="quantity" value="" /> 
 		<input type="hidden" name="skuName" id="skuName" value="" />
 	</form>
+	
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column"></div>
+	</div>
+	<!-- load header and footer  -->
+	<script type="text/javascript"
+		th:src="@{/static/js/loadHeaderFooter.js}"></script>
 
+	<!-- 获取用户已经选商品列表  -->
+	<script th:inline="javascript">  
+			/*<![CDATA[*/  
+      
+			var g_skuSpec = [[${skuIntroduce.sku_spec}]];  
+			console.log("SKU技术参数");  
+      
+			/*]]>*/  
+	</script>
+
+	
 	<script type="text/javascript" th:src="@{/static/js/product_detail/product_detail.js}"></script>
 	<script type="text/javascript" th:src="@{/static/js/quantityInputCheck.js}"></script>
-	
-	
-	
+	<script type="text/javascript" th:src="@{/static/js/slideImg/jquery.jqzoom.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/slideImg/base.js}"></script>
 
 </body>
 </html>
