@@ -2,23 +2,27 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<div th:include="/thymeleaf/common/_head2::headx('商品详情')"
-	th:remove="tag"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/static/css/slideImg/base.css}">
+<div th:include="/thymeleaf/common/_head2::headx('商品详情')"	th:remove="tag"></div>
+<script type="text/javascript" th:src="@{/static/js/slideImg/jquery.jqzoom.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/slideImg/base.js}"></script>
+
 
 <style>
 li {
 	list-style-type: none;
 }
 
-li[class~=attrValue] {
+.attrValue {
 	float: left;
-	margin-right: 10px;
+	margin-right: 5px;
 	list-style-type: none;
+	cursor:pointer;
 }
 
-li[class~=selected] {
+.selected {
 	display: block;
-	width: 80px;
+	width: 60px;
 	height: 20px;
 	border: 1px solid red;
 }
@@ -78,24 +82,28 @@ li[class~=selected] {
 						<H4>产品详情</H4>
 						<div class="col-md-5 column">
 							<div class="row clearfix">
-								<div th:if="${not #lists.isEmpty(skuPicts)}"
-									class="col-md-12 column">
-									<img alt="140x140" th:src="@{${skuPicts[0].pictureUrl}}"
-										style="width: 450px; height: 450px; background: transparent" />
+								<div th:if="${not #lists.isEmpty(skuPicts)}" class="spec-preview" id="preview">
+									<span class="jqzoom">
+										<img alt="140x140"  th:attr="jqimg=@{${skuPicts[0].pictureUrl}}" th:src="@{${skuPicts[0].pictureUrl}}"  />
+									</span>
 								</div>
 							</div>
 							</br>
+							<!-- 缩略图显示 --> 
 							<div class="row clearfix">
-								<div class="col-md-12 column">
-									<ul>
-										<li th:each="pict : ${skuPicts}"
-											style="float: left; margin-right: 10px" class=""
-											th:attr="data-bind=${pict.pictureId}+':'+${pict.skuId}">
-											<img widh="50" height="50" th:src="@{${pict.pictureUrl}}" />
-										</li>
-
-									</ul>
-
+								<div class="">
+									<!--缩图开始-->
+									<div class="spec-scroll"> <a class="prev">&lt;</a> <a class="next">&gt;</a>
+	 										<div class="items">
+											<ul>
+												<li th:each="pict : ${skuPicts}" th:attr="data-bind=${pict.pictureId}+':'+${pict.skuId}">
+													<img  th:src="@{${pict.pictureUrl}}" th:attr="bimg=@{${pict.pictureUrl}}"	onmousemove="preview(this);"/>
+												</li>
+		
+											</ul>
+										</div>
+									</div>
+									<!--缩图结束-->
 								</div>
 							</div>
 							</br>
@@ -176,8 +184,8 @@ li[class~=selected] {
 										class="submit-btn btn btn-primary" data-bind="1" id="cartAdd">
 										加入购物车<b></b>
 									</a> 
-									<a href="javascript:void(0);" onclick="return false;"
-										class="submit-btn btn btn-primary" data-bind="1"> 一键购<b></b></a>
+									<!-- <a href="javascript:void(0);" onclick="return false;"
+										class="submit-btn btn btn-primary" data-bind="1"> 一键购<b></b></a> -->
 								</div>
 							</div>
 						</div>
@@ -217,7 +225,11 @@ li[class~=selected] {
 												</tr>
 												<tr>
 													<td>包装清单</td>
-													<td th:text="${skuIntroduce.packing_list}"></td>
+													<td>
+														<ul>
+															<li th:text="${skuIntroduce.packing_list}"></li>
+														</ul>
+													</td>
 												</tr>
 											</tbody>
 										</table>
@@ -284,6 +296,9 @@ li[class~=selected] {
 
 	<script type="text/javascript" th:src="@{/static/js/product_detail/product_detail.js}"></script>
 	<script type="text/javascript" th:src="@{/static/js/quantityInputCheck.js}"></script>
+	
+	
+	
 
 </body>
 </html>

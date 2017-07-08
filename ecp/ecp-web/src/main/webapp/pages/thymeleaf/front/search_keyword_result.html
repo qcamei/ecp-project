@@ -339,6 +339,8 @@ li {
 			
 			displaySearchCond($("#searchCond").val());  //显示查询条件
 			initSearchCond($("#searchCond").val());  //初始化查询条件
+			
+			$("a,input,button").focus(function(){this.blur()});
 
 			/*
 				当用户MOUSE移动到已经选择的条件上时（crumb-面包渣）
