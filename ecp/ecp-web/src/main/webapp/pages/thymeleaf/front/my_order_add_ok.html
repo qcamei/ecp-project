@@ -2,9 +2,35 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>生成订单成功</title>
+<div th:include="/thymeleaf/common/_head2::headx('订单生成')"
+	th:remove="tag"></div>
+
+<style type="text/css">
+a:hover {
+	text-decoration: none;
+}
+</style>
 </head>
 <body>
-订单生成成功！
+	<!-- header -->
+	<div class="row clearfix">
+		<div id="header" class="col-md-12 column"></div>
+	</div>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<h4 style="color:green"><i class="icon-ok-circle icon-large" style="color:green"></i>己成功生成订单!</h4>
+			</div>
+		</div>
+	</div>
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column"></div>
+	</div>
+	<!-- load header and footer  -->
+	<script type="text/javascript"	th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	
+	
+	
 </body>
 </html>
