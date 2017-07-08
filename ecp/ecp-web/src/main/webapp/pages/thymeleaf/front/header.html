@@ -54,13 +54,13 @@
         </div>
         <div class="searchLine">
             <div class="logo">
-                <a th:href="@{/front/home/home}"><img th:src="@{/static/images/lmxx.jpg}" style="width:270px;height:60px"></a>
+                <a th:href="@{/front/home/home}"><img th:src="@{/static/images/lmxx.jpg}" style="width:200px;height:65px"></a>
             </div>
             <div class="search">
                 <div>
-                	<form  target="_blank"  method="get" role="search" th:action="@{/front/search/keywords}">
+                	<form  target="_blank"  method="get" id="searchform" role="search" th:action="@{/front/search/keywords}">
                     	<input id="searchbox" name="keywords" type="text">
-                    	<input id="searchbutton" type="submit" value="搜索">
+                    	<input id="searchbutton" type="button" value="搜索">
                     </form>
                 </div>
                 <div class="hotSearch">热门搜索：<span class="red">抄底价格</span><span>抄底价格</span><span>抄底价格</span><span>抄底价格</span></div>

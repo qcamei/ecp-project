@@ -84,9 +84,12 @@ public class SearchController {
 		String url = RESPONSE_THYMELEAF + "search_no_result";
 		String resultUrl = "";
 		
-		
-
 		displayKeywords(keywords); //显示分词结果， 此为调试程序，可以屏蔽
+		
+		if(!keywodsIsValid(keywords))
+			return url;
+
+		
 
 		if (keywords.trim() == "")
 			resultUrl = url;
@@ -127,6 +130,8 @@ public class SearchController {
 		String resultUrl = "";
 
 		displayKeywords(keywords); //显示分词结果， 此为调试程序，可以屏蔽
+		if(!keywodsIsValid(keywords))
+			return url;
 
 		if (keywords.trim() == "")
 			resultUrl = url;
@@ -469,6 +474,19 @@ public class SearchController {
 		for (Word word : words) {
 			keywordList.add(word.toString());
 		}
+	}
+	
+	/**
+	 * @Description 分词后的结果是否有效（去除停用词后的结果列表是否为空）
+	 * @param searchStr  查询关键字
+	 * @return true:去除停用词后的结果列表不为空 ; false:去除停用词后的结果列表为空
+	 */
+	private boolean keywodsIsValid(String searchStr){
+		List<Word> words = WordSegmenter.seg(searchStr);
+		if(words.size()>0)
+			return true;
+		else
+			return false;
 	}
 
 	/**

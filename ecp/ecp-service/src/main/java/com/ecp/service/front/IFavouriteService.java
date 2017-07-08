@@ -31,4 +31,17 @@ public interface IFavouriteService extends IBaseService<UserFavorite, Long> {
 	 */
 	public List<FavouriteStatisticBean> getFavouriteStatistic(long userId);
 	
+	/**
+	 * @Description 
+	 * @param spuId  商品id
+	 * @return true:已关注; false:未关注
+	 */
+	/**
+	 * @Description 对于指定用户，查询商品是否已关注
+	 * @param favouriteId
+	 * @param userId
+	 * @return
+	 */
+	public boolean isUserFavourite(long favouriteId,  long userId);
+	
 }

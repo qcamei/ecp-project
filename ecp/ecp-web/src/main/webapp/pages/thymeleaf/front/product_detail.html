@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<div th:include="/thymeleaf/common/_head2::headx('商品详情')" th:remove="tag"></div>
+<div th:include="/thymeleaf/common/_head2::headx('商品详情')"
+	th:remove="tag"></div>
 
 <style>
 li {
@@ -27,8 +28,7 @@ li[class~=selected] {
 <body>
 	<!-- header -->
 	<div class="row clearfix">
-		<div id="header" class="col-md-12 column">
-		</div>
+		<div id="header" class="col-md-12 column"></div>
 	</div>
 	<div class="container">
 		<!-- 登录窗口 -->
@@ -80,7 +80,8 @@ li[class~=selected] {
 							<div class="row clearfix">
 								<div th:if="${not #lists.isEmpty(skuPicts)}"
 									class="col-md-12 column">
-									<img alt="140x140" th:src="@{${skuPicts[0].pictureUrl}}" style="width:450px;height:450px; background:transparent"  />
+									<img alt="140x140" th:src="@{${skuPicts[0].pictureUrl}}"
+										style="width: 450px; height: 450px; background: transparent" />
 								</div>
 							</div>
 							</br>
@@ -102,7 +103,8 @@ li[class~=selected] {
 								<div class="col-md-12 column">
 									<a class="follow J-follow" id="myFavourite"
 										th:attr="data-id=${item.itemId}" href="#none"
-										clstag="shangpin|keycount|product|guanzhushangpin_1"> <em>关注</em>
+										clstag="shangpin|keycount|product|guanzhushangpin_1"> <i
+										class="icon-heart-empty icon-large" style="color: red"></i>关注
 									</a>
 								</div>
 							</div>
@@ -163,11 +165,12 @@ li[class~=selected] {
 							<br>
 							<div class="row clearfix">
 								<div class="col-md-12 column">
-									<label for="amount">数量</label> <input type="number" name="amount"
-										id="amount" value="1" /> <a href="javascript:void(0);"
-										onclick="return false;" class="submit-btn btn btn-primary"
-										data-bind="1" id="cartAdd"> 加入购物车<b></b></a> <a
+									<label for="amount">数量</label> <input type="number"
+										name="amount" id="amount" value="1" /> <a
 										href="javascript:void(0);" onclick="return false;"
+										class="submit-btn btn btn-primary" data-bind="1" id="cartAdd">
+										加入购物车<b></b>
+									</a> <a href="javascript:void(0);" onclick="return false;"
 										class="submit-btn btn btn-primary" data-bind="1"> 一键购<b></b></a>
 								</div>
 							</div>
@@ -175,90 +178,54 @@ li[class~=selected] {
 					</div>
 					<!-- 产品介绍、技术指标、保修 -->
 					<div class="row clearfix">
-					<div class="col-md-10 col-md-offset-2 column">
-						<div class="tabbable" id="tabs-1">
-							<ul class="nav nav-tabs">
-								<li class="active" ><a	href="#panel-1" data-toggle="tab">商品介绍</a></li>
-								<li ><a href="#panel-2"	data-toggle="tab">规格与包装</a></li>
-								<li ><a href="#panel-3"	data-toggle="tab">售后保障</a></li>
-							</ul>
-							<div class="tab-content">
-								<div class="tab-pane active" id="panel-1">
-									<ul class="parameter1 p-parameter-list">
-										<div class="detail">
-											<p title="1920*1080(FHD)">分辨率：1920*1080(FHD)</p>
-										</div>
-										</li>
-										<div class="detail">
-											<p title="1200万像素">后置摄像头：1200万像素</p>
-											<p title="500万像素">前置摄像头：500万像素</p>
-										</div>
-										</li>
-										<div class="detail">
-											<p title="其他">核&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数：其他</p>
-											<p title="以官网信息为准">频&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率：以官网信息为准</p>
-										</div>
-										</li>
-									</ul>
-									<ul class="parameter2 p-parameter-list">
-										<li title="AppleiPhone6s Plus">商品名称：AppleiPhone6s Plus</li>
-										<li title="3726830">商品编号：3726830</li>
-										<li title="0.51kg">商品毛重：0.51kg</li>
-										<li title="中国大陆">商品产地：中国大陆</li>
-										<li title="苹果（IOS）">系统：苹果（IOS）</li>
-										<li title="1200万-1999万">后置摄像头像素：1200万-1999万</li>
-										<li title="32GB">机身内存：32GB</li>
-									</ul>
-								</div>
-								<div class="tab-pane" id="panel-2">
-									<ul class="parameter1 p-parameter-list">
-										<div class="detail">
-											<p title="1920*1080(FHD)">分辨率：1920*1080(FHD)</p>
-										</div>
-										</li>
-										<div class="detail">
-											<p title="1200万像素">后置摄像头：1200万像素</p>
-											<p title="500万像素">前置摄像头：500万像素</p>
-										</div>
-										</li>
-										<div class="detail">
-											<p title="其他">核&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数：其他</p>
-											<p title="以官网信息为准">频&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率：以官网信息为准</p>
-										</div>
-										</li>
-									</ul>
-									<ul class="parameter2 p-parameter-list">
-										<li title="AppleiPhone6s Plus">商品名称：AppleiPhone6s Plus</li>
-										<li title="3726830">商品编号：3726830</li>
-										<li title="0.51kg">商品毛重：0.51kg</li>
-										<li title="中国大陆">商品产地：中国大陆</li>
-										<li title="苹果（IOS）">系统：苹果（IOS）</li>
-										<li title="1200万-1999万">后置摄像头像素：1200万-1999万</li>
-										<li title="32GB">机身内存：32GB</li>
-									</ul>
-
-								</div>
-								<div class="tab-pane" id="panel-3">
-									<dl>
-										<dt>
-											<strong>厂家服务</strong>
-										</dt>
-										<dd>
-											本产品全国联保，享受三包服务，质保期为：一年质保（已激活的iPhone无质量问题不支持7天无理由退换货）<br>
-											如因质量问题或故障，凭厂商维修中心或特约维修点的质量检测证明，享受7日内退货，15日内换货，15日以上在质保期内享受免费保修等三包服务！<br>(注:如厂家在商品介绍中有售后保障的说明,则此商品按照厂家说明执行售后保障服务。)
-											您可以查询本品牌在各地售后服务中心的联系方式，<br> 售后服务电话：400-666-8800
-										</dd>
-										<dt>
-											<strong>正品行货</strong>
-										</dt>
-										<dd>京东商城向您保证所售商品均为正品行货，京东自营商品开具机打发票或电子发票。</dd>
-									</dl>
+						<div class="col-md-10 col-md-offset-2 column">
+							<div class="tabbable" id="tabs-1">
+								<ul class="nav nav-tabs">
+									<li class="active"><a href="#panel-1" data-toggle="tab">商品介绍</a></li>
+									<li><a href="#panel-2" data-toggle="tab">规格与包装</a></li>
+									<li><a href="#panel-3" data-toggle="tab">售后保障</a></li>
+								</ul>
+								<div class="tab-content">
+									<!-- 产品说明 -->
+									<div class="tab-pane active" id="panel-1">
+										<span th:text="${skuIntroduce.describe_url}" th:remove="tag"></span>
+									</div>
+									<!-- 技术规格与包装 -->
+									<div class="tab-pane" id="panel-2">
+										<!-- <span th:text="${skuIntroduce.sku_spec}"></span> -->
+										<table class="table">
+											<thead>
+												<tr>
+													<th>组名称</th>
+													<th>指标</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="skuSpec:${skuSpecList}">
+													<td th:text="${skuSpec.spec_group}">组名称</td>
+													<td>
+														<ul  class="p-parameter-list">
+															<li th:each="spec:${skuSpec.spec}" th:text="${spec.spec_key}+':'+${spec.spec_val}"></li>
+														</ul>
+													</td>
+												</tr>
+												<tr>
+													<td>包装清单</td>
+													<td th:text="${skuIntroduce.packing_list}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<!-- 售后服务 -->
+									<div class="tab-pane" id="panel-3">
+										<span th:text="${skuIntroduce.after_service}"></span>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>  <!-- end of produce -->
-				
+					<!-- end of produce -->
+
 				</div>
 			</div>
 
@@ -269,12 +236,25 @@ li[class~=selected] {
 	</div>
 	<!-- footer -->
 	<div class="row clearfix">
-		<div id="footer" class="col-md-12 column">
-		</div>
+		<div id="footer" class="col-md-12 column"></div>
 	</div>
+
+	<!-- 获取用户已经选商品列表  -->
+	<script th:inline="javascript">  
+			/*<![CDATA[*/  
+      
+			var g_skuSpec = [[${skuIntroduce.sku_spec}]];  
+			console.log("SKU技术参数");  
+      
+			/*]]>*/  
+	</script>
+
+
+
 	<!-- load header and footer  -->
-	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
-	
+	<script type="text/javascript"
+		th:src="@{/static/js/loadHeaderFooter.js}"></script>
+
 
 	<input type="hidden" id="SkuAttribute" th:value="${sku.attributes}" />
 
@@ -282,17 +262,19 @@ li[class~=selected] {
 	<form th:action="@{/front/product/sku/detail}" method="post"
 		id="testform">
 		<!-- SPU id -->
-		<input type="hidden" name="itemId" id="itemId"	th:value="${item.itemId}" /> 
-		<input type="hidden" name="skuAttribute" id="skuAttribute" th:value="${sku.attributes}" />
+		<input type="hidden" name="itemId" id="itemId"
+			th:value="${item.itemId}" /> <input type="hidden"
+			name="skuAttribute" id="skuAttribute" th:value="${sku.attributes}" />
 	</form>
 
 	<!-- 增加到购物车时使用的表单（隐藏表单）  -->
 	<form th:action="@{/front/cart/add}" method="post" id="addToCartForm">
 		<!-- SPU id -->
-		<input type="hidden" name="itemId" id="itemId"	th:value="${item.itemId}" /> 
-		<input type="hidden" name="skuId"	id="skuId" th:value="${sku.sku_id}" /> 
-		<input type="hidden" name="quantity" id="quantity" value="" />
-		<input type="hidden" name="skuName" id="skuName" value="" />
+		<input type="hidden" name="itemId" id="itemId"
+			th:value="${item.itemId}" /> <input type="hidden" name="skuId"
+			id="skuId" th:value="${sku.sku_id}" /> <input type="hidden"
+			name="quantity" id="quantity" value="" /> <input type="hidden"
+			name="skuName" id="skuName" value="" />
 	</form>
 
 
@@ -348,7 +330,6 @@ li[class~=selected] {
 
 		/*
 			查询用户登录状态  （采用ajax方式）
-			
 			return： 已经登录：true
 					未登录：false
 		 */
@@ -405,7 +386,9 @@ li[class~=selected] {
 		}
 
 		/*
-		 	加关注 此处采用AJAX提交请求
+		 	功能：加关注
+		 	
+		 	AJAX提交请求
 		 */
 		function addtoFavourite() {
 			var logined = false;
@@ -425,9 +408,10 @@ li[class~=selected] {
 						var obj = $.parseJSON(res);
 						//alert("message:"+obj.message);
 						if (obj.message == "added") {
-							alert("已经加入收藏");
+							util.message("已经加入收藏");
 						} else {
-							displayLoginWindow(); //在此处显示窗口
+							//displayLoginWindow(); //在此处显示窗口
+							util.message("加入收藏时发生错误！");
 						}
 					}
 				},
@@ -444,6 +428,8 @@ li[class~=selected] {
 				}
 			});
 		}
+		
+		
 
 		/*
 			显示登录窗口
@@ -562,14 +548,13 @@ li[class~=selected] {
 								if (obj.message == "login") {
 									closeLoginWindow();
 								} else {
-									alert("用户名或口令错误");
+									util.message("用户名或口令错误");
 								}
 
 							} else {
 								//show_err_msg(obj.result_err_msg);
-								alert("用户名或口令错误1");
+								util.message("用户登录错误!");
 							}
-							//alert("request ok!");
 						}
 					},
 					error : function(jqXHR, textStatus, errorThrown) {

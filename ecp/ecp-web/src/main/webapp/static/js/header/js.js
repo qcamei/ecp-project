@@ -4,8 +4,16 @@
  * @date 2017-6-16
  * @version
  */
+//==============通用函数===================
 
-//==================动态加载购物车===================
+/*用于判定是否为空*/
+(function($){
+	$.isBlank = function(obj){
+	return(!obj || $.trim(obj) === "");
+		  };
+})(jQuery);
+
+//==================动态加载购物车============
 
 /* 加载购物车 */
 function loadQuickCart() {
@@ -88,6 +96,18 @@ $(function() {
 	$("#btnCart").on("click",function(){
 		var url = BASE_CONTEXT_PATH + "/front/personalcenter/cart";
 		window.open(url,"_blank");  
-	})
+	});
+	
+	/* 关键字查询按钮-click 处理*/
+	$("#searchbutton").on("click",function(){
+		var keywords=$("#searchbox").val();
+		var form=$("#searchform");
+		
+		//当输入不空时提交表单
+		if(!$.isBlank(keywords)){
+			form.submit();  
+		}
+	});
+	
 
 });

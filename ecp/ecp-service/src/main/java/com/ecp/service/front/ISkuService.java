@@ -1,6 +1,9 @@
 package com.ecp.service.front;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.ecp.bean.SkuPriceBean;
 import com.ecp.entity.Sku;
@@ -28,4 +31,13 @@ public interface ISkuService extends IBaseService<Sku, Long> {
 	
 	
 	public SkuPriceBean getSkuBySkuId(long skuId);
+	
+	
+	/**
+	 * @Description 获取sku商品介绍
+	 * @param skuId
+	 * @return
+	 */
+	public List<Map<String,String>> getSkuIntroduce(long skuId);
+	
 }
