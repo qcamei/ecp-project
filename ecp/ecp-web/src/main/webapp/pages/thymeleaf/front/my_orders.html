@@ -166,7 +166,7 @@ a {
 											>
 											 
 											<img class=""
-											th:src="@{${orderItem.picture_url}}"
+											th:src="${orderItem.picture_url}"
 											th:title="${orderItem.sku_name}"											
 											data-lazy-img="done" height="60" width="60">
 
@@ -235,7 +235,7 @@ a {
 											target="_blank"
 											clstag="click|keycount|orderinfo|order_product"	> 
 											<img class=""
-											th:src="@{${orderItem.picture_url}}"
+											th:src="${orderItem.picture_url}"
 											th:title="${orderItem.sku_name}"
 											data-lazy-img="done" height="60" width="60">
 

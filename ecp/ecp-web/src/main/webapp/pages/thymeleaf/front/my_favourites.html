@@ -54,7 +54,7 @@
 				
 					<div  th:each="favouriteItem:${favouriteItems}" class="col-md-3">
 						<div class="thumbnail">
-							<img alt="300x200" th:src="@{${favouriteItem.pictureUrl}}"   />
+							<img alt="300x200" th:src="${favouriteItem.pictureUrl}"   />
 								<div class="caption">
 									<div>
 										<span th:text="${favouriteItem.ItemName}" >产品名称</span><br>

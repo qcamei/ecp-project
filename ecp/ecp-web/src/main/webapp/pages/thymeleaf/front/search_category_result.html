@@ -86,7 +86,7 @@ li {
 									<li th:each="brand : ${brandList}"
 										style="float: left; margin-right: 1px"><a class='brand'
 										th:attr="id='brand_'+${brand.brand_id},data-bind=${brand.brand_id},data-search-cond='brand:'+${brand.brand_name}+':'+${brand.brand_id}" >
-											<img alt="" th:src="@{${brand.brand_logo_url}}">
+											<img alt="" th:src="${brand.brand_logo_url}">
 									</a></li>
 								</ul>
 							</td>
@@ -123,7 +123,7 @@ li {
 								<li th:each="item : ${itemList}">
 									<a
 										th:href="@{/front/product/detail/{itemId}(itemId=${item.item.itemId})}"
-										target="_blank"> <img th:src="@{${item.pict[0].pictureUrl}}" />
+										target="_blank"> <img th:src="${item.pict[0].pictureUrl}" />
 									</a>
 									<p class="proname" th:text="${item.item.itemName}">产品名称</p>
 									<!-- <p class="prointr" th:text="${item.item.itemId}">商品简介</p> -->

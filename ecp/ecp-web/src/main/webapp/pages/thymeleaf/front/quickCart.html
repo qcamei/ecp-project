@@ -11,7 +11,7 @@
 			<a
 				th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
 				target="_blank"> <img alt="50X50" height=50 weight=50
-				th:src="@{${cartItem.skuPicture}}" />
+				th:src="${cartItem.skuPicture}" />
 			</a>
 			<h6 th:text="${cartItem.skuName}">商品名称商品名称商品名称商品名称</h6>
 		</div>

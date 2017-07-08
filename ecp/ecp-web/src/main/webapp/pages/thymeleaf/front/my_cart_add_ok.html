@@ -18,7 +18,7 @@
 				<div class="row clearfix">
 					<div class="col-md-1 column">
 						<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${itemId},skuId=${skuId})}">
-							<img alt="60*60" th:src="${skuPict} ? @{${skuPict}}:''"  style="width:60px;height:60px"/>
+							<img alt="60*60" th:src="${skuPict} ? ${skuPict}:''"  style="width:60px;height:60px"/>
 						</a>
 					</div>
 					<div class="col-md-7 column">

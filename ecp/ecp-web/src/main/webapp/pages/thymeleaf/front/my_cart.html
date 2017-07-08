@@ -66,7 +66,7 @@
 									<a
 										th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
 										target="_blank"> <img alt="80x80" height=80 weight=80
-										th:src="@{${cartItem.skuPicture}}" />
+										th:src="${cartItem.skuPicture}" />
 
 									</a>
 
