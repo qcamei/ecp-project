@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
-<div th:include="/thymeleaf/common/_head2::headx('购物车-结算')"	th:remove="tag"></div>
+<div th:include="/thymeleaf/common/_head2::headx('购物车-结算')"
+	th:remove="tag"></div>
 
 <style>
-	a:hover { text-decoration:none;
-				cursor:Pointer;
-			 }
+a:hover {
+	text-decoration: none;
+	cursor: Pointer;
+}
 </style>
 
 </head>
 <body>
 	<!-- header -->
-	<div class="row clearfix">
-		<div id="header" class="col-md-12 column">
-		</div>
+	<div id="header" class="row clearfix">
+		<!-- <div id="header" class="col-md-12 column"></div> -->
 	</div>
+	<!-- content -->
 	<div class="container">
 		<!-- 增加/编辑用户地址对话框 -->
-		<div th:include="thymeleaf/common/_user_address_dialog::dialog"	class=""></div>
+		<div th:replace="thymeleaf/common/_user_address_dialog::dialog"	class="row clearfix"></div>
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<h4>结算</h4>
 				<div class="panel panel-info">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							收货地址 <a id="addUserAddress" style="float: right">增加收货地址</a>
+							收货地址 <a id="addUserAddress" style="float: right"><i
+								class="icon-plus-sign icon-large" style="color: black"></i>地址</a>
 						</h3>
 
 					</div>
@@ -80,34 +83,26 @@
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 column">
-						<span style="margin-left: 900px" th:text="${cartItemNumAmount}">2</span>件商品<br> 
-						<span style="margin-left: 900px">应付总额：￥<strong style="color: red; font-size: 20px" th:text="${totalPayable}"> 42.80 </strong></span><br> 
-						<span style="float: right">
-							寄送至： <span id="selected-address">河北 石家庄市 长安区 城区</span> 
-							收货人：<span id="selected-person">张女士 139****4365 </span>
+						<span style="margin-left: 900px" th:text="${cartItemNumAmount}">2</span>件商品<br>
+						<span style="margin-left: 900px">应付总额：￥<strong
+							style="color: red; font-size: 20px" th:text="${totalPayable}">
+								42.80 </strong></span><br> <span style="float: right"> 寄送至： <span
+							id="selected-address">河北 石家庄市 长安区 城区</span> 收货人：<span
+							id="selected-person">张女士 139****4365 </span>
 						</span>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 column">
 						<hr />
-						<button id="commitOrder" style="float: right" type="button" class="btn btn-primary">提交订单</button>
+						<button id="commitOrder" style="float: right" type="button"
+							class="btn btn-primary">提交订单</button>
 					</div>
 				</div>
 				</br>
 			</div>
 		</div>
 	</div>
-	<!-- footer -->
-	<div class="row clearfix">
-		<div id="footer" class="col-md-12 column">
-		</div>
-	</div>
-	<!-- load header and footer  -->
-	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
-	
-	
-	
 	<!-- 获取用户已经选商品列表  -->
 	<script th:inline="javascript">  
 			/*<![CDATA[*/  
@@ -116,9 +111,19 @@
 			console.log("买家已选商品类型数量:"+cartItemList.length);  
       
 			/*]]>*/  
-	</script>  
+	</script>
 	
-	<script type="text/javascript" th:src="@{/static/js/settle_account/settle_account.js}"></script>
+	
+	<!-- footer -->
+	<div class="row clearfix">
+		<div id="footer" class="col-md-12 column"></div>
+	</div>
+	<!-- load header and footer  -->
+	<script type="text/javascript"	th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	
+
+	<script type="text/javascript"
+		th:src="@{/static/js/settle_account/settle_account.js}"></script>
 
 </body>
 </html>

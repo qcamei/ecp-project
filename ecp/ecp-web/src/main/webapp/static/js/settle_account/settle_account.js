@@ -148,7 +148,7 @@ function saveFun() {
 			if (res != null) {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
-					util.message(obj.result_msg);
+					//util.message(obj.result_msg);
 					loadAddressTableFun(); // 操作成功后重新加载用户地址列表
 
 				} else {
@@ -177,7 +177,7 @@ function deleteInfoAjaxRequest(id) {
 			if (res != null && res != "") {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
-					util.message(obj.result_msg);
+					//util.message(obj.result_msg);
 					loadAddressTableFun(); // 操作成功后重新加载用户地址列表
 				} else {
 					util.message(obj.result_err_msg);
@@ -206,7 +206,7 @@ function setDefaultAjaxRequest(id) {
 			if (res != null && res != "") {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
-					util.message(obj.result_msg);
+					//util.message(obj.result_msg);
 					loadAddressTableFun(); // 操作成功后重新加载用户地址列表
 				} else {
 					util.message(obj.result_err_msg);
@@ -224,7 +224,7 @@ function setDefaultFunc(e) {
 	var addrId = $(e).attr("data-bind"); // 新的默认地址ID
 	var isDefault = $(e).attr("data-is-default");
 	if (isDefault == 1) { // 如果已经是默认地址，则提示用户。
-		util.message("已经是默认地址！");
+		//util.message("已经是默认地址！");
 	} else // 设置默认地址
 	{
 		setDefaultAjaxRequest(addrId);
@@ -310,7 +310,7 @@ function commitOrder() {
 	// 判定用户是否已经选择了送货地址
 	var flag = isSelectedAddr();
 	if (!flag) {
-		util.message("尚未选择送货地址！");
+		util.message("请先选择送货地址！");
 		return;
 	} else {
 		var url = BASE_CONTEXT_PATH + "/front/order/add"; // 需要提交的 url
