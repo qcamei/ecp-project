@@ -106,7 +106,8 @@
                     	<!-- 一级类目 -->
                         <div th:each="level1 : ${categoryList}" class="firstClass">
                             <h3>
-                            	<a th:href="@{/front/search/category/{categoryId}(categoryId=${level1.category.cid})}" target="_blank"><span th:text="${level1.category.cName}" th:remove="tag">3C外设</span></a><span>&gt;</span></h3>
+                            	<!-- <a th:href="@{/front/search/category/{categoryId}(categoryId=${level1.category.cid})}" target="_blank"><span th:text="${level1.category.cName}" th:remove="tag">3C外设</span></a><span>&gt;</span></h3> -->
+                            	<span th:text="${level1.category.cName}" th:remove="tag">3C外设</span><span>&gt;</span></h3>
                         </div>
                     </div>
                     <!-- detail list start-->
