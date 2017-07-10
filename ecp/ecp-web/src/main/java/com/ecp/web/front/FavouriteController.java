@@ -1,5 +1,7 @@
 package com.ecp.web.front;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ecp.bean.FavouriteBean;
+import com.ecp.bean.FavouriteStatisticBean;
 import com.ecp.common.SessionConstants;
 import com.ecp.entity.User;
 import com.ecp.service.front.IFavouriteService;
@@ -30,6 +34,8 @@ public class FavouriteController {
 
 	@Autowired
 	IFavouriteService favouriteService;
+	
+	
 
 	/**
 	 * @Description 商品加入购物车
@@ -59,6 +65,20 @@ public class FavouriteController {
 		jsonObject.put("status", "success");
 
 		return jsonObject;
+	}
+	
+	@RequestMapping(value = "/show")
+	public String favourite_show(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+
+		List<FavouriteBean> favouriteItems = favouriteService.getFavouritesByUserId(user.getId());
+		List<FavouriteStatisticBean> statisticInfos = favouriteService.getFavouriteStatistic(user.getId());
+
+		model.addAttribute("statisticInfos", statisticInfos);
+		model.addAttribute("favouriteItems", favouriteItems);
+		
+		return RESPONSE_THYMELEAF + "favourite_table"; 
 	}
 
 }

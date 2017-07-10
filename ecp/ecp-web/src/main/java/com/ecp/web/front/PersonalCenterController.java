@@ -105,16 +105,6 @@ public class PersonalCenterController {
 	 */
 	@RequestMapping(value = "/favourites", method = RequestMethod.GET)
 	public String favourites(Model model, HttpServletRequest request) {
-
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute(SessionConstants.USER);
-
-		List<FavouriteBean> favouriteItems = favouriteService.getFavouritesByUserId(user.getId());
-		List<FavouriteStatisticBean> statisticInfos = favouriteService.getFavouriteStatistic(user.getId());
-
-		model.addAttribute("statisticInfos", statisticInfos);
-		model.addAttribute("favouriteItems", favouriteItems);
-
 		return RESPONSE_THYMELEAF + "my_favourites";
 	}
 
