@@ -5,7 +5,7 @@ function preview(img){
 }
 //图片放大镜效果
 $(function(){
-	$(".jqzoom").jqueryzoom({xzoom:450,yzoom:450});
+	/*$(".jqzoom").jqueryzoom({xzoom:450,yzoom:450});*/
 });
 
 //图片预览小图移动效果,页面加载时触发

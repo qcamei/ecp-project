@@ -84,7 +84,7 @@ a:hover { text-decoration:none; }
 							<div class="row clearfix">
 								<div th:if="${not #lists.isEmpty(skuPicts)}" class="spec-preview" id="preview">
 									<span class="jqzoom">
-										<img alt="140x140"  th:attr="jqimg=${skuPicts[0].pictureUrl}" th:src="${skuPicts[0].pictureUrl}"  />
+										<img alt="450x450" style="width:450px;height:450px"  th:attr="jqimg=${skuPicts[0].pictureUrl}" th:src="${skuPicts[0].pictureUrl}"  />
 									</span>
 								</div>
 							</div>
@@ -97,7 +97,7 @@ a:hover { text-decoration:none; }
 	 										<div class="items">
 											<ul>
 												<li th:each="pict : ${skuPicts}" th:attr="data-bind=${pict.pictureId}+':'+${pict.skuId}">
-													<img  th:src="${pict.pictureUrl}" th:attr="bimg=${pict.pictureUrl}"	onmousemove="preview(this);"/>
+													<img  th:src="${pict.pictureUrl}" th:attr="bimg=${pict.pictureUrl}"	onmousemove="preview(this);" />
 												</li>
 		
 											</ul>
