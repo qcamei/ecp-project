@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+
+div.caption div label{
+	float:right;
+}
+
+.favouriteSelector{
+	float:right;
+}
+
+
+
+
+</style>
 </head>
 <body>
 	<div class="row clearfix">
@@ -22,10 +36,10 @@
 	<br>
 	<div class="row clearfix">
 		<div class="col-md-12 column">
-			<input type="checkbox" name="InputSelectAll" id="SelectAll" value="" />
-			<label for="SelectAll">全选</label>
-			<button type="button" class="btn btn-primary">加入购物车</button>
-			<button type="button" class="btn btn-primary">取消关注</button>
+			<input type="checkbox"  id="selectAll" />
+			<label for="selectAll">全选</label>
+			<button type="button" class="btn btn-primary " id="addIntoCartBatch">加入购物车</button>
+			<button type="button" class="btn btn-primary " id="cancelFavouriteBatch" >取消关注</button>
 		</div>
 	</div>
 	<br>
@@ -35,15 +49,21 @@
 
 				<div th:each="favouriteItem:${favouriteItems}" class="col-md-3">
 					<div class="thumbnail">
-						<img alt="215x215" th:src="${favouriteItem.pictureUrl}" />
+						<a
+							th:href="@{/front/product/detail/{itemId}(itemId=${favouriteItem.itemId})}"	target="_blank"> 
+							<img alt="220x220" th:src="${favouriteItem.pictureUrl}" style="width:220px;height:220px"/>
+						</a>
+						
 						<div class="caption">
 							<div>
 								<span th:text="${favouriteItem.ItemName}">产品名称</span><br>
 								<strong th:text="'￥'+${favouriteItem.sellPrice}">价格：5800</strong>
 							</div>
 							<div>
-								<a class="btn btn-primary" href="#"
-									th:attr="data-bind=${favouriteItem.id}">加入购物车</a>
+								<a class="btn btn-primary addIntoCart" href="javascript:void(0)"
+									th:attr="data-item-id=${favouriteItem.itemId}">加入购物车</a>
+								<label th:attr="for='favourite_'+${favouriteItem.id}"><!-- <i class="icon-check icon-2x"  style="color:darkblue"></i> -->选择</label>
+								<input type="checkbox" th:attr="id='favourite_'+${favouriteItem.id},data-id=${favouriteItem.id},data-item-id=${favouriteItem.itemId}"  class="favouriteSelector" />
 							</div>
 						</div>
 					</div>
@@ -52,6 +72,6 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" th:src="@{/static/js/my_favourite/myfavourite.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/my_favourite/my_favourite.js}"></script>
 </body>
 </html>

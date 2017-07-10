@@ -22,6 +22,7 @@ import com.ecp.bean.CartItemBean;
 import com.ecp.bean.CartToOrderItemList;
 import com.ecp.bean.FollowCartItemBean;
 import com.ecp.bean.SkuPriceBean;
+import com.ecp.bean.SkuType;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.Attribute;
@@ -150,6 +151,51 @@ public class CartController {
 
 		return RESPONSE_THYMELEAF + "my_cart_table";
 	}
+	
+	/**
+	 * @Description 将单个关注条目加入购物车
+	 * @param itemId  spuId
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/favouritetocart", method = RequestMethod.POST)
+	@ResponseBody
+	public Object favourite_to_cart(Integer itemId,Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+		
+		favouriteToCart(itemId,userId);
+		
+		return RequestResultUtil.getResultAddSuccess();
+	}
+	
+	
+	@RequestMapping(value = "/favouritetocartbatch", method = RequestMethod.POST)
+	@ResponseBody
+	public Object favourite_to_cart_batch(@RequestBody ArrayList<Integer> itemIds,Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+		
+		for(Integer itemId:itemIds){
+			favouriteToCart(itemId,userId);
+		}
+		
+		return RequestResultUtil.getResultAddSuccess();
+	}
+	
+	/**
+	 * @Description 将spuId加入购物车（将主SKU加入购物车）
+	 * @param itemId  spuId
+	 */
+	private void favouriteToCart(Integer itemId,Long userId){
+		List<SkuPriceBean> skuList = skuService.getSkuByIdAndType((long)itemId, SkuType.PRIMARY);
+		int skuId=Integer.parseInt(Long.toString(skuList.get(0).getSku_id())); // 由于返回的是list类型
+		cartService.addToCart(itemId, skuId, (int)1, Integer.parseInt(userId.toString()));
+	}
+	
 	
 	/**
 	 * @Description 将购车单个条目加入关注
