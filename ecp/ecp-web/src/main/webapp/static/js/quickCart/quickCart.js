@@ -8,6 +8,31 @@ function deleteFunc(e) {
 	// console.log("delete cart item after confirm!");
 }
 
+/**
+ * 更新购物车商品数量
+ * @param id
+ * @returns
+ */
+function updateCartItemNum(id){
+	var oldNum=$("#itemNum").text();
+	var sub=1;
+	$("#itemNum").text(oldNum-sub);
+}
+
+/**
+ * 更新购物车商品总额
+ * @param id
+ * @returns
+ */
+function updateCartItemTotalPrice(id){
+	var oldTotalPrice=$("#cartItemTotalPrice").text();
+	//console.log('oldTotalPrice:'+oldTotalPrice);
+	var sub=$("#quantity"+id).attr("data-quantity")*$("#skuPrice"+id).attr("data-price");
+	//console.log('sub:'+sub);
+	$("#cartItemTotalPrice").text(oldTotalPrice-sub);
+}
+
+
 /*
  * 采用ajax 删除购物车条目
  */
@@ -27,7 +52,10 @@ function deleteInfoAjaxRequest(id) {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
 					// util.message(obj.result_msg); //显示删除成功能对话框，此处省略
-					loadQuickCart(); // 操作成功后重新加载购物车列表
+					$("#cartProduct"+id).hide();
+					updateCartItemNum(id);
+					updateCartItemTotalPrice(id);
+					//loadQuickCart();  // 操作成功后重新加载购物车列表
 				} else {
 					util.message(obj.result_err_msg);
 				}

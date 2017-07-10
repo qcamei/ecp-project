@@ -6,7 +6,7 @@
 </head>
 <body>
 
-	<div th:each="cartItem:${cartItemList}" class="cartProduct">
+	<div th:each="cartItem:${cartItemList}" class="cartProduct" th:attr="id='cartProduct'+${cartItem.id}">
 		<div class="productName">
 			<a
 				th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${cartItem.itemId},skuId=${cartItem.skuId})}"
@@ -16,8 +16,8 @@
 			<h6 th:text="${cartItem.skuName}">商品名称商品名称商品名称商品名称</h6>
 		</div>
 		<div class="productPrice">
-			<p th:text="'￥'+${cartItem.skuPrice}">￥14532</p>
-			<p th:text="${cartItem.quantity}">*88</p>
+			<p th:text="'￥'+${cartItem.skuPrice}" th:attr="id='skuPrice'+${cartItem.id},data-price=${cartItem.skuPrice}">￥14532</p>
+			<p th:text="'*'+${cartItem.quantity}" th:attr="id='quantity'+${cartItem.id},data-quantity=${cartItem.quantity}">*88</p>
 			<a class="delete-cart-item" th:attr="data-bind=${cartItem.id}" onclick="deleteFunc(this)">删除</a>
 		</div>
 	</div>

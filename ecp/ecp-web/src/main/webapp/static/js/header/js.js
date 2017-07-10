@@ -28,6 +28,7 @@ function loadQuickCart() {
 function loadQuickCartSuccess() {
 	displayCartItemNum();
 	displayCartItemTotalPrice();
+	
 }
 
 /*显示购物车中商品数量*/
@@ -40,10 +41,6 @@ function displayCartItemTotalPrice(){
 	$("#cartItemTotalPrice").text(g_cartItemTotalPrice);
 }
 
-//===============global variables=======================
-
-//var g_opened=false;
-
 /* page loaded ready */
 $(function() {
 	
@@ -53,10 +50,11 @@ $(function() {
 	$("#myCart").hover(
 		function() { // hover in
 			console.log("triggered,load cart items");
-			loadQuickCart();
 			//$(".dropdownCart").stop(true, true).slideDown(); // 下拉
 			$("#myCart .cart").addClass("hover");
 			$(".dropdownCart").show();
+			loadQuickCart();
+			
 		}, 
 		function() { // hover out
 			//$(".dropdownCart").stop(true, false).delay(0).slideUp();
