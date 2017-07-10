@@ -414,7 +414,9 @@ function updateCartItemNum(cartItemId,quantity) {
 				if (obj.result_code == "success") {
 					//util.message("成功更新数量！");
 					//util.message(obj.result_msg); //显示加入对话框，此处省略
-					//loadCart(); // 操作成功后重新加载购物车列表，					
+					//loadCart(); // 操作成功后重新加载购物车列表，
+					var amount = calcAmount();
+					displayAmount(amount);
 				} else {
 					util.message(obj.result_err_msg);
 				}
