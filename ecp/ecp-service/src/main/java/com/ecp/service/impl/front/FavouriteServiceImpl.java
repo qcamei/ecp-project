@@ -27,7 +27,8 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 	}	
 
 	@Override
-	public void addToFavourite(long favouriteId,  long userId) {
+	public int addToFavourite(long favouriteId,  long userId) {
+		int row=0;
 		//favouriteMapper.
 		/**
 		 (1)自我的收藏查询，如不存在，则直接插入
@@ -44,8 +45,9 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 		UserFavorite favourite=userFavoriteMapper.selectOne(record);
 		if(favourite==null){  //如果此关注不存在，则加入
 			record.setAddTime(new Date());			
-			userFavoriteMapper.insert(record);
-		}		
+			row=userFavoriteMapper.insert(record);
+		}
+		return row;
 	}
 
 	@Override

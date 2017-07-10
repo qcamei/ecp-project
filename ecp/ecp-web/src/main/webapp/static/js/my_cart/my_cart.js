@@ -178,6 +178,267 @@ function selectOne(cartItemId) {
 
 }
 
+
+/**
+ * 功能： 采用ajax 删除购物车条目
+ * @param id 购物车条目   id
+ * @returns
+ */
+function deleteInfoAjaxRequest(id) {
+	var url = BASE_CONTEXT_PATH + "/front/cart/delete"; // 需要提交的 url
+
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {
+			'id' : id,
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					// util.message(obj.result_msg); //显示删除成功能对话框，此处省略
+					loadCart(); // 操作成功后重新加载购物车列表
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
+/**
+ * 功能： 加到我的关注（单个）  采用ajax
+ * @param id  spuId===itemId
+ * @returns
+ */
+function addtoFavourite(id) {
+	var url = BASE_CONTEXT_PATH + "/front/cart/addtofavourite"; // 需要提交的 url
+
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {
+			'spuId' : id,
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					util.message("成功加入我的关注！");
+					/*util.message(obj.result_msg); //显示加入对话框，此处省略
+					loadCart(); // 操作成功后重新加载购物车列表，	*/				
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
+/**
+ * 功能：移到我的关注
+ * @param cartItemId  购物车条目 id
+ * @param spuId  spuId
+ * @returns
+ */
+function removetouserfavourite(cartItemId,spuId) {
+	var url = BASE_CONTEXT_PATH + "/front/cart/removetofavourite"; // 需要提交的 url
+
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {
+			'cartItemId':cartItemId,
+			'spuId' : spuId,
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					util.message("成功移到我的关注！");
+					//util.message(obj.result_msg); //显示加入对话框，此处省略
+					loadCart(); // 操作成功后重新加载购物车列表，					
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
+/**
+ * 功能：批量删除
+ * @param cartItemIds  购物车条目id数组
+ * @returns
+ */
+function removeBatch(cartItemIds){
+	var url = BASE_CONTEXT_PATH + "/front/cart/removebatch"; // 需要提交的 url
+
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		contentType : "application/json", // 必须有
+		//dataType: "application/json",
+		data :JSON.stringify(cartItemIds),
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					util.message("成功移除所选购物车条目！");
+					//util.message(obj.result_msg); //显示加入对话框，此处省略
+					loadCart(); // 操作成功后重新加载购物车列表，					
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
+
+
+
+/**
+ * 功能：批量移除到我的关注
+ * @param cartItems  购物车条目数组
+ * 			每个对象格式为：
+ * 				id:       cart item's id
+ * 				itemId:   spuid
+ * @returns
+ */
+function followBatch(cartItems){
+	var url = BASE_CONTEXT_PATH + "/front/cart/followbatch"; // 需要提交的 url
+
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		contentType : "application/json", // 必须有
+		//dataType: "application/json",
+		data :JSON.stringify(cartItems),
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					util.message("成功移除所选购物车条目！");
+					//util.message(obj.result_msg); //显示加入对话框，此处省略
+					loadCart(); // 操作成功后重新加载购物车列表，					
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
+
+
+
+/**
+ * @returns  返回所选条目的 id( cartitem's id) 
+ */
+function getSelectedCartIds(){
+	var cartIdArr = new Array();
+
+	// 扫描用户己选SKU
+	$(".cart_item_selector").each(function(index, elem) {
+		if (this.checked) { // 对于己选商品
+			var id = $(this).attr("data-id"); //cart's id
+			cartIdArr.push(id);
+		}
+	}); // end of .cart_item_selector
+	return cartIdArr;
+}
+
+/**
+ * 功能：获取批量移除各条目
+ * @returns  批量移除各条目
+ */
+function getSelectedCartItems(){
+	var itemArr = new Array();
+
+	// 扫描用户己选SKU
+	$(".cart_item_selector").each(function(index, elem) {
+		if (this.checked) { // 对于己选商品
+
+			var dataOrder = $(this).attr("data-order");
+			var dataArr = dataOrder.split("|");
+			var item = new Object();
+			
+			item.itemId = dataArr[1];			
+			item.id = $(this).attr("data-id")
+
+			itemArr.push(item);
+		}
+
+	}); // end of .cart_item_selector
+	
+	return itemArr;
+}
+
+
+/**
+ * 功能：更新购物车条目数量
+ * @param cartItemId  购物车条目 id
+ * @param quantity  商品数量
+ * @returns
+ */
+function updateCartItemNum(cartItemId,quantity) {
+	var url = BASE_CONTEXT_PATH + "/front/cart/updatequantity"; // 需要提交的 url
+
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {
+			'cartItemId':cartItemId,
+			'quantity' : quantity,
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					//util.message("成功更新数量！");
+					//util.message(obj.result_msg); //显示加入对话框，此处省略
+					//loadCart(); // 操作成功后重新加载购物车列表，					
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
+/**
+ * 更新购物车条目数量
+ * @param e
+ * @returns
+ */
+function updateNum(e){
+	var quantity=$(e).val();  //更新后的数量
+	var cartItemId=$(e).attr("data-cart-id");
+	console.log("cart item id:"+cartItemId);
+	console.log("quantity:"+quantity);
+	updateCartItemNum(cartItemId,quantity);
+	
+}
+
+
 // page loaded ready
 $(function() {
 
@@ -278,5 +539,63 @@ $(function() {
 		settle(itemArr); // send request
 
 	}); // end of settle
+	
+	/*单个：删除-click */
+	$(".operate_delete").on('click',function(){
+		var cartItemId = $(this).attr("data-id"); // 获取需要删除的购物车条目
+		// util.delConfirm("确认删除？", cartItemId, "deleteInfoAjaxRequest");
+		deleteInfoAjaxRequest(cartItemId);
+		//calcAmount();
+	});
+	
+	/*单个：加入关注按钮-click */
+	$(".operate_add_favourite").on('click',function(){
+		var itemId = $(this).attr("data-item-id"); // 获取需要删除的购物车条目的SPUID
+		addtoFavourite(itemId);
+	});
+	
+	/*单个：移动我的关注-click */
+	$(".operate_remove_favourite").on('click',function(){
+		var cartItemId = $(this).attr("data-id"); // 获取需要删除的购物车条目
+		var spuId=$(this).attr("data-item-id");  //获取需要移动的 spuId
+		/*console.log("cartItemId"+cartItemId);
+		console.log("spuId:"+spuId);*/
+		// util.delConfirm("确认删除？", cartItemId, "deleteInfoAjaxRequest");
+		removetouserfavourite(cartItemId,spuId);
+		//calcAmount();
+	});
+	
+	//批量删除：remove-batch
+	$(".remove-batch").on('click',function(){
+		
+		var ids=getSelectedCartIds();
+		if(ids.length>0){  //如果所选个数大于0
+			//alert("test");
+			removeBatch(ids);  //批量删除
+			//calcAmount();
+		}
+		
+		
+		
+	});
+	
+	//批量移到我的关注：follow-batch
+	$(".follow-batch").on('click',function(){
+		
+		var cartItems=getSelectedCartItems();
+		if(cartItems.length>0){  //如果所选个数大于0
+			//alert("test");
+			followBatch(cartItems);  //批量删除
+			//calcAmount();
+		}
+		/*else{
+			util.message("请先选择购物车条目");
+		}*/
+		
+	});
+	
+	
+	
+	
 
 }); // end of document ready

@@ -15,7 +15,13 @@ public interface IFavouriteService extends IBaseService<UserFavorite, Long> {
 	 * @param itemId  SPU id 
 	 * @param userId  user id
 	 */
-	public void addToFavourite(long favouriteId,long userId);
+	/**
+	 * @Description 加入到收藏
+	 * @param itemId  SPU id 
+	 * @param userId  user id
+	 * @return 如果加入成功则返回插入影响的行数
+	 */
+	public int addToFavourite(long favouriteId,long userId);
 	
 	/**
 	 * @Description 获取指定用户收藏

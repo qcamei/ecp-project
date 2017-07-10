@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ecp.bean.AddSkuToOrderBean;
 import com.ecp.bean.CartItemBean;
 import com.ecp.bean.CartToOrderItemList;
+import com.ecp.bean.FollowCartItemBean;
 import com.ecp.bean.SkuPriceBean;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.RequestResultUtil;
@@ -33,6 +34,7 @@ import com.ecp.entity.UserAddressInfo;
 import com.ecp.service.front.IAttrValueService;
 import com.ecp.service.front.IAttributeService;
 import com.ecp.service.front.ICartService;
+import com.ecp.service.front.IFavouriteService;
 import com.ecp.service.front.IItemService;
 import com.ecp.service.front.ISkuPictureService;
 import com.ecp.service.front.ISkuService;
@@ -65,7 +67,195 @@ public class CartController {
 	IAttrValueService attrValueService;
 	@Autowired
 	IAttributeService attriubteService;
+	@Autowired
+	IFavouriteService favouriteService;
 	
+	
+	
+	/**
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @param cartItemId  用户选定的购物车条目（用于加入购物车时-->结算）
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/show")
+	public String cart_show(Integer cartItemId,Model model, HttpServletRequest request) {
+		// 自session读取用户信息
+		// 如果用户在此处没有登录时
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+
+		// 准备数据
+		// (1)商品数量
+		int itemNum = cartService.getItemNumByUserId(user.getId());
+		model.addAttribute("itemNum", itemNum);
+
+		// (2)准备购物车条目数据
+		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();
+
+		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);
+		for (Favourite cartItem : cartItems) {
+			CartItemBean itemBean = new CartItemBean();
+			cartItemList.add(itemBean); // add into cartItemList
+
+			// userid quantity skuId itemId
+			itemBean.setId(cartItem.getId());
+			itemBean.setUserId(userId);			
+			itemBean.setQuantity(cartItem.getQuantity());
+			itemBean.setSkuId(cartItem.getSkuId());
+			itemBean.setItemId(cartItem.getItemId());
+
+			// get item's name
+			Item item = itemService.getItemById((long) cartItem.getItemId());
+			itemBean.setItemName(item.getItemName());
+			itemBean.setWeightUnit(item.getWeightUnit());
+			itemBean.setCid(item.getCid());
+
+			// get sku price and weight
+			SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
+			itemBean.setSkuPrice(skuPriceBean.getSell_price());
+			itemBean.setSkuWeight(skuPriceBean.getWeight());
+
+			// get sku attr value names
+			// 将sku attribute 分隔
+			String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+			String skuName = item.getItemName();
+			for (String attrValuePair : skuAttrArray) {
+				String skuValueName = "";
+
+				String[] avPair = attrValuePair.split(":");
+				long attrId = Long.parseLong(avPair[0]);
+				long valueId = Long.parseLong(avPair[1]);
+
+				AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
+				Attribute attr = attriubteService.getAttributeById(attrId);
+
+				skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
+				itemBean.getSkuAttrValueNames().add(skuValueName);
+
+				skuName = skuName + skuValueName; // 生成sku name 生成sku
+			}
+			itemBean.setSkuName(skuName);
+
+			// get sku picture
+			List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById((long) cartItem.getSkuId());
+			itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
+
+		}
+
+		model.addAttribute("cartItemList", cartItemList); // 加入到model
+		model.addAttribute("cartItemId", cartItemId);  //需要自动选定的cart item
+
+		return RESPONSE_THYMELEAF + "my_cart_table";
+	}
+	
+	/**
+	 * @Description 将购车单个条目加入关注
+	 * @param spuId spuId
+	 * @param model
+	 * @return  是否加入成功的MAP对象
+	 */
+	@RequestMapping(value = "/addtofavourite", method = RequestMethod.POST)
+	@ResponseBody
+	public Object add_into_user_favourite(long spuId,Model model, HttpServletRequest request){
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+		
+		int row=favouriteService.addToFavourite(spuId, userId);  //加入我的关注
+		return RequestResultUtil.getResultAddSuccess();
+		/*return RequestResultUtil.getResultAddWarn();*/
+	}
+	
+	/**
+	 * @Description 将购车单个条目    移入到关注
+	 * @param cartItemId 购物车条目id
+	 * @param spuId  spu id
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/removetofavourite", method = RequestMethod.POST)
+	@ResponseBody
+	public Object remove_into_user_favourite(Integer cartItemId,long spuId,Model model, HttpServletRequest request){
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+		
+		cartService.deleteByPrimaryKey(cartItemId);  //删除购物车中的条目
+		int row=favouriteService.addToFavourite(spuId, userId);  //加入到我的关注
+		
+		return RequestResultUtil.getResultAddSuccess();
+	}
+	
+	/**
+	 * @Description 批量删除购物车条目
+	 * @param cartItemIds
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/removebatch", method = RequestMethod.POST)
+	@ResponseBody
+	public Object remove_batch(@RequestBody ArrayList<Integer> cartItemIds,Model model, HttpServletRequest request){
+		
+		for(int cartItemid:cartItemIds){
+			cartService.deleteByPrimaryKey(cartItemid);
+		}
+		return RequestResultUtil.getResultDeleteSuccess();
+	}
+	
+	/**
+	 * @Description 批量移除到我的关注
+	 * @param cartItems
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/followbatch", method = RequestMethod.POST)
+	@ResponseBody
+	public Object follow_batch(@RequestBody ArrayList<FollowCartItemBean> cartItems,Model model, HttpServletRequest request){
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+		
+		
+		for(FollowCartItemBean item:cartItems){
+			favouriteService.addToFavourite(item.getItemId(), userId);  //加入到我的关注
+			cartService.deleteByPrimaryKey(item.getId());  //移除购物车条目
+			
+		}
+		return RequestResultUtil.getResultDeleteSuccess();
+	}
+	
+	/**
+	 * @Description 更新购物车条目商品数量
+	 * @param cartItemId
+	 * @param quantity
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/updatequantity", method = RequestMethod.POST)
+	@ResponseBody
+	public Object cart_update_quantity(Integer cartItemId,Integer quantity, Model model, HttpServletRequest request){
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		long userId = user.getId();
+		
+		Favourite entity=new Favourite();
+		entity.setId(cartItemId);
+		entity.setQuantity(quantity);
+		cartService.updateByPrimaryKeySelective(entity); //更新商品数量
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
 	
 	
 	/**

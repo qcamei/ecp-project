@@ -144,65 +144,6 @@ public class PersonalCenterController {
 		User user = (User) session.getAttribute(SessionConstants.USER);
 		long userId = user.getId();
 
-		// 准备数据
-		// (1)商品数量
-		int itemNum = cartService.getItemNumByUserId(user.getId());
-		model.addAttribute("itemNum", itemNum);
-
-		// (2)准备购物车条目数据
-		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();
-
-		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);
-		for (Favourite cartItem : cartItems) {
-			CartItemBean itemBean = new CartItemBean();
-			cartItemList.add(itemBean); // add into cartItemList
-
-			// userid quantity skuId itemId
-			itemBean.setId(cartItem.getId());
-			itemBean.setUserId(userId);			
-			itemBean.setQuantity(cartItem.getQuantity());
-			itemBean.setSkuId(cartItem.getSkuId());
-			itemBean.setItemId(cartItem.getItemId());
-
-			// get item's name
-			Item item = itemService.getItemById((long) cartItem.getItemId());
-			itemBean.setItemName(item.getItemName());
-			itemBean.setWeightUnit(item.getWeightUnit());
-			itemBean.setCid(item.getCid());
-
-			// get sku price and weight
-			SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
-			itemBean.setSkuPrice(skuPriceBean.getSell_price());
-			itemBean.setSkuWeight(skuPriceBean.getWeight());
-
-			// get sku attr value names
-			// 将sku attribute 分隔
-			String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
-			String skuName = item.getItemName();
-			for (String attrValuePair : skuAttrArray) {
-				String skuValueName = "";
-
-				String[] avPair = attrValuePair.split(":");
-				long attrId = Long.parseLong(avPair[0]);
-				long valueId = Long.parseLong(avPair[1]);
-
-				AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
-				Attribute attr = attriubteService.getAttributeById(attrId);
-
-				skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
-				itemBean.getSkuAttrValueNames().add(skuValueName);
-
-				skuName = skuName + skuValueName; // 生成sku name 生成sku
-			}
-			itemBean.setSkuName(skuName);
-
-			// get sku picture
-			List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById((long) cartItem.getSkuId());
-			itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
-
-		}
-
-		model.addAttribute("cartItemList", cartItemList); // 加入到model
 		model.addAttribute("cartItemId", cartItemId);  //需要自动选定的cart item
 
 		return RESPONSE_THYMELEAF + "my_cart";

@@ -62,7 +62,7 @@ a:hover {
 							<tbody>
 								<tr th:each="cartItem,cartItemState:${cartItemList}">
 									<th th:text="${cartItemState.count}">序号</th>
-									<td><img alt="80x80" height=80 weight=80
+									<td><img alt="60*60" height=60 weight=60
 										th:src="${cartItem.skuPicture}" /></td>
 									<td th:text="${cartItem.skuName}">商品名称</td>
 									<td th:text="'￥'+${cartItem.skuPrice}">价格</td>
