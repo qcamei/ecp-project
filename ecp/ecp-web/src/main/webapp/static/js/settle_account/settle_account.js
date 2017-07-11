@@ -68,6 +68,8 @@ function selectorFunc(e) {
 /* reset dialog */
 function resetDialog() {
 	$("#user-address-form")[0].reset();
+	resetDistPickerDeep();
+	
 }
 
 /*
@@ -75,13 +77,51 @@ function resetDialog() {
  */
 function setEditValue(addrObj) {
 	$("#editId").val(addrObj.id);
+	
+	//set distpicker
+	$("#province").val(addrObj.provinceName);
+	$("#province").trigger("change");
+	$("#city").val(addrObj.cityName);
+	$("#city").trigger("change");
+	$("#district").val(addrObj.countyName);
+	
+	//required fields
 	$("#contactPerson").val(addrObj.contactPerson);
 	$("#contactPhone").val(addrObj.contactPhone);
 	$("#fullAddress").val(addrObj.fullAddress);
-
-	// TODO: set other input's value
-
+	
+	
+	//area code
+	$("#provinceCode").val(addrObj.provinceCode);  //市级编码
+	$("#provinceName").val(addrObj.provinceName);
+	
+	$("#cityCode").val(addrObj.cityCode); //市级编码
+	$("#cityName").val(addrObj.cityName);
+	
+	$("#countyCode").val(addrObj.countyCode); //县区级编码
+	$("#countyName").val(addrObj.countyName);
+	
+	//non required fields
+	$("#contactTel").val(addrObj.contactTel);  //固定电话
+	$("#contactEmail").val(addrObj.contactEmail);  //联系邮箱
+	
 }
+
+/**
+ * 编辑之前初始地区选择器（用被编辑地址中的地区信息）
+ * @param provinceName
+ * @param cityName
+ * @param districtName
+ * @returns
+ */
+function setDistPicker(provinceName,cityName,districtName){
+	$('#distpicker').distpicker({
+	    province: provinceName,
+	    city: cityName,
+	    district: districtName
+	});
+}
+
 
 /* 编辑地址 */
 function editFunc(e) {
@@ -113,9 +153,10 @@ function getEditAddr(addrId) {
 					// util.message(obj.result_msg);
 					var addrObj = $.parseJSON(obj.result_msg);
 					// show edit dialog
-					resetDialog();
+					resetDialog();					
 					setEditValue(addrObj);
 					setDialogTitleAndOperate('修改-收货地址', OPERATE_EDIT); // 设置为编辑操作
+					//setDistPicker('河北省','石家庄市','长安区');  //设置地区选择器
 					showDialog(); // 显示编辑对话框
 
 				} else {
@@ -388,18 +429,132 @@ function createFormAndCommit(url, cartItemList, addrId) {
 	form.submit();
 }
 
-/*
- * 初始化
+//==================地区相关函数===================
+/**
+ * 复位地区列表 (用于增加用户地址时)
+ * @returns
  */
-$(function() {
-	loadAddressTableFun(); // 加载买家收货地址
+function resetDistPickerDeep(){
+	 var $distpicker = $('#distpicker');
+	 $distpicker.distpicker('reset', true);
+}
 
+//================同步更新详细地址====================
+
+/**
+ * 同步更新详细地址
+ * @returns
+ */
+function syncUpdateFullAddress(){
+	console.log("update full address");
+	//选择select中的值
+	var levelOneName=$("#province").val();
+	var levelTwoName=$("#city").val();
+	var levelThreeName=$("#district").val();
+	
+	var levelAllNam=levelOneName+levelTwoName+levelThreeName;
+	
+	$("#fullAddress").val(levelAllNam);
+}
+
+/**
+ * 同步更新地区编码、名称
+ * @returns
+ */
+function syncUpdateHiddenAreaCode(){
+	console.log("debug");
+	var code= $("#province").find("option:selected").attr("data-code");  //省级编码、名称
+	var name= $("#province").find("option:selected").val();
+	console.log("name:"+name);
+	$("#provinceCode").val(code);
+	$("#provinceName").val(name);
+	
+	console.log("debug end");
+	
+	
+	code= $("#city").find("option:selected").attr("data-code");  //市级编码、名称
+	name= $("#city").find("option:selected").val();
+	$("#cityCode").val(code);
+	$("#cityName").val(name);
+	
+	
+	
+	code= $("#district").find("option:selected").attr("data-code");  //县区级编码、名称
+	name= $("#district").find("option:selected").val();
+	$("#countyCode").val(code);
+	$("#countyName").val(name);
+	
+	
+}
+
+//==================提交验证===================
+/**
+ * 判定用户是否选择了省级与市级
+ * @returns true:己选择； false:未选择
+ */
+function hasSelectedProvAndCity(){
+	console.log("enter cond.....");
+	//util.message("test show message!");
+	var provCode=$("#provinceCode").val();
+	var cityCode=$("#cityCode").val();
+	
+	//console.log("cityCode:"+cityCode);
+	
+	if(!$.isBlank(provCode)  && !$.isBlank(cityCode)){
+		console.log("has selected prov and city!");
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+
+/**
+ * 必输入字段检查
+ * @returns  true:己输入；false:未输入
+ */
+function requiredFieldInputed(){
+	var contactPerson=$("#contactPerson").val();
+	var fullAddress=$("#fullAddress").val();
+	var contactPhone=$("#contactPhone").val();
+	
+	if(!$.isBlank(contactPerson)  && !$.isBlank(contactPerson) && !$.isBlank(contactPhone) ){
+		return true;
+	}
+	else{
+		return false;
+	}
+	
+}
+
+
+//===============PAGE LOADED READY=============
+$(function() {
+		
+	loadAddressTableFun(); // 加载买家收货地址页面
+
+	//================地址维护（CRUD）================
+	
 	/*
 	 * 地址编辑对话框：【保存】用户地址
 	 */
 	$("#btnSave").on('click', function(e) {
-		closeDialog(); // close dialog(add buyer's delivery address dialog)
-		saveFun();
+		if(hasSelectedProvAndCity()){
+			if(requiredFieldInputed()){
+				closeDialog(); // close dialog(add buyer's delivery address dialog)
+				saveFun();
+			}
+			else{
+				util.message("请填写必输入字段！");
+			}
+			
+		}
+		else{
+			//console.log("请选择省份、城市、区县！");
+			util.message("请选择省份、城市、区县！");
+		}
+		
 	});
 
 	/*
@@ -409,13 +564,46 @@ $(function() {
 		resetDialog(); // reset the edit dialog
 		setDialogTitleAndOperate('增加-用户地址', OPERATE_ADD);
 		showDialog();
+		
 	});
-
+	
+	//==============结算：订单提交===============
+	
 	/*
 	 * 【提交订单】按钮 -click消息处理
 	 */
 	$("#commitOrder").on('click', function(e) {
 		commitOrder();
 	});
+	
+	
+	//==================地区选择====================
+	/*
+	 *当“省份”变化时，将code赋值给value; 
+	 */
+	$("#province").on("change",function(){
+		syncUpdateHiddenAreaCode();
+		syncUpdateFullAddress();
+	});
+	
+	/*
+	 *当“市级”变化时，将ode赋值给value; 
+	 */
+	$("#city").on("change",function(){
+		syncUpdateHiddenAreaCode();
+		syncUpdateFullAddress();
+	});
+	
+	/*
+	 *当“县级”变化时，将code赋值给value; 
+	 */
+	$("#district").on("change",function(){
+		syncUpdateHiddenAreaCode();
+		syncUpdateFullAddress();
+	});
+	
+		
+
+	
 
 });

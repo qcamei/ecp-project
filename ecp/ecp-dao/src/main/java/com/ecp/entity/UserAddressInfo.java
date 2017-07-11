@@ -30,8 +30,8 @@ public class UserAddressInfo {
     @Column(name = "contact_tel")
     private String contactTel;
 
-    @Column(name = "country_code")
-    private String countryCode;
+    @Column(name = "county_code")
+    private String countyCode;
 
     @Column(name = "create_time")
     private Date createTime;
@@ -64,6 +64,15 @@ public class UserAddressInfo {
     private String villageCode;
 
     private Byte yn;
+
+    @Column(name = "province_name")
+    private String provinceName;
+
+    @Column(name = "city_name")
+    private String cityName;
+
+    @Column(name = "county_name")
+    private String countyName;
 
     /**
      * @return id
@@ -178,17 +187,17 @@ public class UserAddressInfo {
     }
 
     /**
-     * @return country_code
+     * @return county_code
      */
-    public String getCountryCode() {
-        return countryCode;
+    public String getCountyCode() {
+        return countyCode;
     }
 
     /**
-     * @param countryCode
+     * @param countyCode
      */
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode == null ? null : countryCode.trim();
+    public void setCountyCode(String countyCode) {
+        this.countyCode = countyCode == null ? null : countyCode.trim();
     }
 
     /**
@@ -345,6 +354,48 @@ public class UserAddressInfo {
         this.yn = yn;
     }
 
+    /**
+     * @return province_name
+     */
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    /**
+     * @param provinceName
+     */
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName == null ? null : provinceName.trim();
+    }
+
+    /**
+     * @return city_name
+     */
+    public String getCityName() {
+        return cityName;
+    }
+
+    /**
+     * @param cityName
+     */
+    public void setCityName(String cityName) {
+        this.cityName = cityName == null ? null : cityName.trim();
+    }
+
+    /**
+     * @return county_name
+     */
+    public String getCountyName() {
+        return countyName;
+    }
+
+    /**
+     * @param countyName
+     */
+    public void setCountyName(String countyName) {
+        this.countyName = countyName == null ? null : countyName.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -359,7 +410,7 @@ public class UserAddressInfo {
         sb.append(", contactPerson=").append(contactPerson);
         sb.append(", contactPhone=").append(contactPhone);
         sb.append(", contactTel=").append(contactTel);
-        sb.append(", countryCode=").append(countryCode);
+        sb.append(", countyCode=").append(countyCode);
         sb.append(", createTime=").append(createTime);
         sb.append(", emergencyPerson=").append(emergencyPerson);
         sb.append(", emergencyPhone=").append(emergencyPhone);
@@ -371,6 +422,9 @@ public class UserAddressInfo {
         sb.append(", updteTime=").append(updteTime);
         sb.append(", villageCode=").append(villageCode);
         sb.append(", yn=").append(yn);
+        sb.append(", provinceName=").append(provinceName);
+        sb.append(", cityName=").append(cityName);
+        sb.append(", countyName=").append(countyName);
         sb.append("]");
         return sb.toString();
     }
