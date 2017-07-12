@@ -68,11 +68,23 @@ public class OrderController {
 		String orderId=createOrder(cartItemList,addr);  //增加订单
 		orderItemService.addItemIntoOrder(cartItemList, orderId); //增加订单条目
 		delSelectedCartItem(cartItemList);  //自购购物车删除用户已下单商品
+	
+		
+		//准备用于订单提交成功的数据
+		model.addAttribute("orderNo", orderId);  //订单号
+		BigDecimal totalPrice=calcCartItemTotalPayable(cartItemList);  //calc total_price  计算优惠前总金额
+		model.addAttribute("totalPrice",totalPrice);  //订单金额
+		model.addAttribute("orderTime",new Date());  //订单时间
 		
 
 		//订单提交成功页面
 		return RESPONSE_THYMELEAF+"my_order_add_ok";
 	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * @Description 计算应付总金额（优惠前）

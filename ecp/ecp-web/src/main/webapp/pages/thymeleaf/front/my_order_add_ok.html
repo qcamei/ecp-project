@@ -18,8 +18,33 @@ a:hover {
 	</div>
 	<div class="container">
 		<div class="row clearfix">
-			<div class="col-md-12 column">
-				<h4 style="color:green"><i class="icon-ok-circle icon-large" style="color:green"></i>己成功生成订单!</h4>
+			<div class="col-md-6 column">
+				<h4 style="color: green">
+					<i class="icon-ok-circle icon-large" style="color: green"></i>己成功生成订单!
+				</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>字段</th>
+							<th>字段值</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>订单号</td>
+							<td th:text="${orderNo}"></td>
+						</tr>
+						<tr>
+							<td>订单金额</td>
+							<td th:text="${totalPrice}+'元'"></td>
+						</tr>
+						<tr>
+							<td>订单日期</td>
+							<td th:text="${#calendars.format(orderTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+						</tr>
+						
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -28,9 +53,10 @@ a:hover {
 		<div id="footer" class="col-md-12 column"></div>
 	</div>
 	<!-- load header and footer  -->
-	<script type="text/javascript"	th:src="@{/static/js/loadHeaderFooter.js}"></script>
-	
-	
-	
+	<script type="text/javascript"
+		th:src="@{/static/js/loadHeaderFooter.js}"></script>
+
+
+
 </body>
 </html>
