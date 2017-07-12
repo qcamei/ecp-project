@@ -1,24 +1,3 @@
-//============加载页面通用部分===============
-/* 
-	功能描述：加载页
-	参数说明：containerId 窗口id
-		   url:请求加载的页面地址
-		   parms:参数
-		   callbackFunc:加载成功后的回调函数
- */
-function loadPage(containerId, url, parms, callbackFunc) {
-	var parms = parms;
-	url = BASE_CONTEXT_PATH + url;
-	if (callbackFunc == null) {
-		callbackFunc = defaultCallbackFunc();
-	}
-	$(containerId).load(url, parms, callbackFunc);
-}
-
-/* 默认的回调函数 */
-function defaultCallbackFunc() {
-	// alert("load page success!");
-}
 
 // =================业务部分===============
 
@@ -26,7 +5,7 @@ function defaultCallbackFunc() {
 function loadHeader() {
 	var url = "/front/home/header";
 	var parms = null;
-	var callbackFunc = loadFooter; //header load 完毕后再load footer
+	var callbackFunc = null; //header load 完毕后再load footer
 	var containerId = "#header";
 	loadPage(containerId, url, parms, callbackFunc);
 }
@@ -44,7 +23,7 @@ function loadFooter() {
 // =============页面加载初始化部分==================
 function initPage() {
 	loadHeader();
-	//loadFooter();
+	loadFooter();
 }
 
 // =============current page loaded ready===============

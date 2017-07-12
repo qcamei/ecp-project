@@ -65,35 +65,6 @@ public class PersonalCenterController {
 	 */
 	@RequestMapping(value = "/orders", method = RequestMethod.GET)
 	public String orders(Model model, HttpServletRequest request) {
-		// (1）获取订单信息
-		// (2)获取订单下条目信息
-
-		// 用于页面显示
-		List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
-
-		// 获取登录用户信息
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute(SessionConstants.USER);
-
-		// 查询当前登录用户的订单
-		List<Orders> orders = orderService.selectOrderByUserId(user.getId());
-		for (Orders order : orders) { // 迭代订单，查询订单条目
-			
-			Map<String,Object> orderMap=new HashMap<String,Object>();			
-			orderMap.put("order", order);
-			
-			// 读取订单条目数据
-			List<Map<String,String>> orderItems = orderItemService.selectItemsByOrderId(order.getOrderId());	
-			//System.out.println("查询到的条目有："+orderItems.size());
-			
-			orderMap.put("orderItems",orderItems);
-			
-			orderList.add(orderMap);  //加入列表中
-			
-		}
-
-		model.addAttribute("orderList", orderList);
-
 		return RESPONSE_THYMELEAF + "my_orders";
 	}
 
