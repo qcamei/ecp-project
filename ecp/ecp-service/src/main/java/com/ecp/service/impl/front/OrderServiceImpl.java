@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.OrdersMapper;
 import com.ecp.entity.Orders;
 import com.ecp.service.front.IOrderService;
@@ -39,9 +40,19 @@ public class OrderServiceImpl extends AbstractBaseService<Orders, Long> implemen
 	public List<Orders> selectOrderByUserId(long buyerId) {
 		Orders record=new Orders();
 		record.setBuyerId(buyerId);
+		record.setDeleted((byte)DeletedType.NO);  //选择未删除的记录
 		
 		return ordersMapper.select(record);
 		
+	}
+
+	@Override
+	public long getIdByOrderNo(String orderNo) {
+		Orders record=new Orders();
+		record.setOrderId(orderNo);
+		Orders result=ordersMapper.selectOne(record);
+		return result.getId(); 
+
 	}
 	
 	

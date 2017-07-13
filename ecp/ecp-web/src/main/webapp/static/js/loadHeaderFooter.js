@@ -5,7 +5,7 @@
 function loadHeader() {
 	var url = "/front/home/header";
 	var parms = null;
-	var callbackFunc = null; //header load 完毕后再load footer
+	var callbackFunc = loadFooter; //header load 完毕后再load footer
 	var containerId = "#header";
 	loadPage(containerId, url, parms, callbackFunc);
 }

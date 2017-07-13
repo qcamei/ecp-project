@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.AddSkuToOrderBean;
+import com.ecp.bean.CancelType;
 import com.ecp.bean.CartToOrderItemList;
+import com.ecp.bean.DeletedType;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.OrderIdGenerator;
+import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.Orders;
 import com.ecp.entity.User;
 import com.ecp.entity.UserAddressInfo;
@@ -119,6 +121,73 @@ public class OrderController {
 
 		return RESPONSE_THYMELEAF + "my_order_table";
 	}
+	
+	/**
+	 * @Description 删除订单
+	 * @param id  订单id（订单key primary key）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/delete")
+	@ResponseBody
+	public Object order_delete(Long id,HttpServletRequest request){
+		Orders entity=new Orders();
+		entity.setId(id);
+		entity.setDeleted((byte)DeletedType.YES);
+		entity.setDeleteTime(new Date());
+		
+		int row=orderService.updateByPrimaryKeySelective(entity);
+		if (row > 0) {
+			return RequestResultUtil.getResultDeleteSuccess();
+		}
+		return RequestResultUtil.getResultDeleteWarn();
+	}
+	
+	/**
+	 * @Description 取消订单
+	 * @param id  订单id（订单key primary key）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/cancel")
+	@ResponseBody
+	public Object order_cancel(Long id,HttpServletRequest request){
+		Orders entity=new Orders();
+		entity.setId(id);
+		
+		entity.setYn(CancelType.YES);  //取消订单
+		entity.setCancelTime(new Date());  //订单取消时间
+		
+		
+		int row=orderService.updateByPrimaryKeySelective(entity);
+		if (row > 0) {
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+		return RequestResultUtil.getResultUpdateWarn();
+	}
+	
+	/**
+	 * @Description 恢复购买（与取消订单相对）
+	 * @param id  订单id（订单key primary key）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/buyagain")
+	@ResponseBody
+	public Object order_buy_again(Long id,HttpServletRequest request){
+		Orders entity=new Orders();
+		entity.setId(id);
+		
+		entity.setYn(CancelType.NO);  //恢复购买（取消订单的逆操作）
+		entity.setUpdateTime(new Date());  //更新日期
+		
+		int row=orderService.updateByPrimaryKeySelective(entity);
+		if (row > 0) {
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+		return RequestResultUtil.getResultUpdateWarn();
+	}
+	
 
 	/**
 	 * @Description 计算应付总金额（优惠前）

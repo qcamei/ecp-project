@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONArray;
 import com.ecp.bean.ContractAttrValueBean;
 import com.ecp.bean.ContractOrderItemBean;
+import com.ecp.bean.ContractStateType;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.NumberToCN;
 import com.ecp.entity.Contract;
@@ -31,6 +32,7 @@ import com.ecp.service.front.IContractAttributeService;
 import com.ecp.service.front.IContractItemsService;
 import com.ecp.service.front.IContractService;
 import com.ecp.service.front.IOrderItemService;
+import com.ecp.service.front.IOrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -63,6 +65,8 @@ public class ContractController {
 	IContractItemsService contractItemsService;
 	@Autowired
 	IContractAttrValueService contractAttrValueService;
+	@Autowired
+	IOrderService orderService;
 	
 	/**
 	 * @Description 合同详情
@@ -191,15 +195,39 @@ public class ContractController {
 		long contractTemplateId=getTemplateId(contractAttrValueList.get(0));  //获取合同模板ID
 		
 		String contractNo=getContractNo();  //生成合同号
-		Long contractId=createContract(contractNo,contractTemplateId,orderNo,user.getId());  
+		Long contractId=createContract(contractNo,contractTemplateId,orderNo,user.getId());
+		
 		//(2)插入合同属性值
 		addContractAttrValues(contractId,contractAttrValueList);
 		
 		//(3)插入合同商品条目
 		addContractItems(contractOrderItemBeanList,contractNo);
 		
+		//(4)在订单中加入合同信息
+		updateOrderContract(orderNo,contractId,contractNo);
+		
 		return RESPONSE_THYMELEAF_BACK+"contract_create_success";
 	}
+	
+	/**
+	 * @Description 生成合同后，更新相关订单合同信息
+	 * @param orderNo   订单编号
+	 * @param contractId  合同's id (pk)
+	 * @param contractNo  合同编号
+	 */
+	private void updateOrderContract(String orderNo,long contractId,String contractNo){
+		//根据订单号获取订单id(pk)
+		long id= orderService.getIdByOrderNo(orderNo);  //根据订单号获取订单ID
+		Orders order=new Orders();
+		
+		order.setId(id);
+		order.setContractNo(contractNo);
+		order.setContractId(contractId);
+		order.setContractState((byte)ContractStateType.CREATED_YES); //状态：已建合同
+		
+		orderService.updateByPrimaryKeySelective(order);		
+	}
+	
 	
 	/**
 	 * @Description 增加合同属性

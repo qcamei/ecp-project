@@ -58,7 +58,7 @@
 								</div>
 								<div class="order-detail-txt ac" style="float: right; margin-right:150px">订单详情</div></th>
 							<th>收货人</th>
-							<th>金额</th>
+							<th>订单金额</th>
 							<th>
 								<div class="deal-state-cont" id="orderState">
 									<div class="state-txt">
@@ -89,26 +89,35 @@
 					</thead>
 
 					<!-------------- 每种订单一个tbody ---------->
-					<tbody  th:each="orderx:${orderList}" id="tb-53853319081">
+					<tbody  th:each="orderx:${orderList}" th:attr="id='tb-'+${orderx.order.id}">
 						<!-- <tr class="sep-row">
 							<td colspan="5"></td>
 						</tr> -->
 
 						<tr  class="tr-th" >
-							<td colspan="5"><span class="gap"></span> <span th:text="${#calendars.format(orderx.order.createTime,'yyyy-MM-dd HH:mm:ss')}"
-								class="dealtime" title="2017-05-08 12:12:27">订单时间</span> <input id="datasubmit-53848251722"
-								value="2017-05-08 12:12:27" type="hidden"> <span
-								class="number"> 订单号： <a name="orderIdLinks"
-									id="idUrl53848251722" target="_blank"
-									href="#" th:text="${orderx.order.orderId}"
-									clstag="click|keycount|orderinfo|order_num" >订单号</a>
+							<td colspan="5">
+								<span class="gap"></span> 
+								<span th:text="${#calendars.format(orderx.order.createTime,'yyyy-MM-dd HH:mm:ss')}"
+									class="dealtime" title="2017-05-08 12:12:27">订单时间</span> 
+									<input id="datasubmit-53848251722"	value="2017-05-08 12:12:27" type="hidden"> 
+									<span class="orderNo"> 订单号： 
+										<a name="orderIdLinks"	id="idUrl53848251722" target="_blank"
+											href="#" th:text="${orderx.order.orderId}"
+											clstag="click|keycount|orderinfo|order_num" >订单号</a>
+									</span>
+									<span class="contractNo" th:if="${orderx.order.contractNo}"> 合同号： 
+										<a name="contractNoLinks"	id="idUrl53848251722" target="_blank"
+											href="#" th:text="${orderx.order.contractNo}"
+											clstag="click|keycount|orderinfo|order_num" >合同号</a>
 
-							</span>
+									</span>
+									
 
 								<div class="tr-operate" style="float: right">
-									 <a href="#none"
+									 <a href="javascript:void(0)"
 										clstag="click|keycount|orderlist|dingdanshanchu"
 										class="order-del" 
+										th:attr="data-id=${orderx.order.id}"
 										title="删除">删除</a>
 
 								</div></td>
@@ -126,7 +135,7 @@
 										<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
 											target="_blank"
 											clstag="click|keycount|orderinfo|order_product"
-											>
+										>
 											 
 											<img class=""
 											th:src="${orderItem.picture_url}"
@@ -154,7 +163,7 @@
 								<div class="">
 									<div class="prompt-01 prompt-02">
 										<div class="pc">
-											<strong th:text="${orderx.order.name}">购物者名称</strong>											
+											<strong th:text="${orderx.order.name}">收货人姓名</strong>											
 										</div>
 										<div class="p-arrow p-arrow-left"></div>
 									</div>
@@ -170,22 +179,78 @@
 							<!-- 订单状态  及订单详情-->
 							<td th:if="${iterStat.index==0}" th:attr="rowspan=${orderx.orderItemNum}">
 								<div class="status">
-									<span class="order-status ftx-03"> 已取消 </span> <br> <a
-										href="#"
-										clstag="click|keycount|orderlist|dingdanxiangqing"
-										target="_blank">订单详情</a>
+									
+									<!-- 取消状态 -->
+									<span th:switch="${orderx.order.yn}"  th:remove="tag">
+										<span th:case='2' th:remove="tag"><span class="order-status"> 已取消 </span> <br></span>
+									</span>
+									
+									<!-- 其它状态 -->
+									<span th:switch="${orderx.order.contractState}"  th:remove="tag">
+										<span th:case='1' th:remove="tag"><span class="order-status"> 未建合同 </span> <br></span>
+										<span th:case='2' th:remove="tag"><span class="order-status"> 己建合同 </span> <br></span>
+										<span th:case='3' th:remove="tag"><span class="order-status"> LM已确认 </span> <br></span>
+										<span th:case='4' th:remove="tag"><span class="order-status"> 我已确认 </span> <br></span>
+										<span th:case='5' th:remove="tag"><span class="order-status"> 执行中 </span> <br></span>
+										<span th:case='6' th:remove="tag"><span class="order-status"> 执行完毕 </span> <br></span>										
+									</span>								
+									
+									<!-- 订单详情 -->
+									<a	href="javascript:void(0)"	clstag="click|keycount|orderlist|dingdanxiangqing"
+										target="_blank"><b>订单详情</b></a>
+										
+										
+									<!-- 如果已经建立合同，则显示合同详情  -->	
+									<span th:if="${orderx.order.contractState} ge 2" th:remove="tag">
+										<br>
+										<a	href="javascript:void(0)"	clstag="click|keycount|orderlist|dingdanxiangqing"
+										target="_blank"><b>合同详情</b></a>
+									</span>	
+										
 								</div>
 							</td>
 							
 							<!-- 操作区，根据订单的状态显示不同的操作 -->
 							<td th:if="${iterStat.index==0}" th:attr="rowspan=${orderx.orderItemNum}" >
 								<div class="operate">
-									<div id="pay-button-53853319081" _baina="0"></div>
-									<a
-										href="#"
-										class="btn-again btn-again-show" target="_blank"
-										clstag="click|keycount|orderlist|buy"><b></b> 立即购买 </a><br>
-								</div>
+								
+									<!-- 如是取消状态 :操作-->
+									<span th:switch="${orderx.order.yn}"  th:remove="tag">
+										<!-- 如是未取消状态 -->
+										<span th:case='1' th:remove="tag">
+											<div th:attr="id='cancel-button-'+${orderx.order.id}" >
+												<a	href="javascript:void(0);"  th:attr="data-id=${orderx.order.id}" class="btn-cancel" >
+													<b>取消订单</b> 
+												</a>
+												<br>
+											</div>	
+										</span>
+										<!-- 如是取消状态 -->
+										<span th:case='2' th:remove="tag">
+											<div th:attr="id='button-buy-again-'+${orderx.order.id}" >
+												<a	href="javascript:void(0);"  th:attr="data-id=${orderx.order.id}" class="btn-buy-again" >
+													<b>恢复购买 </b> 
+												</a>
+												<br>
+											</div>	
+										</span>
+									</span>
+									
+									<!-- 合同状态-操作  -->
+									<span th:switch="${orderx.order.contractState}"  th:remove="tag">
+										<!-- 如LM方己确认 -->
+										<span th:case='3' th:remove="tag">
+											<div th:attr="id='confirm-button-'+${orderx.order.id}" >
+												<a	href="javascript:void(0);"  th:attr="data-id=${orderx.order.id},data-contract-id=${orderx.order.contractId}"  class="btn-confirm" >
+													<b>确认合同</b> 
+												</a>
+												<br>
+											</div>	
+										</span>										
+									</span>				
+									
+								</div>	
+									
 							</td>
 							
 							<!-- 非第一个元素 -->
