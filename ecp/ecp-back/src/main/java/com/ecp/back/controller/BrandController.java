@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,7 +59,8 @@ public class BrandController {
 	@RequestMapping("/selectItems")
 	public ModelAndView selectLinkItem(HttpServletRequest request, HttpServletResponse response, Boolean clickPageBtn, PageBean pageBean, String pagehelperFun) {
 		ModelAndView mav = new ModelAndView();
-		UserBean user = (UserBean)request.getSession().getAttribute(SessionConstants.USER);
+		Subject subject = SecurityUtils.getSubject();
+		UserBean user = (UserBean)subject.getPrincipal();
 		
 		PageHelper.startPage(pageBean.getPageNum(), pageBean.getPageSize());
 		List<Brand> brandList = iBrandService.selectAll();
@@ -107,7 +110,8 @@ public class BrandController {
 	@ResponseBody
 	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Brand brand) {
 		
-		UserBean userBean = (UserBean)request.getSession().getAttribute(SessionConstants.USER);
+		Subject subject = SecurityUtils.getSubject();
+		UserBean userBean = (UserBean)subject.getPrincipal();
 		
 		//处理上传文件
 		if(!this.processUploadFile(request, brand)){

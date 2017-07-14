@@ -38,6 +38,7 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+	
 	<!-- 扫描controller -->
 	<context:component-scan base-package="com.ecp.back" />
 	

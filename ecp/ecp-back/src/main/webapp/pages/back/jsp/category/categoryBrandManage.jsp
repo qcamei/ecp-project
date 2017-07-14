@@ -28,7 +28,7 @@
 		border-bottom: 1px solid;
 		border-color: #dddddd;
 	}
-	.associate ul section input[type="num"]{width:100px;}
+	.associate ul section input[type="number"]{width:60px;}
 	.associate ul section label{margin:0 3px;}
 	.associate ul section{margin-top:0;border-top:0;margin-bottom:10px;}
 </style>
@@ -47,69 +47,84 @@
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
-								<div class="card-content">
-									<div class="table-responsive"
-										style="background: #fff; margin-top: 30px; border: 1px solid #e5e5e5;">
-										<div id="dataTables-example_wrapper"
-											class="dataTables_wrapper form-inline" role="grid">
-											<div class="panel-body" id="item-div">
-												<ul id="category-ztree" class="ztree"></ul>
-											</div>
-										</div>
-									</div>
-
-								</div>
-
-							</div>
-							<div id="tab-2" class="tab-pane">
-
-								<div class="panel-body">
-									<form class="form-horizontal" id="save-form" method="post">
-										<div class="form-group">
-											<label class="col-sm-2 control-label" style="padding-top:0;font-weight: normal">三级类目名称：</label>
-											<div class="col-sm-10">
-												<b id="third-category-name"></b>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="cusName" class="col-sm-2 control-label" style="padding-top:0;font-weight: normal">编辑类目品牌：</label>
-											<div class="col-sm-10">
-												<!-- 二级类目ID -->
-												<input type="hidden" id="second-lev-cid" value="" />
-												<!-- 三级类目ID -->
-												<input type="hidden" id="third-lev-cid" value="" />
-												<div class="associate">
-													<div id="associate-no" style="border: 1px solid;height: 300px;border-color: #F0F0F0;overflow: auto;width: 30%;">
-														<p>未选择的品牌</p>
-														<ul>
-														    <%-- <c:forEach items="${noBrandList}" var="brand">
-																<li id="${brand.brandId}"  onclick="addBrand(this,'${brand.brandId}');"><i class="fa fa-building">${brand.brandName}</i></li>
-															</c:forEach> --%> 
-														</ul>
-													</div>
-													<div id="associate-yes" style="border: 1px solid;width: 30%;margin-top: -300px; margin-right:20%;border-color: #F0F0F0;  overflow: auto;  height: 300px;float: right;">
-														<p>已选择的品牌</p>
-														<ul>
-															<%-- <c:forEach items="${brandList}" var="brand">
-																<li id="${brand.brandId}"  onclick="delBrand(this,'${brand.brandId}');"><i class="fa fa-building">${brand.brandName}</i></li>
-																<section id="selection-${brand.brandId}">
-																	<label><input type="radio" class="" id="status-yes-${brand.brandId}" name="cbrandStatus${brand.brandId}" value="1" checked="checked" />&nbsp;&nbsp;有效</label>
-																	<label><input type="radio" class="" id="status-no-${brand.brandId}" name="cbrandStatus${brand.brandId}" value="2" />&nbsp;&nbsp;无效</label>
-																	<label><input type="number" class="" id="sort-num-${brand.brandId}" name="sortNum${brand.brandId}" value="" placeholder="排序" /></label>
-																</section>
-															</c:forEach> --%>
-														</ul>
-													</div>
+								<div class="container" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														类目列表
+													</h3>
+												</div>
+												<div class="panel-body" id="item-div">
+													<ul id="category-ztree" class="ztree"></ul>
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label">&nbsp;</label>
-											<div class="col-sm-10">
-												<button type="button" class="btn btn-primary" id="save-submit-btn">保存</button>
+									</div>
+								</div>
+							</div>
+							<div id="tab-2" class="tab-pane">
+								<div class="container" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														类目品牌
+													</h3>
+												</div>
+												<div class="panel-body">
+													<form class="form-horizontal" id="save-form" method="post">
+														<div class="form-group">
+															<label class="col-sm-2 control-label" style="padding-top:0;font-weight: normal">三级类目名称：</label>
+															<div class="col-sm-10">
+																<b id="third-category-name"></b>
+															</div>
+														</div>
+														<div class="form-group">
+															<label for="cusName" class="col-sm-2 control-label" style="padding-top:0;font-weight: normal">编辑类目品牌：</label>
+															<div class="col-sm-10">
+																<!-- 二级类目ID -->
+																<input type="hidden" id="second-lev-cid" value="" />
+																<!-- 三级类目ID -->
+																<input type="hidden" id="third-lev-cid" value="" />
+																<div class="associate">
+																	<div id="associate-no" style="border: 1px solid;height: 300px;border-color: #F0F0F0;overflow: auto;width: 30%;">
+																		<p>未选择的品牌</p>
+																		<ul>
+																		    <%-- <c:forEach items="${noBrandList}" var="brand">
+																				<li id="${brand.brandId}"  onclick="addBrand(this,'${brand.brandId}');"><i class="fa fa-building">${brand.brandName}</i></li>
+																			</c:forEach> --%> 
+																		</ul>
+																	</div>
+																	<div id="associate-yes" style="border: 1px solid;width: 30%;margin-top: -300px; margin-right:20%;border-color: #F0F0F0;  overflow: auto;  height: 300px;float: right;">
+																		<p>已选择的品牌</p>
+																		<ul>
+																			<%-- <c:forEach items="${brandList}" var="brand">
+																				<li id="${brand.brandId}"  onclick="delBrand(this,'${brand.brandId}');"><i class="fa fa-building">${brand.brandName}</i></li>
+																				<section id="selection-${brand.brandId}">
+																					<label><input type="radio" class="" id="status-yes-${brand.brandId}" name="cbrandStatus${brand.brandId}" value="1" checked="checked" />&nbsp;&nbsp;有效</label>
+																					<label><input type="radio" class="" id="status-no-${brand.brandId}" name="cbrandStatus${brand.brandId}" value="2" />&nbsp;&nbsp;无效</label>
+																					<label><input type="number" class="" id="sort-num-${brand.brandId}" name="sortNum${brand.brandId}" value="" placeholder="排序" /></label>
+																				</section>
+																			</c:forEach> --%>
+																		</ul>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10">
+																<button type="button" class="btn btn-primary" id="save-submit-btn">保存</button>
+															</div>
+														</div>
+													</form>
+												</div>
 											</div>
 										</div>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>

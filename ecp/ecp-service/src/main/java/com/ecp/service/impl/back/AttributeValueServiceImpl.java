@@ -11,7 +11,7 @@ import com.ecp.entity.AttributeValue;
 import com.ecp.service.back.IAttributeValueService;
 import com.ecp.service.impl.AbstractBaseService;
 
-@Service
+@Service("attributeValueServiceBean")
 public class AttributeValueServiceImpl extends AbstractBaseService<AttributeValue, Long> implements IAttributeValueService {
 
 	private AttributeValueMapper attributeValueMapper;

@@ -2,6 +2,8 @@ package com.ecp.back.shiro;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -12,9 +14,9 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecp.bean.UserBean;
+import com.ecp.entity.Menu;
 import com.ecp.entity.User;
 import com.ecp.service.back.IUserService;
 
@@ -26,8 +28,7 @@ import com.ecp.service.back.IUserService;
  */
 public class CustomRealm extends AuthorizingRealm {
 	
-	//注入service
-	@Autowired
+	@Resource(name="userServiceBean")
 	private IUserService userService;
 
 	// 设置realm的名称
@@ -66,7 +67,7 @@ public class CustomRealm extends AuthorizingRealm {
 		String password = user.getPassword();
 		
 		//盐
-		String salt = "";
+		String salt = username+":";
 
 		// 如果查询到返回认证信息AuthenticationInfo
 		
@@ -86,21 +87,21 @@ public class CustomRealm extends AuthorizingRealm {
 		activeUser.setUpdateTime(user.getUpdateTime());
 		//..
 		
-		/*//根据用户id取出菜单
-		List<SysPermission> menus  = null;
+		//根据用户id取出菜单
+		List<Menu> menuList  = null;
 		try {
 			//通过service取出菜单 
-			menus = sysService.findMenuListByUserId(sysUser.getId());
+			menuList = userService.getMenuPermissionListByUserId(user.getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//将用户菜单 设置到activeUser
-		activeUser.setMenus(menus);*/
+		//将菜单 设置到activeUser
+		activeUser.setMenuList(menuList);
 		
 		//将activeUser设置simpleAuthenticationInfo
-		//SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(activeUser, password,ByteSource.Util.bytes(salt), this.getName());
-		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(activeUser, password, this.getName());
+		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(activeUser, password,ByteSource.Util.bytes(salt), this.getName());
+		//SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(activeUser, password, this.getName());
 
 		return simpleAuthenticationInfo;
 	}
@@ -115,7 +116,7 @@ public class CustomRealm extends AuthorizingRealm {
 		//从 principals获取主身份信息
 		//将getPrimaryPrincipal方法返回值转为真实身份类型（在上边的doGetAuthenticationInfo认证通过填充到SimpleAuthenticationInfo中身份类型），
 		UserBean activeUser =  (UserBean) principals.getPrimaryPrincipal();
-		
+		System.out.println("验证权限");
 		//根据身份信息获取权限信息
 		//从数据库获取到权限数据
 		/*List<SysPermission> permissionList = null;

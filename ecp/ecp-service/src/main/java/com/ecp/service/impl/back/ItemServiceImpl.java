@@ -56,16 +56,13 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	
 	@Resource(name="skuServiceBean")
 	private ISkuService skuService;//SKU
-	
 	@Resource(name="skuPictureServiceBean")
 	private ISkuPictureService skuPictureService;//SKU图片
-	
 	@Resource(name="skuPriceServiceBean")
 	private ISkuPriceService skuPriceService;//SKU价格
 	
 	@Resource(name="categoryAttrServiceBean")
 	private ICategoryAttrService categoryAttrService;//类目属性
-	
 	@Resource(name="categoryAttrValueServiceBean")
 	private ICategoryAttrValueService categoryAttrValueService;//类目属性值
 	
@@ -111,7 +108,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson) {
 		
 		try {
-			//TODO 添加商品 item
+			//添加商品 item
 			item.setHasPrice(1);
 			int rows = itemMapper.insertSelective(item);
 			if(rows>0){
@@ -123,13 +120,13 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			if(!this.processUploadFile(request, picture)){
 				return -1;
 			}
-			
+			//添加商品图片
 			rows = itemPictureService.insertSelective(picture);
 			if(rows>0){
-				//TODO 添加商品属性值关系表
+				//添加商品属性值关系表
 				rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
 				if(rows>0){
-					rows = this.processSkuRelate(item.getItemId(), picture.getPictureUrl(), skuJson, skuPriceJson);
+					rows = this.processSkuRelate(item, picture.getPictureUrl(), skuJson, skuPriceJson);
 					if(rows>0){
 						return rows;
 					}else{
@@ -158,31 +155,34 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	 * @return
 	 */
 	@Transactional
-	private int processSkuRelate(Long itemId, String pictureUrl, String skuJson, String skuPriceJson){
+	private int processSkuRelate(Item item, String pictureUrl, String skuJson, String skuPriceJson){
 		try {
+			if(StringUtils.isBlank(skuJson)){
+				
+			}
 			int rows = 0;
-			//TODO 添加sku item_sku
+			//添加sku item_sku
 			List<Sku> skuList = JSONArray.parseArray(skuJson, Sku.class);
 			int size = skuList.size();
 			for(int i=0; i<size; i++){
 				Sku sku = skuList.get(i);
 				sku.setCreated(new Date());
 				sku.setModified(new Date());
-				sku.setItemId(itemId);
+				sku.setItemId(item.getItemId());
 				sku.setSkuStatus(1);
 				sku.setSkuType(1);
 				rows = skuService.insertSelective(sku);
 				if(rows>0){
-					//TODO 添加sku价格 item_sku_price
+					//添加sku价格 item_sku_price
 					List<SkuPrice> skuPriceList = JSONArray.parseArray(skuPriceJson, SkuPrice.class);
 					SkuPrice skuPrice = skuPriceList.get(i);
 					skuPrice.setCreateTime(new Date());
 					skuPrice.setUpdateTime(new Date());
-					skuPrice.setItemId(itemId);
+					skuPrice.setItemId(item.getItemId());
 					skuPrice.setSkuId(sku.getSkuId());
 					rows = skuPriceService.insertSelective(skuPrice);
 					if(rows>0){
-						//TODO 添加sku图片 item_sku_picture
+						//添加sku图片 item_sku_picture
 						SkuPicture skuPicture = new SkuPicture();
 						skuPicture.setCreated(new Date());
 						skuPicture.setModified(new Date());

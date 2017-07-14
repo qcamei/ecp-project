@@ -35,47 +35,50 @@
 								</div>
 							</div>
 							<div id="tab-2" class="tab-pane">
-
-								<div class="tabs-container" style="margin-top: 20px;">
-									<div class="modal-dialog" style="width: 100%;">
-										<div class="modal-content animated fadeIn">
-											<div class="modal-header">
-												<h4 class="modal-title">品牌信息</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal" id="save-form">
-													<input type="hidden" id="brand-id" name="brandId" value="" />
-													<div class="form-group">
-														<label class="col-sm-2 control-label">品牌名称</label>
-														<div class="col-sm-10">
-															<input type="text" id="brand-name" name="brandName"
-																class="form-control" placeholder="品牌名称" />
+								<div class="container" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														品牌信息
+													</h3>
+												</div>
+												<div class="panel-body">
+													<form class="form-horizontal" id="save-form">
+														<input type="hidden" id="brand-id" name="brandId" value="" />
+														<div class="form-group">
+															<label class="col-sm-2 control-label">品牌名称</label>
+															<div class="col-sm-10">
+																<input type="text" id="brand-name" name="brandName"
+																	class="form-control" placeholder="品牌名称" />
+															</div>
 														</div>
-													</div>
-													<div class="form-group">
-														<label class="col-md-2 control-label">品牌LOGO</label>
-														<div class="col-md-5 ">
-															<input type="file" id="brand-logo-file" name="logo"
-																onchange="javascript:validateImgFileSizeFun(this);"
-																accept="image/*" /> <input type="hidden"
-																id="brand-logo-url" name="brandLogoUrl" />
+														<div class="form-group">
+															<label class="col-md-2 control-label">品牌LOGO</label>
+															<div class="col-md-5 ">
+																<input type="file" id="brand-logo-file" name="logo"
+																	onchange="javascript:validateImgFileSizeFun(this);"
+																	accept="image/*" /> <input type="hidden"
+																	id="brand-logo-url" name="brandLogoUrl" />
+															</div>
+															<!-- <div class="col-md-5">
+																<button type="button" class="btn btn-primary" onclick="javascript:deleteImgFun('logo');">删除</button>
+															</div> -->
 														</div>
-														<!-- <div class="col-md-5">
-															<button type="button" class="btn btn-primary" onclick="javascript:deleteImgFun('logo');">删除</button>
-														</div> -->
-													</div>
-													<div class="form-group">
-														<label for="name" class="col-sm-2 control-label">&nbsp;</label>
-														<div class="col-sm-10" id="logo-img-portrait"></div>
-													</div>
-													<div class="form-group">
-														<label class="col-sm-2 control-label">&nbsp;</label>
-														<div class="col-sm-10">
-															<button type="button" class="btn btn-primary"
-																id="save-submit-btn">保存</button>
+														<div class="form-group">
+															<label for="name" class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10" id="logo-img-portrait"></div>
 														</div>
-													</div>
-												</form>
+														<div class="form-group">
+															<label class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10">
+																<button type="button" class="btn btn-primary"
+																	id="save-submit-btn">保存</button>
+															</div>
+														</div>
+													</form>
+												</div>
 											</div>
 										</div>
 									</div>

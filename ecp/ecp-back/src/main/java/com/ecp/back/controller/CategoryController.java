@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,7 +66,8 @@ public class CategoryController {
 	@RequestMapping("/selectItems")
 	public ModelAndView selectLinkItems(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-		UserBean user = (UserBean) request.getSession().getAttribute(SessionConstants.USER);
+		Subject subject = SecurityUtils.getSubject();
+		UserBean user = (UserBean)subject.getPrincipal();
 
 		List<Category> categoryList = iCategoryService.selectAll();
 		log.info("List:" + categoryList);
@@ -137,7 +140,8 @@ public class CategoryController {
 	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response,
 			Category category) {
 
-		UserBean userBean = (UserBean) request.getSession().getAttribute(SessionConstants.USER);
+		Subject subject = SecurityUtils.getSubject();
+		UserBean userBean = (UserBean)subject.getPrincipal();
 		if (userBean != null) {
 			int rows = iCategoryService.insertSelective(category);
 			if (rows > 0) {

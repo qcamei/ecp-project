@@ -23,64 +23,73 @@
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
-								<div class="card-content">
-									<div class="table-responsive"
-										style="background: #fff; margin-top: 30px; border: 1px solid #e5e5e5;">
-										<div id="dataTables-example_wrapper"
-											class="dataTables_wrapper form-inline" role="grid">
-											<div class="modal-header">
-												<div class="col-xs-10  clearfix">
-													<button type="button" id="add-btn" onclick="javascript:add(0, '默认为根节点', 1);">新增</button>
-													<button type="button" id="edit-btn" onclick="javascript:edit(0);">编辑</button>
-													<button type="button" id="del-btn" onclick="javascript:del(0);">删除</button>
+								<div class="container" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														<button type="button" id="add-btn" class="btn btn-default btn-primary" onclick="javascript:add(0, '默认为根节点', 1);">新增</button>
+														<button type="button" id="edit-btn" class="btn btn-default btn-info" onclick="javascript:edit(0);">编辑</button>
+														<button type="button" id="del-btn" class="btn btn-default btn-danger" onclick="javascript:del(0);">删除</button>
+													</h3>
 												</div>
-											</div>
-
-											<div class="panel-body" id="item-div">
-												<ul id="category-ztree" class="ztree"></ul>
+												<div class="panel-body" id="item-div">
+													<ul id="category-ztree" class="ztree"></ul>
+												</div>
 											</div>
 										</div>
 									</div>
-
 								</div>
-
 							</div>
 							<div id="tab-2" class="tab-pane">
-
-								<div class="panel-body">
-									<form class="form-horizontal" id="save-form" method="post">
-										<input type="hidden" id="category-id" name="cid" value="" />
-										<div class="form-group">
-											<label class="col-sm-2 control-label">名称</label>
-											<div class="col-sm-10">
-												<input type="text" class="form-control" id="category-name" name="cName" value="" />
+								<div class="container" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														类目信息
+													</h3>
+												</div>
+												<div class="panel-body">
+													<form class="form-horizontal" id="save-form" method="post">
+														<input type="hidden" id="category-id" name="cid" value="" />
+														<div class="form-group">
+															<label class="col-sm-2 control-label">名称</label>
+															<div class="col-sm-10">
+																<input type="text" class="form-control" id="category-name" name="cName" value="" />
+															</div>
+														</div>
+														<!-- <div class="form-group">
+															<label class="col-sm-2 control-label">级别</label>
+															<div class="col-sm-10">
+																<input type="text" class="form-control" id="category-level" name="level" value="" />
+															</div>
+														</div> -->
+														<input type="hidden" class="form-control" id="category-level" name="level" value="0" placeholder="级别" />
+														<div class="form-group">
+															<label class="col-sm-2 control-label">父类型</label>
+															<div class="col-sm-10">
+																<select class="form-control" id="category-parentid" name="parentCid">
+																	<option value="0">请选择父类型（默认为根节点）</option>
+																	<c:forEach items="${categoryList}" var="category">
+																		<option value="${category.cid}">${category.cName}</option>
+																	</c:forEach>
+																</select>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10">
+																<button type="button" class="btn btn-primary" id="save-submit-btn">保存</button>
+															</div>
+														</div>
+													</form>
+												</div>
 											</div>
 										</div>
-										<!-- <div class="form-group">
-											<label class="col-sm-2 control-label">级别</label>
-											<div class="col-sm-10">
-												<input type="text" class="form-control" id="category-level" name="level" value="" />
-											</div>
-										</div> -->
-										<input type="hidden" class="form-control" id="category-level" name="level" value="0" placeholder="级别" />
-										<div class="form-group">
-											<label class="col-sm-2 control-label">父类型</label>
-											<div class="col-sm-10">
-												<select class="form-control" id="category-parentid" name="parentCid">
-													<option value="0">请选择父类型（默认为根节点）</option>
-													<c:forEach items="${categoryList}" var="category">
-														<option value="${category.cid}">${category.cName}</option>
-													</c:forEach>
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label">&nbsp;</label>
-											<div class="col-sm-10">
-												<button type="button" class="btn btn-primary" id="save-submit-btn">保存</button>
-											</div>
-										</div>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>

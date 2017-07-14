@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <!--左侧导航开始-->
 <nav class="navbar-default navbar-static-side" role="navigation">
@@ -23,9 +25,54 @@
 			</li>
 			<li class="line dk"></li>
 
-			<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+			<c:forEach items="${menuList}" var="menu">
+				<c:if test="${menu.parentId==0}">
+					<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+						<i class="${menu.menuIcon}"></i> <span class="ng-scope">${menu.menuName}</span>
+					</li>
+					<li class="line dk"></li>
+					<c:forEach items="${menuList}" var="menuChild">
+						<c:if test="${menuChild.parentId!=0 && menu.menuId==menuChild.parentId}">
+							<li><a class="J_menuItem" href="javascript:void(0);"
+								title="${menuChild.menuName}"
+								onclick="javascript:iframeLoading('${menuChild.menuUrl}');">
+									<i class="${menuChild.menuIcon}"></i> <span class="nav-label">${menuChild.menuName}</span>
+							</a></li>
+							<li class="line dk"></li>
+						</c:if>
+					</c:forEach>
+				</c:if>
+			</c:forEach>
+
+			
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<!-- <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
 				<span class="ng-scope">功能管理</span>
 			</li>
+			<li class="line dk"></li>
+
+			<li><a class="J_menuItem" href="javascript:void(0);"
+				title="商品管理"
+				onclick="javascript:iframeLoading('back/item/addItem');">
+					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">添加商品</span>
+			</a></li>
 			<li class="line dk"></li>
 
 			<li><a class="J_menuItem" href="javascript:void(0);"
@@ -33,12 +80,6 @@
 				onclick="javascript:iframeLoading('back/item/selectItems?pagehelperFun=clickPageBtnRequestFun');">
 					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">商品管理</span>
 			</a></li>
-			<!-- <li class="line dk"></li>
-			<li><a class="J_menuItem" href="javascript:void(0);"
-				title="会员等级"
-				onclick="javascript:iframeLoading('front/level/selectItem?pagehelperFun=clickPageBtnRequestFun');">
-					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">会员等级</span>
-			</a></li> -->
 
 			<li class="line dk"></li>
 			<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
@@ -74,32 +115,25 @@
 					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">品牌管理</span>
 			</a></li>
 			<li class="line dk"></li>
-
-			<!-- <li><a class="J_menuItem" href="javascript:void(0);"
-				title="角色管理"
-				onclick="javascript:iframeLoading('front/role/selectItem?pagehelperFun=clickPageBtnRequestFun');">
-					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">角色管理</span>
-			</a></li>
-			<li class="line dk"></li>
-
+			
 			<li><a class="J_menuItem" href="javascript:void(0);"
-				title="权限管理"
-				onclick="javascript:iframeLoading('front/permission/selectItem?pagehelperFun=clickPageBtnRequestFun');">
-					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">权限管理</span>
-			</a></li>
-			<li class="line dk"></li>
-
-			<li><a class="J_menuItem" href="javascript:void(0);"
-				title="组织管理"
-				onclick="javascript:iframeLoading('front/organize/selectItem?pagehelperFun=clickPageBtnRequestFun');">
-					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">组织管理</span>
+				title="用户管理"
+				onclick="javascript:iframeLoading('back/user/selectItems?pagehelperFun=clickPageBtnRequestFun');">
+					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">用户管理</span>
 			</a></li>
 			<li class="line dk"></li>
 			
 			<li><a class="J_menuItem" href="javascript:void(0);"
-				title="公众号配置"
-				onclick="javascript:iframeLoading('pages/shopdmp/scrm/wxSet.jsp');">
-					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">公众号配置</span>
+				title="角色管理"
+				onclick="javascript:iframeLoading('back/role/selectItems?pagehelperFun=clickPageBtnRequestFun');">
+					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">角色管理</span>
+			</a></li>
+			<li class="line dk"></li>
+			
+			<li><a class="J_menuItem" href="javascript:void(0);"
+				title="菜单管理"
+				onclick="javascript:iframeLoading('back/menu/selectItems');">
+					<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">菜单管理</span>
 			</a></li>
 			<li class="line dk"></li> -->
 

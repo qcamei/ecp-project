@@ -39,7 +39,7 @@
 			<div class="col-sm-12">
 				<form id="login_form" action="login" method="post">
 					<h4 class="no-margins">登录</h4>
-					<p class="m-t-md">${empty error ? "登录到..." : error}</p>
+					<p class="m-t-md">登录到...</p>
 					<input type="text" class="form-control uname" id="username" name="username" placeholder="用户名" />
 					<input type="password" class="form-control pword m-b" id="password" name="password" placeholder="密码" /> 
 					<!-- <a href="">忘记密码了？</a> -->
@@ -65,6 +65,15 @@
 			console.log("改变验证码");
 			$('#kaptchaImage').attr('src', 'kaptcha.jpg?' + Math.floor(Math.random() * 100));
 		}
+		
+		$(function(){
+			var error = "${error_msg}";
+			console.log(error);
+			if(error!=null && error!=""){
+				util.message(error);
+			}
+		});
+		
 	</script>
 </body>
 </html>

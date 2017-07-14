@@ -34,7 +34,7 @@
 							<li class="active"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true"> 商品列表</a></li>
 							<li class="" onclick="javascript:resetFun();"><a
-								data-toggle="tab" href="#tab-2" aria-expanded="false">添加商品</a></li>
+								data-toggle="tab" href="#tab-2" aria-expanded="false">编辑商品</a></li>
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
@@ -51,7 +51,7 @@
 								</div>
 							</div>
 							<div id="tab-2" class="tab-pane">
-								<%@ include file="addItem.jsp"%>
+								<%-- <%@ include file="addItem.jsp"%> --%>
 							</div>
 						</div>
 					</div>

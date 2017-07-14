@@ -21,29 +21,14 @@ function bootstrapValidateFun(){
 	    },
 	    
 	    fields: {
-	        username: {
+	    	roleName: {
 	            validators: {
 	                notEmpty: {
-	                    message: "用户名不能为空"
-	                },
-	                regexp: {
-		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\\\\\/]+$",
-		                message: "请勿输入特殊符号"
+	                    message: "角色名称不能为空"
 	                },
 	                stringLength: {
-                        max: 20,
-                        message: '长度不能超过20个字符'
-                    }
-	            }
-	        },
-	        password: {
-	            validators: {
-	                notEmpty: {
-	                    message: "密码不能为空"
-	                },
-	                stringLength: {
-                        max: 20,
-                        message: '长度不能超过20个字符'
+                        max: 30,
+                        message: '长度不能超过30个字符'
                     }
 	            }
 	        },
@@ -57,23 +42,18 @@ function bootstrapValidateFun(){
 /*
  * 查看详细信息
  */
-function selectDetails(userId){
-	var url = "front/user/selectUpdateById";
-	var params = {"userId":userId};
+function selectDetails(id){
+	var url = "back/role/selectUpdateById";
+	var params = {"id":id};
 	$.post(url, params, function(res){
 		console.log(res);
 		if(res!=null){
 			var resp = $.parseJSON(res);
 			if(resp.result_code=="success"){
-				var user =resp.user;
-				$("#user-id").val(user.userId);//ID
-				$("#user-name").val(user.username);//用户名
-				$("#password").attr("disabled", true);
-				$("#full-name").val(user.fullName);//真实姓名
-				$("#nick-name").val(user.nickName);//昵称
-				$("#state").val(user.state);//性别
-				
-				$("#edit-tab").text("编辑用户");//修改选项卡标题为编辑用户
+				var role =resp.role;
+				$("#role-id").val(role.roleId);//ID
+				$("#role-name").val(role.roleName);//角色名称
+				$("#role-description").val(role.roleDescription);//角色描述
 				
 				$('#tabs-243687 a[href="#tab-2"]').tab('show');
 				return;
@@ -82,13 +62,6 @@ function selectDetails(userId){
 		util.message("查询异常");
 		
 	});
-}
-
-/*
- * 点击会员列表选项卡时把编辑选项卡标题改为新增
- */
-function updateTabTitle(){
-	$("#edit-tab").text("新增用户");//修改选项卡标题为编辑用户
 }
 
 /*
@@ -102,17 +75,20 @@ $("#save-submit-btn").click(function(){
  */
 function saveFun(){
 	var url = null;
-	var userId = $("#user-id").val();
-	if(userId==null || userId==""){
-		url = "front/user/insert";
+	var id = $("#role-id").val();
+	if(id==null || id==""){
+		url = "back/role/insert";
 	}else{
-		url = "front/user/updateById";
+		url = "back/role/updateById";
 	}
 	
 	//util.loading();
 	$("#save-form").ajaxSubmit({
 		type:"post",
 		url:url,
+		data:{
+			"menuPermissionIds" : menuPermsArr.unique3().toString(),
+		},
 		success : function(res) {
 			console.log(res);
 			if(res!=null){
@@ -132,8 +108,8 @@ function saveFun(){
  * 删除信息AJAX请求（物理删除）
  */
 function deleteInfoAjaxRequest(id){
-	var url = "front/user/deleteById";
-	var params = {"userId":id};
+	var url = "back/role/deleteById";
+	var params = {"id":id};
 	//util.loading();
 	$.post(url, params, function(res){
 		console.log(res);
@@ -161,7 +137,7 @@ function deleteInfoFun(id){
  */
 function reloadInfoFun(){
 	//操作成功后重新加载
-	var href = "front/user/selectItem?pagehelperFun=clickPageBtnRequestFun";
+	var href = "back/role/selectItems?pagehelperFun=clickPageBtnRequestFun";
 	parent.window.iframeLoading(href);//调用主页面中的在iframe中加载内容的方法
 }
 
@@ -170,12 +146,10 @@ function reloadInfoFun(){
  * 		函数功能：根据页码数请求当前页内容
  */
 function clickPageBtnRequestFun(params){
-	var action = "front/user/selectItem";
+	var action = "back/role/selectItems";
 	params.clickPageBtn = true;
 	//util.loading();
 	$("#item-div").load(action, params, function(){
-		var totals = $("#total-s").val();
-		$("#filter-total-s").text(totals);
 	});
 }
 
@@ -185,22 +159,22 @@ function clickPageBtnRequestFun(params){
 function checkOne(){
     
     var flag = true;
-    $("#user-table tbody input[type='checkbox']").each(function(){
+    $("#role-table tbody input[type='checkbox']").each(function(){
     	if(!$(this).prop("checked")){
     		flag = false;
     	}
     });
     if(flag){
-    	$("#user-table thead input[type='checkbox']").prop('checked', true);
+    	$("#role-table thead input[type='checkbox']").prop('checked', true);
     }else{
-    	$("#user-table thead input[type='checkbox']").prop('checked', false);
+    	$("#role-table thead input[type='checkbox']").prop('checked', false);
     }
 }
 /*
  * 点击列表中All复选框时，列表全选或反选
  */
 function checkAll(obj){
-	$("#user-table tbody input[type='checkbox']").prop('checked', $(obj).prop('checked'));
+	$("#role-table tbody input[type='checkbox']").prop('checked', $(obj).prop('checked'));
 }
 
 /*
@@ -210,7 +184,8 @@ function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
 	$('#save-form')[0].reset();
-	$("#password").attr("disabled", false);
+	$.fn.zTree.init($("#menu-perms-ztree"), setting, zNodes);
+	menuPermsArr.length = 0;
 }
 
 /*

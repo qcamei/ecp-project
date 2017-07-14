@@ -34,21 +34,32 @@ function iframeLoaded(){
 		<!--右侧部分开始-->
 		<div id="page-wrapper" class="gray-bg dashbard-1">
 			<div class="row border-bottom">
-				<nav class="navbar navbar-static-top" role="navigation"
+				<ul class="nav nav-tabs">
+					<li>
+						<a class="navbar-minimalize minimalize-styl-2 btn btn-info "
+							href="javascript:void(0);"><i class="fa fa-bars"></i> </a>
+					</li>
+					<li class="dropdown pull-right">
+						 <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i> <b>${user.nickname}</b><strong class="caret"></strong></a>
+						<ul class="dropdown-menu">
+							<li>
+								 <a href="">修改密码</a>
+							</li>
+							<li class="divider">
+							</li>
+							<li>
+								 <a href="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<%-- <nav class="navbar navbar-static-top" role="navigation"
 					style="margin-bottom: 0">
 				<div class="navbar-header">
 					<a class="navbar-minimalize minimalize-styl-2 btn btn-info "
 						href="javascript:void(0);"><i class="fa fa-bars"></i> </a>
-					<!-- <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
-								<div class="form-group">
-									<input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
-								</div>
-							</form> -->
 				</div>
 				<div class="nav-footer">
-					<!-- <div class="switch" style='margin-top:8px;display:inline-block;'>
-					    <input type="checkbox" id="scrm-ecp-switch" checked />
-					</div> -->
 					<div class='pull-right' style="font-size:14px;padding:18px 8px 0 0;">
 						<a class=" waves-effect waves-dark active" href="javascript:void(0);"><i class="fa fa-user fa-fw"></i> <b>${user.nickname}</b></a>&nbsp;&nbsp;
 						<a href="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
@@ -56,7 +67,7 @@ function iframeLoaded(){
 					</div>	
 				</div>	
 				
-				</nav>
+				</nav> --%>
 			</div>
 			<div class="row J_mainContent" id="content-main">
 				<iframe  id="J_iframe" name="J_iframe" width="100%" height="100%"

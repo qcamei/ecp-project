@@ -22,14 +22,16 @@
 		</c:if>
 		
 		<c:forEach items="${attrList}" var="attr">
-			<div class="form-group">
-				<label class="col-sm-2 control-label">${attr.attr_name}</label>
-				<div class="col-sm-10">
-					<c:forEach items="${attr.valList}" var="val">
-						<label><input type="checkbox" id="" name="itemAttr" value="${attr.attr_id}:${val.value_id}" />&nbsp;${val.value_name}</label>&nbsp;&nbsp;&nbsp;
-					</c:forEach>
+			<c:if test="${not empty attr.valList}">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">${attr.attr_name}</label>
+					<div class="col-sm-10">
+						<c:forEach items="${attr.valList}" var="val">
+							<label><input type="checkbox" id="" name="itemAttr" value="${attr.attr_id}:${val.value_id}" />&nbsp;${val.value_name}</label>&nbsp;&nbsp;&nbsp;
+						</c:forEach>
+					</div>
 				</div>
-			</div>
+			</c:if>
 		</c:forEach>
 	</div>
 </div>
@@ -170,13 +172,16 @@ function createSku(){
 	
 	var attrvalArr = new Array();//用于保存获取笛卡尔乘积的集合
 	var tab_heads = new Array();//用于保存表格head内容
+	//debugger;
 	for(var j=0; j<arr.length; j++){
 		var obj = arr[j];
-		attrvalArr.push(obj.attrVals);
+		if(obj.attrVals.length>0){
+			attrvalArr.push(obj.attrVals);
+			tab_heads.push(obj);
+		}
 		delete obj.attrVals;
-		tab_heads.push(obj);
 	}
-	
+	console.log("笛卡尔积："+JSON.stringify(attrvalArr));
 	var tab_bodys = multiCartesian(attrvalArr);
 	console.log("tab_heads:"+JSON.stringify(tab_heads));
 	console.log("tab_bodys:"+JSON.stringify(tab_bodys));
@@ -334,11 +339,20 @@ function getSkuInfo(){
 		//多个一起做笛卡尔积  
 		multiCartesian = function(data) {
 			var len = data.length;
-			if (len == 0)
+			if (len == 0){
 				return [];
-			else if (len == 1)
-				return data[0];
-			else {
+			}else if (len == 1){
+				//return data[0];
+				var arr = new Array();
+				var tempData = data[0];
+				var length = tempData.length;
+				for(var j=0; j<length; j++){
+					var temp = new Array();
+					temp.push(tempData[j]);
+					arr.push(temp);
+				}
+				return arr;
+			}else {
 				var r = data[0];
 				for (var i = 1; i < len; i++) {
 					r = Cartesian(r, data[i]);

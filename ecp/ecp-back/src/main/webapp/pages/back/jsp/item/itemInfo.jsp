@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
+<!-- 此页面未用 -->
+
 <div class=" fieldset" id="item-attr">
 	<div class=" legend" onclick="javascript:alert(getItemAttr());">商品属性</div>
 	<div id="item-attr-body">

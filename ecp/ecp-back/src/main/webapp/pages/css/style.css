@@ -246,8 +246,8 @@ body.body-small .navbar-top-links li:last-child {
 }
 
 .minimalize-styl-2 {
-    padding: 4px 12px;
-    margin: 14px 5px 5px 20px;
+    padding: 4px 5px 4px 11px !important;
+	margin: 8px 5px 5px 10px;
     font-size: 14px;
     float: left;
 }
@@ -3832,11 +3832,6 @@ nav.page-tabs .page-tabs-content {
     cursor: default;
 }
 
-.nav.nav-tabs li {
-    background: none;
-    border: none;
-}
-
 .nav-tabs > li > a {
     color: #A7B1C2;
     font-weight: 600;
@@ -3845,7 +3840,7 @@ nav.page-tabs .page-tabs-content {
 
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {
-    background-color: #e6e6e6;
+    background-color: #35a1e6;
     color: #676a6c;
 }
 

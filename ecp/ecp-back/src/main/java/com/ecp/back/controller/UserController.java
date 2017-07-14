@@ -1,24 +1,32 @@
 package com.ecp.back.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ecp.back.commons.SessionConstants;
+import com.ecp.back.commons.StaticConstants;
 import com.ecp.bean.PageBean;
 import com.ecp.bean.UserBean;
 import com.ecp.common.util.RequestResultUtil;
+import com.ecp.entity.Role;
 import com.ecp.entity.User;
+import com.ecp.entity.UserRole;
+import com.ecp.service.back.IRoleService;
+import com.ecp.service.back.IUserRoleService;
 import com.ecp.service.back.IUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,8 +43,12 @@ public class UserController {
 
 	private final Logger log = Logger.getLogger(getClass());
 	
-	@Autowired
-	private IUserService iUserService;
+	@Resource(name="userServiceBean")
+	private IUserService userService;
+	@Resource(name="roleServiceBean")
+	private IRoleService roleService;
+	@Resource(name="userRoleServiceBean")
+	private IUserRoleService userRoleService;
 	
 	/**
 	 * 方法功能：查询列表
@@ -44,21 +56,25 @@ public class UserController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("/selectItem")
+	@RequestMapping("/selectItems")
 	public ModelAndView selectLinkItem(HttpServletRequest request, HttpServletResponse response, Boolean clickPageBtn, PageBean pageBean, String pagehelperFun) {
 		ModelAndView mav = new ModelAndView();
-		UserBean user = (UserBean)request.getSession().getAttribute(SessionConstants.USER);
+		Subject subject = SecurityUtils.getSubject();
+		UserBean user = (UserBean)subject.getPrincipal();
 		
 		PageHelper.startPage(pageBean.getPageNum(), pageBean.getPageSize());
-		List<User> userList = iUserService.selectAll();
+		List<User> userList = userService.getList();
 		PageInfo<User> pagehelper = new PageInfo<User>(userList);
+		
+		List<Role> roleList = roleService.selectAll();
+		mav.addObject("roleList", roleList);
 		
 		mav.addObject("pagehelper", pagehelper);
 		
 		if(clickPageBtn!=null && clickPageBtn){
-			//mav.setViewName(StaticConstants.SCRM_USER_MANAGE_TABLE_PAGE);
+			mav.setViewName(StaticConstants.USER_MANAGE_TABLE_PAGE);
 		}else{
-			//mav.setViewName(StaticConstants.SCRM_USER_MANAGE_PAGE);
+			mav.setViewName(StaticConstants.USER_MANAGE_PAGE);
 		}
 		
 		mav.addObject("pagehelperFun", pagehelperFun);
@@ -74,11 +90,13 @@ public class UserController {
 	 */
 	@RequestMapping("/selectUpdateById")
 	@ResponseBody
-	public Map<String, Object> selectUpdateById(HttpServletRequest request, HttpServletResponse response, Long userId) {
+	public Map<String, Object> selectUpdateById(HttpServletRequest request, HttpServletResponse response, Long id) {
 		try {
-			User user = iUserService.selectByPrimaryKey(userId);
+			User user = userService.selectByPrimaryKey(id);
+			List<UserRole> userRoleList = userRoleService.getByUserId(id);
 			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
 			respM.put("user", user);
+			respM.put("userRoleList", userRoleList);
 			return respM;
 		} catch (Exception e) {
 			log.error("查询异常", e);
@@ -95,12 +113,16 @@ public class UserController {
 	 */
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, User user) {
+	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, User user, String roleIds) {
 		
-		UserBean userBean = (UserBean)request.getSession().getAttribute(SessionConstants.USER);
+		Subject subject = SecurityUtils.getSubject();
+		UserBean userBean = (UserBean)subject.getPrincipal();
 		if(userBean!=null){
 			user.setCreatedTime(new Date());
-			int rows = iUserService.insertSelective(user);
+			user.setUpdateTime(new Date());
+			user.setDeleted(0);//0：默认（未删除），1：已删除
+			user.setPassword(DigestUtils.md5Hex(user.getUsername()+":123456"));//添加用户时，默认密码：123456
+			int rows = userService.add(user, roleIds);
 			if(rows>0){
 				return RequestResultUtil.getResultAddSuccess();
 			}
@@ -117,10 +139,11 @@ public class UserController {
 	 */
 	@RequestMapping("/updateById")
 	@ResponseBody
-	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, User user) {
+	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, User user, String roleIds) {
 		
 		try {
-			int rows = iUserService.updateByPrimaryKeySelective(user);
+			user.setUpdateTime(new Date());
+			int rows = userService.modify(user, roleIds);
 			if(rows>0){
 				return RequestResultUtil.getResultUpdateSuccess();
 			}
@@ -132,20 +155,63 @@ public class UserController {
 	}
 	
 	/**
-	 * 方法功能：删除
+	 * 方法功能：物理删除
 	 * @param request
 	 * @param response
-	 * @param userId
+	 * @param id
 	 * @return
 	 */
 	@RequestMapping("/deleteById")
 	@ResponseBody
-	public Map<String, Object> deleteById(HttpServletRequest request, HttpServletResponse response, Long userId) {
-		int rows = iUserService.deleteByPrimaryKey(userId);
+	public Map<String, Object> deleteById(HttpServletRequest request, HttpServletResponse response, Long id) {
+		int rows = userService.deleteByPrimaryKey(id);
 		if(rows>0){
 			return RequestResultUtil.getResultDeleteSuccess();
 		}
 		return RequestResultUtil.getResultDeleteWarn();
+	}
+	
+	/**
+	 * 方法功能：逻辑删除
+	 * @param request
+	 * @param response
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/logicDelById")
+	@ResponseBody
+	public Map<String, Object> logicDelById(HttpServletRequest request, HttpServletResponse response, Long id) {
+		int rows = userService.logicDelById(id);
+		if(rows>0){
+			return RequestResultUtil.getResultDeleteSuccess();
+		}
+		return RequestResultUtil.getResultDeleteWarn();
+	}
+	
+	/**
+	 * 方法功能：检查用户名是否有效
+	 * @param request
+	 * @param response
+	 * @param username
+	 * @return
+	 */
+	@RequestMapping("/checkUsernameValid")
+	@ResponseBody
+	public Map<String, Boolean> checkUsernameValid(HttpServletRequest request, HttpServletResponse response, String username) {
+		
+		Map<String, Boolean> map = new HashMap<String, Boolean>();
+		try {
+			List<User> userList = userService.getByUsername(username);
+			if(userList.isEmpty()){
+				map.put("valid", true);
+				return map;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		map.put("valid", false);
+		return map;
 	}
 	
 }

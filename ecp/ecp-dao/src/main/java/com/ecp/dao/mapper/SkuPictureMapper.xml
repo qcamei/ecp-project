@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ecp.dao.SkuPictureMapper" >
-  <resultMap id="BaseResultMap" type="com.ecp.entity.SkuPicture" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    <id column="picture_id" property="pictureId" jdbcType="BIGINT" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
-    <result column="picture_status" property="pictureStatus" jdbcType="TINYINT" />
-    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
-    <result column="sku_id" property="skuId" jdbcType="BIGINT" />
-    <result column="sort_number" property="sortNumber" jdbcType="TINYINT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    <!--
-      WARNING - @mbggenerated
-    -->
-    picture_id, created, modified, picture_status, picture_url, sku_id, sort_number
-  </sql>
+<mapper namespace="com.ecp.dao.SkuPictureMapper">
+	<resultMap id="BaseResultMap" type="com.ecp.entity.SkuPicture">
+		<!-- WARNING - @mbggenerated -->
+		<id column="picture_id" property="pictureId" jdbcType="BIGINT" />
+		<result column="created" property="created" jdbcType="TIMESTAMP" />
+		<result column="modified" property="modified" jdbcType="TIMESTAMP" />
+		<result column="picture_status" property="pictureStatus"
+			jdbcType="TINYINT" />
+		<result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+		<result column="sku_id" property="skuId" jdbcType="BIGINT" />
+		<result column="sort_number" property="sortNumber" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		<!-- WARNING - @mbggenerated -->
+		picture_id, created, modified, picture_status, picture_url, sku_id,
+		sort_number
+	</sql>
+	<!-- 根据skuID集合查询sku图片 -->
+	<select id="getBySkuIds" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from item_sku_picture where sku_id in
+		<foreach close=")" collection="list" index="index" item="item"
+			open="(" separator=",">
+			#{item}
+		</foreach>
+		ORDER BY sort_number ASC
+	</select>
+	<!-- 根据skuID集合删除sku图片 -->
+	<delete id="deleteBySkuIds">
+		delete from item_sku_picture where sku_id in
+		<foreach close=")" collection="list" index="index" item="item"
+			open="(" separator=",">
+			#{item}
+		</foreach>
+	</delete>
 </mapper>

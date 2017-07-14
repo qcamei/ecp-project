@@ -1,5 +1,7 @@
 package com.ecp.service.impl.back;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.ecp.dao.SkuPictureMapper;
@@ -19,6 +21,24 @@ public class SkuPictureServiceImpl extends AbstractBaseService<SkuPicture, Long>
 	public void setSkuPictureMapper(SkuPictureMapper skuPictureMapper) {
 		this.skuPictureMapper = skuPictureMapper;
 		this.setMapper(skuPictureMapper);
+	}
+
+	/**
+	 * @see com.ecp.service.back.ISkuPictureService#getBySkuIds(java.util.List)
+	 * 根据skuID集合查询sku图片
+	 */
+	@Override
+	public List<SkuPicture> getBySkuIds(List<Long> skuIds) {
+		return skuPictureMapper.getBySkuIds(skuIds);
+	}
+
+	/**
+	 * @see com.ecp.service.back.ISkuPictureService#deleteBySkuIds(java.util.List)
+	 * 根据skuID集合删除sku图片
+	 */
+	@Override
+	public int deleteBySkuIds(List<Long> skuIds) {
+		return skuPictureMapper.deleteBySkuIds(skuIds);
 	}
 
 }

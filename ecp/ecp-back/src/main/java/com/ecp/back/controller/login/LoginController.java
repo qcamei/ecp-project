@@ -16,7 +16,6 @@ import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ecp.back.commons.SessionConstants;
 import com.ecp.back.commons.StaticConstants;
@@ -24,7 +23,6 @@ import com.ecp.back.commons.TipInfoConstants;
 import com.ecp.bean.UserBean;
 import com.ecp.entity.User;
 import com.ecp.service.back.IUserService;
-import com.google.code.kaptcha.Constants;
 
 @Controller
 public class LoginController {
@@ -95,27 +93,27 @@ public class LoginController {
 			if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
 				//最终会抛给异常处理器
 				System.out.println("账号不存在");
-				request.setAttribute("error", "账号不存在");
 				error_msg = "账号不存在";
 			} else if (IncorrectCredentialsException.class.getName().equals(
 					exceptionClassName)) {
 				System.out.println("用户名/密码错误");
-				request.setAttribute("error", "用户名/密码错误");
 				error_msg = "用户名/密码错误";
 			} else if("randomCodeError".equals(exceptionClassName)){
 				System.out.println("验证码错误");
-				request.setAttribute("error", "验证码错误");
 				error_msg = "验证码错误";
 			}else {
 				//最终在异常处理器生成未知错误
 				System.out.println("未知错误");
-				request.setAttribute("error", "未知错误");
 				error_msg = "未知错误";
 			}
 		}
+		
+		request.setAttribute("error_msg", error_msg);
+		
 		//此方法不处理登陆成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
 		//登陆失败还到login页面
-		return "redirect:goLogin?error="+error_msg;
+		//return "redirect:goLogin?error="+error_msg;
+		return StaticConstants.LOGIN;
 	}
 	
 	/**

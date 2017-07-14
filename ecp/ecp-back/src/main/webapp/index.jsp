@@ -16,6 +16,6 @@
 <title>电子商务平台</title>
 </head>
 <body>
-<% response.sendRedirect("goLogin"); %>
+<% response.sendRedirect("back/main"); %>
 </body>
 </html>
