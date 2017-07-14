@@ -52,15 +52,33 @@ a:hover {
 	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
 
 	<script>
-		function loadOrder() {
+		/**
+			function:加载页面
+			parameters:
+				orderTimeCond:订单时间条件值
+				dealStateCond:处理状态条件值
+		*/
+		function loadOrder(orderTimeCond,dealStateCond) {
 			var url = "/front/order/show";
-			var parms = null;
+			/* var parms = null; */
+			
+			/*
+			//订单选择条件默认值
+			int orderTimeCond=1; //近三个月订单
+			int dealStateCond=0; //全部状态 
+			*/
+		
+						
+			var parms=new Object();
+			parms.orderTimeCond=orderTimeCond;  //近三个月订单
+			parms.dealStateCond=dealStateCond;  //全部状态		
+			
 			var callbackFunc = null;
 			var containerId = "#container";
 			loadPage(containerId, url, parms, callbackFunc);
 		}
 		$(function() {
-			loadOrder();
+			loadOrder(1,0);
 		})
 	</script>
 

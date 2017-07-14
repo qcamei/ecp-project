@@ -84,12 +84,18 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/show")
-	public String order_show(Model model, HttpServletRequest request) {
+	public String order_show(int orderTimeCond,int dealStateCond, Model model, HttpServletRequest request) {
+		/*System.out.println("order-time-cond:"+orderTimeCond);
+		System.out.println("deal-state-cond:"+dealStateCond);*/
+		
+		//回传查询条件
+		model.addAttribute("orderTimeCond", orderTimeCond);
+		model.addAttribute("dealStateCond", dealStateCond);
+		
 		// (1）获取订单信息
 		// (2)获取订单下条目信息
 
 		//System.out.println("--------------debug start");
-
 		// 用于页面显示
 		List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
 
@@ -98,7 +104,8 @@ public class OrderController {
 		User user = (User) session.getAttribute(SessionConstants.USER);
 
 		// 查询当前登录用户的订单
-		List<Orders> orders = orderService.selectOrderByUserId(user.getId());
+		//List<Orders> orders = orderService.selectOrderByUserId(user.getId());
+		List<Orders> orders = orderService.selectOrderByOrderTimeAndDealState(user.getId(), orderTimeCond, dealStateCond);
 		for (Orders order : orders) { // 迭代订单，查询订单条目
 
 			Map<String, Object> orderMap = new HashMap<String, Object>();
@@ -188,6 +195,11 @@ public class OrderController {
 		return RequestResultUtil.getResultUpdateWarn();
 	}
 	
+	@RequestMapping(value = "/detail")
+	public String order_detail(Long id,HttpServletRequest request){
+		
+		return RESPONSE_THYMELEAF + "order_detail";
+	}
 
 	/**
 	 * @Description 计算应付总金额（优惠前）

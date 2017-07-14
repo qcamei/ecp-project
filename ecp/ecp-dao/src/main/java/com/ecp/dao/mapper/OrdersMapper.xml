@@ -80,4 +80,22 @@
     refund_time, seller_evaluate, shipment_type, state, total_discount, total_price, 
     update_time, yn, contract_no, contract_id, contract_state
   </sql>
+  
+  <select id="selectOrderByOrderTimeAndDealState" resultMap="BaseResultMap">
+  	SELECT * FROM trade_orders <where>
+  		buyer_id=#{buyerId} 
+  		AND 
+  		create_time>=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH) 
+  		AND
+  		deleted=1
+  		<!-- AND 
+  			contract_state=#{dealStateCond} -->
+  		<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
+  			AND 
+  			contract_state=#{dealStateCond}	
+  		</if>
+  	</where>
+  </select>
+  
+  
 </mapper>

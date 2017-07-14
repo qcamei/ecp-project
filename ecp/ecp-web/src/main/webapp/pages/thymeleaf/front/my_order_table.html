@@ -3,6 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<style>
+	
+	a{text-decoration:none}
+	a:hover { text-decoration:none; }
+
+	
+	/* 横向“处理状态”菜单   */
+	.extra-l li{
+		float:left;
+		margin:auto 10px;
+		cursor:pointer;		
+	}
+	
+	.extra-l li a:hover{
+		padding-bottom:5px;		
+		border-bottom: 1px solid gray;
+		
+	}
+	
+	.extra-l li a.curr{
+		padding-bottom:5px;		
+		border-bottom: 2px solid blue;
+		font-weight:bold;
+	}
+	
+	.extra-l li a.curr:hover{
+		padding-bottom:5px;		
+		border-bottom: 2px solid blue;
+		font-weight:bold;
+	}
+	
+	/* 纵向菜单：时间条件 */
+	
+	.ordertime-cont{		
+		margin-bottom: 0;
+		display:inline-block;			
+	}	
+	
+	.time-list{
+		display:none;
+		background-color: rgba(65,65,65,.8);		
+		border:2px solid #1296db;
+		position:absolute;		
+	}
+	
+	.time-list ul{		
+		padding:10px 10px 0px 20px;		
+	}
+	
+	.time-list li{
+		list-style-type:none;		
+	}
+	
+	.time-list li.curr{
+		margin-left:-10px;
+		/* background:   一般用图片进行模拟 ，比较好控制 */		
+	}
+		
+	.time-list a{
+		color:#dcdcdc;
+	}
+	
+	.time-list i{
+		color:white;
+	}
+	
+	/* 纵向菜单：处理状态列表 */
+	
+	.deal-state-cont{
+		margin-bottom: 0;
+		display:inline-block;			
+	}	
+	
+	.state-list{
+		display:none;
+		background-color: rgba(65,65,65,.8);		
+		border:2px solid #1296db;
+		position:absolute;
+	}
+	
+	.state-list ul{
+		padding:10px 10px 0px 20px;		
+	}
+	
+	.state-list i{
+		color:white;
+	}
+	
+	.state-list li{
+		list-style-type:none
+	}
+	
+	
+	.state-list li.curr{
+		margin-left:-10px;
+		/* list-style-type:square; */
+		/* background:   一般用图片进行模拟 ，比较好控制 */
+	}
+		
+	.state-list a{
+		color:#dcdcdc;
+	}
+	
+	
+	
+	/* 时间条件 MOUSE形状 */
+	.time-txt{
+		cursor:pointer;
+	}
+	
+	/* 合同处理状态条件 MOUSE形状 */
+	.state-txt{
+		cursor:pointer;
+	}
+		
+</style>
+
 </head> 
 <body>
 <!-- content -->
@@ -12,20 +130,17 @@
 			</div>
 		</div>
 		<br>
+		<!-- 横向菜单 -->
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<ul class="extra-l" style="list-style: none;">
-					<li style="float: left; margin: auto 10px;"><a href="#"
-						class="txt curr">全部订单</a></li>
-					<li style="float: left; margin: auto 10px;">
-						<a href="#"	id="ordertoPay" clstag="click|keycount|orderinfo|waitPay"	class="txt">待付款</a>
-					</li>
-					<li style="float: left; margin: auto 10px;"><a href="#"
-						id="ordertoReceive" clstag="click|keycount|orderinfo|waitReceive"
-						class="txt">待收货</a></li>
-					<li style="float: left; margin: auto 10px;"><a href="#"
-						id="ordertoComment" target="_blank" class="txt"
-						clstag="click|keycount|orderinfo|daipingjia">待评价</a></li>
+					<li value="0"><a href="javascript:void(0);"	class="txt curr">全部订单</a></li>
+					<li value="1"><a href="javascript:void(0);"	class="txt">未建合同</a></li>
+					<li value="2"><a href="javascript:void(0);"	class="txt">己建合同</a></li>
+					<li value="3"><a href="javascript:void(0);"	class="txt"	>LM确认</a></li>
+					<li value="4"><a href="javascript:void(0);"	class="txt"	>我己确认</a></li>
+					<li value="5"><a href="javascript:void(0);"	class="txt"	>执行中..</a></li>
+					<li value="6"><a href="javascript:void(0);"	class="txt"	>执行完毕</a></li>
 				</ul>
 			</div>
 		</div>
@@ -36,52 +151,40 @@
 					<thead>
 						<tr>
 							<th><div class="ordertime-cont">
-									<div class="time-txt" style="float: left">
-										近三个月订单<b></b><span class="blank"></span>
+									<div class="time-txt" >
+										<span class="text" id="ordertime-cond" value="1">近一个月订单 </span>
+										<i class="icon-angle-down icon-large" style="color:black"></i>
 									</div>
 									<div class="time-list">
 										<ul>
-											<!-- <li><a href="#none" _val="1&amp;s=4096"
-												clstag="click|keycount|orderlist|zuijinsangeyue"><b></b>近三个月订单</a></li>
-											 <li><a href="#none" _val="2&amp;s=4096"
-												clstag="click|keycount|orderlist|jinniannei"><b></b>今年内订单</a></li>
-											<li><a href="#none" _val="2016&amp;s=4096"
-												clstag="click|keycount|orderlist|2016"><b></b>2016年订单</a></li>
-											<li><a href="#none" _val="2015&amp;s=4096"
-												clstag="click|keycount|orderlist|2015"><b></b>2015年订单</a></li>
-											<li><a href="#none" _val="2014&amp;s=4096"
-												clstag="click|keycount|orderlist|2014"><b></b>2014年订单</a></li>
-											<li><a href="#none" _val="3&amp;s=4096"
-												clstag="click|keycount|orderlist|before_2014"><b></b>2014年以前订单</a></li> -->
+											<li class="curr" value="1"><i class="icon-ok"></i><a href="javascript:void(0);" >近一个月订单</a></li>
+											<li class="" 	 value="2"><i class="icon-ok"></i><a href="javascript:void(0);" >近两个月订单</a></li>
+											<li class="" 	 value="3"><i class="icon-ok"></i><a href="javascript:void(0);" >近三个月订单</a></li>
+											<li class="" 	 value="6"><i class="icon-ok"></i><a href="javascript:void(0);" >近六个月订单</a></li>			
+											<li class="" 	 value="12"><i class="icon-ok"></i><a href="javascript:void(0);" >今年内订单</a></li>
 										</ul>
 									</div>
 								</div>
 								<div class="order-detail-txt ac" style="float: right; margin-right:150px">订单详情</div></th>
 							<th>收货人</th>
 							<th>订单金额</th>
-							<th>
+							<th style="width:108px">
 								<div class="deal-state-cont" id="orderState">
 									<div class="state-txt">
-										全部状态<b></b><span class="blank"></span>
+										<span class="text" id="dealstate-cond" value="100">全部状态</span>
+										<i class="icon-angle-down icon-large " style="color:black"></i>
 									</div>
-									<!-- <div class="state-list">
-										<ul>
-											<li value="4096"><a href="#none"
-												clstag="click|keycount|orderlist|quanbuzhuangtai"
-												class="curr"><b></b>全部状态</a></li>
-											 <li value="1"><a href="#none"
-												clstag="click|keycount|orderlist|dengdaifukuan"><b></b>等待付款</a>
-											</li>
-											<li value="128"
-												clstag="click|keycount|orderlist|dengdaishouhuo"><a
-												href="#none"><b></b>等待收货</a></li>
-											<li value="1024"><a href="#none"
-												clstag="click|keycount|orderlist|yiwancheng"><b></b>已完成</a>
-											</li>
-											<li value="-1"><a href="#none"
-												clstag="click|keycount|orderlist|yiquxiao"><b></b>已取消</a></li>
+									<div class="state-list">
+										<ul>											
+											<li value="0" class="curr"><i class="icon-ok"></i><a href="javascript:void(0)">全部状态</a></li>
+											<li value="1"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">未建合同</a></li>
+											<li value="2"   class=""><i class="icon-ok"></i><a href="javascript:void(0)">己建合同</a></li>
+											<li value="3"   class=""><i class="icon-ok"></i><a href="javascript:void(0)">LM己确认</a></li>
+											<li value="4"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">我己确认</a></li>
+											<li value="5"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">执行中..</a></li>
+											<li value="6"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">执行完毕</a></li>
 										</ul>
-									</div> -->
+									</div>
 								</div>
 							</th>
 							<th>操作</th>
@@ -101,21 +204,20 @@
 									class="dealtime" title="2017-05-08 12:12:27">订单时间</span> 
 									<input id="datasubmit-53848251722"	value="2017-05-08 12:12:27" type="hidden"> 
 									<span class="orderNo"> 订单号： 
-										<a name="orderIdLinks"	id="idUrl53848251722" target="_blank"
-											href="#" th:text="${orderx.order.orderId}"
-											clstag="click|keycount|orderinfo|order_num" >订单号</a>
+										<a name="orderIdLinks"	class="order-detail" target="_blank"
+											href="javascript:void(0)" th:text="${orderx.order.orderId}"
+											>订单号</a>
 									</span>
 									<span class="contractNo" th:if="${orderx.order.contractNo}"> 合同号： 
-										<a name="contractNoLinks"	id="idUrl53848251722" target="_blank"
-											href="#" th:text="${orderx.order.contractNo}"
-											clstag="click|keycount|orderinfo|order_num" >合同号</a>
+										<a name="contractNoLinks" class="contract-detail" target="_blank"
+											href="javascript:void(0)" th:text="${orderx.order.contractNo}"
+											>合同号</a>
 
 									</span>
 									
 
 								<div class="tr-operate" style="float: right">
-									 <a href="javascript:void(0)"
-										clstag="click|keycount|orderlist|dingdanshanchu"
+									 <a href="javascript:void(0)"										
 										class="order-del" 
 										th:attr="data-id=${orderx.order.id}"
 										title="删除">删除</a>
@@ -196,15 +298,12 @@
 									</span>								
 									
 									<!-- 订单详情 -->
-									<a	href="javascript:void(0)"	clstag="click|keycount|orderlist|dingdanxiangqing"
-										target="_blank"><b>订单详情</b></a>
-										
+									<a	href="javascript:void(0)" class="order-detail"	target="_blank"><b>订单详情</b></a>										
 										
 									<!-- 如果已经建立合同，则显示合同详情  -->	
 									<span th:if="${orderx.order.contractState} ge 2" th:remove="tag">
 										<br>
-										<a	href="javascript:void(0)"	clstag="click|keycount|orderlist|dingdanxiangqing"
-										target="_blank"><b>合同详情</b></a>
+										<a	href="javascript:void(0)" class="contract-detail" target="_blank"><b>合同详情</b></a>
 									</span>	
 										
 								</div>
@@ -288,6 +387,22 @@
 				</table>
 			</div>
 		</div>
-		<script type="text/javascript" th:src="@{/static/js/my_order/my_order.js}"></script>
+		
+		<!-- 订单选择条件  -->
+		<script th:inline="javascript">  
+			/*<![CDATA[*/
+				
+			var g_ordertime_cond = [[${orderTimeCond}]];  //回传的时间条件 
+			var g_dealstate_cond=[[${dealStateCond}]];    //回传的合同处理状态条件
+			
+			
+			/*]]>*/  
+		</script>		
+		
+		<script type="text/javascript" th:src="@{/static/js/my_order/my_order.js}"></script>	
+		
+		
+		
+		
 </body>
 </html>
