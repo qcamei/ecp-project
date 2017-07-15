@@ -1,5 +1,8 @@
 package com.ecp.service.impl.front;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.ecp.dao.ContractItemsMapper;
@@ -20,6 +23,10 @@ public class ContractItemsServiceImpl extends AbstractBaseService<ContractItems,
 	public void setContractItemsMapper(ContractItemsMapper contractItemsMapper) {
 		this.contractItemsMapper=contractItemsMapper;
 		this.setMapper(contractItemsMapper);
+	}
+	
+	public List<Map<String,String>> selectItemsByContractNo(String contractNo) {
+		return contractItemsMapper.selectItemsByContractNo(contractNo);
 	}
 	
 

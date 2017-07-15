@@ -27,12 +27,14 @@ import com.ecp.entity.ContractAttribute;
 import com.ecp.entity.ContractItems;
 import com.ecp.entity.Orders;
 import com.ecp.entity.User;
+import com.ecp.entity.UserExtends;
 import com.ecp.service.front.IContractAttrValueService;
 import com.ecp.service.front.IContractAttributeService;
 import com.ecp.service.front.IContractItemsService;
 import com.ecp.service.front.IContractService;
 import com.ecp.service.front.IOrderItemService;
 import com.ecp.service.front.IOrderService;
+import com.ecp.service.front.IUserAgentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -67,6 +69,8 @@ public class ContractController {
 	IContractAttrValueService contractAttrValueService;
 	@Autowired
 	IOrderService orderService;
+	@Autowired
+	IUserAgentService userAgentService;
 	
 	/**
 	 * @Description 合同详情
@@ -74,9 +78,43 @@ public class ContractController {
 	 * @return
 	 */
 	@RequestMapping(value="/detail")
-	public String contract_detail(Model model){
+	public String contract_detail(long id,Model model){
+		
+		model.addAttribute("contractId", id);
+		
 		return RESPONSE_THYMELEAF_BACK+"contract_detail";
 	}
+	
+	
+	/**
+	 * @Description 合同详情模块
+	 * @param id  合同id(pk)
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/detailtable")
+	public String contract_detail_table(long id,Model model){
+		//(1)合同对象
+		Contract contract=contractService.selectByPrimaryKey(id);		
+		model.addAttribute("contract", contract);
+		
+		//(2) order:select order by orderNo
+		Orders order=orderService.selectOrderByOrderNo(contract.getOrderNo());
+		//model.addAttribute("order", order);
+		
+		//(3)合同商品条目(根据合同编号)
+		List<Map<String,String>> contractItems=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		model.addAttribute("contractItems", contractItems);
+		
+		//(4)代理商
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
+		return RESPONSE_THYMELEAF_BACK+"contract_detail_table";
+	}
+	
+	
+	
 	
 	/**
 	 * @Description 显示-合同列表

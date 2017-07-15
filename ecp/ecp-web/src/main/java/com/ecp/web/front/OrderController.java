@@ -27,10 +27,12 @@ import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.Orders;
 import com.ecp.entity.User;
 import com.ecp.entity.UserAddressInfo;
+import com.ecp.entity.UserExtends;
 import com.ecp.service.front.ICartService;
 import com.ecp.service.front.IOrderItemService;
 import com.ecp.service.front.IOrderService;
 import com.ecp.service.front.IUserAddressInfoService;
+import com.ecp.service.front.IUserAgentService;
 
 /**
  * @ClassName FavouriteController
@@ -57,6 +59,9 @@ public class OrderController {
 	ICartService cartService;
 	@Autowired
 	IUserAddressInfoService userAddressInfoService;
+	@Autowired
+	IUserAgentService userAgentService;
+	
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String order_create(CartToOrderItemList cartToOrderItemList, Model model, HttpServletRequest request) {
@@ -195,11 +200,41 @@ public class OrderController {
 		return RequestResultUtil.getResultUpdateWarn();
 	}
 	
-	@RequestMapping(value = "/detail")
-	public String order_detail(Long id,HttpServletRequest request){
+	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	public String order_detail(Long id,Model model,HttpServletRequest request){
+		
+		model.addAttribute("orderId", id);  //向订单详细table传递参数
 		
 		return RESPONSE_THYMELEAF + "order_detail";
 	}
+	
+	/**
+	 * @Description 订单详情模块页
+	 * @param id
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/detailtable")
+	public String order_detail_table(Long id,Model model,HttpServletRequest request){
+		
+		//(1)读取订单
+		Orders order=orderService.selectByPrimaryKey(id);		
+		//(2)读取订单商品列表
+		List<Map<String, String>> orderItems = orderItemService.selectItemsByOrderId(order.getOrderId());
+		//(3)收货人信息(此信息已经保存至订单中)		
+		//(4)代理商信息
+		//UserExtends agent=userAgentService.selectByPrimaryKey(order.getBuyerId());
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		
+		model.addAttribute("order", order);
+		model.addAttribute("orderItems", orderItems);
+		model.addAttribute("agent", agent);
+		
+		return RESPONSE_THYMELEAF + "order_detail_table";
+	}
+	
+	
 
 	/**
 	 * @Description 计算应付总金额（优惠前）

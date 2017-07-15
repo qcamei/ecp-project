@@ -39,10 +39,10 @@ public class Contract {
     private Long confirmUserFirstParty;
 
     @Column(name = "confirm_status")
-    private Boolean confirmStatus;
+    private Byte confirmStatus;
 
     @Column(name = "contract_status")
-    private Boolean contractStatus;
+    private Byte contractStatus;
 
     @Column(name = "agent_id")
     private Long agentId;
@@ -204,28 +204,28 @@ public class Contract {
     /**
      * @return confirm_status
      */
-    public Boolean getConfirmStatus() {
+    public Byte getConfirmStatus() {
         return confirmStatus;
     }
 
     /**
      * @param confirmStatus
      */
-    public void setConfirmStatus(Boolean confirmStatus) {
+    public void setConfirmStatus(Byte confirmStatus) {
         this.confirmStatus = confirmStatus;
     }
 
     /**
      * @return contract_status
      */
-    public Boolean getContractStatus() {
+    public Byte getContractStatus() {
         return contractStatus;
     }
 
     /**
      * @param contractStatus
      */
-    public void setContractStatus(Boolean contractStatus) {
+    public void setContractStatus(Byte contractStatus) {
         this.contractStatus = contractStatus;
     }
 

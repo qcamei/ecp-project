@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ecp.dao.ContractMapper" >
-  <resultMap id="BaseResultMap" type="com.ecp.entity.Contract" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecp.dao.ContractMapper">
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Contract">
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="contract_template_id" property="contractTemplateId" jdbcType="BIGINT" />
-    <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
-    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
-    <result column="order_id" property="orderId" jdbcType="BIGINT" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-    <result column="create_user" property="createUser" jdbcType="BIGINT" />
-    <result column="confirm_date_second_party" property="confirmDateSecondParty" jdbcType="TIMESTAMP" />
-    <result column="confirm_user_second_party" property="confirmUserSecondParty" jdbcType="BIGINT" />
-    <result column="confirm_date_first_party" property="confirmDateFirstParty" jdbcType="TIMESTAMP" />
-    <result column="confirm_user_first_party" property="confirmUserFirstParty" jdbcType="BIGINT" />
-    <result column="confirm_status" property="confirmStatus" jdbcType="BIT" />
-    <result column="contract_status" property="contractStatus" jdbcType="BIT" />
-    <result column="agent_id" property="agentId" jdbcType="BIGINT" />
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_template_id" jdbcType="BIGINT" property="contractTemplateId" />
+    <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="confirm_date_second_party" jdbcType="TIMESTAMP" property="confirmDateSecondParty" />
+    <result column="confirm_user_second_party" jdbcType="BIGINT" property="confirmUserSecondParty" />
+    <result column="confirm_date_first_party" jdbcType="TIMESTAMP" property="confirmDateFirstParty" />
+    <result column="confirm_user_first_party" jdbcType="BIGINT" property="confirmUserFirstParty" />
+    <result column="confirm_status" jdbcType="TINYINT" property="confirmStatus" />
+    <result column="contract_status" jdbcType="TINYINT" property="contractStatus" />
+    <result column="agent_id" jdbcType="BIGINT" property="agentId" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
@@ -29,7 +29,7 @@
     confirm_status, contract_status, agent_id
   </sql>
   
-  <select id="getMaxContractNo"  resultType="string">
+  <select id="getMaxContractNo" resultType="string">
   	 select max(contract_no)  contractNo from contract where contract_no like CONCAT('%',#{monthCond},'%' )
   </select>
   

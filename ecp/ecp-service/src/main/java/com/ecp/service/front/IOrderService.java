@@ -38,4 +38,12 @@ public interface IOrderService extends IBaseService<Orders, Long> {
 	public List<Orders> selectOrderByOrderTimeAndDealState(long buyerId,int orderTimeCond,int dealStateCond);
 	
 	
+	/**
+	 * @Description 根据订单号读取订单
+	 * @param orderNo
+	 * @return
+	 */
+	public Orders selectOrderByOrderNo(String orderNo);
+	
+	
 }

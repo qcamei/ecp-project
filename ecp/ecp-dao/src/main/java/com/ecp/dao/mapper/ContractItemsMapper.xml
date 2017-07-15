@@ -39,4 +39,12 @@
     primitive_price, promotion_discount, promotion_id, promotion_type, shop_freight_template_id, 
     sku_id, sku_name, update_time, discount_price
   </sql>
+  <select id="selectItemsByContractNo" resultType="map">
+  	 select * from contract_items as o left join item_sku_picture as p
+  	 on(o.sku_id=p.sku_id) 
+	where  o.contract_no=#{contractNo} AND p.sort_number=1
+  </select>
+  
+  
+  
 </mapper>

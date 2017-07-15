@@ -34,6 +34,15 @@ public class UserAgentServiceImpl extends AbstractBaseService<UserExtends, Long>
 	public List<UserExtends> getAllUserAgent() {
 		return userExtendsMapper.selectAll();
 	}
+
+
+	@Override
+	public UserExtends getUserAgentByUserId(long userId) {
+		UserExtends record=new UserExtends();
+		record.setUserId(userId);
+		return userExtendsMapper.selectOne(record);
+		
+	}
 	
 	
 	

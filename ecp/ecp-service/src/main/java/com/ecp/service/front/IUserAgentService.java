@@ -30,7 +30,12 @@ public interface IUserAgentService extends IBaseService<UserExtends, Long> {
 	 */
 	public List<UserExtends> getAllUserAgent();
 	
-	
+	/**
+	 * @Description 根据用户ID获取代理商信息
+	 * @param userId  用户ID
+	 * @return  如果找到则返回相应对象，否则返回null;
+	 */
+	public UserExtends getUserAgentByUserId(long userId);
 	
 	
 	

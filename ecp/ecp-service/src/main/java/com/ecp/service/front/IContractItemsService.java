@@ -1,5 +1,8 @@
 package com.ecp.service.front;
 
+import java.util.List;
+import java.util.Map;
+
 import com.ecp.entity.ContractItems;
 import com.ecp.service.IBaseService;
 
@@ -13,4 +16,10 @@ import com.ecp.service.IBaseService;
  */
 public interface IContractItemsService extends IBaseService<ContractItems, Long> {
 	
+	/**
+	 * @Description 根据合同编号读取合同商品条目
+	 * @param contractNo
+	 * @return
+	 */
+	public List<Map<String,String>> selectItemsByContractNo(String contractNo);
 }
