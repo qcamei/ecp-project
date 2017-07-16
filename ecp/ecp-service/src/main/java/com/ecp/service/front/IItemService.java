@@ -18,6 +18,26 @@ public interface IItemService extends IBaseService<Item, Long> {
 	public List<Item> getItemByBrandAndAttr(Long cid,List<Long> brands,List<String> attrValPairs);
 	
 	
+	/**
+	 * @Description 查询SPU
+	 * @param brands 品牌id列表
+	 * @param cids 三级类目id列表
+	 * @return
+	 */
+	public List<Item> getItemByBrandAndCid(List<Long> brands, List<Long> cids);
+	
+	
+	
+	/**
+	 * @Description 按SPU关键字、品牌、类目查询
+	 * @param keywords
+	 * @param brands
+	 * @param cids
+	 * @return
+	 */
+	public List<Item> getItemByKeywordsAndBrandAndCid(String keywords,List<Long> brands,List<Long>cids); 
+	
+	
 	
 	/**
 	 * @Description 通过关键字进行查询

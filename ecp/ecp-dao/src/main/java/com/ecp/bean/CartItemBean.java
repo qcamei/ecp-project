@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartItemBean {
+	private long id;      //购物车中项目id
 	private long itemId;  //spu id
 	private long skuId;   //sku id
 	private long userId;  //用户id
@@ -103,6 +104,14 @@ public class CartItemBean {
 
 	public void setSkuName(String skuName) {
 		this.skuName = skuName;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	

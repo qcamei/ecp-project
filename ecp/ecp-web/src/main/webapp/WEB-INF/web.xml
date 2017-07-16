@@ -13,8 +13,8 @@
 	</welcome-file-list>
 
 <context-param>
-<param-name>webAppRootKey</param-name>
-<param-value>ecp-web</param-value>
+	<param-name>webAppRootKey</param-name>
+	<param-value>ecp-web</param-value>
 </context-param>
 
 

@@ -27,7 +27,8 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 	}	
 
 	@Override
-	public void addToFavourite(long favouriteId,  long userId) {
+	public int addToFavourite(long favouriteId,  long userId) {
+		int row=0;
 		//favouriteMapper.
 		/**
 		 (1)自我的收藏查询，如不存在，则直接插入
@@ -36,15 +37,17 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 		UserFavorite record=new UserFavorite();
 		record.setFavoriteId(favouriteId);
 		
-		record.setIdType("1");
+		record.setIdType("1");  //类型为商品
+		record.setStatus((byte)1);  //状态为可用
 		record.setUserId(userId);
-		record.setStatus((byte)1);		
+				
 		
 		UserFavorite favourite=userFavoriteMapper.selectOne(record);
 		if(favourite==null){  //如果此关注不存在，则加入
 			record.setAddTime(new Date());			
-			userFavoriteMapper.insert(record);
-		}		
+			row=userFavoriteMapper.insert(record);
+		}
+		return row;
 	}
 
 	@Override
@@ -55,7 +58,26 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 	@Override
 	public List<FavouriteStatisticBean> getFavouriteStatistic(long userId) {
 		return userFavoriteMapper.getFavouriteStatistic(userId);		
+	}
+
+	@Override
+	public boolean isUserFavourite(long favouriteId,  long userId) {
+		UserFavorite record=new UserFavorite();
+		
+		
+		record.setIdType("1");
+		record.setStatus((byte)1);
+		record.setUserId(userId);
+		record.setFavoriteId(favouriteId);		
+		
+		UserFavorite favourite=userFavoriteMapper.selectOne(record);
+		if(favourite==null){  //如果此关注不存在
+			return false;
+		}
+		else{
+			return true;
+		}
+		
 	}		
-	
 
 }

@@ -11,7 +11,7 @@ import com.ecp.service.front.ICartService;
 import com.ecp.service.impl.AbstractBaseService;
 
 @Service
-public class CartServiceImpl extends AbstractBaseService<Favourite, Long> implements ICartService {
+public class CartServiceImpl extends AbstractBaseService<Favourite, Integer> implements ICartService {
 	
 	FavouriteMapper favouriteMapper;
 	
@@ -25,13 +25,13 @@ public class CartServiceImpl extends AbstractBaseService<Favourite, Long> implem
 	}	
 
 	@Override
-	public void addToCart(int itemId, int skuId, int quantity, int userId) {
+	public int addToCart(int itemId, int skuId, int quantity, int userId) {
 		//favouriteMapper.
 		/**
 		 (1)自购物车查询，如不存在，则直接插入
 		 (2)如果已经存在，则进行更新。（status=1）
 		 */
-		Favourite record=new Favourite();
+		Favourite record=new Favourite(); 
 		record.setItemId(itemId);
 		record.setSkuId(skuId);		
 		record.setUserId(userId);
@@ -41,11 +41,13 @@ public class CartServiceImpl extends AbstractBaseService<Favourite, Long> implem
 			record.setQuantity(quantity);
 			record.setCreatedDate(new Date());
 			favouriteMapper.insert(record);
+			return record.getId();
 		}
 		else{
 			//record.setQuantity(record.getquantity);
 			int id=favourite.getId();
 			favouriteMapper.addQuqntityById(id, quantity);
+			return id;
 		}
 		
 		

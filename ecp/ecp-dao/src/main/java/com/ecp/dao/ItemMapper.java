@@ -23,6 +23,28 @@ public interface ItemMapper extends Mapper<Item> {
 	
 	
 	/**
+	 * @Description 通过品牌、cids查询
+	 * @param brands
+	 * @param cids
+	 * @return
+	 */
+	public List<Item> getItemByBrandAndCid(@Param("brands") List<Long> brands,
+											@Param("cids") List<Long> cids);
+	
+	
+	/**
+	 * @Description 按SPU中的关键字、品牌、类目ID查询
+	 * @param keywordList
+	 * @param brands
+	 * @param cids
+	 * @return
+	 */
+	public List<Item> getItemByKeywordsAndBrandAndCid(@Param("keywords") List<String> keywordList,
+													  @Param("brands") List<Long> brands,
+													  @Param("cids") List<Long> cids);
+	
+	
+	/**
 	 * @Description 查询SPU keywords item_name
 	 * @param keywordList
 	 * @return

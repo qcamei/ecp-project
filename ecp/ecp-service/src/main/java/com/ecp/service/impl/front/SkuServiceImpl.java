@@ -1,6 +1,7 @@
 package com.ecp.service.impl.front;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,11 @@ public class SkuServiceImpl extends AbstractBaseService<Sku, Long> implements IS
 	public SkuPriceBean getSkuBySkuId(long skuId) {			
 		return skuMapper.getSkuBySkuId(skuId);
 		
+	}
+
+	@Override
+	public List<Map<String, String>> getSkuIntroduce(long skuId) {
+		return skuMapper.getSkuIntroduce(skuId);
 	}
 	
 

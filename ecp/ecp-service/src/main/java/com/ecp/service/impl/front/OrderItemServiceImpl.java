@@ -30,12 +30,15 @@ public class OrderItemServiceImpl extends AbstractBaseService<OrderItems, Long> 
 	public void addItemIntoOrder(List<AddSkuToOrderBean> itemList, String orderId) {
 		for(AddSkuToOrderBean item:itemList){
 			OrderItems record=new OrderItems();
-			record.setOrderId(orderId);
-			record.setCid(item.getCid());
-			record.setItemId(item.getItemId());
-			record.setSkuId(item.getSkuId());
-			record.setSkuName(item.getSkuName());
-			record.setPayPrice(item.getSkuPrice());
+			
+			record.setOrderId(orderId);  //订单号
+			record.setCid(item.getCid());  //类目id
+			record.setItemId(item.getItemId()); //spu id
+			record.setSkuId(item.getSkuId());  //sku id
+			record.setSkuName(item.getSkuName());  //sku name			
+			record.setPrimitivePrice(item.getSkuPrice());  //原始价（未折减价格）
+			
+			
 			record.setNum(item.getSkuNum());
 			record.setCreateTime(new Date());
 			

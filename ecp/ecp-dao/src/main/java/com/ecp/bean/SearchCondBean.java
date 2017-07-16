@@ -14,6 +14,9 @@ public class SearchCondBean {
 	private String cid;  //类目id
 	private String brands; //品牌id字符串  各id以逗号分隔
 	private String attrs;  //attr_id:xxx   attr_vals:xxx  各属性值对以逗号分隔
+	private int pageNum;   //当前页号
+	private int pageSize;  //页大小
+	private String searchCond; //查询条件  for bread crumb
 	
 	
 	public String getCid() {
@@ -33,6 +36,24 @@ public class SearchCondBean {
 	}
 	public void setAttrs(String attrs) {
 		this.attrs = attrs;
+	}
+	public int getPageNum() {
+		return pageNum;
+	}
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
+	}
+	public int getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	public String getSearchCond() {
+		return searchCond;
+	}
+	public void setSearchCond(String searchCond) {
+		this.searchCond = searchCond;
 	}
 	
 		
