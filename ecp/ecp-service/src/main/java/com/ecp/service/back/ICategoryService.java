@@ -23,6 +23,12 @@ public interface ICategoryService extends IBaseService<Category, Integer> {
 	 */
 	public List<Category> selectByPid(Long parentCid);
 	/**
+	 * 根据级别查询类目
+	 * @param lev
+	 * @return
+	 */
+	public List<Category> selectByLev(int lev);
+	/**
 	 * @Description 读取类目树
 	 * @return  一级类目结点列表
 	 */

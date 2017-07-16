@@ -316,9 +316,9 @@ function saveFun(){
 	}else{
 		createtime = parserDate(createTimeStr);
 	}
-	console.log("创建时间（毫秒）："+createtime.getTime());
+	console.log("创建时间："+createtime);
 	var params = new Object();
-	params.createstr = createtime.getTime();
+	params.created = createtime;
 	params.describeUrl = getContent("item-ueditor");
 	try{
 		params.attributes = getItemAttr().toString();
@@ -371,8 +371,9 @@ function reloadInfoFun(){
  * 验证图片文件大小
  */
 function validateImgFileSizeFun(file){
-	if(isAllowUploadFile(file, 5120, '上传缩略图不能大于5M！')){
-		showPreview(file, 'thumbnail-portrait');
+	if(verifyFilesSize(file, 5120, '缩略图不能大于5M！')){
+		//showPreview(file, 'thumbnail-portrait');
+		showMutiPreview(file, 'thumbnail-portrait');
 		$("#save-submit-btn").attr("disabled", false);
 	}else{
 		$("#save-submit-btn").attr("disabled", true);

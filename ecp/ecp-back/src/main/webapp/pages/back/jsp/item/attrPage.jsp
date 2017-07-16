@@ -3,6 +3,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
+<style>
+	/* biaoti */
+	.fieldset {
+		position: relative;
+		border: 1px solid #ccc;
+		padding: 10px;
+		margin: 10px 0;
+	}
+	
+	.fieldset .legend {
+		position: absolute;
+		left: 80px;
+		top: -15px;
+		padding: 0 10px;
+		background: #fff;
+		font-weight: 700;
+		font-size: 18px;
+	}
+</style>
+
 <div class=" fieldset" id="item-attr">
 	<div class=" legend" onclick="javascript:alert(getItemAttr());">商品属性</div>
 	<div id="item-attr-body">

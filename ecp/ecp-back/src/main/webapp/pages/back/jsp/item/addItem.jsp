@@ -64,7 +64,7 @@
 		padding: 0;
 	}
 	/* biaoti */
-	.fieldset {
+	/* .fieldset {
 		position: relative;
 		border: 1px solid #ccc;
 		padding: 10px;
@@ -79,7 +79,7 @@
 		background: #fff;
 		font-weight: 700;
 		font-size: 18px;
-	}
+	} */
 	</style>
 	
 								<div class="container">
@@ -180,17 +180,15 @@
 											<%@ include file="skuPage.jsp"%>
 										</div> --%>
 		
-										<div class="form-group">
+										<!-- <div class="form-group">
 											<label class="col-sm-2 control-label">商品简介</label>
-		
 											<div class="col-sm-10">
 												<input type="tel" class="form-control" id="introduction"
 													name="introduction" />
 											</div>
-										</div>
+										</div> -->
 										<div class="form-group">
 											<label class="col-sm-2 control-label">商城指导价格</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="guide-price" name="guidePrice"
 													class="form-control">
@@ -198,7 +196,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">市场价格</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="market-price" name="marketPrice"
 													class="form-control">
@@ -206,7 +203,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">成本价格</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="market-price2" name="marketPrice2"
 													class="form-control">
@@ -221,7 +217,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">商品产地</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="origin" name="origin"
 													class="form-control">
@@ -229,7 +224,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">包装清单</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="packing-list" name="packingList"
 													class="form-control">
@@ -237,7 +231,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">商品体积</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="volume" name="volume"
 													class="form-control">
@@ -245,7 +238,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">商品毛重</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="weight" name="weight"
 													class="form-control">
@@ -253,7 +245,6 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-2 control-label">重量单位</label>
-		
 											<div class="col-sm-10">
 												<input type="text" id="weight-unit" name="weightUnit"
 													class="form-control">
@@ -301,8 +292,8 @@
 											<div class="col-md-5 ">
 												<input type="file" id="item" name="pictureImg"
 													onchange="javascript:validateImgFileSizeFun(this);"
-													accept="image/*" /> 
-													<input type="hidden" id="brand-logo-url" name="pictureUrl" />
+													accept="image/*" multiple="multiple" /> 
+													<!-- <input type="hidden" id="brand-logo-url" name="pictureUrl" /> -->
 											</div>
 											<!-- <div class="col-md-5">
 												<button type="button" class="btn btn-primary" onclick="javascript:deleteImgFun('logo');">删除</button>

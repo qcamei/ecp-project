@@ -51,7 +51,7 @@
 								</div>
 							</div>
 							<div id="tab-2" class="tab-pane">
-								<%-- <%@ include file="addItem.jsp"%> --%>
+								<%@ include file="editItem.jsp"%>
 							</div>
 						</div>
 					</div>

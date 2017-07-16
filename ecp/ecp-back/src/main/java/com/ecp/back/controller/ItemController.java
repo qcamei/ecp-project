@@ -119,7 +119,8 @@ public class ItemController {
 		mav.addObject("brandList", brandList);
 		
 		//类目
-		List<Category> categoryList = iCategoryService.selectByPid(0l);
+		//List<Category> categoryList = iCategoryService.selectByPid(0l);
+		List<Category> categoryList = iCategoryService.selectByLev(3);
 		mav.addObject("categoryList", categoryList);
 		
 		//属性
@@ -263,35 +264,5 @@ public class ItemController {
 		}
 		return RequestResultUtil.getResultDeleteWarn();
 	}
-	/**
-	 * 方法功能：处理上传文件
-	 * @param request
-	 * @param gwContent
-	 * @return
-	 * <hr>
-	 * <b>描述：</b>
-	 * <p>Description:方法功能详细说明</p> 
-	 * <p>Version: 1.0</p>
-	 * <p>Author: srd </p>
-	 * <p>Date: 2017年1月11日 下午6:09:34</p>
-	 */
-	private boolean processUploadFile(HttpServletRequest request, ItemPicture picture){
-		boolean flag = false;
-		try {
-			//获取上传背景图文件
-			String backImgPath = FileUploadUtil.getFile2Upload(request, "item", "pictureImg");
-			if(StringUtils.isNotBlank(backImgPath)){
-				if(!FileUploadUtil.deleteFile(request, picture.getPictureUrl())){
-					log.error("文件不存在或已删除 缩略图路径："+picture.getPictureUrl());
-				}
-				picture.setPictureUrl(backImgPath);
-			}
-			flag = true;
-		} catch (IOException e) {
-			log.error("上传文件异常", e);
-		} catch (Exception e) {
-			log.error("删除上传文件异常", e);
-		}
-		return flag;
-	}
+	
 }

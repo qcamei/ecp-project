@@ -2,6 +2,8 @@ package com.ecp.common.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -393,6 +395,49 @@ public class FileUploadUtil {
 				String uploadPath = uploadFile(request, typeDir, file);
 				log.debug("上传文件成功   文件保存路径 : "+uploadPath);
     			return uploadPath;
+    		}
+        }
+		return null;
+    }
+	
+	/**
+	 * 方法功能：根据fileName获取多个上传文件并上传
+	 * @param request
+	 * @param typeDir	类型目录
+	 * @param fileName	上传文件input标签的name值
+	 * @return	
+	 * 		List<String>:文件上传目录集合
+	 * @throws IOException
+	 * <hr>
+	 * <b>描述：</b>
+	 * <p>Description:方法功能详细说明</p> 
+	 * <p>Version: 1.0</p>
+	 * <p>Author: srd </p>
+	 * <p>Date: 2017年7月15日 下午16:11:01</p>
+	 */
+	public static List<String> getFiles2UploadPath(HttpServletRequest request, String typeDir, String fileName) throws IOException{
+		// 创建一个通用的多部分解析器.  
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
+        // 设置编码  
+        commonsMultipartResolver.setDefaultEncoding("utf-8");  
+        // 判断是否有文件上传  
+        if (commonsMultipartResolver.isMultipart(request)) {//有文件上传  
+        	// 转型为MultipartHttpRequest：
+    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+    		// 获得文件：
+    		List<MultipartFile> fileList = multipartRequest.getFiles(fileName);
+    		List<String> filePathList = new ArrayList<String>();
+    		for(MultipartFile file : fileList){
+    			if (file!=null) {
+    				String uploadPath = uploadFile(request, typeDir, file);
+    				if(StringUtils.isNotBlank(uploadPath)){
+    					filePathList.add(uploadPath);
+    					log.debug("上传文件成功   文件保存路径 : "+uploadPath);
+    				}
+        		}
+    		}
+    		if(!filePathList.isEmpty() && filePathList.size()>0){
+    			return filePathList;
     		}
         }
 		return null;

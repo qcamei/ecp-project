@@ -1,6 +1,7 @@
 package com.ecp.service.impl.back;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -115,18 +116,26 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				log.info("添加商品 item 成功");
 			}
 			//TODO 添加商品图片 item_picture
-			ItemPicture picture = new ItemPicture(item.getItemId(), null);
 			//处理上传缩略图
-			if(!this.processUploadFile(request, picture)){
-				return -1;
+			List<String> filePathList = this.processUploadFile(request, new ArrayList<ItemPicture>());
+			List<ItemPicture> pictureList = new ArrayList<ItemPicture>();
+			if(filePathList!=null && filePathList.size()>0){
+				for(String filePath : filePathList){
+					pictureList.add(new ItemPicture(item.getItemId(), filePath));
+				}
 			}
-			//添加商品图片
-			rows = itemPictureService.insertSelective(picture);
+			
+			for(int i=0; i<pictureList.size(); i++){
+				ItemPicture picture = pictureList.get(i);
+				//添加商品图片
+				rows = itemPictureService.insertSelective(picture);
+			}
+			
 			if(rows>0){
 				//添加商品属性值关系表
 				rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
 				if(rows>0){
-					rows = this.processSkuRelate(item, picture.getPictureUrl(), skuJson, skuPriceJson);
+					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
 					if(rows>0){
 						return rows;
 					}else{
@@ -155,7 +164,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	 * @return
 	 */
 	@Transactional
-	private int processSkuRelate(Item item, String pictureUrl, String skuJson, String skuPriceJson){
+	private int processSkuRelate(Item item, List<String> filePathList, String skuJson, String skuPriceJson){
 		try {
 			if(StringUtils.isBlank(skuJson)){
 				
@@ -183,24 +192,37 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					rows = skuPriceService.insertSelective(skuPrice);
 					if(rows>0){
 						//添加sku图片 item_sku_picture
-						SkuPicture skuPicture = new SkuPicture();
-						skuPicture.setCreated(new Date());
-						skuPicture.setModified(new Date());
-						skuPicture.setPictureStatus((byte)1);
-						skuPicture.setSortNumber((byte)1);
-						skuPicture.setPictureUrl(pictureUrl);
-						skuPicture.setSkuId(sku.getSkuId());
-						rows = skuPictureService.insertSelective(skuPicture);
+						if(filePathList!=null && filePathList.size()>0){
+							for(String filePath : filePathList){
+								SkuPicture skuPicture = new SkuPicture();
+								skuPicture.setCreated(new Date());
+								skuPicture.setModified(new Date());
+								skuPicture.setPictureStatus((byte)1);
+								skuPicture.setSortNumber((byte)1);
+								skuPicture.setPictureUrl(filePath);
+								skuPicture.setSkuId(sku.getSkuId());
+								rows = skuPictureService.insertSelective(skuPicture);
+								if(rows>0){
+									continue;
+								}else{
+									log.error("循环添加SKU图片 item_sku_picture 异常");
+									break;
+								}
+							}
+						}
 						if(rows>0){
 							continue;
 						}else{
 							log.error("添加SKU图片 item_sku_picture 异常");
+							break;
 						}
 					}else{
 						log.error("添加SKU价格 item_sku_price 异常");
+						break;
 					}
 				}else{
 					log.error("添加SKU item_sku_price 异常");
+					break;
 				}
 			}
 			return rows;
@@ -208,6 +230,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			e.printStackTrace();
 			log.error("保存SKU相关数据异常", e);
 		}
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		return 0;
 	}
 	
@@ -252,8 +275,9 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	/**
 	 * 方法功能：处理上传文件
 	 * @param request
-	 * @param gwContent
+	 * @param 
 	 * @return
+	 * 		List<String>:上传成功返回路径集合
 	 * <hr>
 	 * <b>描述：</b>
 	 * <p>Description:方法功能详细说明</p> 
@@ -261,24 +285,41 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	 * <p>Author: srd </p>
 	 * <p>Date: 2017年1月11日 下午6:09:34</p>
 	 */
-	private boolean processUploadFile(HttpServletRequest request, ItemPicture picture){
-		boolean flag = false;
+	private List<String> processUploadFile(HttpServletRequest request, List<ItemPicture> pictureList){
 		try {
 			//获取上传背景图文件
-			String backImgPath = FileUploadUtil.getFile2Upload(request, "item", "pictureImg");
-			if(StringUtils.isNotBlank(backImgPath)){
-				if(!FileUploadUtil.deleteFile(request, picture.getPictureUrl())){
-					log.error("文件不存在或已删除 缩略图路径："+picture.getPictureUrl());
+			List<String> filePathList = FileUploadUtil.getFiles2UploadPath(request, "item", "pictureImg");
+			if(filePathList!=null && filePathList.size()>0){
+				if(pictureList!=null && pictureList.size()>0){
+					for(ItemPicture picture : pictureList){
+						if(!FileUploadUtil.deleteFile(request, picture.getPictureUrl())){
+							log.error("文件不存在或已删除 缩略图路径："+picture.getPictureUrl());
+						}
+					}
 				}
-				picture.setPictureUrl(backImgPath);
+				return filePathList;
 			}
-			flag = true;
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			log.error("上传文件异常", e);
 		} catch (Exception e) {
 			log.error("删除上传文件异常", e);
 		}
-		return flag;
+		return null;
 	}
-
+	public static void main(String[] args) {
+		for(int j=0; j<10; j++){
+			System.out.println("外循环 第 "+j+" 次循环。");
+			for(int i=0; i<10; i++){
+				System.out.println("内循环 第 "+i+" 次循环。");
+				if(i==5){
+					break;
+				}
+			}
+			if(j==3){
+				break;
+			}
+		}
+	}
 }

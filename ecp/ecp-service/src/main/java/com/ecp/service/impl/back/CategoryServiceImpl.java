@@ -184,4 +184,15 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 		return categoryMapper.selectByExample(example);
 	}
 
+	/**
+	 * @see com.ecp.service.back.ICategoryService#selectByLev(int)
+	 * 根据级别查询类目
+	 */
+	@Override
+	public List<Category> selectByLev(int lev) {
+		Example example = new Example(Category.class);
+		example.createCriteria().andEqualTo("lev", lev);
+		return categoryMapper.selectByExample(example);
+	}
+
 }

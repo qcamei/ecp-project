@@ -14,9 +14,9 @@ function showPreview(source, portraitId) {
 /*
  * 显示多个预览图片
  */
-function showMutiPreview(source) {
+function showMutiPreview(source, portraitId) {
 
-	document.getElementById("portraits").innerHTML = "";
+	document.getElementById(portraitId).innerHTML = "";
 
 	function readAndPreview(file) {
 		// Make sure `file.name` matches our extensions criteria
@@ -27,8 +27,8 @@ function showMutiPreview(source) {
 				image.height = 100;
 				image.title = file.name;
 				image.src = this.result;
-				document.getElementById("portraits").appendChild(image);
-				document.getElementById("portraits").innerHTML += "&nbsp;&nbsp;";
+				document.getElementById(portraitId).appendChild(image);
+				document.getElementById(portraitId).innerHTML += "&nbsp;&nbsp;";
 			}, false);
 			reader.readAsDataURL(file);
 		}
@@ -76,6 +76,27 @@ function isAllowUploadFile(value, size, prompt){
 		allowUploadFile = true;
 	}
 	return allowUploadFile;
+}
+
+/*
+ * 选择上传文件时验证文件大小（多个文件）
+ * value:文件
+ * size:上传文件大小   单位为KB
+ * prompt:提示
+ */
+function verifyFilesSize(value, size, prompt){
+	var flag = true;
+	var files = value.files;
+	for(var i=0; i<files.length; i++){
+		var fileSize = value.files[i].size;
+		fileSize = Math.round(fileSize / 1024 * 100) / 100; // 单位为KB
+		if (fileSize >= size) {
+			flag = false;
+			util.message("第 "+i+" 张"+prompt);
+			break;
+		}
+	}
+	return flag;
 }
 
 /*
