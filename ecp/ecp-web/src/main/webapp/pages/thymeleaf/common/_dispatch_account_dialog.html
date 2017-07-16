@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<th:block th:fragment="dialog">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<!-- <a hidden="true" id="modal-273078" href="#modal-container-273078" role="button" class="btn" data-toggle="modal">触发遮罩窗体</a> -->
+				<input id="modal-273078" type="hidden" class="btn btn-primary"
+					value="分配帐户" data-toggle="modal"
+					data-target="#modal-container-273078" />
+				<div class="modal " id="modal-container-273078" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<input type="hidden" id="agentId" value="">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">×</button>
+								<h4 class="modal-title" id="myModalLabel">分配帐户</h4>
+							</div>
+							<div class="modal-body">
+								<div class="loginBox">
+									<label for="loginName">帐号</label> <input type="text"
+										id="loginName" name="loginName" placeholder="邮箱/会员帐号/手机号"
+										autofocus required>
+								</div>
+								<div class="password">
+									<label for="password">密码 </label> <input type="password"
+										id="password" name="password" placeholder="请输入密码" required>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button id="btnClose" type="button" class="btn btn-primary"
+									data-dismiss="modal">关闭</button>
+								<button id="btnDispatch" type="button" class="btn btn-primary">确定</button>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+	</th:block>
+</body>
+</html>

@@ -21,5 +21,29 @@ public interface IOrderService extends IBaseService<Orders, Long> {
 	 */
 	public List<Orders>  selectOrderByUserId(long buyerId);
 	
+	/**
+	 * @Description 根据订单号获取订单ID(pk)
+	 * @param orderNo  订单号
+	 * @return  order'id(pk)
+	 */
+	public long getIdByOrderNo(String orderNo);
+	
+	/**
+	 * @Description 根据订单时间及订单处理状态查询
+	 * @param buyerId  登录用户
+	 * @param orderTimeCond 订单时间条件值
+	 * @param dealStateCond 合同处理状态条件值
+	 * @return  订单列表
+	 */
+	public List<Orders> selectOrderByOrderTimeAndDealState(long buyerId,int orderTimeCond,int dealStateCond);
+	
+	
+	/**
+	 * @Description 根据订单号读取订单
+	 * @param orderNo
+	 * @return
+	 */
+	public Orders selectOrderByOrderNo(String orderNo);
+	
 	
 }

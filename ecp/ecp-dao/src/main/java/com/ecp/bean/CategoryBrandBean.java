@@ -1,11 +1,7 @@
 package com.ecp.bean;
 
 public class CategoryBrandBean {
-	/*column="brand_id" property="brandId" jdbcType="BIGINT" />                
-	column="third_lev_cid" property="thirdLevCid" jdbcType="BIGINT" />       
-	column="second_lev_cid" property="secondLevCid" jdbcType="BIGINT" />     
-	column="brand_logo_url" property="brandLogoUrl" jdbcType="VARCHAR" />    
-	column="brand_name" property="brandName" jdbcType="VARCHAR" />         */
+	
 	private long brandId;
 	private long thirdLevCid;
 	private long secondLevCid;

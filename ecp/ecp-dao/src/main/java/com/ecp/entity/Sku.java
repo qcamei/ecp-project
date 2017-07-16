@@ -35,6 +35,9 @@ public class Sku {
 
     private BigDecimal weight;
 
+    @Column(name = "sku_spec")
+    private String skuSpec;
+
     /**
      * @return sku_id
      */
@@ -189,6 +192,20 @@ public class Sku {
         this.weight = weight;
     }
 
+    /**
+     * @return sku_spec
+     */
+    public String getSkuSpec() {
+        return skuSpec;
+    }
+
+    /**
+     * @param skuSpec
+     */
+    public void setSkuSpec(String skuSpec) {
+        this.skuSpec = skuSpec == null ? null : skuSpec.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -206,6 +223,7 @@ public class Sku {
         sb.append(", skuType=").append(skuType);
         sb.append(", volume=").append(volume);
         sb.append(", weight=").append(weight);
+        sb.append(", skuSpec=").append(skuSpec);
         sb.append("]");
         return sb.toString();
     }

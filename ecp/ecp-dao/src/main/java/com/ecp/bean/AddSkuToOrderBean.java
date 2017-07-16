@@ -3,9 +3,11 @@ package com.ecp.bean;
 import java.math.BigDecimal;
 
 public class AddSkuToOrderBean {
+	private long id;  //购物车商品条目id
 	private long cid;
 	private long itemId;
 	private long skuId;
+	private String skuPicture;  //sku图片地址
 	private String skuName;  //sku名称
 	private BigDecimal skuPrice;  //sku单价
 	private int skuNum;  //数量
@@ -45,6 +47,18 @@ public class AddSkuToOrderBean {
 	}
 	public void setSkuNum(int skuNum) {
 		this.skuNum = skuNum;
+	}
+	public String getSkuPicture() {
+		return skuPicture;
+	}
+	public void setSkuPicture(String skuPicture) {
+		this.skuPicture = skuPicture;
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	

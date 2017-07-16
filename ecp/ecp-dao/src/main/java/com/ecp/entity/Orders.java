@@ -11,7 +11,7 @@ public class Orders {
     private Long id;
 
     @Column(name = "after_service")
-    private Boolean afterService;
+    private Byte afterService;
 
     @Column(name = "buyer_id")
     private Long buyerId;
@@ -34,7 +34,7 @@ public class Orders {
     @Column(name = "create_time")
     private Date createTime;
 
-    private Boolean delay;
+    private Byte delay;
 
     @Column(name = "delay_over_time")
     private Date delayOverTime;
@@ -42,7 +42,7 @@ public class Orders {
     @Column(name = "delete_time")
     private Date deleteTime;
 
-    private Boolean deleted;
+    private Byte deleted;
 
     @Column(name = "deliver_time")
     private Date deliverTime;
@@ -55,7 +55,7 @@ public class Orders {
 
     private String email;
 
-    private Boolean evaluate;
+    private Byte evaluate;
 
     @Column(name = "exchange_rate")
     private BigDecimal exchangeRate;
@@ -70,7 +70,7 @@ public class Orders {
     @Column(name = "integral_discount")
     private BigDecimal integralDiscount;
 
-    private Boolean invoice;
+    private Byte invoice;
 
     @Column(name = "invoice_title")
     private String invoiceTitle;
@@ -78,7 +78,7 @@ public class Orders {
     @Column(name = "lock_time")
     private Date lockTime;
 
-    private Boolean locked;
+    private Byte locked;
 
     @Column(name = "logistics_company")
     private String logisticsCompany;
@@ -108,7 +108,7 @@ public class Orders {
     private Date orderTime;
 
     @Column(name = "order_type")
-    private Boolean orderType;
+    private Byte orderType;
 
     private Integer paid;
 
@@ -119,7 +119,7 @@ public class Orders {
     private Integer payPeriod;
 
     @Column(name = "payment_method")
-    private Boolean paymentMethod;
+    private Byte paymentMethod;
 
     @Column(name = "payment_price")
     private BigDecimal paymentPrice;
@@ -138,13 +138,13 @@ public class Orders {
     @Column(name = "province_id")
     private Long provinceId;
 
-    private Boolean refund;
+    private Byte refund;
 
     @Column(name = "refund_time")
     private Date refundTime;
 
     @Column(name = "seller_evaluate")
-    private Boolean sellerEvaluate;
+    private Byte sellerEvaluate;
 
     @Column(name = "shipment_type")
     private Byte shipmentType;
@@ -161,6 +161,15 @@ public class Orders {
     private Date updateTime;
 
     private Integer yn;
+
+    @Column(name = "contract_no")
+    private String contractNo;
+
+    @Column(name = "contract_id")
+    private Long contractId;
+
+    @Column(name = "contract_state")
+    private Byte contractState;
 
     /**
      * @return id
@@ -179,14 +188,14 @@ public class Orders {
     /**
      * @return after_service
      */
-    public Boolean getAfterService() {
+    public Byte getAfterService() {
         return afterService;
     }
 
     /**
      * @param afterService
      */
-    public void setAfterService(Boolean afterService) {
+    public void setAfterService(Byte afterService) {
         this.afterService = afterService;
     }
 
@@ -291,14 +300,14 @@ public class Orders {
     /**
      * @return delay
      */
-    public Boolean getDelay() {
+    public Byte getDelay() {
         return delay;
     }
 
     /**
      * @param delay
      */
-    public void setDelay(Boolean delay) {
+    public void setDelay(Byte delay) {
         this.delay = delay;
     }
 
@@ -333,14 +342,14 @@ public class Orders {
     /**
      * @return deleted
      */
-    public Boolean getDeleted() {
+    public Byte getDeleted() {
         return deleted;
     }
 
     /**
      * @param deleted
      */
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(Byte deleted) {
         this.deleted = deleted;
     }
 
@@ -403,14 +412,14 @@ public class Orders {
     /**
      * @return evaluate
      */
-    public Boolean getEvaluate() {
+    public Byte getEvaluate() {
         return evaluate;
     }
 
     /**
      * @param evaluate
      */
-    public void setEvaluate(Boolean evaluate) {
+    public void setEvaluate(Byte evaluate) {
         this.evaluate = evaluate;
     }
 
@@ -487,14 +496,14 @@ public class Orders {
     /**
      * @return invoice
      */
-    public Boolean getInvoice() {
+    public Byte getInvoice() {
         return invoice;
     }
 
     /**
      * @param invoice
      */
-    public void setInvoice(Boolean invoice) {
+    public void setInvoice(Byte invoice) {
         this.invoice = invoice;
     }
 
@@ -529,14 +538,14 @@ public class Orders {
     /**
      * @return locked
      */
-    public Boolean getLocked() {
+    public Byte getLocked() {
         return locked;
     }
 
     /**
      * @param locked
      */
-    public void setLocked(Boolean locked) {
+    public void setLocked(Byte locked) {
         this.locked = locked;
     }
 
@@ -683,14 +692,14 @@ public class Orders {
     /**
      * @return order_type
      */
-    public Boolean getOrderType() {
+    public Byte getOrderType() {
         return orderType;
     }
 
     /**
      * @param orderType
      */
-    public void setOrderType(Boolean orderType) {
+    public void setOrderType(Byte orderType) {
         this.orderType = orderType;
     }
 
@@ -739,14 +748,14 @@ public class Orders {
     /**
      * @return payment_method
      */
-    public Boolean getPaymentMethod() {
+    public Byte getPaymentMethod() {
         return paymentMethod;
     }
 
     /**
      * @param paymentMethod
      */
-    public void setPaymentMethod(Boolean paymentMethod) {
+    public void setPaymentMethod(Byte paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -837,14 +846,14 @@ public class Orders {
     /**
      * @return refund
      */
-    public Boolean getRefund() {
+    public Byte getRefund() {
         return refund;
     }
 
     /**
      * @param refund
      */
-    public void setRefund(Boolean refund) {
+    public void setRefund(Byte refund) {
         this.refund = refund;
     }
 
@@ -865,14 +874,14 @@ public class Orders {
     /**
      * @return seller_evaluate
      */
-    public Boolean getSellerEvaluate() {
+    public Byte getSellerEvaluate() {
         return sellerEvaluate;
     }
 
     /**
      * @param sellerEvaluate
      */
-    public void setSellerEvaluate(Boolean sellerEvaluate) {
+    public void setSellerEvaluate(Byte sellerEvaluate) {
         this.sellerEvaluate = sellerEvaluate;
     }
 
@@ -960,6 +969,48 @@ public class Orders {
         this.yn = yn;
     }
 
+    /**
+     * @return contract_no
+     */
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    /**
+     * @param contractNo
+     */
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo == null ? null : contractNo.trim();
+    }
+
+    /**
+     * @return contract_id
+     */
+    public Long getContractId() {
+        return contractId;
+    }
+
+    /**
+     * @param contractId
+     */
+    public void setContractId(Long contractId) {
+        this.contractId = contractId;
+    }
+
+    /**
+     * @return contract_state
+     */
+    public Byte getContractState() {
+        return contractState;
+    }
+
+    /**
+     * @param contractState
+     */
+    public void setContractState(Byte contractState) {
+        this.contractState = contractState;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -1023,6 +1074,9 @@ public class Orders {
         sb.append(", totalPrice=").append(totalPrice);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", yn=").append(yn);
+        sb.append(", contractNo=").append(contractNo);
+        sb.append(", contractId=").append(contractId);
+        sb.append(", contractState=").append(contractState);
         sb.append("]");
         return sb.toString();
     }

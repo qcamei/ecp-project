@@ -15,7 +15,7 @@ public class SkuPriceBean implements Serializable {
 	private BigDecimal volume;
 	private BigDecimal weight;
 	private BigDecimal sell_price;
-
+	
 	public String getAttributes() {
 		return attributes;
 	}

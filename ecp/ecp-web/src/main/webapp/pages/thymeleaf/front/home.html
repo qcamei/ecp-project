@@ -2,28 +2,67 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>主页</title>
-
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap.min.css}"
-	rel="stylesheet" />
-<link th:href="@{/static/bootstrap/3.3.5/css/bootstrap-theme.min.css}"
-	rel="stylesheet" />
-<link th:href="@{/static/css/main1.css}" rel="stylesheet" />
-
-<script type="text/javascript"
-	th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-
+<div th:include="/thymeleaf/common/_head2::headx('智慧教育-电子商务平台')"	th:remove="tag"></div>
+<!-- other css -->
+<link th:href="@{/static/css/wu/default.css}"	rel="stylesheet" />
+<!-- other style -->
+<style type="text/css">
+	a:hover { text-decoration:none; } 
+</style>
+<!-- other script -->
 </head>
 <body>
-	<div id="header">
+	<!-- header -->
+	<div id="header" class="row clearfix">
+		<!-- <div id="header" class="col-md-12 column"></div> -->
+	</div>
+	<!-- content -->
+	<div class="container">
+		<div id="content" class="row clearfix">
+			<div id="content" class="col-md-12 column content">
+				<!-- 在此处加入频道内容 -->
+				
+				<!-- 主页商品展示1 -->
+			    <div  id="channel-one" ></div>
+			    
+			    <!-- 主页商品展示2 -->
+			    <div  id="channel-two" ></div>
+    			
+			</div>
+		</div>
 		
 	</div>
-	<div id="content">
-		<div class="main"
-			th:include="thymeleaf/front/public/layout_bootstrap :: layout_bootstrap">首页默认商品列表显示于此，其它频道内容可以在以下添加</div>
+	<!-- footer -->
+	<div id="footer" class="row clearfix">
+		<!-- <div id="footer" class="col-md-12 column"></div> -->
 	</div>
-
+	<!-- load header and footer -->
+	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	<script type="text/javascript">
+		/* 加载channel-one */
+		function loadChannelOne() {
+			var url = "/front/home/channelone";
+			var parms = null;
+			var callbackFunc = null; //load页面 完毕后加调函数
+			var containerId = "#channel-one";
+			loadPage(containerId, url, parms, callbackFunc);
+		}
+		
+		/* 加载channel-two */
+		function loadChannelTwo() {
+			var url = "/front/home/channelone";
+			var parms = null;
+			var callbackFunc = null; //load页面 完毕后加调函数
+			var containerId = "#channel-two";
+			loadPage(containerId, url, parms, callbackFunc);
+		}
+		
+		$(function(){
+			loadChannelOne();	
+			loadChannelTwo();
+		});
+		
+		
+	</script>
 </body>
 </html>

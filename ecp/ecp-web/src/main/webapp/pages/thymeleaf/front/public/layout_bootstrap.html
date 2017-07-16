@@ -37,14 +37,20 @@
 								</a></li>
 
 								<li class="dropdown"><a href="#" class="dropdown-toggle"
-									data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+									data-toggle="dropdown">功能开发<strong class="caret"></strong></a>
 									<ul class="dropdown-menu">
 										<li><a th:href="@{/front/home/categorytree}" target="_blank">类目属性</a></li>										
-										<li><a href="#">Something else here</a></li>
+										<li><a th:href="@{/back/companyinfo/show}" target="_blank">公司信息维护</a></li>
 										<li class="divider"></li>
-										<li><a href="#">Separated link</a></li>
+										<li><a th:href="@{/back/agent/show}" target="_blank">签约用户维护</a></li>										
 										<li class="divider"></li>
-										<li><a href="#">One more separated link</a></li>
+										<li><a th:href="@{/back/contract/detail}" target="_blank">显示合同模板</a></li>
+										<li class="divider"></li>
+										<li><a th:href="@{/back/contract/show}" target="_blank">合同管理</a></li>
+										<li class="divider"></li>
+										<li><a th:href="@{/back/order/show}" target="_blank">订单管理</a></li>
+										
+										
 									</ul></li>
 							</ul>
 							<form class="navbar-form navbar-left" target="_blank"  method="get" role="search" th:action="@{/front/search/keywords}">

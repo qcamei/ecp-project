@@ -28,7 +28,7 @@
 		v.value_id,
 		v.value_name
 		from item_attr_value_item a left join item_attribute_value v
-		on(a.attr_id=v.attr_id and a.value_id=v.value_id)
+		on(a.value_id=v.value_id)
 		where a.item_id=#{itemId} and a.attr_id=#{attrId}
 	</select>
 
