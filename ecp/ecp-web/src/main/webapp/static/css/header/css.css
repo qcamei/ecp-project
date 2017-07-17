@@ -24,7 +24,8 @@ body {
 
 .top ul li>div,
 .top a {
-    color: #666666;
+    /* color: #666666; */
+    color:lightgray;
 }
 
 .top a:hover {
@@ -83,7 +84,8 @@ i {
 }
 
 .login #reg a {
-    color: #c81623;
+    /* color: #c81623; */
+    color:#f97e76;
 }
 
 #top-banner {

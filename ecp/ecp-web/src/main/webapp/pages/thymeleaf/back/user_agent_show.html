@@ -5,7 +5,7 @@
 <div th:include="/thymeleaf/common/_head2::headx('签约客户维护')" th:remove="tag"></div>
 <!-- local style -->
 <style>
-
+	a:hover { text-decoration:none; } 
 </style>
 
 </head>
@@ -16,12 +16,21 @@
 	<div class="container">
 		<!-- 分配帐号对话框 -->
 		<div th:replace="thymeleaf/common/_dispatch_account_dialog::dialog" class="header"></div>
-		
 		<!-- 签约客户列表 -->
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<h3>签约客户维护</h3>
-				<hr>
+				
+				
+				<!-- 工具栏 -->
+				<div class="row clearfix">					
+					<div class="col-md-12 column">
+						<br>
+						<h3 style="display:inline"><i class="icon-user" style="color:green"></i>签约客户维护</h3>
+						<a th:href="@{/back/agent/add}" title="增加签约客户" target="_blank"  style="float:right;margin-right:100px;"><i class="icon-plus-sign icon-large" style="color:green"></i></a>
+						<a th:href="@{/back/agent/show}" title="刷新列表"  style="float:right;margin-right:10px" ><i class="icon-refresh icon-large" style="color:green"></i></a>
+						<hr>
+					</div>
+				</div>
 				<table class="table">
 					<thead>
 						<tr>
@@ -66,12 +75,7 @@
 					<div th:include="/thymeleaf/common/_pager::pager(userAgents)" class="pagerx"  style="float:right; margin-right:100px;"></div>
 				</div>
 				<div class="row clearfix"><hr></div>
-				<div class="row clearfix">					
-					<div class="col-md-12 column">
-						<a th:href="@{/back/agent/add}" class="btn btn-primary"  target="_blank"  style="float:right;margin-right:100px;">增加</a>
-						<a th:href="@{/back/agent/show}" class="btn btn-primary"  style="float:right;margin-right:10px" >刷新</a>
-					</div>
-				</div>		
+					
 				
 			</div>
 		</div>
