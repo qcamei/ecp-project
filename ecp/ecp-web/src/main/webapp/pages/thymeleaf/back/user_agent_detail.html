@@ -1,90 +1,113 @@
 <!DOCTYPE html>
 <html>
-
-<head th:include="/thymeleaf/common/_head::head('客户资料详情')">
+<head>
 <meta charset="UTF-8">
+<div th:include="/thymeleaf/common/_head2::headx('客户资料详情')" th:remove="tag"></div>
 </head>
 <body>
+<!-- header -->
+<!-- <div th:include="thymeleaf/common/_header::header" class="header"></div> -->
+<!-- content -->
 <div class="container">
-		<!-- header -->
-		<div th:include="thymeleaf/common/_header::header" class="header"></div>
-		<!-- content -->
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<h3>签约客户-详情</h3>
-				<form role="form" id="user-agent-form">
+				<h4>签约客户-详情</h4>
+				<hr>
+				<form class="form-horizontal" role="form" id="user-agent-form">
 					<div class="form-group">
-						<label for="companyName">企业名称</label><input class="form-control"
-							id="companyName" name="companyName" th:value="${agent.companyName}" type="text" />
+						<label for="companyName" class="col-sm-2 control-label">企业名称</label>
+						<div class="col-sm-10">
+							<input class="form-control"	id="companyName" name="companyName" th:value="${agent.companyName}" type="text" />
+						</div>
 					</div>
+					
 					<div class="form-group">
-						<label for="artificialPersonName">企业负责人姓名</label><input
-							class="form-control" id="artificialPersonName" name="artificialPersonName" th:value="${agent.artificialPersonName}"  type="text" />
+						<label for="artificialPersonName" class="col-sm-2 control-label">企业负责人姓名</label>
+						<div class="col-sm-10">
+							<input	class="form-control" id="artificialPersonName" name="artificialPersonName" th:value="${agent.artificialPersonName}"  type="text" />
+						</div>
 					</div>
+					
 					<div class="form-group">
-						<label for="contactPhone">手机号码</label><input class="form-control"
-							id="contactPhone" name="contactPhone" th:value="${agent.contactPhone}" type="text" />
+						<label for="contactPhone" class="col-sm-2 control-label">手机号码</label>
+						<div class="col-sm-10">
+							<input class="form-control"	id="contactPhone" name="contactPhone" th:value="${agent.contactPhone}" type="text" />
+						</div>
 					</div>
+					
 					<div class="form-group">
-						<label for="contactEmail">企业邮箱</label><input class="form-control"
-							id="contactEmail" name="contactEmail" th:value="${agent.contactEmail}"  type="text" />
+						<label for="contactEmail" class="col-sm-2 control-label">企业邮箱</label>
+						<div class="col-sm-10">
+							<input class="form-control"	id="contactEmail" name="contactEmail" th:value="${agent.contactEmail}"  type="text" />
+						</div>
 					</div>
+					
 					<div class="form-group">
-						<label for="contactAddress">联系地址</label><input
-							class="form-control" id="contactAddress" name="contactAddress" th:value="${agent.contactAddress}"  type="text" />
+						<label for="contactAddress" class="col-sm-2 control-label">联系地址</label>
+						<div class="col-sm-10">
+							<input	class="form-control" id="contactAddress" name="contactAddress" th:value="${agent.contactAddress}"  type="text" />
+						</div>
+					</div>
+					
+					<!-- 审核用图片 -->
+					<div class="form-group">												
+						<div>
+							<label for="businessLicencePicSrc" class="col-sm-2 control-label">营业执照</label>
+						</div>
+						<div class="col-sm-10">
+							<div  id="businessLicencePicSrc_prev" style="display:inline-block;">
+								<img  style="height:100px;"  th:src="${agent.businessLicencePicSrc}">							
+							</div>
+							<div style="display:inline-block;">
+								<input id="businessLicencePicSrc" name="businessLicencePic_Src" type="file"
+										onchange="javascript:preview(this);"	accept="image/*" />
+							</div>
+						</div>
 					</div>
 
 					<div class="form-group">
-						<!-- <img alt="营业执照" id="businessLicencePicSrc_prev" src=""> -->
 						<div>
-							<label for="businessLicencePicSrc">营业执照</label>
-						</div>
-						<div class="col-sm-10" id="businessLicencePicSrc_prev">
-							<img  style="height:150px;"  th:src="${agent.businessLicencePicSrc}">
+							<label for="taxRegistrationCertificatePicSrc" class="col-sm-2 control-label">税务登记证</label>
 						</div>
 						
-						<input id="businessLicencePicSrc" name="businessLicencePic_Src" type="file"
-							onchange="javascript:preview(this);"
-							accept="image/*" />
-
-					</div>
-
-					<div class="form-group">
-						<div>
-							<label for="taxRegistrationCertificatePicSrc">税务登记证</label>
-						</div>
-						<div class="col-sm-10" id="taxRegistrationCertificatePicSrc_prev">
-							<img  style="height:150px;" th:src="${agent.taxRegistrationCertificatePicSrc}">
+						<div class="col-sm-10">
+							<div  id="taxRegistrationCertificatePicSrc_prev" style="display:inline-block;">
+								<img  style="height:100px;" th:src="${agent.taxRegistrationCertificatePicSrc}">
+							</div>
+							<div style="display:inline-block;">
+								<input id="taxRegistrationCertificatePicSrc" name="taxRegistrationCertificatePic_Src" type="file"
+								onchange="javascript:preview(this);" accept="image/*" />
+							</div>
 						</div>
 						
-						<input id="taxRegistrationCertificatePicSrc" name="taxRegistrationCertificatePic_Src" type="file"
-							onchange="javascript:preview(this);"
-							accept="image/*" />
 					</div>
 
 					<div class="form-group">
 						<div>
-							<label for="organizationPicSrc">组织机构代码证</label>
+							<label for="organizationPicSrc" class="col-sm-2 control-label">组织机构代码证</label>
 						</div>
-						<div class="col-sm-10" id="organizationPicSrc_prev">
-							<img style="height:150px;" th:src="${agent.organizationPicSrc}">
+						
+						<div class="col-sm-10">
+							<div id="organizationPicSrc_prev" style="display:inline-block">
+								<img style="height:100px;" th:src="${agent.organizationPicSrc}">
+							</div>
+							<div style="display:inline-block">
+								<input id="organizationPicSrc" name="organizationPic_Src" type="file"
+									onchange="javascript:preview(this);" accept="image/*" />
+							</div>
 						</div>
-						<input id="organizationPicSrc" name="organizationPic_Src" type="file"
-							onchange="javascript:preview(this);"
-							accept="image/*" />
 					</div>
-
-
-					<button type="button" id="btnSave"  class="btn btn-primary">Submit</button>
+					
+					<hr>
+					<button type="button" id="btnSave"  class="btn btn-primary"  style="float:right;margin-right:100px;" >保存</button>
 				</form>
 			</div>
 		</div>
-		<!-- footer -->
-		<div th:include="/thymeleaf/common/_footer::footer" class="footer"></div>
+		
 	</div>
-
-
-	<!-- 特化JS -->
+	<!-- footer -->
+	<!-- <div th:include="/thymeleaf/common/_footer::footer" class="footer"></div> -->
+	
 	<script type="text/javascript">
 		
 		//上下文信息  
@@ -94,9 +117,7 @@
 	
 	
 	
-		/*
-		 * 上传前预览图片
-		 */
+		/* 上传前预览图片 */
 		function preview(file) {
 			//alert(file.id);
 			if (isAllowUploadFile(file, 5120, '上传logo图不能大于5M！')) {
@@ -107,9 +128,7 @@
 			}
 		}
 		
-		/*
-		 * 保存内容
-		 */
+		/* 保存内容 */
 		function saveFun(){
 			var url = null;
 			
@@ -140,12 +159,9 @@
 		}
 		
 		
-		$(function() {
+		$(function() {		
 			
-			
-			/*
-				保存签约用户
-			*/
+			/*	保存签约用户 */
 			$("#btnSave").on('click', function(e){
 				saveFun();	
 			});

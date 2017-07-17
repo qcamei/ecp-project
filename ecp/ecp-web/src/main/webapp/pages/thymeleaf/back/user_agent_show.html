@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head th:include="/thymeleaf/common/_head::head('签约客户维护')">
+<head>
 <meta charset="UTF-8">
+<div th:include="/thymeleaf/common/_head2::headx('签约客户维护')" th:remove="tag"></div>
+<!-- local style -->
+<style>
+
+</style>
+
 </head>
 <body>
+	<!-- header -->
+	<!-- <div th:replace="thymeleaf/common/_header::header" class="header"></div> -->
+	<!-- content -->
 	<div class="container">
-		<!-- header -->
-		<!-- <div th:replace="thymeleaf/common/_header::header" class="header"></div> -->
-		<!-- content -->
 		<!-- 分配帐号对话框 -->
 		<div th:replace="thymeleaf/common/_dispatch_account_dialog::dialog" class="header"></div>
+		
 		<!-- 签约客户列表 -->
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<h3>签约客户维护</h3>
+				<hr>
 				<table class="table">
 					<thead>
 						<tr>
@@ -53,189 +61,36 @@
 						
 					</tbody>
 				</table>
-				<div class="row clearfix">
-					<div class="col-md-12 column">
-						<a th:href="@{/back/agent/add}" class="btn btn-primary"  target="_blank" >增加</a>
-					</div>
-				</div>
-				
 				<!-- 加入 分页 -->
-				<div th:include="/thymeleaf/common/_pager::pager(userAgents)" class="pagerx"></div>
+				<div class="row clearfix">
+					<div th:include="/thymeleaf/common/_pager::pager(userAgents)" class="pagerx"  style="float:right; margin-right:100px;"></div>
+				</div>
+				<div class="row clearfix"><hr></div>
+				<div class="row clearfix">					
+					<div class="col-md-12 column">
+						<a th:href="@{/back/agent/add}" class="btn btn-primary"  target="_blank"  style="float:right;margin-right:100px;">增加</a>
+						<a th:href="@{/back/agent/show}" class="btn btn-primary"  style="float:right;margin-right:10px" >刷新</a>
+					</div>
+				</div>		
 				
 			</div>
 		</div>
 		
-		<!-- footer -->
-		<!-- <div th:replace="/thymeleaf/common/_footer::footer" class="footer"></div> -->
-		
 		<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
-		<form th:action="@{/back/agent/show}" method="post"	id="searchform">
-			
+		<form th:action="@{/back/agent/show}" method="post"	id="searchform">			
 			<!-- 保存页号与页大小 -->
-			<input type="hidden" name="pageNum" id="pageNum" value=""> <input
-				type="hidden" name="pageSize" id="pageSize" value="">
-	
+			<input type="hidden" name="pageNum" id="pageNum" value=""> 
+			<input type="hidden" name="pageSize" id="pageSize" value="">
+			
 			<!-- 用户选择的条件列表 -->
-			<!-- <input type="hidden" name="searchCond" id="searchCond"
-				th:value="${searchCond}"> -->
+			<!-- <input type="hidden" name="searchCond" id="searchCond"	th:value="${searchCond}"> -->
 		</form>
 		
 	</div>
+	<!-- footer -->
+	<!-- <div th:replace="/thymeleaf/common/_footer::footer" class="footer"></div> -->
 	
-	<script type="text/javascript">
-		
-	
-	
-		/*
-			查询-签约客户
-		 */
-		function search_normal() {
-			$("#searchform").submit(); //提交表单		
-		}
-		
-		/*
-			显示分配帐户窗口
-		 */
-		function displayWindow() {
-			$("#modal-273078").click();
-			
-		}
-		
-		/*
-			关闭窗口
-		*/
-		function closeWindow() {
-			$("#btnClose").click();
-		}
-		
-	
-		$(function(){
-			
-			/*
-				显示【详情】按钮-click
-			*/
-			$(".show-detail").on("click",function(e){
-				
-			});
-			
-			/*
-				【分配帐户】按钮				
-			*/
-			$(".dispatch-account").on("click",function(e){
-				displayWindow();
-				var agentId=$(this).attr("data-bind");
-				var companyName=$(this).attr("data-company-name");
-				var contactPhone=$(this).attr("data-contact-phone");
-				var artificialPersonName=$(this).attr("data-artificialPersonName");
-				
-				$("#agentId").val(agentId);
-				
-				$("#myModalLabel").text("分配帐户("+companyName+ "_"+artificialPersonName+")");
-				$("#loginName").val(contactPhone);
-			});
-			
-			
-			/*
-				【分页】导航：
-				当点击页号时读取需要导航到的页码及每页记录数（pageNum,pageSize）
-				data-bind:pageNum-pageSize形式
-				如果data-bind为空字符串，则不做动作
-				当用户点击某页时，则发送与筛选相同的请求
-			 */
-
-			$(".pagination li a").on('click', function(e) {
-				//alert($(this).attr("data-bind"));
-				var dataBind = $(this).attr("data-bind");
-				//当dataBind有数据时处理
-				if (dataBind != "") {
-					var pageArr = new Array();
-					pageArr = dataBind.split("-");
-					//置隐藏表单数据
-					$("#pageNum").val(pageArr[0]);
-					$("#pageSize").val(pageArr[1]);
-					//发送请求
-					search_normal();
-				}
-	
-			});
-			
-		/*
-			签约客户-帐户分配-【确定】按钮处理(AJAX方式)
-		 */
-		$("#btnDispatch").on("click", function(e) {
-			var url = BASE_CONTEXT_PATH + "/back/agent/dispatch"; // 需要提交的 url
-
-			var loginName = $('#loginName').val();
-			var password = $('#password').val();
-			var agentId=$("#agentId").val();
-			
-			closeWindow();  //关闭窗口
-			
-			//设置参数
-			/* var params = {	"loginName":loginName,
-							"password":password,
-							"agentId":agentId
-						};
-			
-			//util.loading();
-			//此种方式更加的简洁
-			$.post(url, params, function(res){
-				console.log(res);
-				if(res!=null && res!=""){
-					var obj = $.parseJSON(res);
-					if(obj.result_code=="success"){
-						util.message(obj.result_msg);
-					}else{
-						util.message(obj.result_err_msg);
-					}
-				}
-				
-			}); */
-			
-			
-			
-			 $.ajax({
-				type : "post", // 提交方式 get/post
-				url : url, // 需要提交的 url
-				//dataType: "application/json",
-				data : {
-					'loginName' : loginName,
-					'password' : password,
-					'agentId' : agentId
-				},
-				success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
-					console.log(res);
-					if (res != null && res!="") {
-						var obj = $.parseJSON(res);
-						if (obj.result_code == "success") {
-							util.message(obj.result_msg);
-						} else {
-							util.message(obj.result_msg);
-						}
-					}
-				}
-				/* ,
-				error : function(jqXHR, textStatus, errorThrown) {
-					//弹出jqXHR对象的信息
-					alert(jqXHR.responseText);
-					alert(jqXHR.status);
-					alert(jqXHR.readyState);
-					alert(jqXHR.statusText);
-					//弹出其他两个参数的信息
-					alert(textStatus);
-					alert(errorThrown);
-				} */
-			}); 
-
-		});
-			
-			
-			
-			
-		});
-	
-	</script>
-	
+	<script type="text/javascript" th:src="@{/static/js/user_agent/user_agent_show.js}"></script>	
 	
 </body>
 </html>

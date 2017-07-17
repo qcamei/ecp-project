@@ -9,22 +9,47 @@
 		<nav th:if="${not #lists.isEmpty(dispList)}" style="float: right;">
 			<ul class="pagination">
 				<li><a href="#">&laquo;</a></li>
-
-				<li><a th:if="${not isFirstPage}" href="javascript:void(0);"
-					th:attr="data-bind=${pageNum-1}+'-'+${pageSize}">上一页</a> <a
-					th:if="${isFirstPagee}" href="javascript:void(0);" data-bind="">上一页</a>
+				
+				<!-- 上一页 -->
+				<li>
+					<a th:if="${not isFirstPage}" href="javascript:void(0);"
+					th:attr="data-bind=${pageNum-1}+'-'+${pageSize}">上一页</a> 
+					<a	th:if="${isFirstPagee}" href="javascript:void(0);" data-bind="">上一页</a>
 				</li>
 
-				<li th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
-					th:if="${pageNum eq pageNo}" href="javascript:void(0);"
-					data-bind=""> <span th:text="${pageNo}"></span>
-				</a> <a th:if="${not (pageNum eq pageNo)}" href="javascript:void(0);"
-					th:attr="data-bind=${pageNo}+'-'+${pageSize}"> <span
-						th:text="${pageNo}"></span>
-				</a></li>
-				<li><a th:if="${not isLastPage}" href="javascript:void(0);"
-					th:attr="data-bind=${pageNum+1}+'-'+${pageSize}">下一页</a> <a
-					th:if="${isLastPage}" href="javascript:void(0);" data-bind="">下一页</a>
+				<!-- 中间页码: 窗口大小为10-->
+				<span th:with="windowSize=8,
+							   startPageNum=0,
+							   endPageNum=0,
+							   
+							   startPageNum=${pageNum}-${#numbers.formatInteger(windowSize/2,5)},
+							   startPageNum=${startPageNum}<=0 ? 1:${startPageNum},
+							   
+							   endPageNum=${startPageNum}+${windowSize}-1,
+							   endPageNum=${endPageNum} >= ${totalPages} ? ${totalPages}:${endPageNum},			   
+							   
+							   
+							   " th:remove="tag">
+					
+					<!-- <span th:text="${startPageNum}+':'+${endPageNum}"></span> -->
+				
+				
+					<li th:each="pageNo : ${#numbers.sequence(startPageNum, endPageNum)}">
+						<a	th:if="${pageNum eq pageNo}" class="curr" href="javascript:void(0);"  data-bind="" 
+								style=" background-color:gray;color:white;"> 
+							<span th:text="${pageNo}"></span>
+						</a> 
+						<a th:if="${not (pageNum eq pageNo)}" href="javascript:void(0);" th:attr="data-bind=${pageNo}+'-'+${pageSize}"> 
+							<span th:text="${pageNo}"></span>
+						</a>
+					</li>
+				
+				</span>
+				
+				<!-- 下一页 -->
+				<li>
+					<a th:if="${not isLastPage}" href="javascript:void(0);"	th:attr="data-bind=${pageNum+1}+'-'+${pageSize}">下一页</a> 
+					<a	th:if="${isLastPage}" href="javascript:void(0);" data-bind="">下一页</a>
 				</li>
 
 				<li><a href="#">&raquo;</a></li>

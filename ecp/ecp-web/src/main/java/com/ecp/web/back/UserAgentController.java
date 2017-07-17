@@ -42,7 +42,7 @@ public class UserAgentController {
 	final String RESPONSE_THYMELEAF_BACK = "thymeleaf/back/";
 	final String RESPONSE_JSP = "jsps/front/";
 
-	private final int PAGE_SIZE = 10;
+	private final int PAGE_SIZE = 8;
 
 	private final Logger log = Logger.getLogger(getClass());
 
