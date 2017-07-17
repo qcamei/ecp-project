@@ -174,6 +174,29 @@ public class UserAgentController {
 	}
 
 	/**
+	 * @Description 更新签约客户
+	 * @param agent 签约客户对象
+	 * @param request
+	 * @return 
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public Object user_agent_update(UserExtends agent,HttpServletRequest request) {
+		System.out.println(agent.getBusinessLicencePicSrc());
+		//处理上传文件
+		if (!this.processUploadFile(request, agent)) {
+			return RequestResultUtil.getResultUploadWarn();
+		}
+
+		int row=userAgentService.updateByPrimaryKeySelective(agent);
+		if (row > 0) {
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+
+		return RequestResultUtil.getResultUpdateWarn();
+	}
+	
+	/**
 	 * @Description 文件上传
 	 * @param request
 	 * @param brand
@@ -231,24 +254,5 @@ public class UserAgentController {
 
 		return RESPONSE_THYMELEAF_BACK + "user_agent_detail";
 	}
-
-	/**
-	 * @Description 修改客户信息
-	 * @param company
-	 * @param request
-	 * @return
-	 */
-	/*@RequestMapping(value="/modify" ,method=RequestMethod.POST)
-	@ResponseBody
-	public Object companyInfo_modify(@RequestBody CompanyInfo company,HttpServletRequest request){
-		
-		company.setId((long)1);		
-		companyInfoService.updateByPrimaryKeySelective(company);
-		
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("message", "updated");
-		jsonObject.put("status", "success");
-		return jsonObject;
-	}*/
 
 }

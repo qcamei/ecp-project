@@ -12,8 +12,11 @@
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<h4>签约客户-详情</h4>
-				<hr>
+				<hr>				
 				<form class="form-horizontal" role="form" id="user-agent-form">
+					<!-- 需要编辑的签约代理商 -->
+					<input type="hidden" id="extendId" name="extendId" th:value="${agent.extendId}" />
+					
 					<div class="form-group">
 						<label for="companyName" class="col-sm-2 control-label">企业名称</label>
 						<div class="col-sm-10">
@@ -132,7 +135,7 @@
 		function saveFun(){
 			var url = null;
 			
-			url = BASE_CONTEXT_PATH+"/back/agent/insert";
+			url = BASE_CONTEXT_PATH+"/back/agent/update";
 			
 			
 			//util.loading();
@@ -147,7 +150,6 @@
 							//$("#update-menu-modal-div").modal("hide");//隐藏修改菜单对话框
 							util.message(obj.result_msg);
 							//window.location.href="loginSubmit";
-							
 							//操作成功后重新加载当前菜单内容
 							//reloadInfoFun();
 						}else{
