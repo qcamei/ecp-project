@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ecp.bean.AccountStatusType;
 import com.ecp.bean.UserType;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.common.util.RequestResultUtil;
@@ -57,8 +58,12 @@ public class UserAgentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/show")
-	public String user_agent_show(Model model, Integer pageNum, Integer pageSize) {
-		
+	public String user_agent_show(Model model) {
+		return RESPONSE_THYMELEAF_BACK + "user_agent_show";
+	}
+	
+	@RequestMapping(value = "/agenttable")
+	public String user_agent_agenttable(Model model, Integer pageNum, Integer pageSize) {
 		if(pageNum==null || pageNum==0)
 		{
 			pageNum=1;
@@ -72,14 +77,17 @@ public class UserAgentController {
 		List<UserExtends> userAgents = userAgentService.getAllUserAgent();
 		PageInfo<UserExtends> pageInfo = new PageInfo<>(userAgents);// (使用了拦截器或是AOP进行查询的再次处理)
 		
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
+		
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
 
 		model.addAttribute("userAgents", userAgents);
 
-		return RESPONSE_THYMELEAF_BACK + "user_agent_show";
+		return RESPONSE_THYMELEAF_BACK + "user_agent_table";
 	}
+	
 
-	private void setPageInfo(Model model, PageInfo pageInfo) {
+	/*private void setPageInfo(Model model, PageInfo pageInfo) {
 		// 获得当前页
 		model.addAttribute("pageNum", pageInfo.getPageNum());
 		// 获得一页显示的条数
@@ -90,7 +98,7 @@ public class UserAgentController {
 		model.addAttribute("totalPages", pageInfo.getPages());
 		// 是否是最后一页
 		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
-	}
+	}*/
 
 	/**
 	 * @Description 增加签约客户 导航至增加签约客户界面
@@ -103,6 +111,11 @@ public class UserAgentController {
 	}
 	
 	
+	/**
+	 * @Description 分配帐号（帐号默认为有效状态）
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dispatch" ,method=RequestMethod.POST)
 	@ResponseBody
 	public Object user_agent_dispatch(HttpServletRequest request){
@@ -117,19 +130,43 @@ public class UserAgentController {
 		user.setUsername(loginName);
 		String md5Pass=genMD5Password(loginName,password);
 		user.setPassword(md5Pass);
+		user.setStatus(AccountStatusType.VALID);
 		user.setType(UserType.AGENT);  //帐号类型
-		
-		
 		
 		int row =userService.insertSelective(user);
 		if(row>0){
 			UserExtends agent=new UserExtends();
 			agent.setExtendId(agentId);
 			agent.setUserId(user.getId());
+			agent.setAccountState(AccountStatusType.VALID);
 			userAgentService.updateByPrimaryKeySelective(agent);
 		}
 		
 		return RequestResultUtil.getResultUpdateSuccess();
+		
+	}
+	
+	/**
+	 * @Description 分配帐号（帐号默认为有效状态）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/setstate" ,method=RequestMethod.POST)
+	@ResponseBody
+	public Object user_agent_set_state(long agentId,long userId,int accountState, HttpServletRequest request){
+		UserExtends agent=new UserExtends();
+		agent.setExtendId(agentId);
+		agent.setAccountState(accountState);
+		userAgentService.updateByPrimaryKeySelective(agent);
+		
+		User user=new User();
+		user.setId(userId);
+		user.setStatus(accountState);
+		userService.updateByPrimaryKeySelective(user);
+		
+		return RequestResultUtil.getResultUpdateSuccess(); 
+		
+		
 		
 	}
 	
