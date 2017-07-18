@@ -1,10 +1,49 @@
+//==============通用函数===================
+
+/*用于判定是否为空*/
+(function($){
+	$.isBlank = function(obj){
+	return(!obj || $.trim(obj) === "");
+		  };
+})(jQuery);
+
+
 /*
-	查询-签约客户
+	重新加载页面
  */
-function search_normal() {
-	// $("#searchform").submit(); // 提交表单
-	loadUserAgent(); // 重新加载页面
+function reloadPage() {
+	//生成参数对象
+	parms=new Object();
+	//分页数据
+	parms.pageNum=$("#pageNum").val();
+	parms.pageSize=$("#pageSize").val();
+	//查询类型，查询条件值
+	parms.searchTypeValue=g_searchTypeValue;
+	parms.condValue=g_condValue;
+	
+	loadUserAgent(parms,null); // 加载页面
 }
+
+/**
+ * 根据用户的输入条件查询签约客户（包括分页数据）
+ * @returns
+ */
+function search(){
+	//生成参数对象
+	parms=new Object();
+	//分页数据
+	parms.pageNum=$("#pageNum").val();
+	parms.pageSize=$("#pageSize").val();
+	//查询类型，查询条件值
+	var condType=$("#ordertime-cond").val();
+	var condStr=$("#searchCond").val();
+	
+	parms.searchTypeValue=condType;
+	parms.condValue=condStr;
+	
+	loadUserAgent(parms,null); // 加载页面
+}
+
 
 // ===============分配帐户对话框 open/close==================
 /*
@@ -37,7 +76,7 @@ function setAccountState(agentId, userId, accountState) {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
 					util.message(obj.result_msg);
-					loadUserAgent();
+					reloadPage();
 				} else {
 					util.message(obj.result_msg);
 				}
@@ -47,8 +86,84 @@ function setAccountState(agentId, userId, accountState) {
 	});
 }
 
+/**
+ * 设置当前订单时间名称及值
+ * @param selectedTxt  订单时间条件名称
+ * @param value  订单时间条件值
+ * @returns
+ */
+function setOrderTimeCond(selectedTxt,value){
+	$("#ordertime-cond").text(selectedTxt);
+	$("#ordertime-cond").val(value);
+}
+
+/**
+ * 纵向时间菜单更新
+ * 根据回传的条件值（订单时间）更新界面  
+ * @param orderTimeCond  订单时间条件值
+ * @returns
+ */
+function updateUIOrderTime(orderTimeCond){
+	//纵向菜单
+	$(".time-list li").each(function(){
+		$(this).removeClass("curr");
+		$(this).find('i').hide();
+		if($(this).val()==orderTimeCond){
+			$(this).addClass("curr");
+			$(this).find('i').show();
+			//设置处理状态当前
+			var selectedTxt=$(this).find('a').text();
+			var value=$(this).val();
+			setOrderTimeCond(selectedTxt,value);
+		}
+	});
+}
+
 //==================PAGE LOADED READY===================
 $(function() {
+	updateUIOrderTime(g_searchTypeValue);
+	
+	//================条件选择 与查询===================
+	//订单时间条件(下拉菜单)
+	$(".ordertime-cont").hover(
+			function() {
+				$(".time-list").show();			
+			}, 
+			function() {
+				$(".time-list").hide();		
+			}
+		);
+	
+	
+	//选择时间条件（下拉菜单）
+	$(".time-list li").on("click",function(){
+		var selectedTxt=$(this).find('a').text();
+		var value=$(this).val();
+		setOrderTimeCond(selectedTxt,value);
+		updateUIOrderTime(value);  //更新页面				
+	});
+	
+	$(".start-search").on("click",function(){
+		var condType=$("#ordertime-cond").val();
+		var condStr=$("#searchCond").val();
+		
+		if(condType==0 || $.isBlank(condStr)){
+			return;
+		}
+		else{
+			search();
+		}
+		
+	});
+	
+	
+	$("#searchCond").on("keydown",function(event){
+		if(event.keyCode==13){
+			$(".start-search").trigger("click");
+		}
+	});
+	
+	
 
 	// ====================分配帐户=====================
 	/* 【分配帐户】按钮-显示对话框 */
@@ -128,8 +243,7 @@ $(function() {
 			// 置隐藏表单数据
 			$("#pageNum").val(pageArr[0]);
 			$("#pageSize").val(pageArr[1]);
-			// 发送请求
-			search_normal();
+			reloadPage();  // 发送请求
 		}
 
 	});

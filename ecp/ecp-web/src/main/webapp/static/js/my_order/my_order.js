@@ -229,7 +229,7 @@ function sendRequest(){
 }
 
 
-//===============page loaded ready====================
+//===============page loaded ready==================
 
 $(function(){
 	//================INITIALIZE====================

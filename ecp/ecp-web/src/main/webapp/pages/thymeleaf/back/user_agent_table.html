@@ -3,6 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<style>
+
+a{text-decoration:none;
+	cursor:pointer;
+}
+a:hover { text-decoration:none;}
+a:visited{
+	text-decoration:none;
+}
+
+
+/* 纵向菜单：时间条件 */
+	
+	.ordertime-cont{		
+		margin-bottom: 0;
+		display:inline-block;
+		margin-left:350px;			
+	}	
+	
+	.time-list{
+		display:none;
+		background-color: rgba(65,65,65,.8);		
+		border:2px solid #1296db;
+		position:absolute;		
+	}
+	
+	.time-list ul{		
+		padding:10px 10px 0px 20px;		
+	}
+	
+	.time-list li{
+		list-style-type:none;		
+	}
+	
+	.time-list li.curr{
+		margin-left:-10px;
+		/* background:   一般用图片进行模拟 ，比较好控制 */		
+	}
+		
+	.time-list a{
+		color:#dcdcdc;
+	}
+	
+	.time-list i{
+		color:white;
+	}
+
+</style>
+
+
 </head>
 <body>
 	<!-- 分配帐号对话框 -->
@@ -20,12 +71,34 @@
 					<h4 style="display: inline">
 						<i class="icon-user" style="color: green"></i>签约客户维护
 					</h4>
-					<a th:href="@{/back/agent/add}" title="增加签约客户" target="_blank"
-						style="float: right; margin-right: 100px;"><i
-						class="icon-plus-sign icon-large"></i></a> <a
-						th:href="@{/back/agent/show}" title="刷新列表"
-						style="float: right; margin-right: 10px"><i
-						class="icon-refresh icon-large"></i></a>
+					<!-- 查询 -->
+					<div class="search-box" style="display:inline">
+						<div class="ordertime-cont">
+							<div class="time-txt" >
+								<span class="text" id="ordertime-cond" value="0">选择查询条件</span>
+								<i class="icon-angle-down icon-large" style="color:black"></i>							
+							</div>
+							<div class="time-list">
+								<ul>
+									<li class="curr" value="0"><i class="icon-ok"></i><a href="javascript:void(0);" >选择查询条件</a></li>
+									<li class="" 	 value="1"><i class="icon-ok"></i><a href="javascript:void(0);" >企业名称</a></li>
+									<li class="" 	 value="2"><i class="icon-ok"></i><a href="javascript:void(0);" >负责人姓名</a></li>
+									<li class="" 	 value="3"><i class="icon-ok"></i><a href="javascript:void(0);" >手机号码</a></li>			
+								</ul>
+							</div>						
+						</div>
+						<div class="cond-box" style="display:inline">
+							<input type="text" value="" id="searchCond" name="searchCond" />
+							<a class="start-search" href="javascript:void(0);"><i class="icon-search icon-large "></i></a>
+						</div>
+					</div>
+					<a th:href="@{/back/agent/add}" title="增加签约客户" target="_blank" style="float: right; margin-right: 60px;">
+						<i	class="icon-plus-sign icon-large"></i>
+					</a> 
+					<a
+						th:href="@{/back/agent/show}" title="刷新列表"	style="float: right; margin-right: 10px">
+						<i class="icon-refresh icon-large"></i>
+					</a>
 					<hr>
 				</div>
 			</div>
@@ -57,9 +130,9 @@
 
 						<td>
 							<button type="button" th:attr="data-bind=${agent.extendId},data-user-id=${agent.userId},data-account-state=${agent.accountState}" 
-								class="btn btn-success set-valid" title="设置此帐号有效">有效</button>
+								class="btn btn-success btn-sm set-valid" title="设置此帐号有效">有效</button>
 							<button type="button" th:attr="data-bind=${agent.extendId},data-user-id=${agent.userId},data-account-state=${agent.accountState}"
-								class="btn btn-warning set-invalid" title="设置此帐号无效">无效</button>
+								class="btn btn-warning btn-sm set-invalid" title="设置此帐号无效">无效</button>
 						</td>
 						<td><a type="button"
 							th:href="@{/back/agent/detail/{id}(id=${agent.extendId})}"
@@ -87,6 +160,17 @@
 
 		</div>
 	</div>
+
+	
+	<!-- 查询条件  -->
+	<script th:inline="javascript">  
+		/*<![CDATA[*/
+			
+		var g_searchTypeValue = [[${searchTypeValue}]];  //查询类型值
+		var g_condValue=[[${condValue}]]; //查询条件值
+		
+		/*]]>*/  
+	</script>	
 
 	
 	<script type="text/javascript" th:src="@{/static/js/user_agent/user_agent.js}"></script>

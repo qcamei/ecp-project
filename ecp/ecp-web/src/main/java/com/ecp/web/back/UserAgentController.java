@@ -62,22 +62,38 @@ public class UserAgentController {
 		return RESPONSE_THYMELEAF_BACK + "user_agent_show";
 	}
 	
+	/**
+	 * @Description 
+	 * @param pageNum 查询页号
+	 * @param pageSize 页大小
+	 * @param searchTypeValue 查询字段（以整形表示：0-选择查询条件；1：企业名称；2：负责人姓名；3：电话号码）
+	 * @param condValue 查询条件值
+	 * @return 
+	 */
 	@RequestMapping(value = "/agenttable")
-	public String user_agent_agenttable(Model model, Integer pageNum, Integer pageSize) {
+	public String user_agent_agenttable(Integer pageNum, Integer pageSize,Integer searchTypeValue,String condValue,Model model) {
 		if(pageNum==null || pageNum==0)
 		{
 			pageNum=1;
 			pageSize=PAGE_SIZE;
 		}
+		//置默认值
+		if(searchTypeValue==null){
+			searchTypeValue=0;
+			condValue="";
+		}
 		
 		// 查询 并分页		
 		PageHelper.startPage(pageNum, pageSize); // PageHelper
 			
-
-		List<UserExtends> userAgents = userAgentService.getAllUserAgent();
+		//TODO 根据查询类型、条件值进行查询
+		//List<UserExtends> userAgents = userAgentService.getAllUserAgent();
+		List<UserExtends> userAgents = userAgentService.searchUserAgent(searchTypeValue, "%"+condValue+"%");
 		PageInfo<UserExtends> pageInfo = new PageInfo<>(userAgents);// (使用了拦截器或是AOP进行查询的再次处理)
 		
-		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("pageInfo", pageInfo);  					//分页信息
+		model.addAttribute("searchTypeValue", searchTypeValue);  	//查询字段值
+		model.addAttribute("condValue", condValue);  				//查询条件值
 		
 		//setPageInfo(model, pageInfo); // 向前台传递分页信息
 

@@ -233,7 +233,7 @@ i {
 /* cart dropdown jump */
 .dropdownCart {
     top: 100%;
-    left: initial;
+    left: inherit;
     right: 0;
     width: 240px;
     background-color: rgba(65,65,65,.8);
