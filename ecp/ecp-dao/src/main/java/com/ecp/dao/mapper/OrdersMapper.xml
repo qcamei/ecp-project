@@ -97,5 +97,19 @@
   	</where>
   </select>
   
+  <select id="selectAllOrderByOrderTimeAndDealState" resultMap="BaseResultMap">
+  	SELECT * FROM trade_orders <where>
+  		deleted=1 
+  		AND 
+  		create_time>=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH)  		
+  		<!-- AND 
+  			contract_state=#{dealStateCond} -->
+  		<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
+  			AND 
+  			contract_state=#{dealStateCond}	
+  		</if>
+  	</where>
+  </select>
+  
   
 </mapper>

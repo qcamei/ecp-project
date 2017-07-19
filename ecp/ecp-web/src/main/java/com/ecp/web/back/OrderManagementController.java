@@ -1,6 +1,9 @@
 package com.ecp.web.back;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ecp.entity.Orders;
+import com.ecp.entity.UserExtends;
 import com.ecp.service.front.IOrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,9 +28,10 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping("/back/order")
 public class OrderManagementController {
 	final String RESPONSE_THYMELEAF_BACK = "thymeleaf/back/";
+	final String RESPONSE_FRONT="/front/";
 	final String RESPONSE_JSP = "jsps/front/";
 
-	private final int PAGE_SIZE = 2;
+	private final int PAGE_SIZE = 8;
 
 	private final Logger log = Logger.getLogger(getClass());
 
@@ -45,17 +50,21 @@ public class OrderManagementController {
 	}
 	
 	@RequestMapping(value = "/ordertable")
-	public String order_table(Integer pageNum, Integer pageSize,Model model) {
+	public String order_table(int orderTimeCond,int dealStateCond,Integer pageNum, Integer pageSize,Model model) {
 		if(pageNum==null || pageNum==0)
 		{
 			pageNum=1;
 			pageSize=PAGE_SIZE;
 		}
 		
+		//回传查询条件
+		model.addAttribute("orderTimeCond", orderTimeCond);
+		model.addAttribute("dealStateCond", dealStateCond);
+		
 		// 查询 并分页		
 		PageHelper.startPage(pageNum, pageSize); // PageHelper			
 
-		List<Orders> orderList = orderService.selectAll();
+		List<Orders> orderList = orderService.selectAllOrderByOrderTimeAndDealState(orderTimeCond,dealStateCond);
 		PageInfo<Orders> pageInfo = new PageInfo<Orders>(orderList);// (使用了拦截器或是AOP进行查询的再次处理)
 		
 		model.addAttribute("pageInfo", pageInfo);  //分页
@@ -64,20 +73,47 @@ public class OrderManagementController {
 		return RESPONSE_THYMELEAF_BACK + "order_table";
 	}
 	
+	/**
+	 * @Description 订单详情（后台）
+	 * @param id  订单主键（pk）
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/detail")
+	public String order_detail(Long id,Model model,HttpServletRequest request){
+		
+		model.addAttribute("orderId", id);  //向订单详细table传递参数
+		
+		return RESPONSE_THYMELEAF_BACK + "order_detail";
+	}
 	
-
-	/*private void setPageInfo(Model model, PageInfo pageInfo) {
-		// 获得当前页
-		model.addAttribute("pageNum", pageInfo.getPageNum());
-		// 获得一页显示的条数
-		model.addAttribute("pageSize", pageInfo.getPageSize());
-		// 是否是第一页
-		model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
-		// 获得总页数
-		model.addAttribute("totalPages", pageInfo.getPages());
-		// 是否是最后一页
-		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
-	}*/
-
+	/**
+	 * @Description 合同详情（后台）
+	 * @param id 合同id（pk）
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/contractdetail")
+	public String order_contract_detail(Long id,Model model,HttpServletRequest request){
+		
+		model.addAttribute("contractId", id);
+		
+		return RESPONSE_THYMELEAF_BACK + "contract_detail";
+	}
+	
+	/**
+	 * @Description 订单详情模块页
+	 * @param id
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/detailtable")
+	public String order_detail_table(Long id,Model model,HttpServletRequest request){
+		return "forward:"+RESPONSE_FRONT + "order/"+"detailtable";
+	}
+	
 
 }

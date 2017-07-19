@@ -68,4 +68,9 @@ public class OrderServiceImpl extends AbstractBaseService<Orders, Long> implemen
 		return ordersMapper.selectOne(record);
 	}
 
+	@Override
+	public List<Orders> selectAllOrderByOrderTimeAndDealState(int orderTimeCond, int dealStateCond) {
+		return ordersMapper.selectAllOrderByOrderTimeAndDealState(-orderTimeCond,dealStateCond);
+	}
+
 }

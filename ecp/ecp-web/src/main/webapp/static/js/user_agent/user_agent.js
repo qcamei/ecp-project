@@ -140,7 +140,8 @@ $(function() {
 		var selectedTxt=$(this).find('a').text();
 		var value=$(this).val();
 		setOrderTimeCond(selectedTxt,value);
-		updateUIOrderTime(value);  //更新页面				
+		updateUIOrderTime(value);  //更新页面
+		//$(this).blur(null);
 	});
 	
 	$(".start-search").on("click",function(){
@@ -160,6 +161,7 @@ $(function() {
 	$("#searchCond").on("keydown",function(event){
 		if(event.keyCode==13){
 			$(".start-search").trigger("click");
+			
 		}
 	});
 	

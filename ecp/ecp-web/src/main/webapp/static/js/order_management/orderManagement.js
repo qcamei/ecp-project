@@ -11,6 +11,11 @@ function search(){
 	parms.pageNum=$("#pageNum").val();
 	parms.pageSize=$("#pageSize").val();
 	
+	var dealStateCond=$("#dealstate-cond").val();
+	var orderTimeCond=$("#ordertime-cond").val(); 
+	
+	parms.dealStateCond=dealStateCond;
+	parms.orderTimeCond=orderTimeCond;
 	
 	/*parms.searchTypeValue=condType;
 	parms.condValue=condStr;*/
@@ -53,6 +58,7 @@ function createFormAndCommit(url, id, orderId) {
 	var form = document.createElement("form");
 	form.id = "test";
 	form.name = "test";
+	form.target="_blank";
 	document.body.appendChild(form);
 
 	// 生成隐藏表单中的内容
@@ -67,15 +73,100 @@ function createFormAndCommit(url, id, orderId) {
 	form.submit();
 }
 
-//==================page loaded ready======================
-$(function() {
-
-	/*
-	 * 显示【详情】按钮-click
-	 */
-	$(".show-detail").on("click", function(e) {
-
+/**
+ * 根据回传的条件值（处理状态）更新界面
+ * @param dealStateCond  处理状态条件值
+ * @returns
+ */
+function updateUIDealState(dealStateCond){
+	//横向菜单  
+	$(".extra-l li").each(function(){
+		$(this).find('a').removeClass("curr");
+		//console.log("dealStatecond:"+dealStateCond);
+		//console.log("li val:"+$(this).val());
+		if($(this).val()==dealStateCond){
+			$(this).find('a').addClass("curr");
+		}
 	});
+	
+	//纵向菜单
+	$(".state-list li").each(function(){
+		$(this).removeClass("curr");
+		$(this).find('i').hide();
+		if($(this).val()==dealStateCond){
+			$(this).addClass("curr");
+			$(this).find('i').show();
+			//设置处理状态当前
+			var selectedTxt=$(this).find('a').text();
+			var value=$(this).val();
+			
+			//console.log("state value:"+value);
+			setDealStateCond(selectedTxt,value);
+			
+			
+		}
+	});
+}
+
+/**
+ * 纵向时间菜单更新
+ * 根据回传的条件值（订单时间）更新界面  
+ * @param orderTimeCond  订单时间条件值
+ * @returns
+ */
+function updateUIOrderTime(orderTimeCond){
+	//纵向菜单
+	$(".time-list li").each(function(){
+		$(this).removeClass("curr");
+		$(this).find('i').hide();
+		if($(this).val()==orderTimeCond){
+			$(this).addClass("curr");
+			$(this).find('i').show();
+			//设置处理状态当前
+			var selectedTxt=$(this).find('a').text();
+			var value=$(this).val();
+			setOrderTimeCond(selectedTxt,value);
+		}
+	});
+}
+
+/**
+ * 设置当前处理状态名称及值
+ * @param selectedTxt  处理状态名称
+ * @param value  处理状态值
+ * @returns
+ */
+function setDealStateCond(selectedTxt,value){
+	$("#dealstate-cond").text(selectedTxt);
+	$("#dealstate-cond").val(value);
+}
+
+/**
+ * 设置当前订单时间名称及值
+ * @param selectedTxt  订单时间条件名称
+ * @param value  订单时间条件值
+ * @returns
+ */
+function setOrderTimeCond(selectedTxt,value){
+	$("#ordertime-cond").text(selectedTxt);
+	$("#ordertime-cond").val(value);
+}
+
+function sendRequest(){
+	var dealStateCond=$("#dealstate-cond").val();
+	var orderTimeCond=$("#ordertime-cond").val(); 
+	loadOrder(orderTimeCond,dealStateCond);
+}
+
+
+//==================page loaded ready==============
+$(function() {
+	//================INITIALIZE====================
+	updateUIDealState(g_dealstate_cond);
+	updateUIOrderTime(g_ordertime_cond);
+	
+
+	//===================BUSINESS业务处理==============
 
 	/*
 	 * 【创建合同】按钮
@@ -87,6 +178,8 @@ $(function() {
 
 		createFormAndCommit(url, id, orderId);
 	});
+	
+	//======================分页（页码导航）==============
 
 	/*
 	 * 【分页】导航： 当点击页号时读取需要导航到的页码及每页记录数（pageNum,pageSize）
@@ -108,6 +201,52 @@ $(function() {
 			search_normal();
 		}
 
+	});
+	
+	//================条件选择 下拉菜单显示===================
+	//订单时间条件(下拉菜单)
+	$(".ordertime-cont").hover(
+			function() {
+				$(".time-list").show();			
+			}, 
+			function() {
+				$(".time-list").hide();		
+			}
+		);
+	
+	//订单处理状态条件（下拉菜单）
+	$(".deal-state-cont").hover(
+			function() {
+				$(".state-list").show();
+			}, 
+			function() {
+				$(".state-list").hide();		
+			}
+		);
+	
+	//==================菜单选择（CLICK）=================
+	//选择时间条件（下拉菜单）
+	$(".time-list li").on("click",function(){
+		var selectedTxt=$(this).find('a').text();
+		var value=$(this).val();
+		setOrderTimeCond(selectedTxt,value);
+		search_normal();		
+	});
+	
+	//合同处理条件（下拉菜单）
+	$(".state-list li").on("click",function(){
+		var selectedTxt=$(this).find('a').text();
+		var value=$(this).val();		
+		setDealStateCond(selectedTxt,value);
+		search_normal();
+		
+	});
+	
+	$(".extra-l li").on("click",function(){
+		var selectedTxt=$(this).find('a').text();
+		var value=$(this).val();		
+		setDealStateCond(selectedTxt,value);
+		search_normal();		
 	});
 
 });

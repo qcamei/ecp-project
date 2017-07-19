@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<div th:include="/thymeleaf/common/_head2::headx('合同详情')"	th:remove="tag"></div>
+<div th:include="/thymeleaf/common/_head2::headx('订单详情')"	th:remove="tag"></div>
 <style>
 	a:hover {
 		text-decoration: none;
@@ -15,10 +15,8 @@
 	<div class="row clearfix">
 		<div id="header" class="col-md-12 column"></div>
 	</div>
-	
 	<!-- content -->
 	<div class="container" id="container"></div>
-	
 	<!-- footer -->
 	<div class="row clearfix">
 		<div id="footer" class="col-md-12 column"></div>
@@ -29,7 +27,7 @@
 	<script th:inline="javascript">  
 		/*<![CDATA[*/
 			
-		var g_contractId = [[${contractId}]];  //合同id(pk) 
+		var g_orderId = [[${orderId}]];  //订单id(pk) 
 		
 		/*]]>*/  
 	</script>	
@@ -39,15 +37,15 @@
 		/**
 			功能:加载页面
 			parameters:
-				orderId:合同id(pk)
+				orderId:订单id(pk)
 		*/
-		function loadContractDetail(contractId) {
-			var url = "/back/contract/detailtable";
+		function loadOrderDetail(orderId) {
+			var url = "/back/order/detailtable";
 			/* var parms = null; */
 			
 			//向页面传递的参数
 			var parms=new Object();
-			parms.id=contractId;
+			parms.id=orderId;
 					
 			
 			var callbackFunc = null;
@@ -55,7 +53,7 @@
 			loadPage(containerId, url, parms, callbackFunc);
 		}
 		$(function() {
-			loadContractDetail(g_contractId);
+			loadOrderDetail(g_orderId);
 		})
 	</script>
 </body>

@@ -51,6 +51,7 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping("/back/contract")
 public class ContractController {
 	final String RESPONSE_THYMELEAF_BACK="thymeleaf/back/";
+	final String RESPONSE_THYMELEAF_FRONT="thymeleaf/front/";
 	final String RESPONSE_JSP="jsps/front/";
 	
 	private final int PAGE_SIZE = 5;
@@ -82,7 +83,7 @@ public class ContractController {
 		
 		model.addAttribute("contractId", id);
 		
-		return RESPONSE_THYMELEAF_BACK+"contract_detail";
+		return RESPONSE_THYMELEAF_FRONT+"contract_detail";
 	}
 	
 	
@@ -138,8 +139,8 @@ public class ContractController {
 		List<Contract> contractList = contractService.selectAll();
 		PageInfo<Contract> pageInfo = new PageInfo<Contract>(contractList);// (使用了拦截器或是AOP进行查询的再次处理)
 		
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
-
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("contractList", contractList);
 
 		return RESPONSE_THYMELEAF_BACK + "contract_show";

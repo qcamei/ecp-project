@@ -200,7 +200,7 @@ public class OrderController {
 		return RequestResultUtil.getResultUpdateWarn();
 	}
 	
-	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	@RequestMapping(value = "/detail")
 	public String order_detail(Long id,Model model,HttpServletRequest request){
 		
 		model.addAttribute("orderId", id);  //向订单详细table传递参数
