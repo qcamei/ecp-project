@@ -156,7 +156,7 @@ $(function() {
 		
 	});
 	
-	
+	/*当在条件输入框按下enter时*/
 	$("#searchCond").on("keydown",function(event){
 		if(event.keyCode==13){
 			$(".start-search").trigger("click");
