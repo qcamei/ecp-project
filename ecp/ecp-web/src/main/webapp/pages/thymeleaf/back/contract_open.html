@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head th:include="/thymeleaf/common/_head::head('合同预览')">
+<head th:include="/thymeleaf/common/_head::head('销售合同')">
 <meta charset="UTF-8">
 </head>
 <body>
@@ -101,7 +101,7 @@
 								</p></td>
 						</tr>
 						
-						 <tr th:each="contractItemx,iterState:${contractItemList}">
+						 <tr th:each="contractItem,iterState:${contractItemList}">
 							<td
 								style="width: 43px; border: solid windowtext 1px; border-top: none; padding: 0 7px 0 7px"
 								width="43" valign="top"><p style="text-align: center">
@@ -111,7 +111,7 @@
 							<td
 								style="width: 73px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="73" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItemx.sku_name}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.sku_name}">&nbsp;</span>
 								</p></td>
 							
 							<td
@@ -133,31 +133,31 @@
 							<td
 								style="width: 59px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="59" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItemx.primitive_price}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.primitive_price}">&nbsp;</span>
 								</p></td>
 							<!-- 折减 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItemx.discount_price}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.discount_price}">&nbsp;</span>
 								</p></td>
 							<!-- 成交单价 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItemx.pay_price}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.pay_price}">&nbsp;</span>
 								</p></td>
 							<!-- 数量 -->
 							<td
 								style="width: 25px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="38" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItemx.num}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.num}">&nbsp;</span>
 								</p></td>
 							<!-- 小计 -->
 							<td
 								style="width: 50px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="76" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text=${contractItemx.pay_price_total}>&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text=${contractItem.pay_price_total}>&nbsp;</span>
 								</p></td>
 								 
 						</tr>

@@ -15,7 +15,12 @@
 		}
 	.extra-l  a{color:black;}
 	
-	
+	tr:hover{
+		background-color:#CCFFCC;
+	}
+	a i{
+		cursor:pointer;
+	}
 	
 
 	/* 横向“处理状态”菜单   */
@@ -243,8 +248,9 @@
 							</span>
 						</td>
 						<td>
-							<!-- <a type="button" th:href="@{/back/order/detail(id=${order.id})}" class="btn btn-primary show-detail" target="_blank">详情</a> --> 
-							<a type="button" th:attr="data-id=${order.id},data-orderid=${order.orderId}" class="btn btn-primary btn-sm create-contract">生成合同</a></td>
+							<!-- <a type="button" th:href="@{/back/order/detail(id=${order.id})}" class="btn btn-primary show-detail" target="_blank">详情</a> -->
+							<a type="button" th:attr="data-id=${order.id},data-orderid=${order.orderId},data-contractState=${order.contractState}" class="edit-contract" title="编辑合同"><i class=" icon-edit icon-large" style="color:darkblue"></i></a>
+							<a type="button" th:attr="data-id=${order.id},data-orderid=${order.orderId},data-contractState=${order.contractState}" class="create-contract" title="建立合同"><i class=" icon-plus-sign icon-large" style="color:darkblue"></i></a></td>
 
 					</tr>
 

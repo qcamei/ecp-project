@@ -175,8 +175,34 @@ $(function() {
 		var url = BASE_CONTEXT_PATH + "/back/contract/add"; // 需要提交的 url
 		var id = $(this).attr("data-id");
 		var orderId = $(this).attr("data-orderid");
+		var contractState=$(this).attr("data-contractState");
+		if(contractState==1){  //如果是未建合同状态
+			createFormAndCommit(url, id, orderId);
+		}
+		else{
+			util.message("已经建立合同！");
+		}
 
-		createFormAndCommit(url, id, orderId);
+		
+	});
+	
+	/*
+	 * 【编辑合同】按钮
+	 */
+	$(".edit-contract").on("click", function(e) {
+		var url = BASE_CONTEXT_PATH + "/back/contract/edit"; // 需要提交的 url
+		var id = $(this).attr("data-id");
+		var orderId = $(this).attr("data-orderid");
+		var contractState=$(this).attr("data-contractState");
+		
+		if(contractState==2){  //如果是己建合同状态，则可进行编辑
+			//createFormAndCommit(url, id, orderId);  //如果是建立合同状态时
+		}
+		else{
+			util.message("此状态不可编辑合同！");
+		}
+
+		
 	});
 	
 	//======================分页（页码导航）==============

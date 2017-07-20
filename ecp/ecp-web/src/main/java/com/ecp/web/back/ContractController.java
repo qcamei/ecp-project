@@ -198,7 +198,7 @@ public class ContractController {
 		model.addAttribute("companyInfo", companyInfo);
 		
 		//(3)订单信息  用于获取送货地址
-		Orders order=orderService.selectOrderByOrderNo(contractOrderItemBeanList.get(0).getOrder_id());
+		Orders order=orderService.selectOrderByOrderNo(contractOrderItemBeanList.get(0).getOrderId());
 		model.addAttribute("order", order);
 		
 		//(4)甲方信息
@@ -281,7 +281,7 @@ public class ContractController {
 	public Object contract_create(String contractAttrVals,String orderItems,Model model,HttpServletRequest request){
 		
 		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
-		Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
+		//Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
 		
 		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);  //合同商品列表
 		
@@ -380,17 +380,17 @@ public class ContractController {
 			ContractItems record=new ContractItems();
 			
 			record.setCid(orderItem.getCid());
-			record.setItemId(orderItem.getItem_id());
-			record.setSkuId(orderItem.getSku_id());
-			record.setSkuName(orderItem.getSku_name());
-			record.setOrderId(orderItem.getOrder_id());
+			record.setItemId(orderItem.getItemId());
+			record.setSkuId(orderItem.getSkuId());
+			record.setSkuName(orderItem.getSkuName());
+			record.setOrderId(orderItem.getOrderId());
 			record.setContractNo(contractNo);
 			
-			record.setPrimitivePrice(orderItem.getPrimitive_price());  //原始价
-			record.setDiscountPrice(orderItem.getDiscount_price());  //价格折减
-			record.setPayPrice(orderItem.getPay_price());  //实际支付价格
+			record.setPrimitivePrice(orderItem.getPrimitivePrice());  //原始价
+			record.setDiscountPrice(orderItem.getDiscountPrice());  //价格折减
+			record.setPayPrice(orderItem.getPayPrice());  //实际支付价格
 			record.setNum(orderItem.getNum());  //商品数量
-			record.setPayPriceTotal(orderItem.getPay_price_total());  //小计
+			record.setPayPriceTotal(orderItem.getPayPriceTotal());  //小计
 			
 			
 			record.setCreateTime(new Date());
@@ -408,7 +408,7 @@ public class ContractController {
 	 * @return  合同编号
 	 */
 	private String getOrderNo(ContractOrderItemBean contractItem){
-		return contractItem.getOrder_id();
+		return contractItem.getOrderId();
 	}
 	
 	/**
@@ -463,7 +463,7 @@ public class ContractController {
 	private BigDecimal calcContractOrderItemTotalPrice(List<ContractOrderItemBean> itemList){
 		BigDecimal total=new BigDecimal(0.00);
 		for(ContractOrderItemBean item:itemList){
-			total=total.add(item.getPay_price_total());
+			total=total.add(item.getPayPriceTotal());
 		}
 		return total;
 	}
@@ -512,7 +512,7 @@ public class ContractController {
 	 * @param resp
 	 * @return
 	 */
-	private List<ContractOrderItemBean> getEntity2(String resp) {
+	private List<ContractOrderItemBean> getEntity2(String resp) {		
 		List<ContractOrderItemBean> list =JSONArray.parseArray(resp,ContractOrderItemBean.class);    
         return list;
 	} 
