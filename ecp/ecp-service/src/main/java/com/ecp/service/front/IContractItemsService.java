@@ -21,5 +21,5 @@ public interface IContractItemsService extends IBaseService<ContractItems, Long>
 	 * @param contractNo
 	 * @return
 	 */
-	public List<Map<String,String>> selectItemsByContractNo(String contractNo);
+	public List<Map<String,Object>> selectItemsByContractNo(String contractNo);
 }

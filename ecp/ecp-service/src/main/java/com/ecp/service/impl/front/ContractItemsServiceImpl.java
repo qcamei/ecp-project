@@ -16,7 +16,7 @@ public class ContractItemsServiceImpl extends AbstractBaseService<ContractItems,
 	private ContractItemsMapper contractItemsMapper;
 
 	/**
-	 * @param  the mapper to set
+	 * @param  the mapper to set 
 	 * set方式注入
 	 */	
 	
@@ -25,7 +25,7 @@ public class ContractItemsServiceImpl extends AbstractBaseService<ContractItems,
 		this.setMapper(contractItemsMapper);
 	}
 	
-	public List<Map<String,String>> selectItemsByContractNo(String contractNo) {
+	public List<Map<String,Object>> selectItemsByContractNo(String contractNo) {
 		return contractItemsMapper.selectItemsByContractNo(contractNo);
 	}
 	

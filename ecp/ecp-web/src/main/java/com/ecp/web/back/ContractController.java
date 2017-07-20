@@ -21,6 +21,7 @@ import com.ecp.bean.ContractOrderItemBean;
 import com.ecp.bean.ContractStateType;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.NumberToCN;
+import com.ecp.entity.CompanyInfo;
 import com.ecp.entity.Contract;
 import com.ecp.entity.ContractAttrValue;
 import com.ecp.entity.ContractAttribute;
@@ -28,6 +29,7 @@ import com.ecp.entity.ContractItems;
 import com.ecp.entity.Orders;
 import com.ecp.entity.User;
 import com.ecp.entity.UserExtends;
+import com.ecp.service.back.ICompanyInfoService;
 import com.ecp.service.front.IContractAttrValueService;
 import com.ecp.service.front.IContractAttributeService;
 import com.ecp.service.front.IContractItemsService;
@@ -72,6 +74,8 @@ public class ContractController {
 	IOrderService orderService;
 	@Autowired
 	IUserAgentService userAgentService;
+	@Autowired
+	ICompanyInfoService companyInfoService;
 	
 	/**
 	 * @Description 合同详情
@@ -104,7 +108,7 @@ public class ContractController {
 		//model.addAttribute("order", order);
 		
 		//(3)合同商品条目(根据合同编号)
-		List<Map<String,String>> contractItems=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		List<Map<String,Object>> contractItems=contractItemsService.selectItemsByContractNo(contract.getContractNo());
 		model.addAttribute("contractItems", contractItems);
 		
 		//(4)代理商
@@ -146,23 +150,6 @@ public class ContractController {
 		return RESPONSE_THYMELEAF_BACK + "contract_show";
 	}
 	
-	
-	
-	
-	private void setPageInfo(Model model, PageInfo pageInfo) {
-		// 获得当前页
-		model.addAttribute("pageNum", pageInfo.getPageNum());
-		// 获得一页显示的条数
-		model.addAttribute("pageSize", pageInfo.getPageSize());
-		// 是否是第一页
-		model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
-		// 获得总页数
-		model.addAttribute("totalPages", pageInfo.getPages());
-		// 是否是最后一页
-		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
-	}
-	
-	
 	/**
 	 * @Description 创建合同
 	 * @param id  订单主键:id
@@ -177,8 +164,9 @@ public class ContractController {
 		model.addAttribute("orderItemList", orderItemList);
 		
 		//(2)获取合同属性
-		//TODO 查询条件：template_id=1  此处暂时直接查询，而后进行修改
-		List<ContractAttribute> contractAttrList=contractAttributeService.selectAll();
+		//TODO 查询条件：template_id=1  此处暂时直接查询，而后进行修改		
+		long templateId=1L;
+		List<ContractAttribute> contractAttrList=contractAttributeService.selectAttributesByTemplateId(templateId);
 		model.addAttribute("contractAttrList", contractAttrList);
 		
 		return RESPONSE_THYMELEAF_BACK+"contract_add";
@@ -192,13 +180,32 @@ public class ContractController {
 	@RequestMapping(value="/preview")
 	public String contract_preview(String contractAttrVals,String orderItems,Model model){
 		
+		//(1)合同属性
 		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);
 		Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
 		
+		//(2)合同商品列表
 		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);
 		
-		BigDecimal contractItemTotal=calcContractItemTotalPrice(contractOrderItemBeanList);  //计算合同总额
+		
+		
+		//计算合同总额
+		BigDecimal contractItemTotal=calcContractOrderItemTotalPrice(contractOrderItemBeanList);  //计算合同总额
 		String totalCN= NumberToCN.number2CNMontrayUnit(contractItemTotal);
+		
+		//(1)乙方信息
+		CompanyInfo companyInfo=companyInfoService.selectByPrimaryKey(1L);
+		model.addAttribute("companyInfo", companyInfo);
+		
+		//(3)订单信息  用于获取送货地址
+		Orders order=orderService.selectOrderByOrderNo(contractOrderItemBeanList.get(0).getOrder_id());
+		model.addAttribute("order", order);
+		
+		//(4)甲方信息
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
+		
 		
 		
 		model.addAttribute("attrValue", attrValueMap);  //合同属性
@@ -208,6 +215,58 @@ public class ContractController {
 		
 		
 		return RESPONSE_THYMELEAF_BACK+"contract_preview";
+	}
+	
+	/**
+	 * @Description 打开合同(打开已经生成的合同)
+	 * @param id  合同ID(PK)
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/open")
+	public String contract_open(long id,Model model){
+		//(1)乙方信息
+		CompanyInfo companyInfo=companyInfoService.selectByPrimaryKey(1L);
+		model.addAttribute("companyInfo", companyInfo);
+		
+		//(2)合同信息
+		Contract contract=contractService.selectByPrimaryKey(id);
+		model.addAttribute("contract", contract);
+		
+		//(3)订单信息  用于获取送货地址
+		Orders order=orderService.selectOrderByOrderNo(contract.getOrderNo());
+		model.addAttribute("order", order);
+		
+		//(4)甲方信息
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
+		//(5)订单商品列表
+		List<Map<String,Object>> contractItemList=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		model.addAttribute("contractItemList", contractItemList);  //合同商品列表
+		
+		//(6)合同属性
+		List<Map<String,String>> contractAttrValList=contractAttributeService.selectAttrValByContractId(id);
+		Map<String,String> attrValueMap=this.repackage(contractAttrValList); //包装成map
+		model.addAttribute("attrValue", attrValueMap);  //合同属性
+		
+		BigDecimal contractItemTotal=calcContractItemTotalPrice(contractItemList);  //计算合同优惠后总额
+		String totalCN= NumberToCN.number2CNMontrayUnit(contractItemTotal); //转换成中文金额
+		
+		
+		//(7)统计信息
+		model.addAttribute("contractItemTotal",contractItemTotal);
+		model.addAttribute("contractItemTotalCN",totalCN);
+		
+		return RESPONSE_THYMELEAF_BACK+"contract_open";
+	}
+	
+	private Map<String,String> repackage(List<Map<String,String>> list){
+		Map<String,String> map=new HashMap<String,String>();
+		for(Map<String,String> attrValue:list){
+			map.put(attrValue.get("attr_name"), attrValue.get("attr_value"));
+		}
+		return map;
 	}
 	
 	/**
@@ -401,10 +460,24 @@ public class ContractController {
 	 * @param itemList  合同条目商品列表
 	 * @return  合同总金额
 	 */
-	private BigDecimal calcContractItemTotalPrice(List<ContractOrderItemBean> itemList){
+	private BigDecimal calcContractOrderItemTotalPrice(List<ContractOrderItemBean> itemList){
 		BigDecimal total=new BigDecimal(0.00);
 		for(ContractOrderItemBean item:itemList){
 			total=total.add(item.getPay_price_total());
+		}
+		return total;
+	}
+	
+	/**
+	 * @Description 计算合同总金额（优惠后）
+	 * @param itemList  合同条目商品列表
+	 * @return  合同总金额
+	 */
+	private BigDecimal calcContractItemTotalPrice(List<Map<String,Object>> itemList){
+		BigDecimal total=new BigDecimal(0.00);
+		for(Map<String,Object> item:itemList){
+			//Double subTotal=Double.parseDouble(item.get("pay_price_total"));
+			total=total.add((BigDecimal)item.get("pay_price_total"));
 		}
 		return total;
 	}

@@ -10,7 +10,7 @@
 		<div th:replace="thymeleaf/common/_discount_dialog::dialog" ></div>
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<h3>创建合同</h3>
+				<h4>创建合同</h4>
 				<div class="panel panel-success">
 					<div class="panel-heading">
 						<h3 class="panel-title">商品列表(订单消息)</h3>
@@ -210,7 +210,7 @@
      
 		var g_orderItemList = [[${orderItemList}]];  //订单中商品行项目
 		var g_contractAttrList=[[${contractAttrList}]];  //合同属性列表
-		console.log("订单中商品数量:"+g_orderItemList.length);
+		//console.log("订单中商品数量:"+g_orderItemList.length);
 		
      
 		/*]]>*/  
@@ -432,7 +432,7 @@
 		
 		/* 合同预览 */
 		function contractPreview(){
-			var url = BASE_CONTEXT_PATH + "/back/contract/preview"; // 需要提交的 url
+			var url = BASE_CONTEXT_PATH + "/back/contract/preview"; //需要提交的 url
 			
 			var contractAttrList=getContractAttrList();  //合同属性列表
 			var contractAttrValList=getContractAttrValue(contractAttrList);  //合同属性值

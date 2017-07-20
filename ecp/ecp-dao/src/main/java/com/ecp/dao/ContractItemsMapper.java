@@ -13,5 +13,5 @@ public interface ContractItemsMapper extends Mapper<ContractItems> {
 	 * @param contractNo 合同号
 	 * @return 合同商品列表
 	 */
-	public List<Map<String,String>> selectItemsByContractNo(String contractNo);
+	public List<Map<String,Object>> selectItemsByContractNo(String contractNo);
 }
