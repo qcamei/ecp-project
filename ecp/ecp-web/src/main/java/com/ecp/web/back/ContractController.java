@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ecp.bean.ContractAttrValueBean;
@@ -21,6 +22,7 @@ import com.ecp.bean.ContractOrderItemBean;
 import com.ecp.bean.ContractStateType;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.NumberToCN;
+import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.CompanyInfo;
 import com.ecp.entity.Contract;
 import com.ecp.entity.ContractAttrValue;
@@ -169,6 +171,14 @@ public class ContractController {
 		List<ContractAttribute> contractAttrList=contractAttributeService.selectAttributesByTemplateId(templateId);
 		model.addAttribute("contractAttrList", contractAttrList);
 		
+		//(3)加入订单信息
+		Orders order=orderService.selectByPrimaryKey(id);
+		model.addAttribute("order", order);
+		
+		//(4)加入代理商信息
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
 		return RESPONSE_THYMELEAF_BACK+"contract_add";
 	}
 	
@@ -205,13 +215,11 @@ public class ContractController {
 		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
 		model.addAttribute("agent", agent);
 		
-		
-		
-		
 		model.addAttribute("attrValue", attrValueMap);  //合同属性
 		model.addAttribute("contractItemList", contractOrderItemBeanList);  //合同商品列表
 		model.addAttribute("contractItemTotal",contractItemTotal);
 		model.addAttribute("contractItemTotalCN",totalCN);
+		model.addAttribute("now", new Date());
 		
 		
 		return RESPONSE_THYMELEAF_BACK+"contract_preview";
@@ -241,7 +249,7 @@ public class ContractController {
 		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
 		model.addAttribute("agent", agent);
 		
-		//(5)订单商品列表
+		//(5)合同商品列表
 		List<Map<String,Object>> contractItemList=contractItemsService.selectItemsByContractNo(contract.getContractNo());
 		model.addAttribute("contractItemList", contractItemList);  //合同商品列表
 		
@@ -261,10 +269,119 @@ public class ContractController {
 		return RESPONSE_THYMELEAF_BACK+"contract_open";
 	}
 	
+	/**
+	 * @Description 编辑合同(编辑合同)
+	 * @param id  合同ID(PK)
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/edit")
+	public String contract_edit(long id,Model model){
+		//(1)合同信息
+		Contract contract=contractService.selectByPrimaryKey(id);
+		model.addAttribute("contract", contract);
+		
+		//(1.1)查询订单
+		Orders order=orderService.selectOrderByOrderNo(contract.getOrderNo());
+		//(1.2)查询代理商
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
+		//(2)合同商品列表
+		List<Map<String,Object>> contractItemList=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		model.addAttribute("contractItemList", contractItemList);  //合同商品列表
+		
+		//(3)合同属性
+		List<Map<String,String>> contractAttrValList=contractAttributeService.selectAttrValByContractId(id);
+		Map<String,Object> attrValueMap=repackageAttr(contractAttrValList); //包装成map
+		model.addAttribute("attrValue", attrValueMap);  //合同属性
+		
+		//(2)获取合同属性
+		//TODO 查询条件：template_id=1  此处暂时直接查询，而后进行修改		
+		long templateId=1L;
+		List<ContractAttribute> contractAttrList=contractAttributeService.selectAttributesByTemplateId(templateId);
+		model.addAttribute("contractAttrList", contractAttrList);
+		
+		return RESPONSE_THYMELEAF_BACK+"contract_edit";
+	}
+	
+	/**
+	 * @Description 更新合同条目折减
+	 * @param itemId 合同条目id(pk)
+	 * @param discount 折减
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/itemupdate")
+	@ResponseBody
+	public Object contract_item_update(long itemId,BigDecimal discount,Model model){
+		ContractItems record=new ContractItems();
+		record=contractItemsService.selectByPrimaryKey(itemId);		
+		record.setDiscountPrice(discount);  //折减
+		record.setPayPrice(record.getPrimitivePrice().subtract(discount));
+		BigDecimal num=new BigDecimal(record.getNum());
+		record.setPayPriceTotal(record.getPayPrice().multiply(num));
+		contractItemsService.updateByPrimaryKeySelective(record);
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	/**
+	 * @Description 更新合同属性
+	 * @param contractAttrVals
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/attrupdate")
+	@ResponseBody
+	public Object contract_attr_update(String contractAttrVals,Model model){
+		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
+		updateContractAttr(contractAttrValueList);
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	
+	/**
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @param contractAttrValueList
+	 */
+	private void updateContractAttr(List<ContractAttrValueBean> contractAttrValueList){
+		for(ContractAttrValueBean attrx:contractAttrValueList){
+			ContractAttrValue record=new ContractAttrValue();
+			record.setId(attrx.getId());
+			record.setAttrValue(attrx.getAttrValue());
+			contractAttrValueService.updateByPrimaryKeySelective(record);
+		}
+	}
+	
+	
 	private Map<String,String> repackage(List<Map<String,String>> list){
 		Map<String,String> map=new HashMap<String,String>();
 		for(Map<String,String> attrValue:list){
 			map.put(attrValue.get("attr_name"), attrValue.get("attr_value"));
+		}
+		return map;
+	}
+	
+	/**
+	 * @Description 编辑合同属性时，合同属性列表
+	 * @param list 合同属性列表
+	 * @return  合同属性map 列表     attr_namex:attr  
+	 * 						  attr(attrVal:attr_value;
+	 * 								id:合同属性id
+	 * 								)
+	 */
+	private Map<String,Object> repackageAttr(List<Map<String,String>> list){
+		Map<String,Object> map=new HashMap<String,Object>();
+		for(Map<String,String> attrValue:list){
+			
+			Map<String,Object> valAndId=new HashMap<String,Object>();
+			valAndId.put("val", attrValue.get("attr_value"));
+			valAndId.put("id", attrValue.get("id"));
+			
+			map.put(attrValue.get("attr_name"), valAndId);
+			
 		}
 		return map;
 	}
@@ -277,7 +394,7 @@ public class ContractController {
 	 * @return
 	 */
 	@RequestMapping(value="/create")
-	/*@ResponseBody*/
+	@ResponseBody
 	public Object contract_create(String contractAttrVals,String orderItems,Model model,HttpServletRequest request){
 		
 		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
@@ -304,7 +421,7 @@ public class ContractController {
 		//(4)在订单中加入合同信息
 		updateOrderContract(orderNo,contractId,contractNo);
 		
-		return RESPONSE_THYMELEAF_BACK+"contract_create_success";
+		return RequestResultUtil.getResultAddSuccess();
 	}
 	
 	/**

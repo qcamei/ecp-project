@@ -205,7 +205,7 @@
 				</p>
 				<p style="text-indent: 21px">
 					<span>4.1</span><span><span style="font-family: 宋体">时</span><span><span>&nbsp;&nbsp;&nbsp;
-						</span></span></span><span><span style="font-family: 宋体">间：<u th:text=${attrValue.delivery_time}>选择时钟，自动生成</u></span><u></u></span>
+						</span></span></span><span><span style="font-family: 宋体">间：<u th:text="${attrValue.delivery_time}" class="cndate">选择时钟，自动生成</u></span><u></u></span>
 				</p>
 				<p style="text-indent: 21px">
 					<span><span>4.2</span></span><span><span
@@ -243,7 +243,7 @@
 						 	<span th:case='*' style="font-family: 宋体" th:remove="tag">□合同签订后</span>
 						</span>
 					<u><span><span th:text="${attrValue.days_signed}">&nbsp;
-								</span></span></u>日即<u><span><span th:text="${attrValue.date_signed}">&nbsp; </span></span>年 月 日 前</u>甲方支付给乙方全部货款，每延期一日按照欠款金额的<u th:text="${attrValue.fee_rate}">万分之五</u>收取资金占用费。
+								</span></span></u>日即<u><span><span th:text="${attrValue.date_signed}" class="cndate">&nbsp; </span></span>前</u>甲方支付给乙方全部货款，每延期一日按照欠款金额的<u th:text="${attrValue.fee_rate}">万分之五</u>收取资金占用费。
 					</span></span>
 				</p>
 				<p style="text-indent: 25px">
@@ -297,10 +297,10 @@
 				</p>
 				<p style="margin-left: 14px">
 					<span style="font-family: 宋体;width:350px;display:inline-block">
-						日期：<span th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd HH:mm:ss')}"></span>
+						日期：<span th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd')}" class="cndate">2017年10月10日</span>
 					</span>					 
 					<span style="font-family: 宋体">
-						日期：<span th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd HH:mm:ss')}">2017年10月10日 </span>
+						日期：<span th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd')}" class="cndate">2017年10月10日 </span>
 					</span>
 				</p>
 				<p style="margin-left: 14px">
@@ -312,6 +312,26 @@
 			</div>
 		</div>
 	</div>
+
+	<script th:src="@{/static/js/common/dateutil.js}"></script>
+	<script type="text/javascript">
+	
+	$(function(){
+		//将2017-07-21格式时间转换为2017年07月21日格式
+		$(".cndate").each(function(){
+			var oldFmtDate=$(this).text();
+			if(oldFmtDate=="" || oldFmtDate==null){
+				$(this).html("&nbsp;年&nbsp;月&nbsp;日");
+			}else{
+				
+				var cnFmtDate=getCNFormatDate(oldFmtDate);
+				$(this).text(cnFmtDate);	
+			}
+			
+		});
+		
+	});
+	</script>
 
 </body>
 </html>

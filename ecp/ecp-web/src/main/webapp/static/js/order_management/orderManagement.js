@@ -1,4 +1,10 @@
 /*查询-订单 */
+/*用于判定是否为空*/
+(function($){
+	$.isBlank = function(obj){
+	return(!obj || $.trim(obj) === "");
+		  };
+})(jQuery);
 
 
 /**
@@ -62,11 +68,34 @@ function createFormAndCommit(url, id, orderId) {
 	document.body.appendChild(form);
 
 	// 生成隐藏表单中的内容
-	var id = generateHideElement("id", id), orderId = generateHideElement(
-			"orderId", orderId);
+	var id = generateHideElement("id", id), 
+		orderId = generateHideElement("orderId", orderId);
 
 	form.appendChild(id);
 	form.appendChild(orderId);
+
+	form.method = "post";
+	form.action = url;
+	form.submit();
+}
+
+/**
+ * @param url 请求编辑合同的URL地址
+ * @param id  合同URL
+ * @returns
+ */
+function editContract(url, id) {
+	var form = document.createElement("form");
+	form.id = "test";
+	form.name = "test";
+	form.target="_blank";
+	document.body.appendChild(form);
+
+	// 生成隐藏表单中的内容
+	var id = generateHideElement("id", id); 
+		
+
+	form.appendChild(id);
 
 	form.method = "post";
 	form.action = url;
@@ -131,6 +160,28 @@ function updateUIOrderTime(orderTimeCond){
 }
 
 /**
+ * 纵向时间菜单更新
+ * 根据回传的条件值（订单时间）更新界面  
+ * @param orderTimeCond  订单时间条件值
+ * @returns
+ */
+function updateUISearchCond(condType){
+	//纵向菜单
+	$(".search-list li").each(function(){
+		$(this).removeClass("curr");
+		$(this).find('i').hide();
+		if($(this).val()==condType){
+			$(this).addClass("curr");
+			$(this).find('i').show();
+			//设置处理状态当前
+			var selectedTxt=$(this).find('a').text();
+			var value=$(this).val();
+			setSearchCond(selectedTxt,value);
+		}
+	});
+}
+
+/**
  * 设置当前处理状态名称及值
  * @param selectedTxt  处理状态名称
  * @param value  处理状态值
@@ -152,6 +203,18 @@ function setOrderTimeCond(selectedTxt,value){
 	$("#ordertime-cond").val(value);
 }
 
+/**
+ * 设置搜索类型名称及值
+ * @param selectedTxt
+ * @param value
+ * @returns
+ */
+function setSearchCond(selectedTxt,value){
+	$("#search-cond").text(selectedTxt);
+	$("#search-cond").val(value);
+}
+
+
 function sendRequest(){
 	var dealStateCond=$("#dealstate-cond").val();
 	var orderTimeCond=$("#ordertime-cond").val(); 
@@ -164,6 +227,7 @@ $(function() {
 	//================INITIALIZE====================
 	updateUIDealState(g_dealstate_cond);
 	updateUIOrderTime(g_ordertime_cond);
+	updateUISearchCond(0);
 	
 
 	//===================BUSINESS业务处理==============
@@ -173,9 +237,9 @@ $(function() {
 	 */
 	$(".create-contract").on("click", function(e) {
 		var url = BASE_CONTEXT_PATH + "/back/contract/add"; // 需要提交的 url
-		var id = $(this).attr("data-id");
-		var orderId = $(this).attr("data-orderid");
-		var contractState=$(this).attr("data-contractState");
+		var id = $(this).attr("data-id");  //合同id(PK)
+		var orderId = $(this).attr("data-orderid");  //合同号
+		var contractState=$(this).attr("data-contractState"); //状态
 		if(contractState==1){  //如果是未建合同状态
 			createFormAndCommit(url, id, orderId);
 		}
@@ -191,18 +255,41 @@ $(function() {
 	 */
 	$(".edit-contract").on("click", function(e) {
 		var url = BASE_CONTEXT_PATH + "/back/contract/edit"; // 需要提交的 url
-		var id = $(this).attr("data-id");
-		var orderId = $(this).attr("data-orderid");
-		var contractState=$(this).attr("data-contractState");
+		var id = $(this).attr("data-id");   //订单id (pk)
+		var orderId = $(this).attr("data-orderid"); //订单id
+		var contractId=$(this).attr("data-contract-id");
+		var contractState=$(this).attr("data-contractState");  //合同状态
 		
 		if(contractState==2){  //如果是己建合同状态，则可进行编辑
-			//createFormAndCommit(url, id, orderId);  //如果是建立合同状态时
+			editContract(url,contractId);  
 		}
 		else{
 			util.message("此状态不可编辑合同！");
 		}
 
 		
+	});
+	
+	$(".start-search").on("click",function(){
+		var condType=$("#search-cond").val();
+		var condStr=$("#searchCond").val();
+		
+		if(condType==0 || $.isBlank(condStr)){
+			return;
+		}
+		else{
+			//search();
+			alert("search()");
+		}
+		
+	});
+	
+	/*当在条件输入框按下enter时*/
+	$("#searchCond").on("keydown",function(event){
+		if(event.keyCode==13){
+			$(".start-search").trigger("click");
+			
+		}
 	});
 	
 	//======================分页（页码导航）==============
@@ -250,13 +337,25 @@ $(function() {
 			}
 		);
 	
+	//查询条件（下拉菜单）
+	$(".search-cont").hover(
+			function() {
+				$(".search-list").show();			
+			}, 
+			function() {
+				$(".search-list").hide();		
+			}
+		);
+	
 	//==================菜单选择（CLICK）=================
 	//选择时间条件（下拉菜单）
 	$(".time-list li").on("click",function(){
 		var selectedTxt=$(this).find('a').text();
 		var value=$(this).val();
 		setOrderTimeCond(selectedTxt,value);
-		search_normal();		
+		$(this).blur();
+		search_normal();
+		
 	});
 	
 	//合同处理条件（下拉菜单）
@@ -264,15 +363,29 @@ $(function() {
 		var selectedTxt=$(this).find('a').text();
 		var value=$(this).val();		
 		setDealStateCond(selectedTxt,value);
+		$(this).blur();
 		search_normal();
 		
-	});
+	});	
 	
+	//横向菜单（状态）
 	$(".extra-l li").on("click",function(){
 		var selectedTxt=$(this).find('a').text();
 		var value=$(this).val();		
 		setDealStateCond(selectedTxt,value);
+		$(this).blur();
 		search_normal();		
+	});
+	
+	//搜索条件（下拉菜单）
+	$(".search-list li").on("click",function(){
+		var selectedTxt=$(this).find('a').text();
+		var value=$(this).val();		
+		setSearchCond(selectedTxt,value);
+		updateUISearchCond(value);
+		$(this).blur();
+		//search_normal();
+		
 	});
 
 });

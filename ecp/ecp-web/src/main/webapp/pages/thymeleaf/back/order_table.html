@@ -18,6 +18,10 @@
 	tr:hover{
 		background-color:#CCFFCC;
 	}
+	
+	i{
+		color:darkblue;
+	}
 	a i{
 		cursor:pointer;
 	}
@@ -83,6 +87,42 @@
 		color:white;
 	}
 	
+	
+	/* 纵向菜单：搜索条件 */
+	
+	.search-cont{		
+		margin-bottom: 0;
+		display:inline-block;			
+	}	
+	
+	.search-list{
+		display:none;
+		background-color: rgba(65,65,65,.8);		
+		border:2px solid #1296db;
+		position:absolute;		
+	}
+	
+	.search-list ul{		
+		padding:10px 10px 0px 20px;		
+	}
+	
+	.search-list li{
+		list-style-type:none;		
+	}
+	
+	.search-list li.curr{
+		margin-left:-10px;
+		/* background:   一般用图片进行模拟 ，比较好控制 */		
+	}
+		
+	.search-list a{
+		color:#dcdcdc;
+	}
+	
+	.search-list i{
+		color:white;
+	}
+	
 	/* 纵向菜单：处理状态列表 */
 	
 	.deal-state-cont{
@@ -143,10 +183,10 @@
 	<!-- 订单列表 -->
 	<div class="row clearfix">
 		<div class="col-md-12 column">
-			<h4>订单管理</h4>
+			<h4 >订单管理</h4>
 			<br>
 			<!-- 横向菜单 -->
-			<div class="row clearfix">
+			<div class="row clearfix" style="display:inline-block">
 				<div class="col-md-12 column">
 					<ul class="extra-l" style="list-style: none;">
 						<li value="0"><a href="javascript:void(0);"	class="txt curr">全部订单</a></li>
@@ -159,6 +199,29 @@
 					</ul>
 				</div>
 			</div>
+			<div class="search-box" style="display:inline-block;margin-left:100px;">
+				<div class="search-cont">
+					<div class="search-txt" >
+						<span class="text" id="search-cond" value="0">选择查询条件</span>
+						<i class="icon-angle-down icon-large" style="color:black"></i>							
+					</div>
+					<div class="search-list">
+						<ul>
+							<li class="curr" value="0"><i class="icon-ok"></i><a href="javascript:void(0);" >选择查询条件</a></li>
+							<li class="" 	 value="1"><i class="icon-ok"></i><a href="javascript:void(0);" >订单号</a></li>
+							<li class="" 	 value="2"><i class="icon-ok"></i><a href="javascript:void(0);" >合同号</a></li>
+						</ul>
+					</div>						
+				</div>
+				<div class="cond-box" style="display:inline">
+					<input type="text" value="" id="searchCond" name="searchCond" />
+					<a class="start-search" href="javascript:void(0);"><i class="icon-search icon-large "></i></a>
+				</div>
+			</div>
+			<a
+						th:href="@{/back/order/show}" title="刷新列表"	style="float: right; margin-right: 50px">
+						<i class="icon-refresh icon-large"></i>
+			</a>
 			<hr>
 			
 			
@@ -215,12 +278,12 @@
 					<tr th:each="order:${orderList}">
 						<td><a th:href="@{/back/order/detail(id=${order.id})}" target="_blank" title="订单详情"><span th:text="${order.orderId}" th:remove="tag">订单号</span></a></td>
 						<td>
-							<a th:href="@{/back/order/contractdetail(id=${order.contractId})}" target="_blank" title="订单详情">
+							<a th:href="@{/back/order/contractdetail(id=${order.contractId})}" target="_blank" title="合同详情">
 								<span th:text="${order.contractNo}" th:remove="tag">合同号</span>				
 							</a>
 							
 							<span th:if="${order.contractNo}" th:remove="tag">
-								<a th:href="@{/back/contract/open(id=${order.contractId})}" target="_blank" title="打示合同">
+								<a th:href="@{/back/contract/open(id=${order.contractId})}" target="_blank" title="打开合同">
 									<i class="icon-folder-close-alt icon-large" style="color:darkblue;" ></i>
 								</a> 
 							</span>								
@@ -249,7 +312,7 @@
 						</td>
 						<td>
 							<!-- <a type="button" th:href="@{/back/order/detail(id=${order.id})}" class="btn btn-primary show-detail" target="_blank">详情</a> -->
-							<a type="button" th:attr="data-id=${order.id},data-orderid=${order.orderId},data-contractState=${order.contractState}" class="edit-contract" title="编辑合同"><i class=" icon-edit icon-large" style="color:darkblue"></i></a>
+							<a type="button" th:attr="data-id=${order.id},data-orderid=${order.orderId},data-contractState=${order.contractState},data-contract-id=${order.contractId}" class="edit-contract" title="编辑合同"><i class=" icon-edit icon-large" style="color:darkblue"></i></a>
 							<a type="button" th:attr="data-id=${order.id},data-orderid=${order.orderId},data-contractState=${order.contractState}" class="create-contract" title="建立合同"><i class=" icon-plus-sign icon-large" style="color:darkblue"></i></a></td>
 
 					</tr>

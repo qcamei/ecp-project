@@ -17,7 +17,7 @@
     id, attr_name, template_id, comment
   </sql>
   <select id="selectAttrValByContractId" resultType="map">
-  	SELECT * FROM contract_attribute a LEFT JOIN contract_attribute_value v 
+  	SELECT a.attr_name,a.template_id,a.comment,v.attr_id,v.id,v.attr_value FROM contract_attribute a LEFT JOIN contract_attribute_value v 
   		ON(a.id=v.attr_id) 
   		WHERE v.contract_id=#{contractId};
   </select>
