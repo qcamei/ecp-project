@@ -240,7 +240,6 @@ function ajaxRequestGetItemInfo(id){
 				$("#volume").val(item.volume);//商品体积
 				$("#weight").val(item.weight);//商品毛重
 				$("#weight-unit").val(item.weightUnit);//重量单位
-				$("#weight-unit").val(item.weightUnit);//重量单位
 				$("#create-time-str").val(new Date(item.created).format('yyyy-MM-dd HH:mm:ss'));//创建时间
 				
 				var describe = item.describeUrl;
@@ -256,7 +255,48 @@ function ajaxRequestGetItemInfo(id){
 				});
 				
 				var attributes = item.attributes;//商品属性
-				var attrSale = item.attrSale//销售属性
+				var attrs = attributes.split(",");
+				$("#item-attr input[name='itemAttr']").each(function(){
+					for(var i=0; i<attrs.length; i++){
+						var currAttr = $(this).val();
+						var selectAttr = attrs[i];//属性:属性值
+						if(currAttr==selectAttr){
+							$(this).prop("checked", true);
+						}
+					}
+				});
+				
+				var attrSale = item.attrSale;//销售属性
+				var attrSales = attrSale.split(",");
+				$("#sale-attr input[name='attrValId']").each(function(){
+					for(var i=0; i<attrSales.length; i++){
+						var currAttr = $(this).val();
+						var selectAttr = attrSales[i];//属性:属性值
+						var attrVal = selectAttr.split(":")[1];//属性值
+						if(currAttr==attrVal){
+							$(this).prop("checked", true);
+						}
+					}
+				});
+				
+				createSku();
+				//debugger;
+				var skuList = resp.skuList;//SKU
+				var skuPriceList = resp.skuPriceList;//SKU价格
+				for(var i=0; i<skuList.length; i++){
+					var sku = skuList[i];
+					for(var j=0; j<skuPriceList.length; j++){
+						var skuPrice = skuPriceList[j];
+						if(sku.skuId==skuPrice.skuId){
+							sku.costPrice = skuPrice.costPrice;
+							sku.sellPrice = skuPrice.sellPrice;
+						}
+					}
+					$("#cost-price-"+i).val(sku.costPrice);//成本价
+					$("#sell-price-"+i).val(sku.sellPrice);//销售价
+					$("#volume-"+i).val(sku.volume);//体积
+					$("#weight-"+i).val(sku.weight);//重量
+				}
 				
 				$('#tabs-243687 a[href="#tab-2"]').tab('show');
 				return;
@@ -424,7 +464,7 @@ function saveFun(){
 	params.skuPriceJson = JSON.stringify(skuPrice);
 	
 	//util.loading();
-	$("#save-form").ajaxSubmit({
+	/*$("#save-form").ajaxSubmit({
 		type:"post",
 		url:url,
 		data:params,
@@ -440,7 +480,80 @@ function saveFun(){
 				}
 			}
 		},
+	});*/
+	//console.log("POST参数："+decodeURI($("#save-form").serialize()));
+	
+	$.ajaxFileUpload({
+		url: url, //用于文件上传的服务器端请求地址
+        secureuri: false, //一般设置为false
+        fileElementId: "picture-url", //文件上传空间的id属性  <input type="file" id="file" name="file" />
+        dataType: "json", //返回值类型 一般设置为json
+        data: getParams(),
+        success: function (data, status){  //服务器成功响应处理函数
+        	console.log(res);
+        },
+        error: function (data, status, e){//服务器响应失败处理函数
+        	console.log(e);
+        }
 	});
+	
+}
+
+/**
+ * 获取请求参数
+ * @returns
+ */
+function getParams(){
+	var params = new Object();
+	params.itemId = $("#item-id").val();//ID
+	
+	params.cid = $("#item-cid").val();//商品三级类目
+	
+	params.brand = $("#brand").val();//品牌
+	
+	params.itemName = $("#item-name").val();//商品名称
+	params.keywords = $("#keywords").val();//关键字
+	params.guidePrice = $("#guide-price").val();//商城指导价格
+	params.marketPrice = $("#market-price").val();//市场价格
+	params.marketPrice2 = $("#market-price2").val();//成本价格
+	params.inventory = $("#inventory").val();//库存数量
+	params.origin = $("#origin").val();//商品产地
+	params.packingList = $("#packing-list").val();//包装清单
+	params.volume = $("#volume").val();//商品体积
+	params.weight = $("#weight").val();//商品毛重
+	params.weightUnit = $("#weight-unit").val();//重量单位
+	
+	var createTimeStr = $("#create-time-str").val();
+	var createtime = null;
+	if(createTimeStr==null || createTimeStr==""){
+		createtime = new Date();
+	}else{
+		createtime = parserDate(createTimeStr);
+	}
+	console.log("创建时间（毫秒）："+createtime.getTime());
+	
+	params.created = createtime;//创建时间
+	params.modified = new Date();//修改时间
+	params.describeUrl = getContent("item-ueditor");
+	try{
+		params.attributes = getItemAttr().toString();
+		params.attrSale = getSaleAttr().toString();
+	}catch(err){
+		params.attributes = "";
+		params.attrSale = "";
+		console.log(err);
+	}
+	
+	//sku
+	var skuObj = getSkuInfo();
+	var sku = skuObj.sku;
+	var skuPrice = skuObj.skuPrice;
+	console.log("update sku:"+JSON.stringify(sku));
+	console.log("update sku price:"+JSON.stringify(skuPrice));
+	params.skuJson = JSON.stringify(sku);
+	params.skuPriceJson = JSON.stringify(skuPrice);
+	
+	return params;
 }
 
 /*

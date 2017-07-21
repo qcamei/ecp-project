@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -160,7 +159,7 @@ public class ItemController {
 			//查询sku信息
 			List<Sku> skuList = skuService.getByItemId(id);
 			//查询sku价格信息
-			List<SkuPrice> skuPirceList = skuPriceService.getByItemId(id);
+			List<SkuPrice> skuPriceList = skuPriceService.getByItemId(id);
 			//查询sku图片信息
 			List<Long> skuIds = new ArrayList<Long>();
 			for(Sku sku : skuList){
@@ -172,7 +171,7 @@ public class ItemController {
 			respM.put("item", item);
 			respM.put("pictureList", pictureList);
 			respM.put("skuList", skuList);
-			respM.put("skuPirceList", skuPirceList);
+			respM.put("skuPriceList", skuPriceList);
 			respM.put("skuPictureList", skuPictureList);
 			return respM;
 		} catch (Exception e) {
@@ -217,8 +216,9 @@ public class ItemController {
 	 */
 	@RequestMapping("/updateById")
 	@ResponseBody
-	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item) {
+	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson) {
 		log.info("update item:"+item);
+		this.processUploadFile(request, null);
 		try {
 			int rows = iItemService.updateByPrimaryKeySelective(item);
 			if(rows>0){
@@ -229,6 +229,43 @@ public class ItemController {
 		}
 		
 		return RequestResultUtil.getResultUpdateWarn();
+	}
+	
+	/**
+	 * 方法功能：处理上传文件
+	 * @param request
+	 * @param 
+	 * @return
+	 * 		List<String>:上传成功返回路径集合
+	 * <hr>
+	 * <b>描述：</b>
+	 * <p>Description:方法功能详细说明</p> 
+	 * <p>Version: 1.0</p>
+	 * <p>Author: srd </p>
+	 * <p>Date: 2017年1月11日 下午6:09:34</p>
+	 */
+	private List<String> processUploadFile(HttpServletRequest request, List<ItemPicture> pictureList){
+		try {
+			//获取上传背景图文件
+			List<String> filePathList = FileUploadUtil.getFiles2UploadPath(request, "item", "pictureImg");
+			if(filePathList!=null && filePathList.size()>0){
+				if(pictureList!=null && pictureList.size()>0){
+					for(ItemPicture picture : pictureList){
+						if(!FileUploadUtil.deleteFile(request, picture.getPictureUrl())){
+							log.error("文件不存在或已删除 缩略图路径："+picture.getPictureUrl());
+						}
+					}
+				}
+				return filePathList;
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			log.error("上传文件异常", e);
+		} catch (Exception e) {
+			log.error("删除上传文件异常", e);
+		}
+		return null;
 	}
 	
 	/**

@@ -1,11 +1,15 @@
 package com.ecp.back.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +17,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ecp.back.commons.StaticConstants;
 import com.ecp.bean.CategoryAttrBean;
+import com.ecp.bean.PageBean;
+import com.ecp.bean.UserBean;
 import com.ecp.entity.Category;
+import com.ecp.entity.User;
 import com.ecp.service.back.ICategoryAttrService;
 import com.ecp.service.back.ICategoryService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @ClassName CategoryAttrController
@@ -48,28 +60,38 @@ public class CategoryAttrController {
 	 * @return
 	 */
 	@RequestMapping(value = "/categorytree", method = RequestMethod.GET)
-	public String categoryAttr(Model model) {
-		return RESPONSE_THYMELEAF + "categorytree";
+	public ModelAndView categoryAttr(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		List<Map<String, Object>> categoryList = categoryService.getAllCategory();
+		mav.addObject("categoryListJson", JSON.toJSONString(categoryList));
+		mav.setViewName(StaticConstants.CATEGORY_ATTR_MANAGE_PAGE);
+		return mav;
 	}
 
 	/**
-	 * @Description 导航至--->类目属性编辑
+	 * @Description 导根据类目ID查询类目属性列表
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/categoryattreditor/{cid}", method = RequestMethod.GET)
-	public String categoryAttrEditor(@PathVariable("cid") long cid, Model model) {
+	@RequestMapping(value = "/getCategoryAttrItem")
+	public ModelAndView categoryAttrEditor(HttpServletRequest request, HttpServletResponse response, PageBean pageBean, String pagehelperFun, Long categoryId) {
+		
+		ModelAndView mav = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		UserBean user = (UserBean)subject.getPrincipal();
+		
+		PageHelper.startPage(pageBean.getPageNum(), pageBean.getPageSize());
 		// 查询相关叶子结点的属性
-		List<CategoryAttrBean> cateAttrList = categoryAttrService.getCategoryAttrListByCid(cid);
-
-		// test code
-		// List<CategoryAttr> cateAttrList=categoryAttrService.findByCid(cid);
-		// categoryAttrService.getCategoryAttrListByCid1(cid);
-
-		model.addAttribute("categoryAttrList", cateAttrList);
-		model.addAttribute("cid", cid); // 传递cid信息
-
-		return RESPONSE_THYMELEAF + "categoryattreditor";
+		List<CategoryAttrBean> cateAttrList = categoryAttrService.getCategoryAttrListByCid(categoryId);
+		PageInfo<CategoryAttrBean> pagehelper = new PageInfo<CategoryAttrBean>(cateAttrList);
+		
+		
+		mav.addObject("pagehelper", pagehelper);
+		
+		mav.setViewName(StaticConstants.CATEGORY_ATTR_MANAGE_TABLE_PAGE);
+		
+		mav.addObject("pagehelperFun", pagehelperFun);
+		return mav;
 	}
 
 	/**
@@ -134,19 +156,19 @@ public class CategoryAttrController {
 	
 	/**
 	 * 响应ajax请求
-	 * 
+	 * 未用
 	 * @Description 加载类目树数据
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/loadcategorytree", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/loadcategorytree", method = RequestMethod.POST)
 	@ResponseBody
 	public Object LoadCategoryAttr(Model model) {
 
 		List<Map<String, Object>> categoryList = categoryService.getAllCategory();
 
 		return categoryList;
-	}
+	}*/
 
 		
 	//saveCategoryAttrValue

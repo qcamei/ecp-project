@@ -1,6 +1,7 @@
 package com.ecp.service.back;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ecp.entity.Menu;
 import com.ecp.entity.User;
@@ -32,9 +33,11 @@ public interface IUserService extends IBaseService<User, Long> {
 	
 	/**
 	 * 查询未删除的用户
+	 * 		deleted=1:默认（未删除）deleted=2:已删除
+	 * 		type=1:默认（后台管理用户）type=2:前端访问用户
 	 * @return
 	 */
-	public List<User> getList();
+	public List<User> getList(Map<String, Object> map);
 	
 	/**
 	 * 添加用户和用户角色

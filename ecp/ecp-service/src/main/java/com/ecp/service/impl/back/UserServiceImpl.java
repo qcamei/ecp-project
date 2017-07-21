@@ -2,6 +2,7 @@ package com.ecp.service.impl.back;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -100,13 +101,15 @@ public class UserServiceImpl extends AbstractBaseService<User, Long> implements 
 	}
 
 	/**
-	 * @see com.ecp.service.back.IUserService#getList()
+	 * @see com.ecp.service.back.IUserService#getList(java.util.Map)
 	 * 查询未删除的用户
+	 * 		deleted=1:默认（未删除）deleted=2:已删除
+	 * 		type=1:默认（后台管理用户）type=2:前端访问用户
 	 */
 	@Override
-	public List<User> getList() {
+	public List<User> getList(Map<String, Object> map) {
 		Example example=new Example(User.class);
-		example.createCriteria().andEqualTo("deleted", 0);
+		example.createCriteria().andEqualTo("deleted", map.get("deleted").toString()).andEqualTo("type", map.get("type").toString());
 		List<User> list=userMapper.selectByExample(example);
 		return list;
 	}

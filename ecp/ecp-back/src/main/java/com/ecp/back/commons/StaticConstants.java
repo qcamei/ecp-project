@@ -10,6 +10,10 @@ public class StaticConstants {
 	public static String CATEGORY_BRAND_MANAGE_PAGE = "back/jsp/category/categoryBrandManage";//类目品牌管理页面
 	public static String CATEGORY_BRAND_MANAGE_ITEMS_PAGE = "back/jsp/category/categoryBrandItems";//类目品牌管理品牌列表页面
 	
+	public static String CATEGORY_ATTR_MANAGE_PAGE = "back/jsp/categoryattr/category_attr";//类目属性管理页面
+	public static String CATEGORY_ATTR_MANAGE_TABLE_PAGE = "back/jsp/categoryattr/category_attr_table";//类目属性列表页面
+	public static String CATEGORY_ATTR_VALUE_MANAGE_TABLE_PAGE = "back/jsp/categoryattr/category_attr_val_table";//类目属性值列表页面
+	
 	public static String ADD_ITEM_PAGE = "back/jsp/item/addItem";//添加商品页面
 	public static String ITEM_MANAGE_PAGE = "back/jsp/item/itemManage";//商品管理页面
 	public static String ITEM_MANAGE_TABLE_PAGE = "back/jsp/item/itemManageTable";//商品管理页面

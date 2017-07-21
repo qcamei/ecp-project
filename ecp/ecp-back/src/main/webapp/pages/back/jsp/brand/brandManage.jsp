@@ -35,7 +35,7 @@
 								</div>
 							</div>
 							<div id="tab-2" class="tab-pane">
-								<div class="container" style="margin-top: 20px;">
+								<div class="container-fluid" style="margin-top: 20px;">
 									<div class="row clearfix">
 										<div class="col-md-12 column">
 											<div class="panel panel-default">

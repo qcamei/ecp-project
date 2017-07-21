@@ -34,6 +34,7 @@ import com.ecp.service.back.IItemService;
 import com.ecp.service.back.ISkuPictureService;
 import com.ecp.service.back.ISkuPriceService;
 import com.ecp.service.back.ISkuService;
+import com.ecp.service.commons.DefaultConstants;
 import com.ecp.service.impl.AbstractBaseService;
 
 @Service("itemServiceBean")
@@ -118,13 +119,21 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			//TODO 添加商品图片 item_picture
 			//处理上传缩略图
 			List<String> filePathList = this.processUploadFile(request, new ArrayList<ItemPicture>());
-			List<ItemPicture> pictureList = new ArrayList<ItemPicture>();
+			//如果上传图片为空时，添加默认图片
 			if(filePathList!=null && filePathList.size()>0){
-				for(String filePath : filePathList){
-					pictureList.add(new ItemPicture(item.getItemId(), filePath));
-				}
+				
+			}else{
+				//TODO 此处添加默认图片
+				filePathList.add(DefaultConstants.DEFAULT_PICTURE_PATH);
 			}
 			
+			//根据上传图片数量创建商品图片List集合
+			List<ItemPicture> pictureList = new ArrayList<ItemPicture>();
+			for(String filePath : filePathList){
+				pictureList.add(new ItemPicture(item.getItemId(), filePath));
+			}
+			
+			//循环商品图片List集合，添加商品图片信息
 			for(int i=0; i<pictureList.size(); i++){
 				ItemPicture picture = pictureList.get(i);
 				//添加商品图片
@@ -133,8 +142,15 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			
 			if(rows>0){
 				//添加商品属性值关系表
+				if(StringUtils.isBlank(item.getAttrSale())){
+					//TODO 如果销售属性为空时，是否添加？
+				}
 				rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
 				if(rows>0){
+					//添加SKU信息
+					if(StringUtils.isBlank(skuJson)){
+						//TODO 如果没有SKU信息时，手动创建一个SKU；注：商品需要有默认图片和默认SKU
+					}
 					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
 					if(rows>0){
 						return rows;
@@ -155,6 +171,17 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		return 0;
 	}
 	
+
+	/**
+	 * @see com.ecp.service.back.IItemService#updateItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String)
+	 * 修改商品
+	 */
+	@Override
+	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	/**
 	 * 处理SKU相关表
 	 * @param itemId
@@ -166,9 +193,6 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	@Transactional
 	private int processSkuRelate(Item item, List<String> filePathList, String skuJson, String skuPriceJson){
 		try {
-			if(StringUtils.isBlank(skuJson)){
-				
-			}
 			int rows = 0;
 			//添加sku item_sku
 			List<Sku> skuList = JSONArray.parseArray(skuJson, Sku.class);
@@ -244,6 +268,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	private int saveItemAttrValue(Long itemId, String attrSale){
 		
 		try {
+			
 			int rows = 0;
 			String[] attrSaleArrStr = attrSale.split(",");
 			for(int i=0; i<attrSaleArrStr.length; i++){
@@ -308,6 +333,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		}
 		return null;
 	}
+	
 	public static void main(String[] args) {
 		for(int j=0; j<10; j++){
 			System.out.println("外循环 第 "+j+" 次循环。");
@@ -322,4 +348,5 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			}
 		}
 	}
+
 }
