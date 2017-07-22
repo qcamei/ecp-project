@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.common.SessionConstants;
+import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.User;
 import com.ecp.service.front.IAgentService;
 
@@ -25,7 +26,7 @@ import com.ecp.service.front.IAgentService;
  * @version 1.0.0
  */
 @Controller
-@RequestMapping("/front/agent")
+@RequestMapping("/login/agent")
 public class UserEntryController {
 	final String RESPONSE_THYMELEAF = "thymeleaf/front/";
 	final String RESPONSE_JSP = "jsps/front/";
@@ -62,15 +63,19 @@ public class UserEntryController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, String loginName, String password) {
+	@ResponseBody
+	public Object login(HttpServletRequest request, String loginName, String password) {
 		User user = verifyUser(loginName, password);
 		if (user!=null) { // 如果校难正确
+			
 			//将用户信息加入到session
 			HttpSession session = request.getSession();    		
     		session.setAttribute(SessionConstants.USER, user);
-			return "redirect:/front/home/home"; // 导航到主页
+    		
+			//return "redirect:/front/home/home"; // 导航到主页
+    		return RequestResultUtil.getResultSelectSuccess();
 		} else {
-			return "error"; // TODO 此处暂时未处理
+			return RequestResultUtil.getResultSelectWarn();
 		}
 
 	}
@@ -113,7 +118,7 @@ public class UserEntryController {
 	}
 	
 	
-	@RequestMapping(value = "/state/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/loginstate", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getLoginState(HttpServletRequest request, Model model) {		
 		
