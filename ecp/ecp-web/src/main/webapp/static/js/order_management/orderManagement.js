@@ -17,14 +17,19 @@ function search(){
 	parms.pageNum=$("#pageNum").val();
 	parms.pageSize=$("#pageSize").val();
 	
+	//时间段、订单状态
 	var dealStateCond=$("#dealstate-cond").val();
 	var orderTimeCond=$("#ordertime-cond").val(); 
 	
 	parms.dealStateCond=dealStateCond;
 	parms.orderTimeCond=orderTimeCond;
 	
-	/*parms.searchTypeValue=condType;
-	parms.condValue=condStr;*/
+	//搜索类型，搜索条件值
+	var condType=$("#search-cond").val();
+	var condStr=$("#searchCond").val();
+	
+	parms.searchTypeValue=condType;
+	parms.condValue=condStr;
 	
 	loadOrder(parms,null); // 加载页面
 }
@@ -86,8 +91,8 @@ function createFormAndCommit(url, id, orderId) {
  */
 function editContract(url, id) {
 	var form = document.createElement("form");
-	form.id = "test";
-	form.name = "test";
+	form.id = "test1";
+	form.name = "test1";
 	form.target="_blank";
 	document.body.appendChild(form);
 
@@ -227,7 +232,8 @@ $(function() {
 	//================INITIALIZE====================
 	updateUIDealState(g_dealstate_cond);
 	updateUIOrderTime(g_ordertime_cond);
-	updateUISearchCond(0);
+	updateUISearchCond(g_searchTypeValue);
+	//alert("test");
 	
 
 	//===================BUSINESS业务处理==============
@@ -270,6 +276,8 @@ $(function() {
 		
 	});
 	
+	
+	/* 搜索按钮 -click */
 	$(".start-search").on("click",function(){
 		var condType=$("#search-cond").val();
 		var condStr=$("#searchCond").val();
@@ -278,8 +286,8 @@ $(function() {
 			return;
 		}
 		else{
-			//search();
-			alert("search()");
+			search_normal();
+			
 		}
 		
 	});
@@ -309,9 +317,8 @@ $(function() {
 			pageArr = dataBind.split("-");
 			// 置隐藏表单数据
 			$("#pageNum").val(pageArr[0]);
-			$("#pageSize").val(pageArr[1]);
-			// 发送请求
-			search_normal();
+			$("#pageSize").val(pageArr[1]);			
+			search_normal();  // 发送请求
 		}
 
 	});
@@ -384,7 +391,11 @@ $(function() {
 		setSearchCond(selectedTxt,value);
 		updateUISearchCond(value);
 		$(this).blur();
-		//search_normal();
+		var condType=$("#search-cond").val();
+		if(condType==0){   //如果没有选择条件，则进行刷新
+			search_normal();  
+		}
+
 		
 	});
 

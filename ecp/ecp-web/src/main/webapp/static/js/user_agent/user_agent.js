@@ -141,6 +141,11 @@ $(function() {
 		var value=$(this).val();
 		setOrderTimeCond(selectedTxt,value);
 		updateUIOrderTime(value);  //更新页面
+		if(value==0){
+			search();
+		}
+		
+		
 		//$(this).blur(null);
 	});
 	

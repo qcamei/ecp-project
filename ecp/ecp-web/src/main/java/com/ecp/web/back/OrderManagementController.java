@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ecp.entity.Orders;
-import com.ecp.entity.UserExtends;
 import com.ecp.service.front.IOrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -49,12 +47,29 @@ public class OrderManagementController {
 		return RESPONSE_THYMELEAF_BACK + "order_show";
 	}
 	
+	/**
+	 * @Description 订单查询
+	 * @param orderTimeCond  订单时间条件
+	 * @param dealStateCond  订单处理状态条件
+	 * @param pageNum		  页号
+	 * @param pageSize		 页大小
+	 * @param searchTypeValue 搜索类型
+	 * @param condValue		  搜索条件值
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/ordertable")
-	public String order_table(int orderTimeCond,int dealStateCond,Integer pageNum, Integer pageSize,Model model) {
+	public String order_table(int orderTimeCond,int dealStateCond,Integer pageNum, Integer pageSize,Integer searchTypeValue,String condValue,Model model) {
 		if(pageNum==null || pageNum==0)
 		{
 			pageNum=1;
 			pageSize=PAGE_SIZE;
+		}
+		
+		//置默认值(搜索)
+		if(searchTypeValue==null){
+			searchTypeValue=0;
+			condValue="";
 		}
 		
 		//回传查询条件
@@ -64,11 +79,16 @@ public class OrderManagementController {
 		// 查询 并分页		
 		PageHelper.startPage(pageNum, pageSize); // PageHelper			
 
-		List<Orders> orderList = orderService.selectAllOrderByOrderTimeAndDealState(orderTimeCond,dealStateCond);
-		PageInfo<Orders> pageInfo = new PageInfo<Orders>(orderList);// (使用了拦截器或是AOP进行查询的再次处理)
+		//List<Map<String,Object>> orderList = orderService.selectAllOrderByOrderTimeAndDealState(orderTimeCond,dealStateCond);
+		
+		List<Map<String,Object>> orderList = orderService.selectOrder(orderTimeCond,dealStateCond,searchTypeValue,condValue);  //查询订单
+		
+		PageInfo<Map<String,Object>> pageInfo = new PageInfo<Map<String,Object>>(orderList);// (使用了拦截器或是AOP进行查询的再次处理)
 		
 		model.addAttribute("pageInfo", pageInfo);  //分页
 		model.addAttribute("orderList", orderList); //列表
+		model.addAttribute("searchTypeValue", searchTypeValue);  	//查询字段值
+		model.addAttribute("condValue", condValue);  				//查询条件值
 		
 		return RESPONSE_THYMELEAF_BACK + "order_table";
 	}

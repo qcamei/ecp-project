@@ -30,10 +30,15 @@
 			var url = "/back/order/ordertable";
 
 			var parms = new Object(); //参数
-			parms.orderTimeCond = orderTimeCond; //近三个月订单
-			parms.dealStateCond = dealStateCond; //全部状态
+			parms.orderTimeCond = orderTimeCond; //时间段条件：近三个月订单
+			parms.dealStateCond = dealStateCond; //订单处理状态条件：全部状态
+			//分页
 			parms.pageNum = null;
 			parms.pageSize = null;
+			
+			//查询类型，查询条件值
+			parms.searchTypeValue=0;
+			parms.condValue="";
 
 			loadOrder(parms,null);
 		}

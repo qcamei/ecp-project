@@ -1,6 +1,7 @@
 package com.ecp.service.front;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ecp.entity.Orders;
 import com.ecp.service.IBaseService;
@@ -53,6 +54,16 @@ public interface IOrderService extends IBaseService<Orders, Long> {
 	 * @return
 	 */
 	public Orders selectOrderByOrderNo(String orderNo);
+	
+	/**
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @param orderTimeCond 时间段条件
+	 * @param dealStateCond 处理状态条件
+	 * @param searchTypeValue  搜索条件类型
+	 * @param condValue  搜索值
+	 * @return
+	 */
+	public List<Map<String,Object>> selectOrder(int orderTimeCond,int dealStateCond,int searchTypeValue,String condValue);
 	
 	
 }
