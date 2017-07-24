@@ -27,18 +27,7 @@
 	<div class="container" id="container">
 	</div>
 	<!-- footer -->
-	<!-- <div th:replace="/thymeleaf/common/_footer::footer" class="footer"></div> -->
-	
-	
-	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
-	<form th:action="@{/back/agent/show}" method="post" id="searchform">
-		<!-- 保存页号与页大小 -->
-		<input type="hidden" name="pageNum" id="pageNum" value=""> 
-		<input type="hidden" name="pageSize" id="pageSize" value="">
-
-		<!-- 用户选择的条件列表 -->
-		<!-- <input type="hidden" name="searchCond" id="searchCond"	th:value="${searchCond}"> -->
-	</form>
+	<!-- <div th:replace="/thymeleaf/common/_footer::footer" class="footer"></div> -->	
 
 	<script type="text/javascript">
 	

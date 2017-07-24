@@ -120,7 +120,7 @@ tr:hover{
 				</thead>
 				<tbody>
 					<tr th:each="agent:${userAgents}">
-						<td th:text="${agent.companyName}">北京XXX科技有限责任公司</td>
+						<td th:text="${agent.companyName}" style="width:400px;">北京XXX科技有限责任公司</td>
 						<td th:text="${agent.artificialPersonName}">张XX</td>
 						<td th:text="${agent.contactPhone}">138xxxxxxxx</td>
 						<span th:switch="${agent.userId}" th:remove="tag">
@@ -158,12 +158,23 @@ tr:hover{
 				<div th:include="/thymeleaf/common/_pager::pager" class="pagerx"
 					style="float: right; margin-right: 100px;"></div>
 			</div>
+			
 			<div class="row clearfix">
 				<hr>
 			</div>
 
 		</div>
 	</div>
+	
+	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
+	<form th:action="@{/back/agent/show}" method="post" id="searchform">
+		<!-- 保存页号与页大小 -->
+		<input type="hidden" name="pageNum" id="pageNum" th:value="${pageInfo.pageNum}"> 
+		<input type="hidden" name="pageSize" id="pageSize" th:value="${pageInfo.pageSize}">
+
+		<!-- 用户选择的条件列表 -->
+		<!-- <input type="hidden" name="searchCond" id="searchCond"	th:value="${searchCond}"> -->
+	</form>
 
 	
 	<!-- 查询条件  -->

@@ -76,6 +76,10 @@ public class OrderManagementController {
 		model.addAttribute("orderTimeCond", orderTimeCond);
 		model.addAttribute("dealStateCond", dealStateCond);
 		
+		//搜索条件类型、搜索条件值
+		model.addAttribute("searchTypeValue", searchTypeValue);  	//查询字段值
+		model.addAttribute("condValue", condValue);  				//查询条件值
+		
 		// 查询 并分页		
 		PageHelper.startPage(pageNum, pageSize); // PageHelper			
 
@@ -87,8 +91,7 @@ public class OrderManagementController {
 		
 		model.addAttribute("pageInfo", pageInfo);  //分页
 		model.addAttribute("orderList", orderList); //列表
-		model.addAttribute("searchTypeValue", searchTypeValue);  	//查询字段值
-		model.addAttribute("condValue", condValue);  				//查询条件值
+		
 		
 		return RESPONSE_THYMELEAF_BACK + "order_table";
 	}

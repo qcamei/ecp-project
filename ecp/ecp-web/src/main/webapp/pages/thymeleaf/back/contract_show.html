@@ -1,112 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head th:include="/thymeleaf/common/_head::head('合同管理')">
+<head>
 <meta charset="UTF-8">
+<div th:include="/thymeleaf/common/_head2::headx('合同管理')"	th:remove="tag"></div>
+<!-- <head th:include="/thymeleaf/common/_head::head('合同管理')"> -->
 </head>
 <body>
 	<!-- header -->
 	<!-- <div th:include="thymeleaf/common/_header::header" class="header"></div> -->
-	<div class="container">
-		
-		<div class="row clearfix">
-			<div class="col-md-12 column">
-				<h3>合同管理</h3>
-				<div class="row clearfix">
-					<div class="col-md-12 column">
-						<table class="table">
-							<thead>
-								<tr>
-									<th>合同编号</th>
-									<th>订单编号</th>
-									<th>生成时间</th>
-									<th>代理商名称</th>
-									<th>确认状态</th>
-									<th>执行状态</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="contract:${contractList}">
-									<td><a th:text="${contract.contractNo}">合同号LM_2017-06-22-0001</a></td>
-									<td><a th:text="${contract.orderNo}">订单号1000000533146723</a></td>
-									<td th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd HH:mm:ss')}">订单日期：2017/06/22 12:12:12</td>
-									<td>代理商名称：北京XXX科技有限公司</td>
-									<td>确认状态：乙：Y｜甲：N</td>
-									<td>合同状态：新建</td>
-									<td>
-										<a class="btn btn-primary">详情</a>
-										<a class="btn btn-primary">完结</a>
-										
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<!-- 加入 分页 -->
-						<div th:include="/thymeleaf/common/_pager::pager" class="pagerx"></div>
-					</div>
-				</div>
-				<div class="row clearfix">
-					<div class="col-md-12 column">
-						<!-- <button type="button" class="btn btn-default">按钮</button> -->
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
-		<form th:action="@{/back/contract/show}" method="post"	id="searchform">
-			
-			<!-- 保存页号与页大小 -->
-			<input type="hidden" name="pageNum" id="pageNum" value=""> <input
-				type="hidden" name="pageSize" id="pageSize" value="">
 	
-			<!-- 用户选择的查询条件列表 -->
-			<!-- <input type="hidden" name="searchCond" id="searchCond"
-				th:value="${searchCond}"> -->
-		</form>
-		
-	</div>
+	<!-- content -->
+	<div class="container" id="container"></div>
+	
 	<!-- footer -->
 	<!-- <div th:include="/thymeleaf/common/_footer::footer" class="footer"></div> -->
 </body>
+<script type="text/javascript">
+	/*function:加载页面 */
+	function loadContract(parms, callback) {
+		var url = "/back/contract/contracttable";
+		var callbackFunc = callback;
+		var containerId = "#container";
+		loadPage(containerId, url, parms, callbackFunc);
+	}
 
-<script>
-	//==============分页通用================
-	/*查询-合同 */
-	function search_normal() {
-		$("#searchform").submit(); //提交表单		
+	/**
+	 function:加载页面
+	 parameters:
+	 orderTimeCond:合同时间条件值 
+	 dealStateCond:处理状态条件值
+	 */
+	function defaultLoadContract(timeCond, dealStateCond) {
+		//var url = "/back/contract/contracttable";
+		var parms = new Object(); //参数
+		parms.timeCond = timeCond; //时间段条件：近三个月合同
+		parms.dealStateCond = dealStateCond; //合同处理状态条件：全部状态
+		//分页
+		parms.pageNum = null;
+		parms.pageSize = null;
+
+		//查询类型，查询条件值
+		parms.searchTypeValue = 0;
+		parms.condValue = "";
+
+		loadContract(parms, null);
 	}
 	
-	$(function(){
-		/*
-		【分页】导航：
-		当点击页号时读取需要导航到的页码及每页记录数（pageNum,pageSize）
-		data-bind:pageNum-pageSize形式
-		如果data-bind为空字符串，则不做动作
-		当用户点击某页时，则发送与筛选相同的请求
-	 	*/
-
-		$(".pagination li a").on('click', function(e) {
-			//alert($(this).attr("data-bind"));
-			var dataBind = $(this).attr("data-bind");
-			//当dataBind有数据时处理
-			if (dataBind != "") {
-				var pageArr = new Array();
-				pageArr = dataBind.split("-");
-				//置隐藏表单数据
-				$("#pageNum").val(pageArr[0]);
-				$("#pageSize").val(pageArr[1]);
-				//发送请求
-				search_normal();
-			}
-	
-		});
-		
-		
-	});   //end of $();
-	
-	
-	
+	$(function() {
+		defaultLoadContract(1, 0);  //一个月内
+	});
 </script>
 
 

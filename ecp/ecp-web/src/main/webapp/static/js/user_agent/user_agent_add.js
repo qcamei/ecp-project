@@ -27,10 +27,13 @@ function saveFun() {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
 					// $("#update-menu-modal-div").modal("hide");//隐藏修改菜单对话框
-					util.message(obj.result_msg);
-					// window.location.href="loginSubmit";
-					// 操作成功后重新加载当前菜单内容
+					//util.message(obj.result_msg);
+					
+					// window.location.href="loginSubmit";					
 					// reloadInfoFun();
+					
+					window.opener.reloadPage();  //刷新父窗口中的网页  操作成功后重新加载当前菜单内容
+					window.close();//关闭当前窗窗口
 				} else {
 					util.message(obj.result_err_msg);
 				}

@@ -1,4 +1,4 @@
-/*查询-订单 */
+
 /*用于判定是否为空*/
 (function($){
 	$.isBlank = function(obj){
@@ -6,7 +6,7 @@
 		  };
 })(jQuery);
 
-
+/*查询-订单 */
 /**
  * 根据用户的输入条件查询（包括分页数据）
  * @returns
@@ -233,7 +233,6 @@ $(function() {
 	updateUIDealState(g_dealstate_cond);
 	updateUIOrderTime(g_ordertime_cond);
 	updateUISearchCond(g_searchTypeValue);
-	//alert("test");
 	
 
 	//===================BUSINESS业务处理==============
@@ -395,8 +394,6 @@ $(function() {
 		if(condType==0){   //如果没有选择条件，则进行刷新
 			search_normal();  
 		}
-
-		
 	});
 
 });

@@ -58,7 +58,7 @@ public class ContractController {
 	final String RESPONSE_THYMELEAF_FRONT="thymeleaf/front/";
 	final String RESPONSE_JSP="jsps/front/";
 	
-	private final int PAGE_SIZE = 5;
+	private final int PAGE_SIZE = 8;
 
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -78,6 +78,7 @@ public class ContractController {
 	IUserAgentService userAgentService;
 	@Autowired
 	ICompanyInfoService companyInfoService;
+	
 	
 	/**
 	 * @Description 合同详情
@@ -126,12 +127,26 @@ public class ContractController {
 	/**
 	 * @Description 显示-合同列表
 	 * @param model
-	 * @param pageNum  页号
-	 * @param pageSize 页大小
 	 * @return  
 	 */
 	@RequestMapping(value = "/show")
-	public String contract_show(Model model, Integer pageNum, Integer pageSize) {
+	public String contract_show(Model model) {
+		return RESPONSE_THYMELEAF_BACK + "contract_show";
+	}
+	
+	/**
+	 * @Description 显示-合同列表
+	 * @param orderTimeCond   时间 
+	 * @param dealStateCond
+	 * @param pageNum
+	 * @param pageSize
+	 * @param searchTypeValue
+	 * @param condValue
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/contracttable")
+	public String contract_table(int timeCond,int dealStateCond,Integer pageNum, Integer pageSize,Integer searchTypeValue,String condValue,Model model) {
 		
 		if(pageNum==null || pageNum==0)
 		{
@@ -139,18 +154,36 @@ public class ContractController {
 			pageSize=PAGE_SIZE;
 		}
 		
+		//置默认值(搜索)
+		if(searchTypeValue==null){
+			searchTypeValue=0;
+			condValue="";
+		}
+		
+		//回传查询条件
+		model.addAttribute("orderTimeCond", timeCond);
+		model.addAttribute("dealStateCond", dealStateCond);
+		//搜索类型及搜索关键字
+		model.addAttribute("searchTypeValue", searchTypeValue);  	//查询字段值
+		model.addAttribute("condValue", condValue);  				//查询条件值
+		
+		
 		// 查询 并分页		
 		PageHelper.startPage(pageNum, pageSize); // PageHelper			
 
-		List<Contract> contractList = contractService.selectAll();
-		PageInfo<Contract> pageInfo = new PageInfo<Contract>(contractList);// (使用了拦截器或是AOP进行查询的再次处理)
+		//List<Contract> contractList = contractService.selectAll();
+		List<Map<String,Object>> contractList=contractService.selectContract(timeCond,dealStateCond,searchTypeValue,condValue); 
+		
+		PageInfo<Map<String,Object>> pageInfo = new PageInfo<Map<String,Object>>(contractList);// (使用了拦截器或是AOP进行查询的再次处理)
 		
 		//setPageInfo(model, pageInfo); // 向前台传递分页信息
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("contractList", contractList);
-
-		return RESPONSE_THYMELEAF_BACK + "contract_show";
+		
+		return RESPONSE_THYMELEAF_BACK + "contract_table";
+		
 	}
+	
 	
 	/**
 	 * @Description 创建合同
@@ -341,6 +374,110 @@ public class ContractController {
 		return RequestResultUtil.getResultUpdateSuccess();
 	}
 	
+	/**
+	 * @Description 创建新合同
+	 * @param contractAttrVals  合同属性（JSON格式）
+	 * @param orderItems  合同商品列表（JSON格式）
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/create")
+	@ResponseBody
+	public Object contract_create(String contractAttrVals,String orderItems,Model model,HttpServletRequest request){
+		
+		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
+		//Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
+		
+		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);  //合同商品列表
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		
+		//(1)创建合同
+		String orderNo=getOrderNo(contractOrderItemBeanList.get(0));   //获取订单号
+		long contractTemplateId=getTemplateId(contractAttrValueList.get(0));  //获取合同模板ID
+		
+		String contractNo=getContractNo();  //生成合同号
+		Long contractId=createContract(contractNo,contractTemplateId,orderNo,user.getId());
+		
+		//(2)插入合同属性值
+		addContractAttrValues(contractId,contractAttrValueList);
+		
+		//(3)插入合同商品条目
+		addContractItems(contractOrderItemBeanList,contractNo);
+		
+		//(4)在订单中加入合同信息
+		updateOrderContract(orderNo,contractId,contractNo);
+		
+		return RequestResultUtil.getResultAddSuccess();
+	}
+	
+	/**
+	 * @Description 后台置合同的状态
+	 * @param orderId
+	 * @param contractId
+	 * @param status
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/setstatus")
+	@ResponseBody
+	public Object contract_set_setatus(long orderId,long contractId,byte status, Model model,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		
+		setContractStatus(orderId,contractId,status,user.getId());
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	/**
+	 * @Description 后台置合同的状态
+	 * @param orderId
+	 * @param contractId
+	 * @param status
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/frontsetstatus")
+	@ResponseBody
+	public Object contract_front_set_status(long orderId,long contractId,byte status, Model model,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		
+		setContractStatus(orderId,contractId,status,user.getId());
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	
+	
+	
+	
+	/**
+	 * @Description 设置合同状态
+	 * @param orderId
+	 * @param contractId
+	 * @param status
+	 * @param userId
+	 */
+	private void setContractStatus(long orderId,long contractId,byte status,long userId){
+		Orders order=new Orders();
+		order.setId(orderId);
+		order.setContractState(status);
+		orderService.updateByPrimaryKeySelective(order);
+		
+		Contract contract=new Contract();
+		contract.setId(contractId);
+		contract.setConfirmUserSecondParty(userId);
+		contract.setConfirmDateSecondParty(new Date());
+		contract.setContractStatus(status);  //合同状态
+		
+		contractService.updateByPrimaryKeySelective(contract);
+	}
+	
 	
 	/**
 	 * @Description (TODO这里用一句话描述这个方法的作用)
@@ -386,43 +523,7 @@ public class ContractController {
 		return map;
 	}
 	
-	/**
-	 * @Description 创建新合同
-	 * @param contractAttrVals  合同属性（JSON格式）
-	 * @param orderItems  合同商品列表（JSON格式）
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value="/create")
-	@ResponseBody
-	public Object contract_create(String contractAttrVals,String orderItems,Model model,HttpServletRequest request){
-		
-		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
-		//Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
-		
-		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);  //合同商品列表
-		
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute(SessionConstants.USER);
-		
-		//(1)创建合同
-		String orderNo=getOrderNo(contractOrderItemBeanList.get(0));   //获取订单号
-		long contractTemplateId=getTemplateId(contractAttrValueList.get(0));  //获取合同模板ID
-		
-		String contractNo=getContractNo();  //生成合同号
-		Long contractId=createContract(contractNo,contractTemplateId,orderNo,user.getId());
-		
-		//(2)插入合同属性值
-		addContractAttrValues(contractId,contractAttrValueList);
-		
-		//(3)插入合同商品条目
-		addContractItems(contractOrderItemBeanList,contractNo);
-		
-		//(4)在订单中加入合同信息
-		updateOrderContract(orderNo,contractId,contractNo);
-		
-		return RequestResultUtil.getResultAddSuccess();
-	}
+	
 	
 	/**
 	 * @Description 生成合同后，更新相关订单合同信息
@@ -546,16 +647,28 @@ public class ContractController {
 	 * @return  合同id
 	 */
 	private Long createContract(String contractNo,Long contractTemplateId,String orderNo,Long createUserId){
+		//查询订单（根据订单号）
+		Orders order=orderService.selectOrderByOrderNo(orderNo);  //读取订单
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());  //代理商
+		
+		
+		
 		//生成合同对象
-		Contract contract=new Contract();
+		Contract contract=new Contract(); 
 		
 		//设置合同属性
 		contract.setContractTemplateId(contractTemplateId);
 		contract.setOrderNo(orderNo);
+		contract.setOrderId(order.getId());		
 		contract.setContractNo(contractNo);
 		//创建用户及时间
 		contract.setCreateDate(new Date());
 		contract.setCreateUser(createUserId);
+		
+		if(agent!=null){
+			contract.setAgentId(agent.getExtendId());  //设置代理商id
+		}
+		contract.setContractStatus((byte)ContractStateType.CREATED_YES);
 		
 		//插入记录
 		contractService.insertSelective(contract);

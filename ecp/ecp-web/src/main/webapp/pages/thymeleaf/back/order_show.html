@@ -27,7 +27,7 @@
 				dealStateCond:处理状态条件值
 		 */
 		function defaultLoadOrder(orderTimeCond, dealStateCond) {
-			var url = "/back/order/ordertable";
+			//var url = "/back/order/ordertable";
 
 			var parms = new Object(); //参数
 			parms.orderTimeCond = orderTimeCond; //时间段条件：近三个月订单
@@ -46,18 +46,6 @@
 			defaultLoadOrder(1, 0);
 		})
 
-		/* function defaultLoad() {
-			var parms = new Object();
-			parms.pageNum = null;
-			parms.pageSize = null;
-
-			loadOrder(parms, null);
-		} */
-
-		//================page loaded ready===============
-		/* $(function() {
-			defaultLoad();
-		}) */
 	</script>
 
 

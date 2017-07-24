@@ -349,8 +349,8 @@
 	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
 	<form th:action="@{/back/order/show}" method="post" id="searchform">
 		<!-- 保存页号与页大小 -->
-		<input type="hidden" name="pageNum" id="pageNum" value=""> 
-		<input type="hidden" name="pageSize" id="pageSize" value="">
+		<input type="hidden" name="pageNum" id="pageNum" th:value="${pageInfo.pageNum}"> 
+		<input type="hidden" name="pageSize" id="pageSize" th:value="${pageInfo.pageSize}">
 	</form>
 	
 	<script type="text/javascript"	th:src="@{/static/js/order_management/orderManagement.js}"></script>
