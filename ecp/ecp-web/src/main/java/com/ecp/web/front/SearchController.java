@@ -309,7 +309,8 @@ public class SearchController {
 			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds,thirdCategoryCids); // 查询商品列表
 			
 			PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-			setPageInfo(model, pageInfo); // 向前台传递分页信息
+			//setPageInfo(model, pageInfo); // 向前台传递分页信息
+			model.addAttribute("pageInfo", pageInfo);
 			
 			// --------- 按SPU查询SPU的picture----------
 			for (Item item : itemList) {
@@ -366,7 +367,8 @@ public class SearchController {
 		List<Item> itemList = itemService.getItemByKeywordsAndBrandAndCid(keywords,brands,thirdCategoryCids); //查询商品列表
 		
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
 		
 		if (itemList.size() > 0) {
 			// 生成筛选条件，按品牌搜索的方式处理
@@ -575,7 +577,8 @@ public class SearchController {
 		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, brands, attrValPair); // 查询spu
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
 
 		// -------- 按SPU查询SPU的picture-------------
 		for (Item item : itemList) {
@@ -746,7 +749,9 @@ public class SearchController {
 		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, null, null); // 查询spu
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);// (使用了拦截器或是AOP进行查询的再次处理)
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo",pageInfo);
+		
 
 		// 按SPU查询SPU的picture
 		for (Item item : itemList) {
@@ -760,20 +765,7 @@ public class SearchController {
 		// 向页面传递的数据
 		model.addAttribute("itemList", item_pict_list);
 	}
-
-	private void setPageInfo(Model model, PageInfo pageInfo) {
-		// 获得当前页
-		model.addAttribute("pageNum", pageInfo.getPageNum());
-		// 获得一页显示的条数
-		model.addAttribute("pageSize", pageInfo.getPageSize());
-		// 是否是第一页
-		model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
-		// 获得总页数
-		model.addAttribute("totalPages", pageInfo.getPages());
-		// 是否是最后一页
-		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
-	}
-
+	
 	private SearchCondBean getEntity(String resp) {
 		JSONObject jsonObj = (JSONObject) JSON.parse(resp);
 		SearchCondBean entity = JSONObject.toJavaObject(jsonObj, SearchCondBean.class);

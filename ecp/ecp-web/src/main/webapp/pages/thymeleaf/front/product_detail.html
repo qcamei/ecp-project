@@ -10,17 +10,20 @@ li {
 	list-style-type: none;
 }
 
-.attrValue {
+li.attrValue {
 	float: left;
 	margin-right: 5px;
+	margin-left:5px;
 	list-style-type: none;
 	cursor:pointer;
+	border: 1px solid white;
 }
 
-.selected {
-	display: block;
-	width: 60px;
-	height: 20px;
+li.attrValue:hover {
+	border: 1px solid blue;
+}
+
+li.selected {		
 	border: 1px solid red;
 }
 
