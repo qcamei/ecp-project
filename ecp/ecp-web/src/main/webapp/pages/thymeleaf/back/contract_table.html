@@ -285,9 +285,9 @@
 								</td>
 								
 								<td class="contract-time"
-									th:text="${#calendars.format(contract.create_date,'yyyy-MM-dd HH:mm:ss')}" style="width:200px;">合同日期：2017/06/22
+									th:text="${#calendars.format(contract.create_date,'yyyy-MM-dd HH:mm:ss')}">合同日期：2017/06/22
 									12:12:12</td>
-								<td style="width:380px;" th:text="${contract.company_name}">代理商名称：北京XXX科技有限公司</td>
+								<td  th:text="${contract.company_name}">代理商名称：北京XXX科技有限公司</td>
 								<td style="width:100px;">
 									<!-- 其它状态 -->
 									<span th:switch="${contract.contract_status}"  th:remove="tag">
