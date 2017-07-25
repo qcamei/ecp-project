@@ -81,6 +81,17 @@ public class UserEntryController {
 	}
 	
 	/**
+	 * @Description 导航->登录页
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/gologin", method = RequestMethod.GET)
+	public String login(Model model) {
+		return RESPONSE_THYMELEAF + "login";
+	}
+	
+	
+	/**
 	 * 
 	 * @Description 用户登录-AJAX方式
 	 * @param request
