@@ -192,8 +192,8 @@
 						<li value="0"><a href="javascript:void(0);"	class="txt curr">全部订单</a></li>
 						<li value="1"><a href="javascript:void(0);"	class="txt">未建合同</a></li>
 						<li value="2"><a href="javascript:void(0);"	class="txt">己建合同</a></li>
-						<li value="3"><a href="javascript:void(0);"	class="txt"	>LM确认</a></li>
-						<li value="4"><a href="javascript:void(0);"	class="txt"	>我己确认</a></li>
+						<li value="3"><a href="javascript:void(0);"	class="txt"	>乙方己确认</a></li>
+						<li value="4"><a href="javascript:void(0);"	class="txt"	>甲方己确认</a></li>
 						<li value="5"><a href="javascript:void(0);"	class="txt"	>执行中..</a></li>
 						<li value="6"><a href="javascript:void(0);"	class="txt"	>执行完毕</a></li>
 					</ul>
@@ -269,8 +269,8 @@
 										<li value="0" class="curr"><i class="icon-ok"></i><a href="javascript:void(0)">全部状态</a></li>
 										<li value="1"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">未建合同</a></li>
 										<li value="2"   class=""><i class="icon-ok"></i><a href="javascript:void(0)">己建合同</a></li>
-										<li value="3"   class=""><i class="icon-ok"></i><a href="javascript:void(0)">LM己确认</a></li>
-										<li value="4"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">我己确认</a></li>
+										<li value="3"   class=""><i class="icon-ok"></i><a href="javascript:void(0)">乙方己确认</a></li>
+										<li value="4"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">甲方己确认</a></li>
 										<li value="5"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">执行中..</a></li>
 										<li value="6"	class=""><i class="icon-ok"></i><a href="javascript:void(0)">执行完毕</a></li>
 									</ul>
@@ -308,8 +308,8 @@
 							<span th:switch="${order.contract_state}"  th:remove="tag">
 								<span th:case='1' th:remove="tag"><span class="order-status"> 未建合同 </span> <br></span>
 								<span th:case='2' th:remove="tag"><span class="order-status"> 己建合同 </span> <br></span>
-								<span th:case='3' th:remove="tag"><span class="order-status"> LM已确认 </span> <br></span>
-								<span th:case='4' th:remove="tag"><span class="order-status"> 我已确认 </span> <br></span>
+								<span th:case='3' th:remove="tag"><span class="order-status"> 乙方已确认 </span> <br></span>
+								<span th:case='4' th:remove="tag"><span class="order-status"> 甲方已确认 </span> <br></span>
 								<span th:case='5' th:remove="tag"><span class="order-status"> 执行中 </span> <br></span>
 								<span th:case='6' th:remove="tag"><span class="order-status"> 执行完毕 </span> <br></span>										
 							</span>

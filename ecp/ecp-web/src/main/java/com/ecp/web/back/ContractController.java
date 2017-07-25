@@ -427,7 +427,7 @@ public class ContractController {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(SessionConstants.USER);
 		
-		setContractStatus(orderId,contractId,status,user.getId());
+		setContractStatus(orderId,contractId,status,user.getId(),BACK_CONTRACT_CONFIRM);
 		
 		return RequestResultUtil.getResultUpdateSuccess();
 	}
@@ -447,14 +447,15 @@ public class ContractController {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(SessionConstants.USER);
 		
-		setContractStatus(orderId,contractId,status,user.getId());
+		setContractStatus(orderId,contractId,status,user.getId(),FRONT_CONTRACT_CONFIRM);
 		
 		return RequestResultUtil.getResultUpdateSuccess();
 	}
 	
 	
 	
-	
+	private  final  int BACK_CONTRACT_CONFIRM=2;
+	private  final 	int FRONT_CONTRACT_CONFIRM=1; 
 	
 	/**
 	 * @Description 设置合同状态
@@ -463,7 +464,7 @@ public class ContractController {
 	 * @param status
 	 * @param userId
 	 */
-	private void setContractStatus(long orderId,long contractId,byte status,long userId){
+	private void setContractStatus(long orderId,long contractId,byte status,long userId,int frontOrBack){
 		Orders order=new Orders();
 		order.setId(orderId);
 		order.setContractState(status);
@@ -471,8 +472,19 @@ public class ContractController {
 		
 		Contract contract=new Contract();
 		contract.setId(contractId);
-		contract.setConfirmUserSecondParty(userId);
-		contract.setConfirmDateSecondParty(new Date());
+		
+		if(frontOrBack==FRONT_CONTRACT_CONFIRM){  //前台合同确认
+			contract.setConfirmUserFirstParty(userId);
+			contract.setConfirmDateFirstParty(new Date());
+		}
+		else{  //后台合同确认
+			contract.setConfirmUserSecondParty(userId);
+			contract.setConfirmDateSecondParty(new Date());
+		}
+		
+		
+		
+		
 		contract.setContractStatus(status);  //合同状态
 		
 		contractService.updateByPrimaryKeySelective(contract);
