@@ -10,7 +10,6 @@
     <!-- <script th:src="@{/static/jquery/1.11.3/jquery-1.11.3.js}"></script> -->
     <script type="text/javascript" th:src="@{/static/js/header/js.js}"></script>
     <script type="text/javascript" th:src="@{/static/iconfont/iconfont.js}"></script>
-    
 </head>
 
 <body>
@@ -31,6 +30,9 @@
                         <div id="reg">
                         	<a th:href="${user} ?  @{/front/home/unRegister}:@{/login/agent/gologin}" 
                         	   th:text="${user} ?  '[退出登录]': '[请登录]'" > [请登录]</a></div>
+                       	<div>
+                       		<a href="javascript:void(0);" style="margin-left:20px;" id="change-password">[修改口令]</a>
+                       	</div>                       
                     </li>
                 </ul>
                 <ul class="rightul">
@@ -145,6 +147,7 @@
             </div>
         </div>
     </div>
+    <div id="changePassword" th:replace="thymeleaf/common/change_password_dialog::dialog"></div>
     <!-- 占位图片 不属于header  -->
     <!-- <div>
         <img src="http://via.placeholder.com/1200x330" style="display: block;width: auto;margin:0 auto">
@@ -152,6 +155,9 @@
     <!-- 占位图片 不属于header end  -->
     
     <!--  -->
+    
+    <script type="text/javascript" th:src="@{/static/js/header/change_password.js}"></script>
+    
     
     
     
