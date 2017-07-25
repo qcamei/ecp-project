@@ -307,7 +307,7 @@ $(function() {
 			setContractStatus(orderId,contractId,status);
 		}
 		else{
-			util.message("甲方尚未确认！");
+			util.message("执行此操作时，合同当前状态需为：甲方己确认！");
 		}
 			
 	});
@@ -323,7 +323,7 @@ $(function() {
 			setContractStatus(orderId,contractId,status);
 		}
 		else{
-			util.message("乙方尚未确认！");
+			util.message("执行此操作时，合同当前状态需为：乙方己确认！");
 		}
 	});
 	
@@ -338,7 +338,7 @@ $(function() {
 			setContractStatus(orderId,contractId,status);
 		}
 		else{
-			util.message("此合同尚未执行！");
+			util.message("执行此操作时，合同当前状态需为：执行状态！");
 		}
 	});
 	
