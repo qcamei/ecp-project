@@ -35,9 +35,9 @@
 												th:case='2' th:remove="tag"><span
 													class="order-status"> 己建合同 </span> <br></span> <span
 												th:case='3' th:remove="tag"><span
-													class="order-status"> LM已确认 </span> <br></span> <span
+													class="order-status"> 乙方已确认 </span> <br></span> <span
 												th:case='4' th:remove="tag"><span
-													class="order-status"> 我已确认 </span> <br></span> <span
+													class="order-status"> 甲方己确认 </span> <br></span> <span
 												th:case='5' th:remove="tag"><span
 													class="order-status"> 执行中 </span> <br></span> <span
 												th:case='6' th:remove="tag"><span
@@ -150,7 +150,7 @@
 								<td></td>
 								<td></td>
 								<td></td>
-								<td th:text="'总金额:'+'￥'+${order.totalPrice}"></td>
+								<td><b th:text="'总金额:'+'￥'+${order.totalPrice}"></b></td>
 							</tr>
 						</tbody>
 					</table>

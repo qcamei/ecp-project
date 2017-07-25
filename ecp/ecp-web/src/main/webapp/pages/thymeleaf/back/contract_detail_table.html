@@ -34,10 +34,10 @@
 													<span class="contract-status"> 己建合同 </span> <br>
 												</span> 
 												<span th:case='2' th:remove="tag">
-													<span class="contract-status"> LM已确认 </span> <br>
+													<span class="contract-status"> 乙方已确认 </span> <br>
 												</span> 
 												<span th:case='3' th:remove="tag">
-													<span class="contract-status"> 我已确认 </span> <br>
+													<span class="contract-status"> 甲方已确认 </span> <br>
 												</span> 
 												<span th:case='4' th:remove="tag">
 													<span class="contract-status"> 执行中 </span> <br>
@@ -147,14 +147,16 @@
 								<td th:text="${contractItem.num}">数量</td>
 								<td th:text="'￥'+${contractItem.pay_price_total}">金额</td>
 							</tr>
-							<!-- <tr>
+							<tr>
 								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
-								<td >总金额</td>
-							</tr> -->
+								<td></td>
+								<td></td>
+								<td><b th:text="'总金额:'+'￥'+${contractItemTotal}"></b></td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

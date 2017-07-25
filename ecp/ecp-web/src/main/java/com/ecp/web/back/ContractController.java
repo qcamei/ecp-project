@@ -113,6 +113,9 @@ public class ContractController {
 		//(3)合同商品条目(根据合同编号)
 		List<Map<String,Object>> contractItems=contractItemsService.selectItemsByContractNo(contract.getContractNo());
 		model.addAttribute("contractItems", contractItems);
+		BigDecimal contractItemTotal=calcContractItemTotalPrice(contractItems);  //计算合同优惠后总额
+		model.addAttribute("contractItemTotal", contractItemTotal);
+		
 		
 		//(4)代理商
 		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
