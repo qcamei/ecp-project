@@ -95,6 +95,7 @@
   			contract_state=#{dealStateCond}	
   		</if>
   	</where>
+  	ORDER BY create_time DESC
   </select>
   
   <select id="selectAllOrderByOrderTimeAndDealState" resultMap="BaseResultMap">
