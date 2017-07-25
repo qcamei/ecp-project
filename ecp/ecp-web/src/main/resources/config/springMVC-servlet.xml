@@ -123,19 +123,19 @@
 	</bean>
 	
 	<!-- spring mvc 拦截器配置 -->
-    <!-- <mvc:interceptors>  
-        session超时
+    <mvc:interceptors>  
+       <!--  session超时 -->
         <mvc:interceptor>  
             <mvc:mapping path="/front/**" />  
             <bean class="com.ecp.interceptor.SessionTimeoutInterceptor">  
                 <property name="allowUrls">  
                     <list>  
-                        如果请求中包含以下路径，则不进行拦截
+                      	<!--   如果请求中包含以下路径，则不进行拦截 -->
                         <value>/login</value>
-                        <value>/user/login</value>
+                        <!-- <value>/user/login</value> -->
                     </list>  
                 </property>  
             </bean>  
         </mvc:interceptor>  
-    </mvc:interceptors> -->
+    </mvc:interceptors>
 </beans>
