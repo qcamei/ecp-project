@@ -85,10 +85,36 @@ public class UserEntryController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/gologin", method = RequestMethod.GET)
+	@RequestMapping(value = "/gologin")
 	public String login(Model model) {
 		return RESPONSE_THYMELEAF + "login";
 	}
+	
+	/**
+	 * @Description 修改口令
+	 * @param loginName  登录名
+	 * @param oldPassword 原口令
+	 * @param newPassword 新口令
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/updatepassword")
+	@ResponseBody
+	public Object change_password(String loginName,String oldPassword,String newPassword,Model model) {
+		User user = verifyUser(loginName, oldPassword);
+		if (user!=null) { // 如果校难正确
+			
+			user.setPassword(genMD5Password(loginName,newPassword));
+			agentService.updateByPrimaryKeySelective(user);
+    		
+    		return RequestResultUtil.getResultUpdateSuccess();
+		} else {
+			return RequestResultUtil.getResultUpdateWarn();
+		}
+
+		
+	}
+	
 	
 	
 	/**
@@ -189,6 +215,14 @@ public class UserEntryController {
 		// DigestUtils.md5Hex(pass.getBytes()).toUpperCase());
 		String md5Password = DigestUtils.md5Hex(pass.getBytes()).toUpperCase();
 		return md5Password;
+	}
+	
+	public static void main(String args[]) { 
+		String pass = "jch" + ":CNWELL:" + "12345";
+		// log.debug("md5 password upper : " +
+		// DigestUtils.md5Hex(pass.getBytes()).toUpperCase());
+		String md5Password = DigestUtils.md5Hex(pass.getBytes()).toUpperCase();
+		System.out.println(md5Password);
 	}
 
 }
