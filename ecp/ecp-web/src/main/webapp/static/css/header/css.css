@@ -479,7 +479,7 @@ i {
 }
 
 .subitem dt {
-	width: 90px;
+	/* width: 90px; */
     padding: 8px 30px 0 0;
     text-align: right;
     position: relative;

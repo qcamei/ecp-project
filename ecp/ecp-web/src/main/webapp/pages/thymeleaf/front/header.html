@@ -119,9 +119,11 @@
                             <div class="subitem">
                                 <dl th:each="level2,iter2 : ${level1.subCategoryList}" th:attr="class='force'+${iter2.count}">
                                     <dt>
-                                        <a th:href="@{/front/search/category/{categoryId}(categoryId=${level2.category.cid})}" target="_blank"><span th:text="${level2.category.cName}" th:remove="tag">电视</span>
-                                        	<i>></i>
+                                        <a th:href="@{/front/search/category/{categoryId}(categoryId=${level2.category.cid})}" target="_blank">
+                                        	<span th:text="${level2.category.cName}" th:remove="tag">电视</span>
+                                        	<b>></b>
                                     	</a>
+                                    	
                                     </dt>
                                     <dd>
                                         <a th:each="level3 : ${level2.subCategoryList}" th:href="@{/front/search/category/{categoryId}(categoryId=${level3.category.cid})}" target="_blank"><span th:text="${level3.category.cName}" th:remove="tag">电视</span></a>
