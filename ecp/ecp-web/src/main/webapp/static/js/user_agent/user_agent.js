@@ -50,12 +50,15 @@ function search(){
  * 显示分配帐户窗口
  */
 function displayWindow() {
-	$("#modal-273078").click();
+	$('#modal-container-273078').modal({
+		backdrop : 'static',
+		keyboard : false
+	});
 }
 
 /* 关闭分配帐户窗口 */
 function closeWindow() {
-	$("#btnClose").click();
+	$("#modal-container-273078").modal("hide");
 }
 
 // ===================设置帐号状态====================
@@ -116,6 +119,94 @@ function updateUIOrderTime(orderTimeCond){
 			var value=$(this).val();
 			setOrderTimeCond(selectedTxt,value);
 		}
+	});
+}
+
+
+
+/**
+ * 判定用户帐号的有效性
+ * @returns
+ * 		0：正确; 		
+ * 		2:字段为空
+ */
+function validUserAccount(){
+	var loginName=$("#loginName").val();
+	var password=$("#password").val();
+	if($.isBlank(loginName) || $.isBlank(password)){
+		return 2;
+	}
+	else{
+		return 0;
+	}
+}
+
+
+/**
+ * 分配帐号
+ * @returns
+ */
+function dispatchAccount(){
+	var loginName=$("#loginName").val();
+	var password=$("#password").val();
+	var agentId=$("#agentId").val();
+	var url = BASE_CONTEXT_PATH + "/back/agent/dispatch"; // 需要提交的 url
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {
+			"loginName" : loginName,
+			"password"	: password,
+			"agentId"	: agentId
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {  
+					//生成帐号成功 重新加载页面
+					util.message("成功分配帐号！");
+					reloadPage();
+					
+				} else {  //此帐号不重复
+					util.message(obj.result_msg);
+				}
+			}
+		}
+
+	});
+}
+
+
+/**
+ * 采用AJAX来判定是否登录用户重复
+ * @returns
+ */
+function hasSameLoginName(){
+	var loginName=$("#loginName").val();
+	var url = BASE_CONTEXT_PATH + "/back/agent/sameloginname"; // 需要提交的 url
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {
+			'loginName' : loginName			
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {  //有重复的帐号
+					util.message("有相同的帐号，请重新输入新登录名称！");
+				} else {  //此帐号不重复
+					//util.message(obj.result_msg);
+					closeWindow();  //关闭窗口
+					dispatchAccount();  //分配帐号
+				}
+			}
+		}
+
 	});
 }
 
@@ -198,6 +289,19 @@ $(function() {
 				
 				
 	});
+	
+	/*分配帐户：确认按钮-click*/
+	$("#btnDispatch").on("click",function(){
+		//console.log("debug1");
+		var result=validUserAccount();
+		if (result==2){
+			util.message("字段不可以为空!");
+			return;
+		}
+		
+		hasSameLoginName();  //判定登录名称是否重复
+	});
+	
 
 	// ===================设置帐号状态（有效、无效）======================
 	/* 设置帐号为有效 */

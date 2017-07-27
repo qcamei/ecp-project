@@ -46,5 +46,4 @@ public interface IUserAgentService extends IBaseService<UserExtends, Long> {
 	public List<UserExtends> searchUserAgent(int searchTypeValue,String condValue);
 	
 	
-	
 }

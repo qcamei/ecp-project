@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.AccountStatusType;
 import com.ecp.bean.UserType;
 import com.ecp.common.util.FileUploadUtil;
@@ -26,6 +24,7 @@ import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.User;
 import com.ecp.entity.UserExtends;
 import com.ecp.service.back.IUserService;
+import com.ecp.service.front.IAgentService;
 import com.ecp.service.front.IUserAgentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -51,6 +50,8 @@ public class UserAgentController {
 	IUserAgentService userAgentService;
 	@Autowired
 	IUserService userService;
+	@Autowired
+	IAgentService agentService; 
 
 	/**
 	 * @Description 显示-签约客户列表
@@ -163,6 +164,43 @@ public class UserAgentController {
 	}
 	
 	/**
+	 * @Description 查询是否有相同的登录帐号
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/sameloginname" ,method=RequestMethod.POST)
+	@ResponseBody
+	public Object user_agent_same_loginname(String loginName,HttpServletRequest request){
+		User user=new User();
+		user.setUsername(loginName);
+		
+		boolean has=agentService.hasSameLoginName(loginName);
+		if(has)
+			return RequestResultUtil.getResultSelectSuccess();
+		
+		
+		return RequestResultUtil.getResultSelectWarn();
+	}
+	
+	
+	
+	
+	
+	/**
+	 * @Description 签约客户-详情（修改）
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/detail/{id}")
+	public String user_agent_detail(@PathVariable("id") long extendId, Model model) {
+	
+		UserExtends agent = userAgentService.selectByPrimaryKey(extendId);
+		model.addAttribute("agent", agent);
+	
+		return RESPONSE_THYMELEAF_BACK + "user_agent_detail";
+	}
+
+	/**
 	 * @Description 分配帐号（帐号默认为有效状态）
 	 * @param request
 	 * @return
@@ -186,22 +224,6 @@ public class UserAgentController {
 		
 	}
 	
-	/**
-	 * @Description 根据用户名及口令生成MD5加密口令
-	 * @param loginName
-	 * @param password
-	 * @return 生成MD5的加密口令
-	 */
-	private String genMD5Password(String loginName, String password) {
-		// user_pass加密规则：UPPER(MD5(CONCAT(user_name,":CNWELL:",user_pass)))
-		String pass = loginName + ":CNWELL:" + password;
-		// log.debug("md5 password upper : " +
-		// DigestUtils.md5Hex(pass.getBytes()).toUpperCase());
-		String md5Password = DigestUtils.md5Hex(pass.getBytes()).toUpperCase();
-		return md5Password;
-	}
-	
-
 	/**
 	 * @Description 插入签约客户
 	 * @param model
@@ -295,17 +317,18 @@ public class UserAgentController {
 	}
 
 	/**
-	 * @Description 签约客户-详情（修改）
-	 * @param model
-	 * @return
+	 * @Description 根据用户名及口令生成MD5加密口令
+	 * @param loginName
+	 * @param password
+	 * @return 生成MD5的加密口令
 	 */
-	@RequestMapping(value = "/detail/{id}")
-	public String user_agent_detail(@PathVariable("id") long extendId, Model model) {
-
-		UserExtends agent = userAgentService.selectByPrimaryKey(extendId);
-		model.addAttribute("agent", agent);
-
-		return RESPONSE_THYMELEAF_BACK + "user_agent_detail";
+	private String genMD5Password(String loginName, String password) {
+		// user_pass加密规则：UPPER(MD5(CONCAT(user_name,":CNWELL:",user_pass)))
+		String pass = loginName + ":CNWELL:" + password;
+		// log.debug("md5 password upper : " +
+		// DigestUtils.md5Hex(pass.getBytes()).toUpperCase());
+		String md5Password = DigestUtils.md5Hex(pass.getBytes()).toUpperCase();
+		return md5Password;
 	}
 
 }
