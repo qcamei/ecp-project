@@ -22,6 +22,7 @@
     second_lev_cid
   </sql>
   
+  <!-- 读取三级类目下的品牌 -->
   <select id="getBrandByCid"  resultType="map" >
   	select  		
   		c.brand_id,
@@ -31,6 +32,22 @@
   	where c.third_lev_cid=#{cid} 
   		 
   </select>
+  
+  <!-- 读取二级类目下的品牌 -->
+  <select id="getBrandByLevelSecondCid"  resultMap="CategoryBrandMap" >
+  	SELECT  		
+  		c.brand_id,
+ 		c.third_lev_cid,
+ 		c.second_lev_cid,
+ 		b.brand_logo_url,
+ 		b.brand_name
+  	FROM item_category_brand c LEFT JOIN item_brand b ON(c.brand_id=b.brand_id) 
+  	WHERE c.second_lev_cid=#{cid} 
+  		 
+  </select>
+  
+  
+  
   
   <select id="getCategoryByBrand"  resultMap="CategoryBrandMap">
  	select 

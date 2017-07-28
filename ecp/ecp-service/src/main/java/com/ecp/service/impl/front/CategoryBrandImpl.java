@@ -54,6 +54,11 @@ public class CategoryBrandImpl extends AbstractBaseService<CategoryBrand, Long> 
 		
 		return categoryBrandMapper.getCategoryByBrandIds(ids);
 	}
+
+	@Override
+	public List<CategoryBrandBean> getBrandByLevelSecondCid(Long cid) {
+		return categoryBrandMapper.getBrandByLevelSecondCid(cid);
+	}
 	
 	
 
