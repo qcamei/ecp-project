@@ -44,7 +44,7 @@ import com.github.pagehelper.PageInfo;
 public class SearchController {
 	final String RESPONSE_THYMELEAF = "thymeleaf/front/";
 	final String RESPONSE_JSP = "jsps/front/";
-	final int PAGE_SIZE = 1;
+	final int PAGE_SIZE = 10;
 
 	/**
 	 * 查询的数据格式为：
@@ -896,7 +896,7 @@ public class SearchController {
 			List<Map<String, String>> valueList = categoryAttrService.getCategoryAttrValList(cid,
 					attrBean.getAttr_id());
 			if (valueList.size() > 0)
-				System.out.println("test-----------" + valueList.get(0).get("attr_name"));
+				//System.out.println("test-----------" + valueList.get(0).get("attr_name"));
 			attrValMap.put("valueList", valueList);
 
 			attrValueList.add(attrValMap); // 加入列表中
