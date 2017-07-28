@@ -109,7 +109,8 @@ public class SearchController {
 		return url;
 
 	}
-
+	
+	
 	/**
 	 * @Description 通过关键字查询（条件查询）
 	 * @param keywords
@@ -254,6 +255,19 @@ public class SearchController {
 	}
 
 	/**
+	 * @Description 主机频道查询
+	 * @param cid 三级类目ID
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/channel/{categoryId}")
+	public String home_channel_search(@PathVariable("categoryId") Long categoryId, Model model) {
+		getSPU(model, categoryId, PAGE_SIZE);
+		return RESPONSE_THYMELEAF + "channel";
+	}
+
+
+	/**
 	 * @Description 三级类目查询
 	 * @param categoryId
 	 *            类目ID
@@ -274,7 +288,7 @@ public class SearchController {
 		// (2)类目-属性-属性值列表
 		getCategoryAttrValue(model, categoryId);
 		// (3)查询类目下的SPU
-		getSPU(model, categoryId);
+		getSPU(model, categoryId,PAGE_SIZE);
 	
 		//get category name by cid;
 		Category cate = categoryService.getCategoryByCid(categoryId);
@@ -896,7 +910,7 @@ public class SearchController {
 			List<Map<String, String>> valueList = categoryAttrService.getCategoryAttrValList(cid,
 					attrBean.getAttr_id());
 			if (valueList.size() > 0)
-				//System.out.println("test-----------" + valueList.get(0).get("attr_name"));
+				System.out.println("test-----------" + valueList.get(0).get("attr_name"));
 			attrValMap.put("valueList", valueList);
 
 			attrValueList.add(attrValMap); // 加入列表中
@@ -910,11 +924,11 @@ public class SearchController {
 	 * @param model
 	 * @param cid
 	 */
-	private void getSPU(Model model, long cid) {
+	private void getSPU(Model model, long cid,int pageSize) {
 		// 查询类目下的SPU
 		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的数据
 
-		PageHelper.startPage(1, PAGE_SIZE); // PageHelper
+		PageHelper.startPage(1, pageSize); // PageHelper
 		List<Long> brands = new ArrayList<Long>(); // (1)品牌ID列表 条件列表
 		List<String> params = new ArrayList<String>();// (2)属性-属性值 条件列表
 		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, null, null); // 查询spu

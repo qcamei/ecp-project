@@ -87,9 +87,11 @@ public class HomeController {
 	 * @Description 加载channel-one
 	 * @return channel_one页面
 	 */
-	@RequestMapping(value = "/channelone")
-	public String channel_one(){
-		return RESPONSE_THYMELEAF + "channel_one";
+	@RequestMapping(value = "/channel")
+	public String channel_one(long cid){
+		
+		//return RESPONSE_THYMELEAF + "channel_one";
+		return "redirect:/front/search/channel/" + cid;
 	}
 	
 	/** 

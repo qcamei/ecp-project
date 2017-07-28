@@ -30,19 +30,19 @@
 										<td>状态</td>
 										<td>
 											<span th:switch="${contract.contractStatus}" th:remove="tag"> 
-												<span th:case='1' th:remove="tag">
+												<span th:case='2' th:remove="tag">
 													<span class="contract-status"> 己建合同 </span> <br>
 												</span> 
-												<span th:case='2' th:remove="tag">
+												<span th:case='3' th:remove="tag">
 													<span class="contract-status"> 乙方已确认 </span> <br>
 												</span> 
-												<span th:case='3' th:remove="tag">
+												<span th:case='4' th:remove="tag">
 													<span class="contract-status"> 甲方已确认 </span> <br>
 												</span> 
-												<span th:case='4' th:remove="tag">
+												<span th:case='5' th:remove="tag">
 													<span class="contract-status"> 执行中 </span> <br>
 												</span> 
-												<span th:case='5' th:remove="tag">
+												<span th:case='6' th:remove="tag">
 													<span class="contract-status"> 执行完毕 </span> <br>
 												</span>
 											</span>
