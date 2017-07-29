@@ -1,5 +1,6 @@
 package com.ecp.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,8 +11,12 @@ import java.util.Date;
  * @Date 2017年6月29日 下午3:53:19
  * @version 1.0.0
  */
-public class ContractOrderItemBean {
+public class ContractOrderItemBean implements Serializable  {
 
+	/**
+	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 */
+	private static final long serialVersionUID = -2000803613749093426L;
 	/*
 	 "create_time":"2017-06-27T17:45:12.000+08:00",
 					"picture_url":"/static/images/iphone_index.png",
@@ -45,10 +50,10 @@ public class ContractOrderItemBean {
 	private Long picture_id;
 	private Integer picture_status;
 	
-	public Long getItem_id() {
+	public Long getItemId() {
 		return item_id;
 	}
-	public void setItem_id(Long item_id) {
+	public void setItemId(Long item_id) {
 		this.item_id = item_id;
 	}
 	public Integer getNum() {
@@ -57,28 +62,28 @@ public class ContractOrderItemBean {
 	public void setNum(Integer num) {
 		this.num = num;
 	}
-	public Long getSku_id() {
+	public Long getSkuId() {
 		return sku_id;
 	}
-	public void setSku_id(Long sku_id) {
+	public void setSkuId(Long sku_id) {
 		this.sku_id = sku_id;
 	}
-	public BigDecimal getPrimitive_price() {
+	public BigDecimal getPrimitivePrice() {
 		return primitive_price;
 	}
-	public void setPrimitive_price(BigDecimal primitive_price) {
+	public void setPrimitivePrice(BigDecimal primitive_price) {
 		this.primitive_price = primitive_price;
 	}
-	public String getSku_name() {
+	public String getSkuName() {
 		return sku_name;
 	}
-	public void setSku_name(String sku_name) {
+	public void setSkuName(String sku_name) {
 		this.sku_name = sku_name;
 	}
-	public String getOrder_id() {
+	public String getOrderId() {
 		return order_id;
 	}
-	public void setOrder_id(String order_id) {
+	public void setOrderId(String order_id) {
 		this.order_id = order_id;
 	}
 	public Long getCid() {
@@ -87,50 +92,57 @@ public class ContractOrderItemBean {
 	public void setCid(Long cid) {
 		this.cid = cid;
 	}
-	public BigDecimal getDiscount_price() {
+	public BigDecimal getDiscountPrice() {
 		return discount_price;
 	}
-	public void setDiscount_price(BigDecimal discount_price) {
+	public void setDiscountPrice(BigDecimal discount_price) {
 		this.discount_price = discount_price;
 	}
-	public BigDecimal getPay_price() {
+	public BigDecimal getPayPrice() {
 		return pay_price;
 	}
-	public void setPay_price(BigDecimal pay_price) {
+	public void setPayPrice(BigDecimal pay_price) {
 		this.pay_price = pay_price;
 	}
-	public BigDecimal getPay_price_total() {
+	public BigDecimal getPayPriceTotal() {
 		return pay_price_total;
 	}
-	public void setPay_price_total(BigDecimal pay_price_total) {
+	public void setPayPriceTotal(BigDecimal pay_price_total) {
 		this.pay_price_total = pay_price_total;
 	}
 	
-	public String getPicture_url() {
+	public String getPictureUrl() {
 		return picture_url;
 	}
-	public void setPicture_url(String picture_url) {
+	public void setPictureUrl(String picture_url) {
 		this.picture_url = picture_url;
 	}
-	public Long getPicture_id() {
+	public Long getPictureId() {
 		return picture_id;
 	}
-	public void setPicture_id(Long picture_id) {
+	public void setPictureId(Long picture_id) {
 		this.picture_id = picture_id;
 	}
-	public Integer getPicture_status() {
+	public Integer getPictureStatus() {
 		return picture_status;
 	}
-	public void setPicture_status(Integer picture_status) {
+	public void setPictureStatus(Integer picture_status) {
 		this.picture_status = picture_status;
 	}
-	public Date getCreate_time() {
+	public Date getCreateTime() {
 		return create_time;
 	}
-	public void setCreate_time(Date create_time) {
+	public void setCreateTime(Date create_time) {
 		this.create_time = create_time;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "ContractOrderItemBean [item_id=" + item_id + ", num=" + num + ", sku_id=" + sku_id
+				+ ", primitive_price=" + primitive_price + ", sku_name=" + sku_name + ", order_id=" + order_id
+				+ ", cid=" + cid + ", discount_price=" + discount_price + ", pay_price=" + pay_price
+				+ ", pay_price_total=" + pay_price_total + ", create_time=" + create_time + ", picture_url="
+				+ picture_url + ", picture_id=" + picture_id + ", picture_status=" + picture_status + "]";
+	}
 	
 }

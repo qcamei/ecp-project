@@ -14,13 +14,24 @@ li {
 	list-style-type: none;
 }
 
+.brandcond{
+	float: left;		
+}
+
+.cond li{
+	border: 1px solid white;
+}
+
 .cond li:hover {
-	border: 1px solid blue;
-	margin: -1px
+	border: 1px solid blue;	
 }
 
 .shaixuan-tj i{
 	color:black;
+}
+
+div li span{
+	cursor:pointer;
 }
 
 </style>
@@ -39,26 +50,21 @@ li {
 				<div class="col-md-12 column">
 					
 					<p class="shaixuan-tj floatLeft clearfix ">
-						<span class=""><a href="#">全部结果</a></span> <i
-							class="icon-angle-right"></i> <span><em
-							th:text="'“'+${cName}+'”'">查询关键字</em></span> <i
-							class="icon-angle-right"></i>
-
-						<!-- <span class="crumb-select-item">
-							<a href="/">
-								<b>品牌：</b>
-								<em>苹果</em>
-								<i class="icon-remove"></i>
-							</a>
-						</span>	 -->
-
+						<span class="">
+							<a href="#">全部结果</a>
+						</span> 
+						<i	class="icon-angle-right"></i> 
+						<span>
+							<em th:text="'“'+${cName}+'”'">查询关键字</em>
+						</span> 
+						<i	class="icon-angle-right"></i>
 					</p>
 				</div>
 			</div>
 			<!-- 类目信息 查询结果个数 -->
 			<div class="row clearfix">
 				<div class="col-md-12 column">
-					<span>手机 商品筛选 共xxxx个</span>
+					商品筛选 共<b><span th:text="${pageInfo.total}">xxxx</span></b>个
 				</div>
 			</div>
 			<div class="col-md-12 column cond">
@@ -75,22 +81,26 @@ li {
 							<td>品牌</td>
 							<td>
 								<ul>
-									<li th:each="brand : ${brandList}"
-										style="float: left; margin-right: 1px"><a class='brand'
-										th:attr="id='brand_'+${brand.brand_id},data-bind=${brand.brand_id},data-search-cond='brand:'+${brand.brand_name}+':'+${brand.brand_id}" >
+									<li th:each="brand : ${brandList}" class="brandcond" >
+										<a class='brand' th:attr="id='brand_'+${brand.brand_id},data-bind=${brand.brand_id},data-search-cond='brand:'+${brand.brand_name}+':'+${brand.brand_id}" >
 											<img alt="" th:src="${brand.brand_logo_url}">
-									</a></li>
+										</a>
+									</li>
 								</ul>
 							</td>
 						</tr>
 						<tr th:each="attrValue : ${attrValueList}">
 							<td th:text="${attrValue.attrName}">条件名称</td>
-							<td><ul>
+							<td>
+								<ul>
 									<li th:each="value : ${attrValue.valueList}"
 										style="float: left; margin-right: 10px" class="attrValue"
-										th:attr="data-bind=${value.attr_id}+':'+${value.value_id},data-search-cond='attr:'+${attrValue.attrName}+':'+${value.value_name}+':'+${value.attr_id}+':'+${value.value_id}"><span
-										th:text="${value.value_name}">属性值</span></li>
-								</ul></td>
+										th:attr="data-bind=${value.attr_id}+':'+${value.value_id},data-search-cond='attr:'+${attrValue.attrName}+':'+${value.value_name}+':'+${value.attr_id}+':'+${value.value_id}">
+										
+										<span th:text="${value.value_name}">属性值</span>
+									</li>
+								</ul>
+							</td>
 						</tr>
 
 					</tbody>
@@ -131,52 +141,27 @@ li {
 			</div>
 				
 		</div>
-		<!-- 加入分页处理 -->
-		<nav th:if="${not #lists.isEmpty(itemList)}" style="float: right;">
-			<ul class="pagination">
-				<li><a href="#">&laquo;</a></li>
-
-				<li><a th:if="${not isFirstPage}" href="javascript:void(0);"
-					th:attr="data-bind=${pageNum-1}+'-'+${pageSize}">上一页</a> <a
-					th:if="${isFirstPagee}" href="javascript:void(0);" data-bind="">上一页</a>
-				</li>
-
-				<li th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
-					th:if="${pageNum eq pageNo}" href="javascript:void(0);"
-					data-bind=""> <span th:text="${pageNo}"></span>
-				</a> <a th:if="${not (pageNum eq pageNo)}" href="javascript:void(0);"
-					th:attr="data-bind=${pageNo}+'-'+${pageSize}"> <span
-						th:text="${pageNo}"></span>
-				</a></li>
-				<li><a th:if="${not isLastPage}" href="javascript:void(0);"
-					th:attr="data-bind=${pageNum+1}+'-'+${pageSize}">下一页</a> <a
-					th:if="${isLastPage}" href="javascript:void(0);" data-bind="">下一页</a>
-				</li>
-
-				<li><a href="#">&raquo;</a></li>
-			</ul>
-		</nav>
+		
+		<!-- 加入 分页 -->
+		<div class="row clearfix">
+			<div th:include="/thymeleaf/common/_pager::pager" class="pagerx" style="float: right; margin-right: 100px;"></div>
+		</div>
 
 	</div>
 	
-	<!-- <input type="button" value="test" id="BtnTest" /> -->
-
-	<!-- 当用户点击查询条件时，采用些隐藏表单提交 -->
-	<form th:action="@{/front/search/categorycond}" method="post"
-		id="testform">
+	<!-- 当用户点击查询条件时，采用隐藏表单提交 -->
+	<form th:action="@{/front/search/categorycond}" method="post" id="testform">
 		<!-- 保存cid -->
 		<input type="hidden" name="cid" id="cid" th:value="${cid}" />
 		<!-- 用于保存上次查询的条件  初始值为空字符串 -->
-		<input type="hidden" name="brands" id="brandCond"
-			th:value="${brandCond}" /> <input type="hidden" name="attrs"
-			id="attrCond" th:value="${attrCond}" />
-		<!-- 保存页号与页大小 -->
-		<input type="hidden" name="pageNum" id="pageNum" value=""> <input
-			type="hidden" name="pageSize" id="pageSize" value="">
-
+		<input type="hidden" name="brands" id="brandCond" th:value="${brandCond}" /> 
+		<input type="hidden" name="attrs"  id="attrCond" th:value="${attrCond}" />
 		<!-- 用户选择的条件列表 -->
-		<input type="hidden" name="searchCond" id="searchCond"
-			th:value="${searchCond}">
+		<input type="hidden" name="searchCond" id="searchCond"	th:value="${searchCond}">
+		
+		<!-- 保存页号与页大小 -->
+		<input type="hidden" name="pageNum" id="pageNum" value=""> 
+		<input type="hidden" name="pageSize" id="pageSize" value="">
 	</form>
 	
 	<!-- footer -->

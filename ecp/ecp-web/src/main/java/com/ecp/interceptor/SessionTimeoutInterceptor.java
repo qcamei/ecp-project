@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ecp.bean.UserBean;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.DateUtils;
+import com.ecp.entity.User;
 
 /**
  * Class: SessionTimeoutInterceptor
@@ -66,7 +67,7 @@ public class SessionTimeoutInterceptor implements HandlerInterceptor {
         log.debug("上次访问时间："+DateUtils.getDateTime(session.getLastAccessedTime()));
         log.debug("session有效时间："+session.getMaxInactiveInterval()+"s");
         
-        UserBean user = (UserBean)session.getAttribute(SessionConstants.USER);
+        User user = (User)session.getAttribute(SessionConstants.USER);
         
         if (user != null) {  
         	log.debug("user:"+user);
@@ -78,7 +79,7 @@ public class SessionTimeoutInterceptor implements HandlerInterceptor {
 	            response.setHeader("sessionstatus", "timeout");//在响应头设置session状态  
 	        }else{
 	        	log.error("url request timeout !");
-	        	String url = request.getContextPath() + "/login";
+	        	String url = request.getContextPath() + "/login/agent/gologin";
 	        	response.sendRedirect(url);
 	        }  
         	return false;

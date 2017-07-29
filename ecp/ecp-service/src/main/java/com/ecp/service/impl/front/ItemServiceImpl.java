@@ -27,9 +27,9 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 
 	@Override
-	public List<Item> getItemByBrandAndAttr(Long cid, List<Long> brands, List<String> attrValPairs) {
+	public List<Item> getItemByBrandAndAttr(Long cid, List<Long> brands, List<String> attrValPairs,int itemStatus) {
 
-		return itemMapper.getItemByBrandAndAttr(cid, brands, attrValPairs);
+		return itemMapper.getItemByBrandAndAttr(cid, brands, attrValPairs,itemStatus);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 
 	@Override
-	public List<Item> getItemByKeywords(String keywords) {
+	public List<Item> getItemByKeywords(String keywords,int itemStatus) {
 		// 读取关键字 分词
 		List<Word> words = WordSegmenter.seg(keywords);
 		List<String> keywordList = new ArrayList<String>();
@@ -49,31 +49,31 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			keywordList.add(word.toString());
 		}
 
-		return itemMapper.getItemByKeywords(keywordList);
+		return itemMapper.getItemByKeywords(keywordList,itemStatus);
 
 	}
 
 	@Override
-	public List<Item> getItemByBrandIds(List<Long> ids) {
-		return itemMapper.getItemByBrandIds(ids);
+	public List<Item> getItemByBrandIds(List<Long> ids,int itemStatus) {
+		return itemMapper.getItemByBrandIds(ids,itemStatus);
 
 	}
 
 	@Override
-	public List<Item> getItemByBrandAndCid(List<Long> brands, List<Long> cids) {
-		return itemMapper.getItemByBrandAndCid(brands, cids);
+	public List<Item> getItemByBrandAndCid(List<Long> brands, List<Long> cids,int itemStatus) {
+		return itemMapper.getItemByBrandAndCid(brands, cids,itemStatus);
 
 	}
 
 	@Override
-	public List<Item> getItemByKeywordsAndBrandAndCid(String keywords, List<Long> brands, List<Long> cids) {
+	public List<Item> getItemByKeywordsAndBrandAndCid(String keywords, List<Long> brands, List<Long> cids,int itemStatus) {
 		// 读取关键字 分词
 		List<Word> words = WordSegmenter.seg(keywords);
 		List<String> keywordList = new ArrayList<String>();
 		for (Word word : words) {
 			keywordList.add(word.toString());
 		}
-		return itemMapper.getItemByKeywordsAndBrandAndCid(keywordList,brands,cids);
+		return itemMapper.getItemByKeywordsAndBrandAndCid(keywordList,brands,cids,itemStatus);
 	}
 
 }

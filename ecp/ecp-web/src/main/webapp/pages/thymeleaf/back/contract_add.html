@@ -10,10 +10,11 @@
 		<div th:replace="thymeleaf/common/_discount_dialog::dialog" ></div>
 		<div class="row clearfix">
 			<div class="col-md-12 column">
-				<h3>创建合同</h3>
+				<h4>创建合同</h4>
 				<div class="panel panel-success">
 					<div class="panel-heading">
-						<h3 class="panel-title">商品列表(订单消息)</h3>
+						<h3 class="panel-title" style="display:inline">商品列表</h3>
+						<span th:text="'订单号:'+${order.orderId}" style="margin-left:50px;"></span>
 					</div>
 					<div class="panel-body">
 						<table class="table">
@@ -49,13 +50,13 @@
 									<td th:attr="id='discount_price_'+${orderItem.id}">￥0.00</td>
 									<td th:text="'￥'+${orderItem.primitive_price}" th:attr="id='pay_price_'+${orderItem.id}" >成交单价</td>
 									<td th:text="${orderItem.num}" th:attr="id='num_'+${orderItem.id}" >数量</td>
-									<td th:text="'￥'+${orderItem.num}*${orderItem.primitive_price}" th:attr="id='amount_'+${orderItem.id}">小计</td>									
+									<td th:text="'￥'+${orderItem.pay_price_total}" th:attr="id='amount_'+${orderItem.id}">小计</td>									
 									<td><button type="button" class="btn btn-sm btn-primary" th:attr="data-bind=${orderItem.id}"  onclick="displayDiscountDialog(this);" >折减</button></td>
 								</tr>								
 								<tr>
 									<td>总计</td>
-									<td colspan="8"></td>
-									<td><strong style="font-size:18px;color:red" id="sumAmount">总计</strong></td>
+									<td colspan="5"></td>
+									<td><strong>￥</strong><strong style="font-size:18px;color:red" id="sumAmount">总计</strong></td>
 									<td></td>
 								</tr>
 								</hr>					
@@ -66,7 +67,10 @@
 				</div>
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title">合同细则</h3>
+						<h3 class="panel-title" style="display:inline">合同细则</h3>
+						<span th:text="'公司:'+${agent.companyName}" style="margin-left:50px;"></span>
+						<span th:text="'负责人:'+${agent.artificialPersonName}" style="margin-left:50px;"></span>
+						<span th:text="'电话:'+${agent.contactPhone}" style="margin-left:50px;"></span>
 					</div>
 					<div class="panel-body">
 						<form class="form-horizontal" role="form">
@@ -81,14 +85,20 @@
 							<div class="form-group">
 								<label for="delivery_time" class="col-sm-3 control-label">交货时间</label>
 								<div class="col-sm-6">
-									<input class="form-control" id="delivery_time" name="delivery_time" type="text" />
+									<input class="datetimepicker datetime  form-control" 
+											readonly="readonly" 
+											id="delivery_time" 
+											name="delivery_time" 
+											type="text"
+											onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});" 
+											/>
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="delivery_address" class="col-sm-3 control-label">交货地址</label>
 								<div class="col-sm-6">
-									<input class="form-control" id="delivery_address" name="delivery_address" type="text" />
+									<input class="form-control"  id="delivery_address" name="delivery_address" type="text" th:value="${order.fullAddress}" />
 								</div>
 							</div>
 							
@@ -108,12 +118,13 @@
 								</div>
 							</div>
 							
-							<div class="form-group">
+							<div class="form-group" >
 								<label for="payment_percent_signed" class="col-sm-offset-2 col-sm-3 control-label">合同签定后甲方支付合同百分比</label>
-								<div class="col-sm-4">
+								<div class="col-sm-4" >
 									<input class="form-control" id="payment_percent_signed" name="payment_percent_signed"
-										type="text" />
+										type="text" title="输入百分比数据值后自动计算金额" />
 								</div>
+								<label for="payment_percent_signed" class="control-label" style="vertical-aline:middle">%</label>
 							</div>
 							<div class="form-group">
 								<label for="payment_amount_signed" class="col-sm-offset-2 col-sm-3 control-label">合同签定后甲方支付金额</label>
@@ -121,14 +132,16 @@
 									<input class="form-control" id="payment_amount_signed" name="payment_amount_signed"
 										type="text" />
 								</div>
+								<label for="payment_amount_signed" class="control-label" style="vertical-aline:middle">元</label>
 							</div>
 							
 							<div class="form-group">
 								<label for="payment_percent_delivery" class="col-sm-offset-2 col-sm-3 control-label">发货前甲方支付合同百分比</label>
 								<div class="col-sm-4">
 									<input class="form-control" id="payment_percent_delivery" name="payment_percent_delivery"
-										type="text" />
+										type="text" title="输入百分比数据值后自动计算金额"/>
 								</div>
+								<label for="payment_percent_delivery" class="control-label" style="vertical-aline:middle">%</label>
 							</div>
 							
 							<div class="form-group">
@@ -137,6 +150,7 @@
 									<input class="form-control" id="payment_amount_delivery" name="payment_amount_delivery"
 										type="text" />
 								</div>
+								<label for="payment_amount_delivery" class="control-label" style="vertical-aline:middle">元</label>
 							</div>
 							
 							<!-- 付款方式2 -->
@@ -151,15 +165,19 @@
 								<label for="days_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后多少日付全部货款</label>
 								<div class="col-sm-4">
 									<input class="form-control" id="days_signed" name="days_signed"
-										type="text" />
+										type="text" title="输入天数后自动按当天计算日期"/>
 								</div>
+								<label for="days_signed" class="control-label" style="vertical-aline:middle">天</label>
 							</div>
 							
 							<!-- 签定后于日期前付全部货款 -->
 							<div class="form-group">
 								<label for="date_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后于日期前付全部货款</label>
 								<div class="col-sm-4">
-									<input class="form-control" id="date_signed" name="date_signed"
+									<input class="datetimepicker datetime form-control" 
+										id="date_signed" name="date_signed"										 
+										readonly="readonly" 
+										onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
 										type="text" />
 								</div>
 							</div>
@@ -210,371 +228,15 @@
      
 		var g_orderItemList = [[${orderItemList}]];  //订单中商品行项目
 		var g_contractAttrList=[[${contractAttrList}]];  //合同属性列表
-		console.log("订单中商品数量:"+g_orderItemList.length);
+		//console.log("订单中商品数量:"+g_orderItemList.length);
 		
      
 		/*]]>*/  
 	</script>  
-
-	<script>
-		
-		//===============变量定义=================
-		var g_orderItemId=0;
-		
-		/* 设置orderItemId */
-		function setOrderItemId(orderItemId){
-			g_orderItemId=orderItemId;
-		}
-		
-		function getOrderItemId(){
-			return g_orderItemId;
-		}
-		
-		function getContractAttrList(){
-			return g_contractAttrList;
-		}
-		
-		
-		//==================对话框通用部分=START=================
-		/*
-			显示增加用户地址对话框
-		 */
-		function showDialog() {
-			$('#modal-container-273078').modal({
-				backdrop : 'static',
-				keyboard : false
-			});
-		}
-		
-		/* close dialog */
-		function closeDialog() {
-			$("#modal-container-273078").modal("hide");
-		}
-		
-		/* set dialog's title  */
-		function setDialogTitle(title){
-			$("#myModalLabel").text(title);
-		}
-		
-		/*  reset dialog  */
-		function resetDialog(){
-			$("#dialog-form")[0].reset();
-		}
-		
-		
-		//===============合同条目================
-		
-		/* 获取合同行项目列表 */
-		function getOrderItemList(){
-			return g_orderItemList;
-		}	
-			
-			
-			
-		/*
-			显示折减对话框		
-		*/
-		function displayDiscountDialog(e){
-			var orderItemId=$(e).attr("data-bind");  //get orderItem'id
-			setOrderItemId(orderItemId);
-			
-			var sku_name=$("#sku_name_"+orderItemId).html();  //get sku_name and set dialog's title
-			setDialogTitle("折减金额("+sku_name+")");
-			
-			resetDialog();
-			showDialog();
-		}	
-			
-		/*
-			初始化订单条目中的折减字段为0
-		*/	
-		function initOrderItemDiscount(){
-			var orderItemList=getOrderItemList();
-			for(var i=0;i<orderItemList.length;i++){
-				orderItemList[i].discount_price=0;
-				orderItemList[i].pay_price=orderItemList[i].primitive_price;
-				orderItemList[i].pay_price_total=orderItemList[i].primitive_price*orderItemList[i].num;
-			}
-		}
-		
-		/*
-			计算订单条目小计
-			params:
-				id:order item id
-				discount:折减金额
-		*/
-		function calcAmount(id,discount){
-			var orderItemList=getOrderItemList();		
-			var index=-1;
-			for(var i=0;i<orderItemList.length;i++){
-				if (orderItemList[i].id==id){
-					index=i;
-					break;
-				}
-			}
-			orderItemList[index].discount_price=discount;
-			orderItemList[index].pay_price=orderItemList[index].primitive_price-discount;
-			orderItemList[index].pay_price_total=orderItemList[index].pay_price*orderItemList[index].num;
-		}
-		
-		
-		/*
-			更新 (UI)
-			params:
-				id:order item id
-		*/
-		function displayOrderTtem(id){
-			var orderItemList=getOrderItemList();		
-			var index=-1;
-			for(var i=0;i<orderItemList.length;i++){
-				if (orderItemList[i].id==id){
-					index=i;
-					break;
-				}
-			}		
-					
-			$("#"+"discount_price_"+id).html('￥'+orderItemList[index].discount_price.toFixed(2));  //折减
-			$("#"+"pay_price_"+id).html('￥'+orderItemList[index].pay_price.toFixed(2));  //成交价格
-			$("#"+"amount_"+id).html('￥'+(orderItemList[index].pay_price*orderItemList[index].num).toFixed(2));  //小计
-			
-		}
-		
-		/*
-			计算所有订单条目合计
-		*/
-		function calcSumAmount(){
-			var orderItemList=getOrderItemList();
-			var sumAmount=0.00;
-			for(var i=0;i<orderItemList.length;i++){
-				sumAmount=sumAmount+orderItemList[i].pay_price*orderItemList[i].num;
-			}
-			return sumAmount;			
-		}
-		
-		/*
-			显示总计
-		*/
-		function displaySumAmount(sumAmount){
-			$("#sumAmount").text('￥'+sumAmount.toFixed(2));
-		}
-		
-		//===============合同属性==================
-		
-		/*
-			return:返回付款类型
-		*/
-		function getPayType(){
-			var val=0;
-			$("input[name='pay_type']").each(function(index,elem){
-				if(this.checked){
-					val=$(this).val();
-					return false;
-				}
-			});
-			return val;
-		}
-		
-		/*
-			return:返回质保期
-			
-		*/
-		function getGuaranteePeriod(){
-			var val=0;
-			$("input[name='guarantee_period']").each(function(index,elem){
-				if (this.checked) { 
-					val=$(this).val();
-					return false;
-				}
-			});
-			return val;
-		}
-		
-		/*
-			初始化合同属性
-		*/
-		function initContractAttr(){
-			$("input[name='guarantee_period']").eq(0).attr("checked",true);
-			$("input[name='pay_type']").eq(0).attr("checked",true);
-		}
-		
-		/* 收集合同属性 */
-		function getContractAttrValue(contractAttrList){
-			
-			/* 	guarantee_period
-				delivery_time
-				delivery_address
-				transport_charge
-				payment_percent_signed
-				payment_amount_signed
-				payment_percent_delivery
-				payment_amount_delivery
-				days_signed
-				date_signed
-				fee_rate
-				voucher
-				pay_type */
-			
-			
-			contractAttrList.forEach(function(item, index){
-				if(item.attrName=='guarantee_period'){
-					item.attrvalue=getGuaranteePeriod();
-				}
-				else if(item.attrName=='pay_type'){
-					item.attrValue=getPayType();
-				}
-				else{
-					item.attrValue=$("#"+item.attrName).val();
-				}
-			});
-			
-			return contractAttrList;
-		}
-		
-		/* 合同预览 */
-		function contractPreview(){
-			var url = BASE_CONTEXT_PATH + "/back/contract/preview"; // 需要提交的 url
-			
-			var contractAttrList=getContractAttrList();  //合同属性列表
-			var contractAttrValList=getContractAttrValue(contractAttrList);  //合同属性值
-			
-			var orderItemList=getOrderItemList();    //订单列表行
-			
-			var form = document.createElement("form");  //生成表单
-			form.id="test";
-			form.name="test";
-			form.target="_blank";
-			document.body.appendChild(form);
-			
-			//请求参数
-			var attrVals = generateHideElement("contractAttrVals", JSON.stringify(contractAttrValList)), 
-				orderItems = generateHideElement("orderItems", JSON.stringify(orderItemList)); 
-			form.appendChild(attrVals);  //合同属性列表
-			form.appendChild(orderItems);  //订单列表行
-
-			//发送请求
-			form.method = "post";
-			form.action = url;
-			form.submit();
-		}
-		
-		
-		/* 合同确认 */
-		function contractCreate(){
-			var url = BASE_CONTEXT_PATH + "/back/contract/create"; // 需要提交的 url
-			
-			var contractAttrList=getContractAttrList();  //合同属性列表
-			var contractAttrValList=getContractAttrValue(contractAttrList);  //合同属性值
-			
-			var orderItemList=getOrderItemList();    //订单列表行
-			
-			var form = document.createElement("form");  //生成表单
-			form.id="test";
-			form.name="test";
-			form.target="_blank";
-			document.body.appendChild(form);
-			
-			//请求参数
-			var attrVals = generateHideElement("contractAttrVals", JSON.stringify(contractAttrValList)), 
-				orderItems = generateHideElement("orderItems", JSON.stringify(orderItemList)); 
-			form.appendChild(attrVals);  //合同属性列表
-			form.appendChild(orderItems);  //订单列表行
-
-			//发送请求
-			form.method = "post";
-			form.action = url;
-			form.submit();
-			
-		}
-		
-		
-		
-		//========================================
-		/*
-			生成隐藏表单域函数
-			params:
-				name:input's name
-				value:inptu's value
-		 */
-		var generateHideElement = function(name, value) {
-			var tempInput = document.createElement("input");
-			tempInput.type = "hidden";
-			tempInput.name = name;
-			tempInput.value = value;
-			return tempInput;
-		}
-		
-		
-		
-		
-		//==================页面-READY-初始化======================
-		$(function(){
-			
-			initOrderItemDiscount();
-			displaySumAmount(calcSumAmount());
-			initContractAttr();  //初始化合同属性
-			
-			
-			/**
-				折减对话框【确定】按钮-click处理
-			*/
-			$("#btnConfirm").on('click', function(e){
-				closeDialog();
-				var discountStr=$("#discount").val();
-				var discount=parseInt(discountStr,10);
-				if (isNaN(discount)){
-					util.message("所输入的不是数字！");
-				}
-				else{
-					calcAmount(getOrderItemId(),discount);
-					displayOrderTtem(getOrderItemId());
-					displaySumAmount(calcSumAmount());
-				}
-				
-			});
-			
-			/*	质保期 checkbox  click处理	*/
-			$("input[name='guarantee_period']").on('click', function(e){
-				
-				$("input[name='guarantee_period']").each(function(index,val){
-					(this).checked=false;
-				});
-				
-				this.checked=true;
-				
-			});
-			
-			/* 收款方式 checkbox click处理 */
-			$("input[name='pay_type']").on('click', function(e){
-				
-				$("input[name='pay_type']").each(function(index,val){
-					(this).checked=false;
-				});
-				
-				this.checked=true;
-				
-			});
-			
-			
-			/* 【合同预览】 按钮 click process */
-			$(".btn-preview").on('click', function(e){
-				alert("质保期："+getGuaranteePeriod());
-				//alert("付款类型:"+getPayType());
-				contractPreview();
-				
-			});
-			
-			/* 【合同确认】 按钮 click process */
-			$(".btn-create").on('click', function(e){
-				contractCreate();
-			});
-			
-			
-			
-			
-			
-		});
 	
-	</script>
+	<script th:src="@{/static/js/common/dateutil.js}"></script>
+	<script th:src="@{/static/js/order_management/contract_add.js}"></script>
+	<script th:src="@{/static/calendar/WdatePicker.js}"></script>
 	
 </body>
 </html>

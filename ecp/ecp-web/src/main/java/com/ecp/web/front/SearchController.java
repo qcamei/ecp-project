@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryBrandBean;
+import com.ecp.bean.ItemStatusType;
 import com.ecp.bean.SearchCondBean;
 import com.ecp.bean.constants.AttributeType;
 import com.ecp.entity.Category;
@@ -44,7 +45,7 @@ import com.github.pagehelper.PageInfo;
 public class SearchController {
 	final String RESPONSE_THYMELEAF = "thymeleaf/front/";
 	final String RESPONSE_JSP = "jsps/front/";
-	final int PAGE_SIZE = 1;
+	final int PAGE_SIZE = 10;
 
 	/**
 	 * 查询的数据格式为：
@@ -69,27 +70,73 @@ public class SearchController {
 	IBrandService brandService;
 
 	/**
+	 * @Description 通过关键字查询
+	 * @param keywords
+	 *            关键字
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/keywords", method = RequestMethod.GET)
+	public String keywordsSearch(String keywords, Model model) {
+		String url = RESPONSE_THYMELEAF + "search_no_result";
+		String resultUrl = "";
+
+		displayKeywords(keywords); //显示分词结果， 此为调试程序，可以屏蔽
+		if (!keywodsIsValid(keywords))
+			return url;
+
+		if (keywords.trim() == "")
+			resultUrl = url;
+
+		if (resultUrl.equals("")) {
+			resultUrl = keywordsSearch_category(keywords); //按类目查询
+		}
+		if (resultUrl.equals("")) {
+			resultUrl = keywordsSearch_brand(model, keywords, "", "", 1, PAGE_SIZE); //按品牌查询
+		}
+		if (resultUrl.equals("")) {
+			resultUrl = keywordsSearch_SPU_Keywords(model, keywords, "", "", 1, PAGE_SIZE); //按SPU的关键字查询
+		}
+
+		if (!resultUrl.equals("")) {
+			url = resultUrl;
+		}
+
+		model.addAttribute("keywords", keywords);
+		model.addAttribute("brandCond", "");
+		model.addAttribute("categoryCond", "");
+		model.addAttribute("searchCond", "");
+
+		return url;
+
+	}
+	
+	
+	/**
 	 * @Description 通过关键字查询（条件查询）
 	 * @param keywords
+	 *            搜索关键字
 	 * @param brandCond
+	 *            品牌查询条件
 	 * @param categoryCond
+	 *            类目查询条件
 	 * @param pageNum
+	 *            页号
 	 * @param pageSize
+	 *            页大小
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/keywordscond", method = RequestMethod.GET)
-	public String keywordsSearch_cond(String keywords, String brandCond, String categoryCond, int pageNum, int pageSize,String searchCond,
-			Model model) {
+	public String keywordsSearch_cond(String keywords, String brandCond, String categoryCond, int pageNum, int pageSize,
+			String searchCond, Model model) {
 		String url = RESPONSE_THYMELEAF + "search_no_result";
 		String resultUrl = "";
-		
-		displayKeywords(keywords); //显示分词结果， 此为调试程序，可以屏蔽
-		
-		if(!keywodsIsValid(keywords))
-			return url;
 
-		
+		displayKeywords(keywords); //显示分词结果， 此为调试程序，可以屏蔽
+
+		if (!keywodsIsValid(keywords))
+			return url;
 
 		if (keywords.trim() == "")
 			resultUrl = url;
@@ -118,45 +165,142 @@ public class SearchController {
 	}
 
 	/**
-	 * @Description 通过关键字查询
-	 * @param keywords
-	 *            关键字
+	 * @Description 通过三级类目进行查询
+	 * @param categoryId
+	 *            类目ID
 	 * @param model
+	 *            spring model
 	 * @return
 	 */
-	@RequestMapping(value = "/keywords", method = RequestMethod.GET)
-	public String keywordsSearch(String keywords, Model model) {
-		String url = RESPONSE_THYMELEAF + "search_no_result";
-		String resultUrl = "";
-
-		displayKeywords(keywords); //显示分词结果， 此为调试程序，可以屏蔽
-		if(!keywodsIsValid(keywords))
-			return url;
-
-		if (keywords.trim() == "")
-			resultUrl = url;
-
-		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_category(keywords); //按类目查询
+	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
+	public String categorySearch(@PathVariable("categoryId") Long categoryId, Model model) {
+		String url = "";
+		//在此判定是三级类目还是二级类目,如果是三级类目,则按原来的逻辑进行处理,否则按二级类目来处理
+		Category cate = categoryService.getCategoryByCid(categoryId);
+		switch (cate.getLev()) {
+		case 3:
+			url = category_search_level3(categoryId, model);
+			break;
+		case 2:
+			url = category_search_level2(categoryId, "", "","", 1, PAGE_SIZE,model);
+			break;
 		}
-		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_brand(model, keywords, "", "", 1, PAGE_SIZE); //按品牌查询
-		}
-		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_SPU_Keywords(model, keywords, "", "", 1, PAGE_SIZE); //按SPU的关键字查询
-		}
-
-		if (!resultUrl.equals("")) {
-			url = resultUrl;
-		}
-
-		model.addAttribute("keywords", keywords);
-		model.addAttribute("brandCond", "");
-		model.addAttribute("categoryCond", "");
-		model.addAttribute("searchCond", "");
 
 		return url;
 
+	}
+	
+	
+	
+
+	/**
+	 * @Description 用户选择筛选条件时 处理
+	 * @param searchBean
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/categorycond", method = RequestMethod.POST)
+	// @ResponseBody @RequestBody
+	public String categoryCond(SearchCondBean searchBean, Model model) {
+
+		/*
+		 * (1)筛选条件（动态） 筛选条件分为两种: 类目的品牌条件 类目的关键属性 (2)当前条件下的SPU列表 三个数据列表： 品牌列表
+		 * 类目其它属性列表（包括属性名称及属性值列表） SPU列表
+		 */
+
+		Long cid = Long.parseLong(searchBean.getCid());
+
+		// ------- 筛选条件数据---------
+		// （1）类目-品牌列表 筛选条件
+		if (searchBean.getBrands().equals("")) {
+			getCategoryBrands(model, cid);
+		} else {
+			model.addAttribute("brandList", null); // 用户已经选择品牌，查询结果中不再显示此筛选条件（筛选条件-品牌）
+		}
+
+		// (2)属性-属性值列表 筛选条件
+		getCategoryAttrValue_cond(model, searchBean.getAttrs(), cid);
+
+		// (3) 查询类目下的SPU并分页
+		getSPU_cond(model, cid, searchBean.getBrands(), searchBean.getAttrs(), searchBean.getPageNum(),
+				searchBean.getPageSize());
+
+		//get category name by cid;
+		Category cate = categoryService.getCategoryByCid(cid);
+
+		// 向页面传递的数据
+		model.addAttribute("cid", cid);
+		model.addAttribute("cName", cate.getcName());
+		model.addAttribute("brandCond", searchBean.getBrands());
+		model.addAttribute("attrCond", searchBean.getAttrs());
+		model.addAttribute("searchCond", searchBean.getSearchCond());
+
+		return RESPONSE_THYMELEAF + "search_category_result";
+	}
+	
+	/**
+	 * @Description 二级类目查询
+	 * @param categoryId
+	 * @param brandCond
+	 * @param categoryCond
+	 * @param pageNum
+	 * @param pageSize
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/category2cond")
+	public String category2Cond(long categoryId, String brandCond, String categoryCond, int pageNum,String searchCond,
+			int pageSize, Model model) {
+		String url=category_search_level2(categoryId, brandCond, categoryCond,searchCond, pageNum, pageSize,model);
+		return url;
+	}
+
+	/**
+	 * @Description 主机频道查询
+	 * @param cid 三级类目ID
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/channel/{categoryId}")
+	public String home_channel_search(@PathVariable("categoryId") Long categoryId, Model model) {
+		getSPU(model, categoryId, PAGE_SIZE);
+		return RESPONSE_THYMELEAF + "channel";
+	}
+
+
+	/**
+	 * @Description 三级类目查询
+	 * @param categoryId
+	 *            类目ID
+	 * @return 查询结果页URL
+	 */
+	private String category_search_level3(long categoryId, Model model) {
+		/*
+		 * (1)筛选条件（动态） 筛选条件分为两种: 类目的品牌条件 类目的其它属性 
+		 * (2)当前条件下的SPU列表 三个数据列表： 
+		 * 			品牌列表
+		 * 			类目关键属性列表（包括属性名称及属性值列表） 
+		 * 			SPU列表
+		 */
+	
+		/*---------- 筛选条件--------------- */
+		// （1）类目-品牌列表
+		getCategoryBrands(model, categoryId);
+		// (2)类目-属性-属性值列表
+		getCategoryAttrValue(model, categoryId);
+		// (3)查询类目下的SPU
+		getSPU(model, categoryId,PAGE_SIZE);
+	
+		//get category name by cid;
+		Category cate = categoryService.getCategoryByCid(categoryId);
+	
+		model.addAttribute("cid", categoryId);
+		model.addAttribute("cName", cate.getcName());
+		model.addAttribute("brandCond", "");
+		model.addAttribute("attrCond", "");
+		model.addAttribute("searchCond", "");
+	
+		return RESPONSE_THYMELEAF + "search_category_result";
 	}
 
 	/**
@@ -174,63 +318,6 @@ public class SearchController {
 		return url;
 	}
 
-	
-
-	/**
-	 * @Description 处理品牌条件
-	 * @param brandCond
-	 * @return
-	 */
-	private Map<Long, Long> processBrandCond(String brandCond) {
-		Map<Long, Long> map = new HashMap<>();		
-		String[] brandArr = brandCond.split(",");
-		for (String brand : brandArr) {
-			if(!brand.equals(""))
-				map.put(Long.parseLong(brand), (long) 1);
-		}
-		return map;
-	}
-
-	/**
-	 * @Description 处理用户选择的类目条件，获取二级类目map
-	 * @param categoryCond
-	 * @return
-	 */
-	private Map<Long, Long> processCategoryCond(String categoryCond) {
-		Map<Long, Long> map = new HashMap<>();
-		String[] categoryArr = categoryCond.split(",");
-		for (String categoryPair : categoryArr) {
-			if(!categoryPair.equals("")){
-				String[] tempArr = categoryPair.split("\\|");
-				map.put(Long.parseLong(tempArr[0]), (long) 1);
-			}			
-		}
-
-		return map;
-	}
-	
-	
-	/**
-	 * @Description 获取用户选择类目条件中的 三级类目列表
-	 * @param categoryCond
-	 * @return
-	 */
-	private List<Long> processCategoryCond_Cids(String categoryCond){
-		List<Long> list = new ArrayList<>();
-		String[] categoryArr = categoryCond.split(",");
-		for (String categoryPair : categoryArr) {
-			if(!categoryPair.equals("")){
-				String[] tempArr = categoryPair.split("\\|");  //需要加入转义，"｜"不可以直接做为分隔符
-				list.add(Long.parseLong(tempArr[1]));
-			}			
-		}
-
-		if (list.size()==0) 
-			return null;
-		else
-			return list;
-	}
-	
 	/**
 	 * @Description 关键字查询：按品牌查询
 	 * @param model
@@ -240,7 +327,7 @@ public class SearchController {
 	private String keywordsSearch_brand(Model model, String keywords, String brandCond, String categoryCond,
 			int pageNum, int pageSize) {
 		String url = "";
-		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的数据
+		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的SPU数据
 		// 按品牌查询
 		List<Map<String, Object>> filterList = new ArrayList<Map<String, Object>>();
 		List<CategoryBrandBean> brandList = new ArrayList<CategoryBrandBean>(); // 品牌列表
@@ -265,7 +352,7 @@ public class SearchController {
 					if (brandCondMap.size() == 0) {//如果用户没有选择品牌条件
 						brandList.add(cateBrand);
 						brandIds.add(cateBrand.getBrandId());
-					} else {  //如果用选择选择了品牌条件
+					} else { //如果用选择选择了品牌条件
 						if (brandCondMap.get(cateBrand.getBrandId()) != null) { //如果是用户选择的品牌
 							brandIds.add(cateBrand.getBrandId());
 						}
@@ -275,7 +362,7 @@ public class SearchController {
 			}
 
 			//处理用户选择的品牌条件		
-			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond);  //获取二级类目ID
+			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); //获取二级类目ID
 
 			// 获取二级类目ID
 			Map<Long, Long> secondLevMap = new HashMap<Long, Long>();
@@ -297,20 +384,21 @@ public class SearchController {
 
 				filterList.add(condMap);
 			}
-			
-			List<Long> thirdCategoryCids=processCategoryCond_Cids(categoryCond); //获取三级类目id列表
+
+			List<Long> thirdCategoryCids = processCategoryCond_Cids(categoryCond); //获取三级类目id列表
 
 			//查询SPU并分页
 			if (pageNum != 0)
 				PageHelper.startPage(pageNum, pageSize); // PageHelper
 			else
 				PageHelper.startPage(1, PAGE_SIZE); // PageHelper
-			
-			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds,thirdCategoryCids); // 查询商品列表
-			
+
+			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds, thirdCategoryCids,ItemStatusType.IS_SALING); // 查询商品列表
+
 			PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-			setPageInfo(model, pageInfo); // 向前台传递分页信息
-			
+			//setPageInfo(model, pageInfo); // 向前台传递分页信息
+			model.addAttribute("pageInfo", pageInfo);
+
 			// --------- 按SPU查询SPU的picture----------
 			for (Item item : itemList) {
 				List<ItemPicture> pictList = itemPictureService.getItemPictureByItemId(item.getItemId());
@@ -332,6 +420,134 @@ public class SearchController {
 	}
 
 	/**
+	 * @Description 二级类目查询
+	 * @param categoryId
+	 *            类目ID
+	 * @param brandCond
+	 *            品牌条件
+	 * @param categoryCond
+	 *            类目条件
+	 * @param pageNum
+	 *            页号
+	 * @param pageSize
+	 *            页大小
+	 * @param model
+	 * @return
+	 */
+	private String category_search_level2(long categoryId, String brandCond, String categoryCond,String searchCond, int pageNum,
+			int pageSize, Model model) {
+		String url = RESPONSE_THYMELEAF + "search_no_result";
+		//(1)查询此类目下的三级类目
+		//(3)三级类目条件:显示此二级类目下的三级类目,以作为查询条件		
+		//(4)查询结果:根据三级类目ID及品牌ID查询SPU并显示
+
+		
+		//getCategoryLevelSecondBrands(model,categoryId);  //品牌条件:查询三级类目的所有品牌,以作为查询条件
+		
+		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的SPU数据
+		// 按品牌查询
+		List<Map<String, Object>> filterList = new ArrayList<Map<String, Object>>(); //类目条件
+		List<CategoryBrandBean> brandList = new ArrayList<CategoryBrandBean>(); // 品牌列表
+		// 如果查询不到相应的类目，查询类目中的品牌
+		List<CategoryBrandBean> cateBrandList = null;
+
+		//处理用户选择的品牌条件		
+		Map<Long, Long> brandCondMap = processBrandCond(brandCond);
+
+		// 根据关键词（品牌）查询类目品牌(叶子结点)
+		cateBrandList = cateBrandService.getBrandByLevelSecondCid(categoryId); // 品牌列表
+		if (cateBrandList.size() > 0) {
+			// 过滤重复品牌（获取品牌列表）
+			// TODO 可通过数据库来处理
+			List<Long> brandIds = new ArrayList<Long>(); // 品牌ID列表
+			Map<Long, Long> brandMap = new HashMap<Long, Long>();
+			for (CategoryBrandBean cateBrand : cateBrandList) {
+				if (brandMap.get(cateBrand.getBrandId()) == null) {
+
+					brandMap.put(cateBrand.getBrandId(), cateBrand.getBrandId()); //排重过滤器
+
+					if (brandCondMap.size() == 0) {//如果用户没有选择品牌条件
+						brandList.add(cateBrand);
+						brandIds.add(cateBrand.getBrandId());
+					} else { //如果用选择选择了品牌条件
+						if (brandCondMap.get(cateBrand.getBrandId()) != null) { //如果是用户选择的品牌
+							brandIds.add(cateBrand.getBrandId());
+						}
+					}
+
+				}
+			}
+
+			//处理用户选择的品牌条件		
+			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); //获取二级类目ID
+
+			// 获取二级类目ID
+			Map<Long, Long> secondLevMap = new HashMap<Long, Long>();
+			for (CategoryBrandBean cateBrand : cateBrandList) {
+				if (secondLevMap.get(cateBrand.getSecondLevCid()) == null) {
+					if (categoryCondMap.size() == 0) { //如果用户没有选择类目条件
+						secondLevMap.put(cateBrand.getSecondLevCid(), cateBrand.getSecondLevCid());
+					}
+				}
+			}
+			// 读取二级类目
+			for (long secondLevCid : secondLevMap.keySet()) {
+				Category secondCategory = categoryService.getCategoryByCid(secondLevCid);
+				Map<String, Object> condMap = new HashMap<String, Object>();
+				condMap.put("secondCategory", secondCategory);
+				// 读取三级类目列表
+				List<Category> thirdCategoryList = categoryService.getCategoryByParentCid(secondLevCid);
+				condMap.put("thirdCategoryList", thirdCategoryList);
+
+				filterList.add(condMap);
+			}
+
+			List<Long> thirdCategoryCids = processCategoryCond_Cids(categoryCond); //获取三级类目id列表
+
+			//查询SPU并分页
+			if (pageNum != 0)
+				PageHelper.startPage(pageNum, pageSize); // PageHelper
+			else
+				PageHelper.startPage(1, PAGE_SIZE); // PageHelper
+
+			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds, thirdCategoryCids,ItemStatusType.IS_SALING); // 查询商品列表
+
+			PageInfo<Item> pageInfo = new PageInfo<>(itemList);
+			//setPageInfo(model, pageInfo); // 向前台传递分页信息
+			model.addAttribute("pageInfo", pageInfo);
+
+			// --------- 按SPU查询SPU的picture----------
+			for (Item item : itemList) {
+				List<ItemPicture> pictList = itemPictureService.getItemPictureByItemId(item.getItemId());
+
+				Map<String, Object> itemPictMap = new HashMap<String, Object>();
+				itemPictMap.put("item", item);
+				itemPictMap.put("pict", pictList);
+				item_pict_list.add(itemPictMap);
+			}
+
+			model.addAttribute("brandList", brandList);
+			model.addAttribute("filterList", filterList);
+			model.addAttribute("itemList", item_pict_list);
+
+			url = RESPONSE_THYMELEAF + "search_category2_result";
+		}
+		
+		//get category name by cid;
+		Category cate = categoryService.getCategoryByCid(categoryId);
+		
+		
+		model.addAttribute("cName", cate.getcName());
+		model.addAttribute("categoryId",categoryId);
+		model.addAttribute("brandCond", brandCond);
+		model.addAttribute("categoryCond", categoryCond);
+		model.addAttribute("searchCond", searchCond);
+
+		return url;
+
+	}
+
+	/**
 	 * @Description 通过SPU关键字查询
 	 * @param model
 	 * @param keywords
@@ -347,27 +563,27 @@ public class SearchController {
 		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的数据
 
 		// 按品牌查询
-		
+
 		List<Map<String, Object>> filterList = new ArrayList<Map<String, Object>>(); //查询条件：类目条件
 		List<CategoryBrandBean> brandList = new ArrayList<CategoryBrandBean>(); // 查询条件：品牌列表 
 		// 如果查询不到相应的类目，查询类目中的品牌
-		List<CategoryBrandBean> cateBrandList = null;		
-		
-		
-		List<Long> brands=processBrandCond_ids(brandCond);
-		List<Long> thirdCategoryCids=processCategoryCond_Cids(categoryCond);
-		
+		List<CategoryBrandBean> cateBrandList = null;
+
+		List<Long> brands = processBrandCond_ids(brandCond);
+		List<Long> thirdCategoryCids = processCategoryCond_Cids(categoryCond);
+
 		// 按SPU的关键字、商品名称查询 并分页
 		if (pageNum != 0)
 			PageHelper.startPage(pageNum, pageSize); // PageHelper
 		else
 			PageHelper.startPage(1, PAGE_SIZE); // PageHelper		
-		
-		List<Item> itemList = itemService.getItemByKeywordsAndBrandAndCid(keywords,brands,thirdCategoryCids); //查询商品列表
-		
+
+		List<Item> itemList = itemService.getItemByKeywordsAndBrandAndCid(keywords, brands, thirdCategoryCids,ItemStatusType.IS_SALING); //查询商品列表
+
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
-		
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
+
 		if (itemList.size() > 0) {
 			// 生成筛选条件，按品牌搜索的方式处理
 			// 获取商品列表中的品牌id
@@ -386,8 +602,7 @@ public class SearchController {
 			// TODO 可通过数据库来处理
 			//处理用户选择的品牌条件		
 			Map<Long, Long> brandCondMap = processBrandCond(brandCond);
-			
-			
+
 			Map<Long, Long> brandMap = new HashMap<Long, Long>();
 			for (CategoryBrandBean cateBrand : cateBrandList) {
 				if (brandMap.get(cateBrand.getBrandId()) == null) {
@@ -398,8 +613,8 @@ public class SearchController {
 			}
 
 			//处理用户选择的品牌条件		
-			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond);  //获取二级类目ID
-			
+			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); //获取二级类目ID
+
 			// 获取二级类目ID
 			Map<Long, Long> secondLevMap = new HashMap<Long, Long>();
 			for (CategoryBrandBean cateBrand : cateBrandList) {
@@ -439,22 +654,76 @@ public class SearchController {
 
 		return url;
 	}
-	
+
+	/**
+	 * @Description 处理品牌条件
+	 * @param brandCond
+	 * @return
+	 */
+	private Map<Long, Long> processBrandCond(String brandCond) {
+		Map<Long, Long> map = new HashMap<>();
+		String[] brandArr = brandCond.split(",");
+		for (String brand : brandArr) {
+			if (!brand.equals(""))
+				map.put(Long.parseLong(brand), (long) 1);
+		}
+		return map;
+	}
+
+	/**
+	 * @Description 处理用户选择的类目条件，获取二级类目map
+	 * @param categoryCond
+	 * @return
+	 */
+	private Map<Long, Long> processCategoryCond(String categoryCond) {
+		Map<Long, Long> map = new HashMap<>();
+		String[] categoryArr = categoryCond.split(",");
+		for (String categoryPair : categoryArr) {
+			if (!categoryPair.equals("")) {
+				String[] tempArr = categoryPair.split("\\|");
+				map.put(Long.parseLong(tempArr[0]), (long) 1);
+			}
+		}
+
+		return map;
+	}
+
+	/**
+	 * @Description 获取用户选择类目条件中的 三级类目列表
+	 * @param categoryCond
+	 * @return
+	 */
+	private List<Long> processCategoryCond_Cids(String categoryCond) {
+		List<Long> list = new ArrayList<>();
+		String[] categoryArr = categoryCond.split(",");
+		for (String categoryPair : categoryArr) {
+			if (!categoryPair.equals("")) {
+				String[] tempArr = categoryPair.split("\\|"); //需要加入转义，"｜"不可以直接做为分隔符
+				list.add(Long.parseLong(tempArr[1]));
+			}
+		}
+
+		if (list.size() == 0)
+			return null;
+		else
+			return list;
+	}
+
 	/**
 	 * @Description 获取品牌id列表
 	 * @param brandCond
 	 * @return
 	 */
-	private List<Long> processBrandCond_ids(String brandCond){
+	private List<Long> processBrandCond_ids(String brandCond) {
 		List<Long> list = new ArrayList<>();
 		String[] brandArr = brandCond.split(",");
 		for (String brand : brandArr) {
-			if(!brand.equals("")){				
+			if (!brand.equals("")) {
 				list.add(Long.parseLong(brand));
-			}			
+			}
 		}
 
-		if (list.size()==0) 
+		if (list.size() == 0)
 			return null;
 		else
 			return list;
@@ -475,64 +744,19 @@ public class SearchController {
 			keywordList.add(word.toString());
 		}
 	}
-	
+
 	/**
 	 * @Description 分词后的结果是否有效（去除停用词后的结果列表是否为空）
-	 * @param searchStr  查询关键字
+	 * @param searchStr
+	 *            查询关键字
 	 * @return true:去除停用词后的结果列表不为空 ; false:去除停用词后的结果列表为空
 	 */
-	private boolean keywodsIsValid(String searchStr){
+	private boolean keywodsIsValid(String searchStr) {
 		List<Word> words = WordSegmenter.seg(searchStr);
-		if(words.size()>0)
+		if (words.size() > 0)
 			return true;
 		else
 			return false;
-	}
-
-	/**
-	 * @Description 用户选择筛选条件时 处理
-	 * @param searchBean
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/categorycond", method = RequestMethod.POST)
-	// @ResponseBody @RequestBody
-	public String categoryCond(SearchCondBean searchBean, Model model) {
-
-		/*
-		 * (1)筛选条件（动态） 筛选条件分为两种: 类目的品牌条件 类目的其它属性 (2)当前条件下的SPU列表 三个数据列表： 品牌列表
-		 * 类目其它属性列表（包括属性名称及属性值列表） SPU列表
-		 */
-
-		Long cid = Long.parseLong(searchBean.getCid());
-
-		// ------- 筛选条件数据---------
-		// （1）类目-品牌列表 筛选条件
-		if (searchBean.getBrands().equals("")) {
-			getCategoryBrands(model, cid);
-		} else {
-			model.addAttribute("brandList", null); // 用户已经选择品牌，查询结果中不再显示此筛选条件（筛选条件-品牌）
-		}
-
-		// (2)属性-属性值列表 筛选条件
-		getCategoryAttrValue_cond(model, searchBean.getAttrs(), cid);
-
-		// (3) 查询类目下的SPU并分页
-		getSPU_cond(model, cid, searchBean.getBrands(), searchBean.getAttrs(), searchBean.getPageNum(),
-				searchBean.getPageSize());
-
-		//get category name by cid;
-		Category cate=categoryService.getCategoryByCid(cid);	
-		
-		
-		// 向页面传递的数据
-		model.addAttribute("cid", cid);
-		model.addAttribute("cName", cate.getcName());
-		model.addAttribute("brandCond", searchBean.getBrands());
-		model.addAttribute("attrCond", searchBean.getAttrs());
-		model.addAttribute("searchCond", searchBean.getSearchCond());
-
-		return RESPONSE_THYMELEAF + "search_category_result";
 	}
 
 	/**
@@ -572,10 +796,11 @@ public class SearchController {
 		else
 			PageHelper.startPage(1, PAGE_SIZE); // PageHelper
 
-		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, brands, attrValPair); // 查询spu
+		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, brands, attrValPair,ItemStatusType.IS_SALING); // 查询spu
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
 
 		// -------- 按SPU查询SPU的picture-------------
 		for (Item item : itemList) {
@@ -657,44 +882,7 @@ public class SearchController {
 	}
 
 	/**
-	 * @Description 通过类目进行查询
-	 * @param categoryId
-	 *            通过目录查询的参数
-	 * @param model
-	 *            spring model
-	 * @return
-	 */
-	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
-	public String categorySearch(@PathVariable("categoryId") Long categoryId, Model model) {
-
-		/*
-		 * (1)筛选条件（动态） 筛选条件分为两种: 类目的品牌条件 类目的其它属性 (2)当前条件下的SPU列表 三个数据列表： 品牌列表
-		 * 类目其它属性列表（包括属性名称及属性值列表） SPU列表
-		 */
-
-		/*---------- 筛选条件--------------- */
-		// （1）类目-品牌列表
-		getCategoryBrands(model, categoryId);
-		// (2)类目-属性-属性值列表
-		getCategoryAttrValue(model, categoryId);
-		// (3)查询类目下的SPU
-		getSPU(model, categoryId);
-		
-		//get category name by cid;
-		Category cate=categoryService.getCategoryByCid(categoryId);		
-		
-		model.addAttribute("cid", categoryId);
-		model.addAttribute("cName", cate.getcName());
-		model.addAttribute("brandCond", "");
-		model.addAttribute("attrCond", "");
-		model.addAttribute("searchCond", "");
-
-		return RESPONSE_THYMELEAF + "search_category_result";
-
-	}
-
-	/**
-	 * @Description 类目-品牌
+	 * @Description 三级类目-品牌
 	 * @param model
 	 * @param cid
 	 */
@@ -703,6 +891,7 @@ public class SearchController {
 		List<Map<String, String>> brandList = cateBrandService.getBrandByCid(cid);
 		model.addAttribute("brandList", brandList);
 	}
+
 
 	/**
 	 * @Description 类目-属性-属性值
@@ -736,17 +925,18 @@ public class SearchController {
 	 * @param model
 	 * @param cid
 	 */
-	private void getSPU(Model model, long cid) {
+	private void getSPU(Model model, long cid,int pageSize) {
 		// 查询类目下的SPU
 		List<Map<String, Object>> item_pict_list = new ArrayList<Map<String, Object>>(); // 向前台传递的数据
 
-		PageHelper.startPage(1, PAGE_SIZE); // PageHelper
+		PageHelper.startPage(1, pageSize); // PageHelper
 		List<Long> brands = new ArrayList<Long>(); // (1)品牌ID列表 条件列表
 		List<String> params = new ArrayList<String>();// (2)属性-属性值 条件列表
-		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, null, null); // 查询spu
+		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, null, null,ItemStatusType.IS_SALING); // 查询spu
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);// (使用了拦截器或是AOP进行查询的再次处理)
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
 
 		// 按SPU查询SPU的picture
 		for (Item item : itemList) {
@@ -759,19 +949,6 @@ public class SearchController {
 
 		// 向页面传递的数据
 		model.addAttribute("itemList", item_pict_list);
-	}
-
-	private void setPageInfo(Model model, PageInfo pageInfo) {
-		// 获得当前页
-		model.addAttribute("pageNum", pageInfo.getPageNum());
-		// 获得一页显示的条数
-		model.addAttribute("pageSize", pageInfo.getPageSize());
-		// 是否是第一页
-		model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
-		// 获得总页数
-		model.addAttribute("totalPages", pageInfo.getPages());
-		// 是否是最后一页
-		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
 	}
 
 	private SearchCondBean getEntity(String resp) {

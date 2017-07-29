@@ -106,18 +106,14 @@ function buyAgainOrder(id){
 }
 
 /**
- * 
- * @param id 订单id(primary key)
+ * 设置合同状态  （ajax）
+ * @param orderId  订单id(pk)
+ * @param contractId 合同ID(pk)
+ * @param status  合同状态
  * @returns
  */
-/**
- * （agent)确认订单
- * @param orderId  订单ID（primary key）
- * @param contractId 合同ID
- * @returns
- */
-function agentConfirmOrder(orderId,contractId){
-	var url = BASE_CONTEXT_PATH + "/front/order/agentconfirm"; // 需要提交的 url
+function setContractStatus(orderId,contractId,status){
+	var url = BASE_CONTEXT_PATH + "/back/contract/frontsetstatus"; // 需要提交的 url
 
 	$.ajax({
 		type : "post", // 提交方式 get/post
@@ -125,15 +121,17 @@ function agentConfirmOrder(orderId,contractId){
 		// dataType: "application/json",
 		data : {
 			'orderId' : orderId,
-			'contractId':contractId
+			'contractId':contractId,
+			'status':status
 		},
 		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
 			console.log(res);
 			if (res != null && res != "") {
 				var obj = $.parseJSON(res);
 				if (obj.result_code == "success") {
-					// util.message(obj.result_msg); //显示删除成功能对话框，此处省略
-					sendRequest(); // 操作成功后重新加载					
+					util.message(obj.result_msg); //显示更新成功能对话框
+					sendRequest();  //重新加载页面
+					
 				} else {
 					util.message(obj.result_err_msg);
 				}
@@ -229,7 +227,7 @@ function sendRequest(){
 }
 
 
-//===============page loaded ready====================
+//===============page loaded ready==================
 
 $(function(){
 	//================INITIALIZE====================
@@ -259,7 +257,15 @@ $(function(){
 	$(".btn-confirm").on('click',function(){		
 		var orderId=$(this).attr("data-id");  //获取订单ID
 		var contractId=$(this).attr("data-contract-id");
-		confirmOrder(orderId,contractId);		
+		var status=$(this).attr("data-contract-state");
+		
+		if(status==2){  //如尚未建立合同
+			status=4;  //甲方确认
+			setContractStatus(orderId,contractId,status);
+		}
+		else{
+			util.message("尚未建立合同！");
+		}
 	});
 	
 	//================条件选择 下拉菜单显示===================

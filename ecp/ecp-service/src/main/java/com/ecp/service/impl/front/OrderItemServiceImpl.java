@@ -1,5 +1,6 @@
 package com.ecp.service.impl.front;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +38,11 @@ public class OrderItemServiceImpl extends AbstractBaseService<OrderItems, Long> 
 			record.setSkuId(item.getSkuId());  //sku id
 			record.setSkuName(item.getSkuName());  //sku name			
 			record.setPrimitivePrice(item.getSkuPrice());  //原始价（未折减价格）
-			
-			
 			record.setNum(item.getSkuNum());
+			BigDecimal num=new BigDecimal(item.getSkuNum());
+			record.setPayPriceTotal(item.getSkuPrice().multiply(num));
+			
+			
 			record.setCreateTime(new Date());
 			
 			orderItemsMapper.insert(record);

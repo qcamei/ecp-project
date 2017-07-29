@@ -13,7 +13,7 @@
 				<p>
 					<span style="font-family: 宋体"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;</span><span>&nbsp;</span></span><span
-						style="font-family: 宋体">合同编号：<span>LM-XS-17-05-046</span>合同签订地点：石家庄
+						style="font-family: 宋体">合同编号：<span >LM-YYYY-MM-XXXX</span>合同签订地点：<span>石家庄</span>
 					</span>
 				</p>
 				<p style="text-indent: 28px; line-height: normal">
@@ -23,18 +23,22 @@
 					<b><span>1</span></b><b><span style="font-family: 宋体">、合同双方</span></b>
 				</p>
 				<p style="text-indent: 7px">
-					<span style="font-family: 宋体">甲方：<u>石家庄</u></span><u><span>
-							********</span></u><u><span style="font-family: 宋体">学校</span></u><span
-						style="font-size: 16px; font-family: 宋体">&nbsp;</span><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span></span><span
-						style="font-family: 宋体">乙方：<u>河北菱美信息技术有限公司</u></span><u></u>
+					<span style="font-family: 宋体;display:inline-block;width:350px;">甲方：<u th:text="${agent.companyName}" >甲方（代理商一方）</u></span>
+					<span style="font-family: 宋体;">乙方：<u th:text="${companyInfo.companyName}" >河北菱美信息技术有限公司</u></span>
 				</p>
 				<p style="text-indent: 7px">
-					<span style="font-family: 宋体">联系人：</span><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span></span><span style="font-family: 宋体">电话：</span><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-						style="font-family: 宋体">联系人：</span><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span></span><span style="font-family: 宋体">电话：</span>
+					<span style="display:inline-block;width:350px;">
+						<span style="font-family: 宋体">联系人：</span>
+						<span th:text=${agent.artificialPersonName}></span>
+						
+						<span style="font-family: 宋体;margin-left:10px;">电话：</span>
+						<span th:text="${agent.contactPhone}"></span>					
+					</span>
+					
+					<span style="font-family: 宋体">联系人：</span>
+					<span th:text="${companyInfo.contactMan}"></span>
+					<span style="font-family: 宋体">电话：</span>
+					<span th:text="${companyInfo.tel}">电话号码</span>
 				</p>
 				<p>
 					<b><span>2</span></b><b><span style="font-family: 宋体">、产品的名称、规格、数量及价格</span><span>(</span></b><b><span
@@ -97,17 +101,19 @@
 								</p></td>
 						</tr>
 						
-						<tr th:each="contractItem,iterState:${contractItemList}">
+						 <tr th:each="contractItem,iterState:${contractItemList}">
 							<td
 								style="width: 43px; border: solid windowtext 1px; border-top: none; padding: 0 7px 0 7px"
 								width="43" valign="top"><p style="text-align: center">
 									<span style="font-family: 'Calibri', sans-serif" th:text="${iterState.count}" >序号</span>
 								</p></td>
+							
 							<td
 								style="width: 73px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="73" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.sku_name}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.skuName}">&nbsp;</span>
 								</p></td>
+							
 							<td
 								style="width: 54px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="54" valign="top"><p>
@@ -127,32 +133,33 @@
 							<td
 								style="width: 59px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="59" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.primitive_price}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.primitivePrice}">&nbsp;</span>
 								</p></td>
 							<!-- 折减 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.discount_price}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.discountPrice}">&nbsp;</span>
 								</p></td>
 							<!-- 成交单价 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.pay_price}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.payPrice}">&nbsp;</span>
 								</p></td>
 							<!-- 数量 -->
 							<td
 								style="width: 25px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="38" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.num}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.Num}">&nbsp;</span>
 								</p></td>
 							<!-- 小计 -->
 							<td
 								style="width: 50px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="76" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text=${contractItem.pay_price_total}>&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text=${contractItem.payPriceTotal}>&nbsp;</span>
 								</p></td>
+								 
 						</tr>
 						<tr>
 							<td
@@ -198,7 +205,7 @@
 				</p>
 				<p style="text-indent: 21px">
 					<span>4.1</span><span><span style="font-family: 宋体">时</span><span><span>&nbsp;&nbsp;&nbsp;
-						</span></span></span><span><span style="font-family: 宋体">间：<u th:text=${attrValue.delivery_time}>选择时钟，自动生成</u></span><u></u></span>
+						</span></span></span><span><span style="font-family: 宋体">间：<u th:text=${attrValue.delivery_time} class="cndate">选择时钟，自动生成</u></span><u></u></span>
 				</p>
 				<p style="text-indent: 21px">
 					<span><span>4.2</span></span><span><span
@@ -236,7 +243,7 @@
 						 	<span th:case='*' style="font-family: 宋体" th:remove="tag">□合同签订后</span>
 						</span>
 					<u><span><span th:text="${attrValue.days_signed}">&nbsp;
-								</span></span></u>日即<u><span><span th:text="${attrValue.date_signed}">&nbsp; </span></span>年 月 日 前</u>甲方支付给乙方全部货款，每延期一日按照欠款金额的<u th:text="${attrValue.fee_rate}">万分之五</u>收取资金占用费。
+								</span></span></u>日即<u><span><span th:text="${attrValue.date_signed}" class="cndate">&nbsp; </span></span>前</u>甲方支付给乙方全部货款，每延期一日按照欠款金额的<u th:text="${attrValue.fee_rate}">万分之五</u>收取资金占用费。
 					</span></span>
 				</p>
 				<p style="text-indent: 25px">
@@ -246,10 +253,10 @@
 				</p>
 				<p style="text-indent: 19px">
 					<span><span>5.2</span></span><span><span
-						style="font-family: 宋体">乙方收款账户：<u>河北菱美信息技术有限公司</u>，开户行：<u>中信石家庄体育北大街支行</u><span
+						style="font-family: 宋体">乙方收款账户：<u th:text="${companyInfo.companyName}">河北菱美信息技术有限公司</u>，开户行：<u th:text="${companyInfo.bankName}">中信石家庄体育北大街支行</u><span
 							style="color: black">，</span></span><span style="color: black"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</span><span>&nbsp;&nbsp;&nbsp;</span></span></span><span><span
-						style="font-family: 宋体; color: black">账号：</span><u><span>7241510182600080029</span></u></span>
+						style="font-family: 宋体; color: black">账号：</span><u><span th:text="${companyInfo.bankAccount}">7241510182600080029</span></u></span>
 				</p>
 				<p style="text-indent: 21px">
 					<span><span>5.3</span></span><span><span
@@ -281,26 +288,20 @@
 					<span>&nbsp;</span>
 				</p>
 				<p style="margin-left: 14px">
-					<span style="font-family: 宋体">甲方：（盖章）石家庄</span><span>*******</span><span
-						style="font-family: 宋体">学校</span><span>&nbsp;<span>&nbsp;
-					</span><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;</span></span><span
-						style="font-family: 宋体">乙方：（盖章）河北菱美信息技术有限公司</span>
+					<span style="font-family: 宋体 ;width:350px;display:inline-block">甲方：（盖章）<span style="font-family: 宋体" th:text="${agent.companyName}">乙方公司名称</span></span>
+					<span style="font-family: 宋体">乙方：（盖章）<span th:text=${companyInfo.companyName}>河北菱美信息技术有限公司</span></span>
 				</p>
 				<p style="margin-left: 14px">
-					<span style="font-family: 宋体">授权人：</span><span><span>&nbsp;&nbsp;&nbsp;&nbsp;
-					</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span></span><span style="font-family: 宋体">授权人：</span>
+					<span style="font-family: 宋体;width:350px;display:inline-block">授权人：<span th:text=${agent.artificialPersonName}></span></span>
+					<span style="font-family: 宋体">授权人：<span th:text="${companyInfo.contactMan}"></span></span>
 				</p>
 				<p style="margin-left: 14px">
-					<span style="font-family: 宋体">日期：</span> <span>2017</span><span
-						style="font-family: 宋体">年</span><span>5</span><span
-						style="font-family: 宋体">月</span><span>18</span><span
-						style="font-family: 宋体">日</span><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span><span>&nbsp;&nbsp;&nbsp;&nbsp; </span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span></span><span style="font-family: 宋体">日期：</span><span>2017 </span><span
-						style="font-family: 宋体">年</span><span>5</span><span
-						style="font-family: 宋体">月</span><span>18</span><span
-						style="font-family: 宋体">日</span>
+					<span style="font-family: 宋体;width:350px;display:inline-block">
+						日期：<span th:text="${#calendars.format(now,'yyyy-MM-dd')}" class="cndate">2017年10月10日 </span>
+					</span>					 
+					<span style="font-family: 宋体">
+						日期：<span th:text="${#calendars.format(now,'yyyy-MM-dd')}"  class="cndate">2017年10月10日 </span>
+					</span>
 				</p>
 				<p style="margin-left: 14px">
 					<span>&nbsp;</span>
@@ -311,6 +312,29 @@
 			</div>
 		</div>
 	</div>
+
+	<script th:src="@{/static/js/common/dateutil.js}"></script>
+	<script type="text/javascript">
+	
+	$(function(){
+		//将2017-07-21格式时间转换为2017年07月21日格式
+		$(".cndate").each(function(){
+			var oldFmtDate=$(this).text();
+			if(oldFmtDate=="" || oldFmtDate==null){
+				$(this).html("&nbsp;年&nbsp;月&nbsp;日");
+			}else{
+				var cnFmtDate=getCNFormatDate(oldFmtDate);
+				$(this).text(cnFmtDate);	
+			}
+			
+		});
+		
+	});
+	
+	
+	</script>
+
+
 
 </body>
 </html>

@@ -7,7 +7,7 @@ import com.ecp.service.IBaseService;
 
 /**
  * @ClassName IAgentService
- * @Description 代理商用户登录接口
+ * @Description 代理商:帐号接口（user）
  * @author Administrator
  * @Date 2017年5月18日 上午6:43:19
  * @version 1.0.0
@@ -36,4 +36,13 @@ public interface IAgentService extends IBaseService<User, Long> {
 	 * @return
 	 */
 	public List<User> getByLoginName(String loginName);
+	
+	/**
+	 * @Description 查询是否有相同的登录名
+	 * @param loginName
+	 * @return 有:true;没有:false;
+	 */
+	public boolean hasSameLoginName(String loginName);
+	
+	
 }

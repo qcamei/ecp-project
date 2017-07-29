@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ecp.bean.ContractAttrValueBean;
@@ -21,6 +22,8 @@ import com.ecp.bean.ContractOrderItemBean;
 import com.ecp.bean.ContractStateType;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.NumberToCN;
+import com.ecp.common.util.RequestResultUtil;
+import com.ecp.entity.CompanyInfo;
 import com.ecp.entity.Contract;
 import com.ecp.entity.ContractAttrValue;
 import com.ecp.entity.ContractAttribute;
@@ -28,6 +31,7 @@ import com.ecp.entity.ContractItems;
 import com.ecp.entity.Orders;
 import com.ecp.entity.User;
 import com.ecp.entity.UserExtends;
+import com.ecp.service.back.ICompanyInfoService;
 import com.ecp.service.front.IContractAttrValueService;
 import com.ecp.service.front.IContractAttributeService;
 import com.ecp.service.front.IContractItemsService;
@@ -51,9 +55,10 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping("/back/contract")
 public class ContractController {
 	final String RESPONSE_THYMELEAF_BACK="thymeleaf/back/";
+	final String RESPONSE_THYMELEAF_FRONT="thymeleaf/front/";
 	final String RESPONSE_JSP="jsps/front/";
 	
-	private final int PAGE_SIZE = 5;
+	private final int PAGE_SIZE = 8;
 
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -71,6 +76,9 @@ public class ContractController {
 	IOrderService orderService;
 	@Autowired
 	IUserAgentService userAgentService;
+	@Autowired
+	ICompanyInfoService companyInfoService;
+	
 	
 	/**
 	 * @Description 合同详情
@@ -82,7 +90,7 @@ public class ContractController {
 		
 		model.addAttribute("contractId", id);
 		
-		return RESPONSE_THYMELEAF_BACK+"contract_detail";
+		return RESPONSE_THYMELEAF_FRONT+"contract_detail";
 	}
 	
 	
@@ -103,8 +111,11 @@ public class ContractController {
 		//model.addAttribute("order", order);
 		
 		//(3)合同商品条目(根据合同编号)
-		List<Map<String,String>> contractItems=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		List<Map<String,Object>> contractItems=contractItemsService.selectItemsByContractNo(contract.getContractNo());
 		model.addAttribute("contractItems", contractItems);
+		BigDecimal contractItemTotal=calcContractItemTotalPrice(contractItems);  //计算合同优惠后总额
+		model.addAttribute("contractItemTotal", contractItemTotal);
+		
 		
 		//(4)代理商
 		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
@@ -119,12 +130,26 @@ public class ContractController {
 	/**
 	 * @Description 显示-合同列表
 	 * @param model
-	 * @param pageNum  页号
-	 * @param pageSize 页大小
 	 * @return  
 	 */
 	@RequestMapping(value = "/show")
-	public String contract_show(Model model, Integer pageNum, Integer pageSize) {
+	public String contract_show(Model model) {
+		return RESPONSE_THYMELEAF_BACK + "contract_show";
+	}
+	
+	/**
+	 * @Description 显示-合同列表
+	 * @param orderTimeCond   时间 
+	 * @param dealStateCond
+	 * @param pageNum
+	 * @param pageSize
+	 * @param searchTypeValue
+	 * @param condValue
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/contracttable")
+	public String contract_table(int timeCond,int dealStateCond,Integer pageNum, Integer pageSize,Integer searchTypeValue,String condValue,Model model) {
 		
 		if(pageNum==null || pageNum==0)
 		{
@@ -132,33 +157,34 @@ public class ContractController {
 			pageSize=PAGE_SIZE;
 		}
 		
+		//置默认值(搜索)
+		if(searchTypeValue==null){
+			searchTypeValue=0;
+			condValue="";
+		}
+		
+		//回传查询条件
+		model.addAttribute("orderTimeCond", timeCond);
+		model.addAttribute("dealStateCond", dealStateCond);
+		//搜索类型及搜索关键字
+		model.addAttribute("searchTypeValue", searchTypeValue);  	//查询字段值
+		model.addAttribute("condValue", condValue);  				//查询条件值
+		
+		
 		// 查询 并分页		
 		PageHelper.startPage(pageNum, pageSize); // PageHelper			
 
-		List<Contract> contractList = contractService.selectAll();
-		PageInfo<Contract> pageInfo = new PageInfo<Contract>(contractList);// (使用了拦截器或是AOP进行查询的再次处理)
+		//List<Contract> contractList = contractService.selectAll();
+		List<Map<String,Object>> contractList=contractService.selectContract(timeCond,dealStateCond,searchTypeValue,condValue); 
 		
-		setPageInfo(model, pageInfo); // 向前台传递分页信息
-
+		PageInfo<Map<String,Object>> pageInfo = new PageInfo<Map<String,Object>>(contractList);// (使用了拦截器或是AOP进行查询的再次处理)
+		
+		//setPageInfo(model, pageInfo); // 向前台传递分页信息
+		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("contractList", contractList);
-
-		return RESPONSE_THYMELEAF_BACK + "contract_show";
-	}
-	
-	
-	
-	
-	private void setPageInfo(Model model, PageInfo pageInfo) {
-		// 获得当前页
-		model.addAttribute("pageNum", pageInfo.getPageNum());
-		// 获得一页显示的条数
-		model.addAttribute("pageSize", pageInfo.getPageSize());
-		// 是否是第一页
-		model.addAttribute("isFirstPage", pageInfo.isIsFirstPage());
-		// 获得总页数
-		model.addAttribute("totalPages", pageInfo.getPages());
-		// 是否是最后一页
-		model.addAttribute("isLastPage", pageInfo.isIsLastPage());
+		
+		return RESPONSE_THYMELEAF_BACK + "contract_table";
+		
 	}
 	
 	
@@ -176,9 +202,18 @@ public class ContractController {
 		model.addAttribute("orderItemList", orderItemList);
 		
 		//(2)获取合同属性
-		//TODO 查询条件：template_id=1  此处暂时直接查询，而后进行修改
-		List<ContractAttribute> contractAttrList=contractAttributeService.selectAll();
+		//TODO 查询条件：template_id=1  此处暂时直接查询，而后进行修改		
+		long templateId=1L;
+		List<ContractAttribute> contractAttrList=contractAttributeService.selectAttributesByTemplateId(templateId);
 		model.addAttribute("contractAttrList", contractAttrList);
+		
+		//(3)加入订单信息
+		Orders order=orderService.selectByPrimaryKey(id);
+		model.addAttribute("order", order);
+		
+		//(4)加入代理商信息
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
 		
 		return RESPONSE_THYMELEAF_BACK+"contract_add";
 	}
@@ -191,22 +226,155 @@ public class ContractController {
 	@RequestMapping(value="/preview")
 	public String contract_preview(String contractAttrVals,String orderItems,Model model){
 		
+		//(1)合同属性
 		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);
 		Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
 		
+		//(2)合同商品列表
 		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);
 		
-		BigDecimal contractItemTotal=calcContractItemTotalPrice(contractOrderItemBeanList);  //计算合同总额
+		
+		
+		//计算合同总额
+		BigDecimal contractItemTotal=calcContractOrderItemTotalPrice(contractOrderItemBeanList);  //计算合同总额
 		String totalCN= NumberToCN.number2CNMontrayUnit(contractItemTotal);
 		
+		//(1)乙方信息
+		CompanyInfo companyInfo=companyInfoService.selectByPrimaryKey(1L);
+		model.addAttribute("companyInfo", companyInfo);
+		
+		//(3)订单信息  用于获取送货地址
+		Orders order=orderService.selectOrderByOrderNo(contractOrderItemBeanList.get(0).getOrderId());
+		model.addAttribute("order", order);
+		
+		//(4)甲方信息
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
 		
 		model.addAttribute("attrValue", attrValueMap);  //合同属性
 		model.addAttribute("contractItemList", contractOrderItemBeanList);  //合同商品列表
 		model.addAttribute("contractItemTotal",contractItemTotal);
 		model.addAttribute("contractItemTotalCN",totalCN);
+		model.addAttribute("now", new Date());
 		
 		
 		return RESPONSE_THYMELEAF_BACK+"contract_preview";
+	}
+	
+	/**
+	 * @Description 打开合同(打开已经生成的合同)
+	 * @param id  合同ID(PK)
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/open")
+	public String contract_open(long id,Model model){
+		//(1)乙方信息
+		CompanyInfo companyInfo=companyInfoService.selectByPrimaryKey(1L);
+		model.addAttribute("companyInfo", companyInfo);
+		
+		//(2)合同信息
+		Contract contract=contractService.selectByPrimaryKey(id);
+		model.addAttribute("contract", contract);
+		
+		//(3)订单信息  用于获取送货地址
+		Orders order=orderService.selectOrderByOrderNo(contract.getOrderNo());
+		model.addAttribute("order", order);
+		
+		//(4)甲方信息
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
+		//(5)合同商品列表
+		List<Map<String,Object>> contractItemList=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		model.addAttribute("contractItemList", contractItemList);  //合同商品列表
+		
+		//(6)合同属性
+		List<Map<String,String>> contractAttrValList=contractAttributeService.selectAttrValByContractId(id);
+		Map<String,String> attrValueMap=this.repackage(contractAttrValList); //包装成map
+		model.addAttribute("attrValue", attrValueMap);  //合同属性
+		
+		BigDecimal contractItemTotal=calcContractItemTotalPrice(contractItemList);  //计算合同优惠后总额
+		String totalCN= NumberToCN.number2CNMontrayUnit(contractItemTotal); //转换成中文金额
+		
+		
+		//(7)统计信息
+		model.addAttribute("contractItemTotal",contractItemTotal);
+		model.addAttribute("contractItemTotalCN",totalCN);
+		
+		return RESPONSE_THYMELEAF_BACK+"contract_open";
+	}
+	
+	/**
+	 * @Description 编辑合同(编辑合同)
+	 * @param id  合同ID(PK)
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/edit")
+	public String contract_edit(long id,Model model){
+		//(1)合同信息
+		Contract contract=contractService.selectByPrimaryKey(id);
+		model.addAttribute("contract", contract);
+		
+		//(1.1)查询订单
+		Orders order=orderService.selectOrderByOrderNo(contract.getOrderNo());
+		//(1.2)查询代理商
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		model.addAttribute("agent", agent);
+		
+		//(2)合同商品列表
+		List<Map<String,Object>> contractItemList=contractItemsService.selectItemsByContractNo(contract.getContractNo());
+		model.addAttribute("contractItemList", contractItemList);  //合同商品列表
+		
+		//(3)合同属性
+		List<Map<String,String>> contractAttrValList=contractAttributeService.selectAttrValByContractId(id);
+		Map<String,Object> attrValueMap=repackageAttr(contractAttrValList); //包装成map
+		model.addAttribute("attrValue", attrValueMap);  //合同属性
+		
+		//(2)获取合同属性
+		//TODO 查询条件：template_id=1  此处暂时直接查询，而后进行修改		
+		long templateId=1L;
+		List<ContractAttribute> contractAttrList=contractAttributeService.selectAttributesByTemplateId(templateId);
+		model.addAttribute("contractAttrList", contractAttrList);
+		
+		return RESPONSE_THYMELEAF_BACK+"contract_edit";
+	}
+	
+	/**
+	 * @Description 更新合同条目折减
+	 * @param itemId 合同条目id(pk)
+	 * @param discount 折减
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/itemupdate")
+	@ResponseBody
+	public Object contract_item_update(long itemId,BigDecimal discount,Model model){
+		ContractItems record=new ContractItems();
+		record=contractItemsService.selectByPrimaryKey(itemId);		
+		record.setDiscountPrice(discount);  //折减
+		record.setPayPrice(record.getPrimitivePrice().subtract(discount));
+		BigDecimal num=new BigDecimal(record.getNum());
+		record.setPayPriceTotal(record.getPayPrice().multiply(num));
+		contractItemsService.updateByPrimaryKeySelective(record);
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	/**
+	 * @Description 更新合同属性
+	 * @param contractAttrVals
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/attrupdate")
+	@ResponseBody
+	public Object contract_attr_update(String contractAttrVals,Model model){
+		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
+		updateContractAttr(contractAttrValueList);
+		
+		return RequestResultUtil.getResultUpdateSuccess();
 	}
 	
 	/**
@@ -217,11 +385,11 @@ public class ContractController {
 	 * @return
 	 */
 	@RequestMapping(value="/create")
-	/*@ResponseBody*/
+	@ResponseBody
 	public Object contract_create(String contractAttrVals,String orderItems,Model model,HttpServletRequest request){
 		
 		List<ContractAttrValueBean> contractAttrValueList=getEntity1(contractAttrVals);  //合同属性列表
-		Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
+		//Map<String,String> attrValueMap=  convertAttrValueList(contractAttrValueList);
 		
 		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);  //合同商品列表
 		
@@ -244,8 +412,133 @@ public class ContractController {
 		//(4)在订单中加入合同信息
 		updateOrderContract(orderNo,contractId,contractNo);
 		
-		return RESPONSE_THYMELEAF_BACK+"contract_create_success";
+		return RequestResultUtil.getResultAddSuccess();
 	}
+	
+	/**
+	 * @Description 后台置合同的状态
+	 * @param orderId
+	 * @param contractId
+	 * @param status
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/setstatus")
+	@ResponseBody
+	public Object contract_set_setatus(long orderId,long contractId,byte status, Model model,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		
+		setContractStatus(orderId,contractId,status,user.getId(),BACK_CONTRACT_CONFIRM);
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	/**
+	 * @Description 后台置合同的状态
+	 * @param orderId
+	 * @param contractId
+	 * @param status
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/frontsetstatus")
+	@ResponseBody
+	public Object contract_front_set_status(long orderId,long contractId,byte status, Model model,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		
+		setContractStatus(orderId,contractId,status,user.getId(),FRONT_CONTRACT_CONFIRM);
+		
+		return RequestResultUtil.getResultUpdateSuccess();
+	}
+	
+	
+	
+	private  final  int BACK_CONTRACT_CONFIRM=2;
+	private  final 	int FRONT_CONTRACT_CONFIRM=1; 
+	
+	/**
+	 * @Description 设置合同状态
+	 * @param orderId
+	 * @param contractId
+	 * @param status
+	 * @param userId
+	 */
+	private void setContractStatus(long orderId,long contractId,byte status,long userId,int frontOrBack){
+		Orders order=new Orders();
+		order.setId(orderId);
+		order.setContractState(status);
+		orderService.updateByPrimaryKeySelective(order);
+		
+		Contract contract=new Contract();
+		contract.setId(contractId);
+		
+		if(frontOrBack==FRONT_CONTRACT_CONFIRM){  //前台合同确认
+			contract.setConfirmUserFirstParty(userId);
+			contract.setConfirmDateFirstParty(new Date());
+		}
+		else{  //后台合同确认
+			contract.setConfirmUserSecondParty(userId);
+			contract.setConfirmDateSecondParty(new Date());
+		}
+		
+		
+		
+		
+		contract.setContractStatus(status);  //合同状态
+		
+		contractService.updateByPrimaryKeySelective(contract);
+	}
+	
+	
+	/**
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @param contractAttrValueList
+	 */
+	private void updateContractAttr(List<ContractAttrValueBean> contractAttrValueList){
+		for(ContractAttrValueBean attrx:contractAttrValueList){
+			ContractAttrValue record=new ContractAttrValue();
+			record.setId(attrx.getId());
+			record.setAttrValue(attrx.getAttrValue());
+			contractAttrValueService.updateByPrimaryKeySelective(record);
+		}
+	}
+	
+	
+	private Map<String,String> repackage(List<Map<String,String>> list){
+		Map<String,String> map=new HashMap<String,String>();
+		for(Map<String,String> attrValue:list){
+			map.put(attrValue.get("attr_name"), attrValue.get("attr_value"));
+		}
+		return map;
+	}
+	
+	/**
+	 * @Description 编辑合同属性时，合同属性列表
+	 * @param list 合同属性列表
+	 * @return  合同属性map 列表     attr_namex:attr  
+	 * 						  attr(attrVal:attr_value;
+	 * 								id:合同属性id
+	 * 								)
+	 */
+	private Map<String,Object> repackageAttr(List<Map<String,String>> list){
+		Map<String,Object> map=new HashMap<String,Object>();
+		for(Map<String,String> attrValue:list){
+			
+			Map<String,Object> valAndId=new HashMap<String,Object>();
+			valAndId.put("val", attrValue.get("attr_value"));
+			valAndId.put("id", attrValue.get("id"));
+			
+			map.put(attrValue.get("attr_name"), valAndId);
+			
+		}
+		return map;
+	}
+	
+	
 	
 	/**
 	 * @Description 生成合同后，更新相关订单合同信息
@@ -320,17 +613,17 @@ public class ContractController {
 			ContractItems record=new ContractItems();
 			
 			record.setCid(orderItem.getCid());
-			record.setItemId(orderItem.getItem_id());
-			record.setSkuId(orderItem.getSku_id());
-			record.setSkuName(orderItem.getSku_name());
-			record.setOrderId(orderItem.getOrder_id());
+			record.setItemId(orderItem.getItemId());
+			record.setSkuId(orderItem.getSkuId());
+			record.setSkuName(orderItem.getSkuName());
+			record.setOrderId(orderItem.getOrderId());
 			record.setContractNo(contractNo);
 			
-			record.setPrimitivePrice(orderItem.getPrimitive_price());  //原始价
-			record.setDiscountPrice(orderItem.getDiscount_price());  //价格折减
-			record.setPayPrice(orderItem.getPay_price());  //实际支付价格
+			record.setPrimitivePrice(orderItem.getPrimitivePrice());  //原始价
+			record.setDiscountPrice(orderItem.getDiscountPrice());  //价格折减
+			record.setPayPrice(orderItem.getPayPrice());  //实际支付价格
 			record.setNum(orderItem.getNum());  //商品数量
-			record.setPayPriceTotal(orderItem.getPay_price_total());  //小计
+			record.setPayPriceTotal(orderItem.getPayPriceTotal());  //小计
 			
 			
 			record.setCreateTime(new Date());
@@ -348,7 +641,7 @@ public class ContractController {
 	 * @return  合同编号
 	 */
 	private String getOrderNo(ContractOrderItemBean contractItem){
-		return contractItem.getOrder_id();
+		return contractItem.getOrderId();
 	}
 	
 	/**
@@ -369,16 +662,28 @@ public class ContractController {
 	 * @return  合同id
 	 */
 	private Long createContract(String contractNo,Long contractTemplateId,String orderNo,Long createUserId){
+		//查询订单（根据订单号）
+		Orders order=orderService.selectOrderByOrderNo(orderNo);  //读取订单
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());  //代理商
+		
+		
+		
 		//生成合同对象
-		Contract contract=new Contract();
+		Contract contract=new Contract(); 
 		
 		//设置合同属性
 		contract.setContractTemplateId(contractTemplateId);
 		contract.setOrderNo(orderNo);
+		contract.setOrderId(order.getId());		
 		contract.setContractNo(contractNo);
 		//创建用户及时间
 		contract.setCreateDate(new Date());
 		contract.setCreateUser(createUserId);
+		
+		if(agent!=null){
+			contract.setAgentId(agent.getExtendId());  //设置代理商id
+		}
+		contract.setContractStatus((byte)ContractStateType.CREATED_YES);
 		
 		//插入记录
 		contractService.insertSelective(contract);
@@ -400,10 +705,24 @@ public class ContractController {
 	 * @param itemList  合同条目商品列表
 	 * @return  合同总金额
 	 */
-	private BigDecimal calcContractItemTotalPrice(List<ContractOrderItemBean> itemList){
+	private BigDecimal calcContractOrderItemTotalPrice(List<ContractOrderItemBean> itemList){
 		BigDecimal total=new BigDecimal(0.00);
 		for(ContractOrderItemBean item:itemList){
-			total=total.add(item.getPay_price_total());
+			total=total.add(item.getPayPriceTotal());
+		}
+		return total;
+	}
+	
+	/**
+	 * @Description 计算合同总金额（优惠后）
+	 * @param itemList  合同条目商品列表
+	 * @return  合同总金额
+	 */
+	private BigDecimal calcContractItemTotalPrice(List<Map<String,Object>> itemList){
+		BigDecimal total=new BigDecimal(0.00);
+		for(Map<String,Object> item:itemList){
+			//Double subTotal=Double.parseDouble(item.get("pay_price_total"));
+			total=total.add((BigDecimal)item.get("pay_price_total"));
 		}
 		return total;
 	}
@@ -438,7 +757,7 @@ public class ContractController {
 	 * @param resp
 	 * @return
 	 */
-	private List<ContractOrderItemBean> getEntity2(String resp) {
+	private List<ContractOrderItemBean> getEntity2(String resp) {		
 		List<ContractOrderItemBean> list =JSONArray.parseArray(resp,ContractOrderItemBean.class);    
         return list;
 	} 

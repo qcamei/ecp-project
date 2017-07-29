@@ -12,7 +12,19 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface CategoryBrandMapper extends Mapper<CategoryBrand> {
 	
-	public List<Map<String,String>> getBrandByCid(@Param("cid") Long cid);  //根据CID读取类目品牌
+	/**
+	 * @Description 读取三级类目下的brands
+	 * @param cid
+	 * @return
+	 */
+	public List<Map<String,String>> getBrandByCid(@Param("cid") Long cid);  
+	
+	/**
+	 * @Description 读取二级类目下的brands
+	 * @param cid 
+	 * @return
+	 */
+	public List<CategoryBrandBean> getBrandByLevelSecondCid(@Param("cid") Long cid);
 	
 	/**
 	 * @Description 根据品牌名称列表查询类目

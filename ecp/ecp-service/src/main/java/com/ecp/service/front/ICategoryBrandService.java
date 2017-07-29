@@ -11,11 +11,20 @@ public interface ICategoryBrandService extends IBaseService<CategoryBrand, Long>
 	
 	
 	/**
-	 * @Description  获取指定类目下的品牌
+	 * @Description  获取指定三级类目下的品牌
 	 * @param cid
 	 * @return
 	 */
 	public List<Map<String,String>> getBrandByCid(Long cid);
+	
+	
+	/**
+	 * @Description  获取指定二级类目下的品牌
+	 * @param cid 二级类目id
+	 * @return
+	 */
+	public List<CategoryBrandBean> getBrandByLevelSecondCid(Long cid);
+
 	
 	
 	/**

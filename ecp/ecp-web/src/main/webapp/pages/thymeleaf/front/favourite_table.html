@@ -13,7 +13,9 @@ div.caption div label{
 	float:right;
 }
 
-
+i {
+	color:lightblue;
+}
 
 
 </style>
@@ -38,8 +40,8 @@ div.caption div label{
 		<div class="col-md-12 column">
 			<input type="checkbox"  id="selectAll" />
 			<label for="selectAll">全选</label>
-			<button type="button" class="btn btn-primary " id="addIntoCartBatch">加入购物车</button>
-			<button type="button" class="btn btn-primary " id="cancelFavouriteBatch" >取消关注</button>
+			<a  class="btn btn-primary " id="addIntoCartBatch">加入<i class="icon-shopping-cart icon-large"></i></a>
+			<a  class="btn btn-primary " id="cancelFavouriteBatch" >取消<i class="icon-heart-empty icon-large"></i></a>
 		</div>
 	</div>
 	<br>
@@ -61,7 +63,7 @@ div.caption div label{
 							</div>
 							<div>
 								<a class="btn btn-primary addIntoCart" href="javascript:void(0)"
-									th:attr="data-item-id=${favouriteItem.itemId}">加入购物车</a>
+									th:attr="data-item-id=${favouriteItem.itemId}">加入<i class="icon-shopping-cart icon-large"></i></a>
 								<label th:attr="for='favourite_'+${favouriteItem.id}"><!-- <i class="icon-check icon-2x"  style="color:darkblue"></i> -->选择</label>
 								<input type="checkbox" th:attr="id='favourite_'+${favouriteItem.id},data-id=${favouriteItem.id},data-item-id=${favouriteItem.itemId}"  class="favouriteSelector" />
 							</div>

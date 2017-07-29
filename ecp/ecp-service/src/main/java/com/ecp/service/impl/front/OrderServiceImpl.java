@@ -2,6 +2,7 @@ package com.ecp.service.impl.front;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -66,6 +67,33 @@ public class OrderServiceImpl extends AbstractBaseService<Orders, Long> implemen
 		record.setOrderId(orderNo);
 		
 		return ordersMapper.selectOne(record);
+	}
+
+	@Override
+	public List<Orders> selectAllOrderByOrderTimeAndDealState(int orderTimeCond, int dealStateCond) {
+		return ordersMapper.selectAllOrderByOrderTimeAndDealState(-orderTimeCond,dealStateCond);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrder(int orderTimeCond, int dealStateCond, int searchTypeValue,
+			String condValue) {
+		List<Map<String,Object>> resultList=null;
+		switch(searchTypeValue){
+		case 0:  //在订单表内进行查询			
+		case 1:  
+		case 2:
+		case 3:
+		case 4:
+			resultList= ordersMapper.selectOrderBySelfField(-orderTimeCond, dealStateCond, searchTypeValue,condValue); 
+			break;
+		case 5:
+		case 6:
+		case 7:	
+			resultList= ordersMapper.selectOrderByAgent(-orderTimeCond, dealStateCond, searchTypeValue,condValue);
+			break;
+		}
+		
+		return resultList;
 	}
 
 }

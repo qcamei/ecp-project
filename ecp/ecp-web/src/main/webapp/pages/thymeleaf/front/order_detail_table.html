@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<!-- <div th:include="/thymeleaf/common/_head2::headx('我的订单')"	th:remove="tag"></div> -->
 <title>订单详情模块（用于order_detail）</title>
 </head>
 <body>
@@ -34,9 +35,9 @@
 												th:case='2' th:remove="tag"><span
 													class="order-status"> 己建合同 </span> <br></span> <span
 												th:case='3' th:remove="tag"><span
-													class="order-status"> LM已确认 </span> <br></span> <span
+													class="order-status"> 乙方已确认 </span> <br></span> <span
 												th:case='4' th:remove="tag"><span
-													class="order-status"> 我已确认 </span> <br></span> <span
+													class="order-status"> 甲方己确认 </span> <br></span> <span
 												th:case='5' th:remove="tag"><span
 													class="order-status"> 执行中 </span> <br></span> <span
 												th:case='6' th:remove="tag"><span
@@ -46,12 +47,12 @@
 									</tr>
 									<tr>
 										<td>收货人姓名</td>
-										<td th:text="${order.name}"></td>
+										<td th:text="${order.Name}"></td>
 
 									</tr>
 									<tr>
 										<td>收货人电话</td>
-										<td th:text="${order.mobile}"></td>
+										<td th:text="${order.Mobile}"></td>
 									</tr>
 									<tr>
 										<td>收货地址</td>
@@ -69,7 +70,7 @@
 				<div class="col-md-6 column">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">代理商 <span style="margin-left:50px;" th:text="'合同号:'+${order.contractNo}"></span></h3>
+							<h3 class="panel-title">代理商 <span style="margin-left:50px;" th:if="${order.contractNo}" th:text="'合同号:'+${order.contractNo}"></span></h3>
 						</div>
 						<div class="panel-body">
 							<table class="table">
@@ -149,7 +150,7 @@
 								<td></td>
 								<td></td>
 								<td></td>
-								<td th:text="'总金额:'+'￥'+${order.totalPrice}"></td>
+								<td><b th:text="'总金额:'+'￥'+${order.totalPrice}"></b></td>
 							</tr>
 						</tbody>
 					</table>

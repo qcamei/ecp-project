@@ -8,7 +8,8 @@
 **/
 body {
     /* background-color: #f7f7f7; */
-    background-color: #fFF;
+    background-color: #FFF;
+    font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体"; 
 }
 
 /*  header  */
@@ -24,7 +25,8 @@ body {
 
 .top ul li>div,
 .top a {
-    color: #666666;
+    /* color: #666666; */
+    color:lightgray;
 }
 
 .top a:hover {
@@ -83,7 +85,8 @@ i {
 }
 
 .login #reg a {
-    color: #c81623;
+    /* color: #c81623; */
+    color:#f97e76;
 }
 
 #top-banner {
@@ -231,7 +234,7 @@ i {
 /* cart dropdown jump */
 .dropdownCart {
     top: 100%;
-    left: initial;
+    left: inherit;
     right: 0;
     width: 240px;
     background-color: rgba(65,65,65,.8);
@@ -476,8 +479,8 @@ i {
 }
 
 .subitem dt {
-	width: 90px;
-    padding: 8px 30px 0 0;
+	width: 110px; 
+    padding: 8px 10px 0 0;
     text-align: right;
     position: relative;
     float: left;

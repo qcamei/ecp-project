@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.common.SessionConstants;
+import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.User;
 import com.ecp.service.front.IAgentService;
 
@@ -25,7 +26,7 @@ import com.ecp.service.front.IAgentService;
  * @version 1.0.0
  */
 @Controller
-@RequestMapping("/front/agent")
+@RequestMapping("/login/agent")
 public class UserEntryController {
 	final String RESPONSE_THYMELEAF = "thymeleaf/front/";
 	final String RESPONSE_JSP = "jsps/front/";
@@ -62,18 +63,59 @@ public class UserEntryController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, String loginName, String password) {
+	@ResponseBody
+	public Object login(HttpServletRequest request, String loginName, String password) {
 		User user = verifyUser(loginName, password);
 		if (user!=null) { // 如果校难正确
+			
 			//将用户信息加入到session
 			HttpSession session = request.getSession();    		
     		session.setAttribute(SessionConstants.USER, user);
-			return "redirect:/front/home/home"; // 导航到主页
+    		
+			//return "redirect:/front/home/home"; // 导航到主页
+    		return RequestResultUtil.getResultSelectSuccess();
 		} else {
-			return "error"; // TODO 此处暂时未处理
+			return RequestResultUtil.getResultSelectWarn();
 		}
 
 	}
+	
+	/**
+	 * @Description 导航->登录页
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/gologin")
+	public String login(Model model) {
+		return RESPONSE_THYMELEAF + "login";
+	}
+	
+	/**
+	 * @Description 修改口令
+	 * @param loginName  登录名
+	 * @param oldPassword 原口令
+	 * @param newPassword 新口令
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/updatepassword")
+	@ResponseBody
+	public Object change_password(String loginName,String oldPassword,String newPassword,Model model) {
+		User user = verifyUser(loginName, oldPassword);
+		if (user!=null) { // 如果校难正确
+			
+			user.setPassword(genMD5Password(loginName,newPassword));
+			agentService.updateByPrimaryKeySelective(user);
+    		
+    		return RequestResultUtil.getResultUpdateSuccess();
+		} else {
+			return RequestResultUtil.getResultUpdateWarn();
+		}
+
+		
+	}
+	
+	
 	
 	/**
 	 * 
@@ -113,7 +155,7 @@ public class UserEntryController {
 	}
 	
 	
-	@RequestMapping(value = "/state/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/loginstate", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getLoginState(HttpServletRequest request, Model model) {		
 		
@@ -173,6 +215,14 @@ public class UserEntryController {
 		// DigestUtils.md5Hex(pass.getBytes()).toUpperCase());
 		String md5Password = DigestUtils.md5Hex(pass.getBytes()).toUpperCase();
 		return md5Password;
+	}
+	
+	public static void main(String args[]) { 
+		String pass = "jch" + ":CNWELL:" + "12345";
+		// log.debug("md5 password upper : " +
+		// DigestUtils.md5Hex(pass.getBytes()).toUpperCase());
+		String md5Password = DigestUtils.md5Hex(pass.getBytes()).toUpperCase();
+		System.out.println(md5Password);
 	}
 
 }

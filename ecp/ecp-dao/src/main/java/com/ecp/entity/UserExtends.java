@@ -38,7 +38,7 @@ public class UserExtends {
     private String contactAddress;
 
     @Column(name = "account_state")
-    private String accountState;
+    private Integer accountState;
 
     @Column(name = "create_dt")
     private Date createDt;
@@ -186,15 +186,15 @@ public class UserExtends {
     /**
      * @return account_state
      */
-    public String getAccountState() {
+    public Integer getAccountState() {
         return accountState;
     }
 
     /**
      * @param accountState
      */
-    public void setAccountState(String accountState) {
-        this.accountState = accountState == null ? null : accountState.trim();
+    public void setAccountState(Integer accountState) {
+        this.accountState = accountState;
     }
 
     /**

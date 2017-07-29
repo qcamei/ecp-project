@@ -11,7 +11,7 @@
 		 */
 		function getLoginState() {
 			var logined = false;
-			var urlStr = BASE_CONTEXT_PATH + "/front/agent/state/login"; // 需要提交的 url
+			var urlStr = BASE_CONTEXT_PATH + "/login/agent/loginstate"; // 需要提交的 url
 			//alert("url is:"+urlStr);
 			$.ajax({
 				type : "post", // 提交方式 get/post
@@ -55,7 +55,7 @@
 		function getLoginState_favourite() {
 			var logined = false;
 
-			var urlStr = BASE_CONTEXT_PATH + "/front/agent/state/login"; // 需要提交的 url
+			var urlStr = BASE_CONTEXT_PATH + "/login/agent/loginstate"; // 需要提交的 url
 			//alert("url is:"+urlStr);
 			$.ajax({
 				type : "post", // 提交方式 get/post
@@ -244,7 +244,7 @@
 				用户登录(AJAX方式)
 			 */
 			$("#btnLogin").on("click", function(e) {
-				var urlStr = BASE_CONTEXT_PATH + "/front/agent/ajaxLogin"; // 需要提交的 url
+				var urlStr = BASE_CONTEXT_PATH + "/login/agent/ajaxLogin"; // 需要提交的 url
 
 				var loginName = $('#loginName').val();
 				var loginPass = $('#password').val();

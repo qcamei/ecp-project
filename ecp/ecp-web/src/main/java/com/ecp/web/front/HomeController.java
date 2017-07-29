@@ -87,9 +87,11 @@ public class HomeController {
 	 * @Description 加载channel-one
 	 * @return channel_one页面
 	 */
-	@RequestMapping(value = "/channelone")
-	public String channel_one(){
-		return RESPONSE_THYMELEAF + "channel_one";
+	@RequestMapping(value = "/channel")
+	public String channel_one(long cid){
+		
+		//return RESPONSE_THYMELEAF + "channel_one";
+		return "redirect:/front/search/channel/" + cid;
 	}
 	
 	/** 
@@ -98,7 +100,7 @@ public class HomeController {
 	 * @return
 	 */
 	//TODO 购物车路径单词拼写错误
-	@RequestMapping(value = "/cart", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/cart", method = RequestMethod.GET)
 	public String chart(Model model) {
 		ArrayList<Favourite> cartItems = new ArrayList<Favourite>();
 		for (int i = 0; i < 3; i++) {
@@ -110,7 +112,7 @@ public class HomeController {
 		model.addAttribute("cart", cartItems);
 
 		return RESPONSE_THYMELEAF + "cart";
-	}
+	}*/
 	
 	
 	/**
@@ -161,14 +163,18 @@ public class HomeController {
 	
 	
 	/**
-	 * @Description 导航->登录页
+	 * @Description退出登录
 	 * @param model
-	 * @return
+	 * @return 导航到->主页面
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Model model) {
-		return RESPONSE_THYMELEAF + "login";
+	@RequestMapping(value = "/unRegister", method = RequestMethod.GET)
+	public String unRegister(HttpServletRequest request) {
+		request.getSession().invalidate();
+		// return RESPONSE_THYMELEAF+"home";
+		return "redirect:/login/agent/gologin";
 	}
+	
+	
 
 	/**
 	 * @Description 导航->注册页
@@ -180,17 +186,7 @@ public class HomeController {
 		return RESPONSE_THYMELEAF + "register";
 	}
 
-	/**
-	 * @Description退出登录
-	 * @param model
-	 * @return 导航到->主页面
-	 */
-	@RequestMapping(value = "/unRegister", method = RequestMethod.GET)
-	public String unRegister(HttpServletRequest request) {
-		request.getSession().invalidate();
-		// return RESPONSE_THYMELEAF+"home";
-		return "redirect:/front/home/login";
-	}
+	
 
 	/**
 	 * @Description 测试代码  用于测试jsp视图

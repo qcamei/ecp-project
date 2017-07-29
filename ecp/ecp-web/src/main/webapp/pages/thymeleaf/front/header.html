@@ -10,7 +10,6 @@
     <!-- <script th:src="@{/static/jquery/1.11.3/jquery-1.11.3.js}"></script> -->
     <script type="text/javascript" th:src="@{/static/js/header/js.js}"></script>
     <script type="text/javascript" th:src="@{/static/iconfont/iconfont.js}"></script>
-    
 </head>
 
 <body>
@@ -29,8 +28,11 @@
                     <li class="login">
                         <div><span  th:text="${user} ? ${user.nickname}:'尚未登录'  "></span>您好，欢迎来到</div>
                         <div id="reg">
-                        	<a th:href="${user} ?  @{/front/home/unRegister}:@{/front/home/login}" 
+                        	<a th:href="${user} ?  @{/front/home/unRegister}:@{/login/agent/gologin}" 
                         	   th:text="${user} ?  '[退出登录]': '[请登录]'" > [请登录]</a></div>
+                       	<div>
+                       		<a href="javascript:void(0);" style="margin-left:20px;" id="change-password">[修改口令]</a>
+                       	</div>                       
                     </li>
                 </ul>
                 <ul class="rightul">
@@ -51,13 +53,13 @@
         <!-- banner -->
         <div id="top-banner">
             <div class="banner-img">
-                <img th:src="@{/static/images/hengfu.jpg}" style="width:auto">
+                <img th:src="@{/static/images/hengfu.jpg}" >
                 <div class="closeAd">X</div>
             </div>
         </div>
         <div class="searchLine">
             <div class="logo">
-                <a th:href="@{/front/home/home}"><img th:src="@{/static/images/lmxx.jpg}" style="width:200px;height:65px"></a>
+                <a th:href="@{/front/home/home}"><img th:src="@{/static/images/lingmei.png}" style="width:210px;height:65px;margin-left:8px;"></a>
             </div>
             <div class="search">
                 <div>
@@ -66,7 +68,7 @@
                     	<input id="searchbutton" type="button" value="搜索">
                     </form>
                 </div>
-                <div class="hotSearch">热门搜索：<span class="red">抄底价格</span><span>抄底价格</span><span>抄底价格</span><span>抄底价格</span></div>
+                <div class="hotSearch">热门搜索：<!-- <span class="red">抄底价格</span><span>抄底价格</span><span>抄底价格</span><span>抄底价格</span> --></div>
             </div>
             <div id="myCart" class="quick quickRight">
                	<a th:href="@{/front/personalcenter/cart}" target="_blank">
@@ -96,7 +98,7 @@
                 <a th:href="@{/front/personalcenter/favourites}" target="_blank"><div class="cart"><span class="iconfont">&#xe639;</span>我的收藏</div></a>
             </div>
             <div class="quick">
-                <a th:href="@{/front/home/login}"><div class="cart"><span class="iconfont">&#xe606;</span>点击登录</div></a>
+                <a th:href="@{/login/agent/gologin}"><div class="cart"><span class="iconfont">&#xe606;</span>点击登录</div></a>
             </div>
         </div>
         <div id="sort">
@@ -117,9 +119,11 @@
                             <div class="subitem">
                                 <dl th:each="level2,iter2 : ${level1.subCategoryList}" th:attr="class='force'+${iter2.count}">
                                     <dt>
-                                        <a th:href="@{/front/search/category/{categoryId}(categoryId=${level2.category.cid})}" target="_blank"><span th:text="${level2.category.cName}" th:remove="tag">电视</span>
-                                        	<i>></i>
+                                        <a th:href="@{/front/search/category/{categoryId}(categoryId=${level2.category.cid})}" target="_blank">
+                                        	<span th:text="${level2.category.cName}" th:remove="tag">电视</span>
+                                        	<b>></b>
                                     	</a>
+                                    	
                                     </dt>
                                     <dd>
                                         <a th:each="level3 : ${level2.subCategoryList}" th:href="@{/front/search/category/{categoryId}(categoryId=${level3.category.cid})}" target="_blank"><span th:text="${level3.category.cName}" th:remove="tag">电视</span></a>
@@ -145,6 +149,7 @@
             </div>
         </div>
     </div>
+    <div id="changePassword" th:replace="thymeleaf/common/change_password_dialog::dialog"></div>
     <!-- 占位图片 不属于header  -->
     <!-- <div>
         <img src="http://via.placeholder.com/1200x330" style="display: block;width: auto;margin:0 auto">
@@ -152,6 +157,9 @@
     <!-- 占位图片 不属于header end  -->
     
     <!--  -->
+    
+    <script type="text/javascript" th:src="@{/static/js/header/change_password.js}"></script>
+    
     
     
     

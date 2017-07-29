@@ -62,4 +62,16 @@ public class AgentServiceImpl extends AbstractBaseService<User, Long> implements
 		return 0;
 	}
 
+	@Override
+	public boolean hasSameLoginName(String loginName) {
+		User record=new User();
+		record.setUsername(loginName);
+		
+		List<User> list=userMapper.select(record);
+		if (list.size()>0) 
+			return true;
+		
+		return false;
+	}
+
 }

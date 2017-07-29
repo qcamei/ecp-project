@@ -37,6 +37,13 @@ public interface IUserAgentService extends IBaseService<UserExtends, Long> {
 	 */
 	public UserExtends getUserAgentByUserId(long userId);
 	
+	/**
+	 * @Description 根据所选字段值、输入的条件进行查询
+	 * @param searchTypeValue  字段
+	 * @param condValue 查询字符串
+	 * @return
+	 */
+	public List<UserExtends> searchUserAgent(int searchTypeValue,String condValue);
 	
 	
 }

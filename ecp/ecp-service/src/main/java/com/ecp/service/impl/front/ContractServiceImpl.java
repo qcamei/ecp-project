@@ -3,6 +3,8 @@ package com.ecp.service.impl.front;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -60,6 +62,13 @@ public class ContractServiceImpl extends AbstractBaseService<Contract, Long> imp
 		}
 		
 		return contractNo;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectContract(int timeCond, int dealStateCond, int searchTypeValue,
+			String condValue) {
+		
+		return contractMapper.selectContractByCond(-timeCond,dealStateCond,searchTypeValue,condValue);
 	}
 	
 	
