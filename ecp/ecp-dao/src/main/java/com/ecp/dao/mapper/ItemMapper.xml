@@ -66,6 +66,9 @@
 	<!-- 通过品牌及类目属性查询 -->
 	<select id="getItemByBrandAndAttr" resultMap="BaseResultMap">
 		select * from item where cid=#{cid}
+		<if test="itemStatus!=0">
+			AND item_status=#{itemStatus}		
+		</if>
 		<if test="brands!=null">
 			AND brand IN
 			<foreach collection="brands" item="item" index="index" open="("
@@ -88,8 +91,11 @@
 	<select id="getItemByBrandAndCid" resultMap="BaseResultMap">
 		select * from item
 		<where>
+			<if test="itemStatus!=0">
+				AND item_status=#{itemStatus}		
+			</if>
 			<if test="brands!=null">
-				brand IN
+				AND brand IN
 				<foreach collection="brands" item="brand" index="index"
 					open="(" close=")" separator=",">
 					#{brand}
@@ -112,6 +118,7 @@
 	<select id="getItemByKeywords" resultMap="BaseResultMap">
 		select * from item
 		<where>
+		    (
 			<foreach collection="keywords" item="keyword" index="index"
 				open="(" close=")" separator=" or ">
 				item_name like
@@ -125,7 +132,12 @@
 					CONCAT('%',#{keyword},'%' )
 				</foreach>
 			</if>
+			)
+			<if test="itemStatus!=0">
+				AND item_status=#{itemStatus}		
+			</if>
 		</where>
+		
 	</select>
 
 
@@ -133,6 +145,7 @@
 	<select id="getItemByKeywordsAndBrandAndCid" resultMap="BaseResultMap">
 		select * from item
 		<where>
+			(
 			<if test="keywords!=null">
 				AND
 				<foreach collection="keywords" item="keyword" index="index"
@@ -162,6 +175,10 @@
 					#{cid}
 				</foreach>
 			</if>
+			)
+			<if test="itemStatus!=0">
+				AND item_status=#{itemStatus}		
+			</if>
 		</where>
 
 
@@ -179,6 +196,9 @@
 				close=")" separator=" , ">
 				#{id}
 			</foreach>
+			<if test="itemStatus!=0">
+				AND item_status=#{itemStatus}		
+			</if>
 		</where>
 	</select>
 

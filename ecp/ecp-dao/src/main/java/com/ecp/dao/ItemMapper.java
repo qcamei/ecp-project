@@ -19,7 +19,8 @@ public interface ItemMapper extends Mapper<Item> {
 	 */
 	public List<Item> getItemByBrandAndAttr(@Param("cid") Long cid, 
 											@Param("brands") List<Long> brands, 
-											@Param("attrValPairs") List<String> attrValPairs);
+											@Param("attrValPairs") List<String> attrValPairs,
+											@Param("itemStatus") Integer itemStatus);
 	
 	
 	/**
@@ -29,7 +30,7 @@ public interface ItemMapper extends Mapper<Item> {
 	 * @return
 	 */
 	public List<Item> getItemByBrandAndCid(@Param("brands") List<Long> brands,
-											@Param("cids") List<Long> cids);
+											@Param("cids") List<Long> cids,@Param("itemStatus") Integer itemStatus);
 	
 	
 	/**
@@ -41,7 +42,7 @@ public interface ItemMapper extends Mapper<Item> {
 	 */
 	public List<Item> getItemByKeywordsAndBrandAndCid(@Param("keywords") List<String> keywordList,
 													  @Param("brands") List<Long> brands,
-													  @Param("cids") List<Long> cids);
+													  @Param("cids") List<Long> cids,@Param("itemStatus") Integer itemStatus);
 	
 	
 	/**
@@ -49,7 +50,7 @@ public interface ItemMapper extends Mapper<Item> {
 	 * @param keywordList
 	 * @return
 	 */
-	public List<Item> getItemByKeywords(@Param("keywords") List<String> keywordList);
+	public List<Item> getItemByKeywords(@Param("keywords") List<String> keywordList,@Param("itemStatus") Integer itemStatus);
 	
 	
 	/**
@@ -57,7 +58,7 @@ public interface ItemMapper extends Mapper<Item> {
 	 * @param ids
 	 * @return
 	 */
-	public List<Item> getItemByBrandIds(@Param("ids") List<Long> ids);
+	public List<Item> getItemByBrandIds(@Param("ids") List<Long> ids,@Param("itemStatus") Integer itemStatus);
 	
 	
 	/**

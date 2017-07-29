@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryBrandBean;
+import com.ecp.bean.ItemStatusType;
 import com.ecp.bean.SearchCondBean;
 import com.ecp.bean.constants.AttributeType;
 import com.ecp.entity.Category;
@@ -392,7 +393,7 @@ public class SearchController {
 			else
 				PageHelper.startPage(1, PAGE_SIZE); // PageHelper
 
-			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds, thirdCategoryCids); // 查询商品列表
+			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds, thirdCategoryCids,ItemStatusType.IS_SALING); // 查询商品列表
 
 			PageInfo<Item> pageInfo = new PageInfo<>(itemList);
 			//setPageInfo(model, pageInfo); // 向前台传递分页信息
@@ -509,7 +510,7 @@ public class SearchController {
 			else
 				PageHelper.startPage(1, PAGE_SIZE); // PageHelper
 
-			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds, thirdCategoryCids); // 查询商品列表
+			List<Item> itemList = itemService.getItemByBrandAndCid(brandIds, thirdCategoryCids,ItemStatusType.IS_SALING); // 查询商品列表
 
 			PageInfo<Item> pageInfo = new PageInfo<>(itemList);
 			//setPageInfo(model, pageInfo); // 向前台传递分页信息
@@ -577,7 +578,7 @@ public class SearchController {
 		else
 			PageHelper.startPage(1, PAGE_SIZE); // PageHelper		
 
-		List<Item> itemList = itemService.getItemByKeywordsAndBrandAndCid(keywords, brands, thirdCategoryCids); //查询商品列表
+		List<Item> itemList = itemService.getItemByKeywordsAndBrandAndCid(keywords, brands, thirdCategoryCids,ItemStatusType.IS_SALING); //查询商品列表
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
 		//setPageInfo(model, pageInfo); // 向前台传递分页信息
@@ -795,7 +796,7 @@ public class SearchController {
 		else
 			PageHelper.startPage(1, PAGE_SIZE); // PageHelper
 
-		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, brands, attrValPair); // 查询spu
+		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, brands, attrValPair,ItemStatusType.IS_SALING); // 查询spu
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
 		//setPageInfo(model, pageInfo); // 向前台传递分页信息
@@ -931,7 +932,7 @@ public class SearchController {
 		PageHelper.startPage(1, pageSize); // PageHelper
 		List<Long> brands = new ArrayList<Long>(); // (1)品牌ID列表 条件列表
 		List<String> params = new ArrayList<String>();// (2)属性-属性值 条件列表
-		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, null, null); // 查询spu
+		List<Item> itemList = itemService.getItemByBrandAndAttr(cid, null, null,ItemStatusType.IS_SALING); // 查询spu
 
 		PageInfo<Item> pageInfo = new PageInfo<>(itemList);// (使用了拦截器或是AOP进行查询的再次处理)
 		//setPageInfo(model, pageInfo); // 向前台传递分页信息
