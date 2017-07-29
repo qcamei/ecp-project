@@ -23,8 +23,13 @@
 
 <%@ include file="../../../common/headJs.jsp"%>
 
+<script type="text/javascript" src="static/jquery/ajaxFileUpload.js"></script>
+
 </head>
 <body class="gray-bg">
+<div class="container-fluid" style="margin-top: 20px;">
+					<div class="row clearfix">
+						<div class="col-md-12 column">
 	<div class="wrapper wrapper-content">
 		<div class="row">
 			<div class="col-sm-12">
@@ -58,7 +63,9 @@
 				</div>
 			</div>
 		</div>
-
+</div>
+</div>
+</div>
 		
 		<script type="text/javascript" src="static/js/itemManage.js"></script>
 </body>

@@ -258,7 +258,7 @@
 	 */
 	util.delConfirm = function(msg, id, callback_name) {
 		console.log("del id:"+id);
-		if(msg){
+		if(msg==null || msg==""){
 			msg = "确认删除？";
 		}
 		var type = 'warning';
@@ -276,6 +276,40 @@
 		var footer = 
 			'			<button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:'+callback_name+'(&apos;'+id+'&apos;)'+';">确认</button>' +
 			'			<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>';;
+		var modalobj = util.dialog('系统提示', content, footer, {'containerName' : 'modal-del-confirm'});
+		modalobj.find('.modal-content').addClass('alert alert-'+type);
+		modalobj.modal('show');
+		return modalobj;
+	};
+	
+	/*
+	 * 确认模态框
+	 */
+	util.confirm = function(msg, id, ok_callback_name, cancel_callback_name) {
+		console.log("del id:"+id);
+		if(msg==null || msg==""){
+			msg = "确认删除？";
+		}
+		var cancel_click = "javascript;";
+		if(cancel_callback_name!=null && cancel_callback_name!=""){
+			cancel_click = "javascript:"+cancel_callback_name+"();";
+		}
+		
+		var type = 'warning';
+		var icons = {
+			success : 'check-circle',
+			error :'times-circle',
+			info : 'info-circle',
+			warning : 'exclamation-triangle'
+		};
+		var content = 
+			'			<i class="pull-left fa fa-4x fa-'+icons[type]+'"></i>'+
+			'			<div class="pull-left"><p>'+ msg +'</p>' +
+			'			</div>'+
+			'			<div class="clearfix"></div>';
+		var footer = 
+			'			<button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:'+ok_callback_name+'(&apos;'+id+'&apos;)'+';">确认</button>' +
+			'			<button type="button" class="btn btn-default" data-dismiss="modal" onclick="'+cancel_click+'">取消</button>';;
 		var modalobj = util.dialog('系统提示', content, footer, {'containerName' : 'modal-del-confirm'});
 		modalobj.find('.modal-content').addClass('alert alert-'+type);
 		modalobj.modal('show');

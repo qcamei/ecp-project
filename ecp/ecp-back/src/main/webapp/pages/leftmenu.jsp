@@ -15,20 +15,19 @@
 				<div class="dropdown profile-element">
 					<a data-toggle="dropdown" class="dropdown-toggle"
 						href="javascript:void(0);"> <span class="clear"> <span
-							class="block m-t-xs" style="font-size: 20px;"> <i
-								class="fa fa-area-chart"></i> <strong class="font-bold">酒庄会员管理</strong>
+							class="block m-t-xs" style="font-size: 18px;"><img alt="凌美" src="static/images/lm.jpg" style="height:28px;" /> <strong class="font-bold">电子商务平台</strong>
 						</span>
 					</span>
 					</a>
 				</div>
-				<div class="logo-element">SCRM</div>
+				<div class="logo-element"><img alt="凌美" src="static/images/lm.jpg" style="height:28px;" /></div>
 			</li>
 			<li class="line dk"></li>
 
 			<c:forEach items="${menuList}" var="menu">
 				<c:if test="${menu.parentId==0}">
-					<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-						<i class="${menu.menuIcon}"></i> <span class="ng-scope">${menu.menuName}</span>
+					<li class="hidden-folded padder m-t m-b-sm text-muted text-xs" style="width:100%;margin:0 0;">
+						<a><i class="${menu.menuIcon}"></i> <span class="ng-scope">${menu.menuName}</span></a>
 					</li>
 					<li class="line dk"></li>
 					<c:forEach items="${menuList}" var="menuChild">

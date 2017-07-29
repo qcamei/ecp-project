@@ -192,22 +192,21 @@ function bootstrapValidateFun(){
  * 点击查看详细信息按钮时执行，获取当前类目下属性和属性值，成功后请求获取商品信息
  */
 function selectDetails(id, cid){
-	getAttrAndValueFun(cid);//查询属性和属性值
-	alert("test");
-	ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
+	getAttrAndValueFun(id, cid);//查询属性和属性值
+	//ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
 }
 
 /**
- * 查询属性和属性值，显示添加商品基本信息选项卡
+ * 加载属性和属性值
  */
-function getAttrAndValueFun(cid){
+function getAttrAndValueFun(id, cid){
 	var url = "back/category/selectAttrAndValue";
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");
 		//$('#tabs-edit-item a[href="#tab-7"]').tab('show');
+		ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
 	});
-	
 };
 
 /**
@@ -224,6 +223,7 @@ function ajaxRequestGetItemInfo(id){
 				var item =resp.item;
 				$("#item-id").val(item.itemId);//ID
 				
+				$("#curr-item-cid").val(item.cid);//用于保存当前商品的类目
 				$("#item-cid").val(item.cid);//商品三级类目
 				
 				$("#brand").val(item.brand);//品牌
@@ -240,7 +240,6 @@ function ajaxRequestGetItemInfo(id){
 				$("#volume").val(item.volume);//商品体积
 				$("#weight").val(item.weight);//商品毛重
 				$("#weight-unit").val(item.weightUnit);//重量单位
-				$("#weight-unit").val(item.weightUnit);//重量单位
 				$("#create-time-str").val(new Date(item.created).format('yyyy-MM-dd HH:mm:ss'));//创建时间
 				
 				var describe = item.describeUrl;
@@ -256,9 +255,51 @@ function ajaxRequestGetItemInfo(id){
 				});
 				
 				var attributes = item.attributes;//商品属性
-				var attrSale = item.attrSale//销售属性
+				var attrs = attributes.split(",");
+				$("#item-attr input[name='itemAttr']").each(function(){
+					for(var i=0; i<attrs.length; i++){
+						var currAttr = $(this).val();
+						var selectAttr = attrs[i];//属性:属性值
+						if(currAttr==selectAttr){
+							$(this).prop("checked", true);
+						}
+					}
+				});
+				
+				var attrSale = item.attrSale;//销售属性
+				var attrSales = attrSale.split(",");
+				$("#sale-attr input[name='attrValId']").each(function(){
+					for(var i=0; i<attrSales.length; i++){
+						var currAttr = $(this).val();
+						var selectAttr = attrSales[i];//属性:属性值
+						var attrVal = selectAttr.split(":")[1];//属性值
+						if(currAttr==attrVal){
+							$(this).prop("checked", true);
+						}
+					}
+				});
+				
+				createSku();
+				//debugger;
+				var skuList = resp.skuList;//SKU
+				var skuPriceList = resp.skuPriceList;//SKU价格
+				for(var i=0; i<skuList.length; i++){
+					var sku = skuList[i];
+					for(var j=0; j<skuPriceList.length; j++){
+						var skuPrice = skuPriceList[j];
+						if(sku.skuId==skuPrice.skuId){
+							sku.costPrice = skuPrice.costPrice;
+							sku.sellPrice = skuPrice.sellPrice;
+						}
+					}
+					$("#cost-price-"+i).val(sku.costPrice);//成本价
+					$("#sell-price-"+i).val(sku.sellPrice);//销售价
+					$("#volume-"+i).val(sku.volume);//体积
+					$("#weight-"+i).val(sku.weight);//重量
+				}
 				
 				$('#tabs-243687 a[href="#tab-2"]').tab('show');
+				$('#tabs-edit-item a[href="#tab-5"]').tab('show');
 				return;
 			}
 		}
@@ -386,10 +427,18 @@ $("#save-submit-btn").click(function(){
  * 保存内容
  */
 function saveFun(){
+	
+	var brand = $("#brand").val();
+	if(brand==null || brand=="" || brand<=0){
+		util.message("请选择品牌");
+		return;
+	}
+	
 	var url = null;
 	var id = $("#item-id").val();
 	if(id==null || id==""){
 		util.message("此商品没有ID");
+		return;
 	}else{
 		url = "back/item/updateById";
 	}
@@ -424,7 +473,7 @@ function saveFun(){
 	params.skuPriceJson = JSON.stringify(skuPrice);
 	
 	//util.loading();
-	$("#save-form").ajaxSubmit({
+	/*$("#save-form").ajaxSubmit({
 		type:"post",
 		url:url,
 		data:params,
@@ -440,7 +489,88 @@ function saveFun(){
 				}
 			}
 		},
+	});*/
+	//console.log("POST参数："+decodeURI($("#save-form").serialize()));
+	
+	$.ajaxFileUpload({
+		url: url, //用于文件上传的服务器端请求地址
+        secureuri: false, //一般设置为false
+        fileElementId: "picture-url", //文件上传空间的id属性  <input type="file" id="file" name="file" />
+        dataType: "json", //返回值类型 一般设置为json
+        data: getParams(),
+        success: function (res, status){  //服务器成功响应处理函数
+        	console.log(res);
+        	if(res!=null){
+				if(res.result_code=="success"){
+					//操作成功后重新加载当前菜单内容
+					reloadInfoFun();
+				}else{
+					util.message(res.result_err_msg);
+				}
+			}
+        },
+        error: function (data, status, e){//服务器响应失败处理函数
+        	console.log(e);
+        }
 	});
+	
+}
+
+/**
+ * 获取请求参数
+ * @returns
+ */
+function getParams(){
+	var params = new Object();
+	params.itemId = $("#item-id").val();//ID
+	
+	params.cid = $("#item-cid").val();//商品三级类目
+	
+	params.brand = $("#brand").val();//品牌
+	
+	params.itemName = $("#item-name").val();//商品名称
+	params.keywords = $("#keywords").val();//关键字
+	params.guidePrice = $("#guide-price").val();//商城指导价格
+	params.marketPrice = $("#market-price").val();//市场价格
+	params.marketPrice2 = $("#market-price2").val();//成本价格
+	params.inventory = $("#inventory").val();//库存数量
+	params.origin = $("#origin").val();//商品产地
+	params.packingList = $("#packing-list").val();//包装清单
+	params.volume = $("#volume").val();//商品体积
+	params.weight = $("#weight").val();//商品毛重
+	params.weightUnit = $("#weight-unit").val();//重量单位
+	
+	var createTimeStr = $("#create-time-str").val();
+	var createtime = null;
+	if(createTimeStr==null || createTimeStr==""){
+		createtime = new Date();
+	}else{
+		createtime = parserDate(createTimeStr);
+	}
+	console.log("创建时间（毫秒）："+createtime.getTime());
+	
+	params.created = createtime;//创建时间
+	params.modified = new Date();//修改时间
+	params.describeUrl = getContent("item-ueditor");
+	try{
+		params.attributes = getItemAttr().toString();
+		params.attrSale = getSaleAttr().toString();
+	}catch(err){
+		params.attributes = "";
+		params.attrSale = "";
+		console.log(err);
+	}
+	
+	//sku
+	var skuObj = getSkuInfo();
+	var sku = skuObj.sku;
+	var skuPrice = skuObj.skuPrice;
+	console.log("update sku:"+JSON.stringify(sku));
+	console.log("update sku price:"+JSON.stringify(skuPrice));
+	params.skuJson = JSON.stringify(sku);
+	params.skuPriceJson = JSON.stringify(skuPrice);
+	
+	return params;
 }
 
 /*
@@ -537,6 +667,56 @@ function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
 	$('#save-form')[0].reset();
+	if(isIE()) {// 此处判断是否是IE
+	    $('#picture-url').replaceWith($('#upload').clone(true));
+	} else {
+	    $('#picture-url').val('');
+	}
+	$("#thumbnail-portrait").empty();
+	$("#attr-page").empty();
+	setContent("item-ueditor", "");//商品详情
+	$('#tabs-edit-item a[href="#tab-5"]').tab('show');
+}
+
+/**
+ * 判断是否是IE浏览器
+ * @returns
+ */
+function isIE(){ //ie?
+	if(!!window.ActiveXObject || "ActiveXObject" in window){
+		return true;
+	}else{
+		return false; 
+	}
+}
+
+/**
+ * change事件
+ * 		改变商品类目
+ * @returns
+ */
+function changeItemCategory(){
+	var cid = $("#item-cid").val();
+	util.confirm("改变商品类目，属性和SKU信息需要重新设置，是否继续？", cid, "reloadAttrAndValuePage", "cancelChangeItemCantegory");
+}
+
+/**
+ * 根据类目ID重新加载属性和属性值
+ */
+function reloadAttrAndValuePage(cid){
+	var url = "back/category/selectAttrAndValue";
+	var params = {"cid": cid};
+	$("#attr-page").load(url, params, function(){
+		console.log("加载属性页面完成");
+	});
+};
+
+/**
+ * 取消改为商品类目ID
+ */
+function cancelChangeItemCantegory(){
+	var curr_item_cid = $("#curr-item-cid").val();
+	$("#item-cid").val(curr_item_cid);
 }
 
 /*
@@ -549,6 +729,35 @@ var parserDate = function (dateStr) {
     } else {  
         return new Date();  
     }  
+}
+
+/**
+ * 修改商品状态（4：上架，5：下架）
+ * @returns
+ */
+function updateItemStatus(itemId, status){
+	var url = "back/item/updateStatusById";
+	var params = {"itemId":itemId, "itemStatus":status};
+	//util.loading();
+	$.post(url, params, function(res){
+		console.log(res);
+		if(res!=null && res!=""){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				if(status==4){
+					$("#item-status-up-"+itemId).attr("disabled", true);
+					$("#item-status-down-"+itemId).attr("disabled", false);
+				}else{
+					$("#item-status-up-"+itemId).attr("disabled", false);
+					$("#item-status-down-"+itemId).attr("disabled", true);
+				}
+				
+			}else{
+				util.message(obj.result_err_msg);
+			}
+		}
+		
+	});
 }
 
 /*

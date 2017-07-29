@@ -33,4 +33,23 @@ public interface IItemService extends IBaseService<Item, Long> {
 	 * @return
 	 */
 	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson);
+	
+	/**
+	 * 修改商品
+	 * @param request
+	 * @param item
+	 * @param skuJson
+	 * @param skuPriceJson
+	 * @return
+	 */
+	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson);
+	
+	/**
+	 * 修改商品状态
+	 * @param itemId
+	 * @param itemStatus
+	 * @return
+	 */
+	public int updateStatusById(Long itemId, Integer itemStatus);
+	
 }

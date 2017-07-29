@@ -19,7 +19,9 @@
 	<tbody>
 		<c:forEach items="${pagehelper.list}" var="user">
 			<tr>
-				<td><input type="checkbox" name="checkbox2" id="user-td-${user.id}" onclick="javascript:checkOne();" value="${user.id}"></td>
+				<td>
+					<input type="checkbox" name="checkbox2" id="user-td-${user.id}" onclick="javascript:checkOne();" value="${user.id}">
+				</td>
 				<td>${user.id}</td>
 				<td>${user.nickname}</td>
 				<td>${user.username}</td>

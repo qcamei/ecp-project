@@ -32,7 +32,16 @@
 				<td>${item.item_category}</td> --%>
 				<td>${item.brand}</td>
 				<td>${item.cid}</td>
-				<td>${item.item_status}</td>
+				<td>
+					<c:if test="${item.item_status==4}">
+						<button class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);" disabled="disabled">上架</button>	
+						<button class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);">下架</button>
+					</c:if>
+					<c:if test="${item.item_status==5}">
+						<button class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);">上架</button>	
+						<button class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);" disabled="disabled">下架</button>
+					</c:if>
+				</td>
 				<td>￥${item.guide_price}</td>
 				<td>￥${item.market_price}</td>
 				<td>￥${item.market_price2}</td>

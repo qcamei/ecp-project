@@ -4,8 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.dao.AttributeMapper;
@@ -16,7 +20,10 @@ import com.ecp.entity.Attribute;
 import com.ecp.entity.AttributeValue;
 import com.ecp.entity.CategoryAttr;
 import com.ecp.entity.CategoryAttrValue;
+import com.ecp.service.back.IAttributeService;
+import com.ecp.service.back.IAttributeValueService;
 import com.ecp.service.back.ICategoryAttrService;
+import com.ecp.service.back.ICategoryAttrValueService;
 import com.ecp.service.impl.AbstractBaseService;
 
 import tk.mybatis.mapper.entity.Example;
@@ -32,6 +39,13 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 	CategoryAttrValueMapper categoryAttrValueMapper;
 	@Autowired
 	AttributeValueMapper attributeValueMapper;
+	
+	@Resource(name="attributeServiceBean")
+	IAttributeService attributeService;
+	@Resource(name="categoryAttrValueServiceBean")
+	ICategoryAttrValueService categoryAttrValService;
+	@Resource(name="attributeValueServiceBean")
+	IAttributeValueService attributeValueService;
 	
 	
 
@@ -67,32 +81,48 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 
 	final int VALID = 1; // final int DELETED=2;
 	
+	/**
+	 * @see com.ecp.service.back.ICategoryAttrService#saveCategoryAttr(com.ecp.entity.Attribute, com.ecp.entity.CategoryAttr)
+	 * 保存类目属性（添加或修改）
+	 */
 	@Override
-	public void saveCategoryAttr(CategoryAttrBean cateAttrBean) {
+	@Transactional
+	public int saveCategoryAttr(Attribute attribute, CategoryAttr categoryAttr) {
 		
+		int rows = 0;
+		if(attribute.getAttrId()==null || categoryAttr.getId()==null){
+			// (1)保存属性，
+			attribute.setCreated(new Date());
+			attribute.setStatus(VALID);
 
-		// (1)保存属性，
-		Attribute attr = new Attribute();
-		attr.setAttrName(cateAttrBean.getAttr_name());
-		attr.setCreated(new Date());
-		attr.setStatus(VALID);
+			rows = attributeService.insertSelective(attribute); // 返回的是记录的个数
+			if(rows>0){
+				long attr_id = attribute.getAttrId(); // 获取新插入记录的pk
 
-		int recNum = attributeMapper.insert(attr); // 返回的是记录的个数
+				// (2)保存类目-属性关系
+				categoryAttr.setAttrId(attr_id);
+				categoryAttr.setCreated(new Date());
+				categoryAttr.setStatus((byte) VALID);
+				
+				rows = categoryAttrMapper.insertSelective(categoryAttr);
+				if(rows>0){
+					System.out.println("保存类目属性成功");
+					return rows;
+				}
+			}
+		}else{
+			rows = attributeService.updateByPrimaryKeySelective(attribute);
+			if(rows>0){
+				rows = categoryAttrMapper.updateByPrimaryKeySelective(categoryAttr);
+				if(rows>0){
+					System.out.println("修改类目属性值");
+					return rows;
+				}
+			}
+		}
 
-		long attr_id = attr.getAttrId(); // 获取新插入记录的pk
-
-		// (2)保存类目-属性关系
-		CategoryAttr cateAttr = new CategoryAttr();
-		cateAttr.setCid(cateAttrBean.getCid());
-		cateAttr.setAttrType((byte) cateAttrBean.getAttr_type());
-		cateAttr.setInputType((byte) cateAttrBean.getInput_type());
-		cateAttr.setOptionType((byte) cateAttrBean.getOption_type());
-		cateAttr.setSortNumber((long) cateAttrBean.getSort_number());
-		cateAttr.setAttrId(attr_id);
-		cateAttr.setCreated(new Date());
-		cateAttr.setStatus((byte) VALID);
-		categoryAttrMapper.insert(cateAttr);
-
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
 	}
 
 	@Override
@@ -101,29 +131,45 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 		return categoryAttrMapper.getCategoryAttrValList(cid, attrId);
 	}
 
+	/**
+	 * @see com.ecp.service.back.ICategoryAttrService#saveCategoryAttrValue(com.ecp.entity.AttributeValue, com.ecp.entity.CategoryAttrValue)
+	 * 保存类目属性值（添加或修改）
+	 */
 	@Override
-	public void saveCategoryAttrValue(Long cid, Long attrId, String valueName) {
-		//(1)保存至  属性-值  表中  item_attribute_value
-		AttributeValue attrValue=new AttributeValue();
-		attrValue.setCreated(new Date());
-		attrValue.setStatus(VALID);
-		attrValue.setAttrId(attrId);
-		attrValue.setValueName(valueName);
+	@Transactional
+	public int saveCategoryAttrValue(AttributeValue attrValue, CategoryAttrValue categoryAttrValue) {
 		
-		int recNum=attributeValueMapper.insert(attrValue);
+		int rows = 0;
+		if(attrValue.getAttrId()==null || categoryAttrValue.getId()==null){
+			//(1)保存至  属性-值  表中  item_attribute_value
+			attrValue.setCreated(new Date());
+			attrValue.setStatus(VALID);
+			rows = attributeValueMapper.insertSelective(attrValue);
+			if(rows>0){
+				//（2）保存到 类目-属性-属性值表中  item_attribute_attr_value
+				Long valueId=attrValue.getValueId();  //获取属性值 id	
+				categoryAttrValue.setValueId(valueId);
+				categoryAttrValue.setStatus((byte)VALID);
+				categoryAttrValue.setCreated(new Date());
+				rows = categoryAttrValueMapper.insertSelective(categoryAttrValue);
+				if(rows>0){
+					System.out.println("添加类目属性值");
+					return rows;
+				}
+			}
+		}else{
+			rows = attributeValueMapper.updateByPrimaryKeySelective(attrValue);
+			if(rows>0){
+				rows = categoryAttrValueMapper.updateByPrimaryKeySelective(categoryAttrValue);
+				if(rows>0){
+					System.out.println("修改类目属性值");
+					return rows;
+				}
+			}
+		}
 		
-		long valueId=attrValue.getValueId();  //获取属性值 id		
-		
-		//（2）保存到 类目-属性-属性值表中  item_attribute_attr_value
-		CategoryAttrValue categoryAttrValue=new CategoryAttrValue();
-		categoryAttrValue.setCid(cid);
-		categoryAttrValue.setAttrId(attrId);
-		categoryAttrValue.setValueId(valueId);
-		categoryAttrValue.setStatus((byte)VALID);
-		categoryAttrValue.setCreated(new Date());
-		categoryAttrValue.setSortNumber((long)1);
-		categoryAttrValueMapper.insert(categoryAttrValue);		
-		
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
 	}
 
 	/**
@@ -139,6 +185,48 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 			return list.get(0);
 		}
 		return null;
+	}
+
+	/**
+	 * @see com.ecp.service.back.ICategoryAttrService#delCategoryAttr(java.lang.Long)
+	 * 根据属性ID删除属性
+	 */
+	@Override
+	@Transactional
+	public int delCategoryAttr(Long attrId) {
+		// TODO Auto-generated method stub
+		int rows = attributeService.deleteByPrimaryKey(attrId);
+		if(rows>0){
+			Example example = new Example(CategoryAttr.class);
+			example.createCriteria().andEqualTo("attrId", attrId);
+			rows = categoryAttrMapper.deleteByExample(example);
+			if(rows>0){
+				return rows;
+			}
+		}
+		
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
+	}
+
+	/**
+	 * @see com.ecp.service.back.ICategoryAttrService#delCategoryAttrVal(java.lang.Long)
+	 * 根据属性值ID删除属性值
+	 */
+	@Override
+	@Transactional
+	public int delCategoryAttrVal(Long valueId) {
+		// TODO Auto-generated method stub
+		int rows = attributeValueService.deleteByPrimaryKey(valueId);
+		if(rows>0){
+			rows = categoryAttrValService.deleteByValueId(valueId);
+			if(rows>0){
+				return rows;
+			}
+		}
+		
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
 	}
 
 }

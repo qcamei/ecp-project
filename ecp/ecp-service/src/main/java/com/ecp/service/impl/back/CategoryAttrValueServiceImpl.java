@@ -40,4 +40,15 @@ public class CategoryAttrValueServiceImpl extends AbstractBaseService<CategoryAt
 		return null;
 	}
 
+	/**
+	 * @see com.ecp.service.back.ICategoryAttrValueService#deleteByValueId(java.lang.Long)
+	 * 根据属性值ID删除类目属性值
+	 */
+	@Override
+	public int deleteByValueId(Long valueId) {
+		Example example = new Example(CategoryAttrValue.class);
+		example.createCriteria().andEqualTo("valueId", valueId);
+		return categoryAttrValueMapper.deleteByExample(example);
+	}
+
 }

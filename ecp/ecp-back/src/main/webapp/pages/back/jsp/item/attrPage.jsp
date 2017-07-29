@@ -282,6 +282,9 @@ function createHtmlTd(currArr){
 	return htmlBody;
 }
 
+/**
+ * 获取SKU信息
+ */
 function getSkuInfo(){
 	var sku = new Array();//sku集合
 	var skuPrice = new Array();//sku价格集合

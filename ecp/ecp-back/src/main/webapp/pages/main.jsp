@@ -43,7 +43,7 @@ function iframeLoaded(){
 						 <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i> <b>${user.nickname}</b><strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
 							<li>
-								 <a href="">修改密码</a>
+								 <a href="javascript:void(0);" onclick="javascript:iframeLoading('pages/back/jsp/user/update_password.jsp');">修改密码</a>
 							</li>
 							<li class="divider">
 							</li>
