@@ -65,25 +65,27 @@
 
 	<!-- 通过品牌及类目属性查询 -->
 	<select id="getItemByBrandAndAttr" resultMap="BaseResultMap">
-		select * from item where cid=#{cid}
-		<if test="itemStatus!=0">
-			AND item_status=#{itemStatus}		
-		</if>
-		<if test="brands!=null">
-			AND brand IN
-			<foreach collection="brands" item="item" index="index" open="("
-				close=")" separator=",">
-				#{item}
-			</foreach>
-		</if>
-		<if test="attrValPairs!=null">
-			AND
-			<foreach collection="attrValPairs" item="item" index="index"
-				open="(" close=")" separator=" and ">
-				find_in_set(#{item},attributes)
-			</foreach>
-		</if>
-
+		select * from item 
+		<where>
+			cid=#{cid}
+			<if test="itemStatus!=0">
+				AND item_status=#{itemStatus}
+			</if>
+			<if test="brands!=null">
+				AND brand IN
+				<foreach collection="brands" item="item" index="index" open="("
+					close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test="attrValPairs!=null">
+				AND
+				<foreach collection="attrValPairs" item="item" index="index"
+					open="(" close=")" separator=" and ">
+					find_in_set(#{item},attributes)
+				</foreach>
+			</if>
+		</where>
 	</select>
 
 
@@ -92,7 +94,7 @@
 		select * from item
 		<where>
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}		
+				item_status=#{itemStatus}
 			</if>
 			<if test="brands!=null">
 				AND brand IN
@@ -118,7 +120,7 @@
 	<select id="getItemByKeywords" resultMap="BaseResultMap">
 		select * from item
 		<where>
-		    (
+			(
 			<foreach collection="keywords" item="keyword" index="index"
 				open="(" close=")" separator=" or ">
 				item_name like
@@ -134,10 +136,10 @@
 			</if>
 			)
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}		
+				AND item_status=#{itemStatus}
 			</if>
 		</where>
-		
+
 	</select>
 
 
@@ -147,7 +149,6 @@
 		<where>
 			(
 			<if test="keywords!=null">
-				AND
 				<foreach collection="keywords" item="keyword" index="index"
 					open="(" close=")" separator=" or ">
 					item_name like
@@ -157,7 +158,8 @@
 				OR
 				<foreach collection="keywords" item="keyword" index="index"
 					open="(" close=")" separator=" or ">
-					keywords like CONCAT('%',#{keyword},'%' )
+					keywords like
+					CONCAT('%',#{keyword},'%' )
 				</foreach>
 
 			</if>
@@ -177,7 +179,7 @@
 			</if>
 			)
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}		
+				AND item_status=#{itemStatus}
 			</if>
 		</where>
 
@@ -197,7 +199,7 @@
 				#{id}
 			</foreach>
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}		
+				AND item_status=#{itemStatus}
 			</if>
 		</where>
 	</select>
