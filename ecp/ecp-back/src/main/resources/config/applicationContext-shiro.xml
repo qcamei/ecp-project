@@ -35,6 +35,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				<!-- 对静态资源设置匿名访问 -->
+				/ueditor/** = anon
 				/static/** = anon
 				/echarts/** = anon
 				/tools/** = anon

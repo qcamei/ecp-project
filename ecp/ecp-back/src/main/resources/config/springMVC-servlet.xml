@@ -63,6 +63,7 @@
 	<mvc:resources location="/echarts/" mapping="/echarts/**" />
 	
 	<mvc:resources location="/tools/" mapping="/tools/**" />
+	<mvc:resources location="/ueditor/" mapping="/ueditor/**" />
 	
 	<!-- 配置视图解析器 -->
 	<!-- <bean

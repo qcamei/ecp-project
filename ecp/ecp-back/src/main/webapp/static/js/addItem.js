@@ -307,6 +307,13 @@ $("#save-submit-btn").click(function(){
  * 保存内容
  */
 function saveFun(){
+	
+	var brand = $("#brand").val();
+	if(brand==null || brand=="" || brand<=0){
+		util.message("请选择品牌");
+		return;
+	}
+	
 	var url = "back/item/insert";
 	
 	var createTimeStr = $("#create-time-str").val();
@@ -316,9 +323,9 @@ function saveFun(){
 	}else{
 		createtime = parserDate(createTimeStr);
 	}
-	console.log("创建时间："+createtime);
+	console.log("创建时间（毫秒）："+createtime.getTime());
 	var params = new Object();
-	params.created = createtime;
+	params.createstr = createtime.getTime();
 	params.describeUrl = getContent("item-ueditor");
 	try{
 		params.attributes = getItemAttr().toString();
@@ -339,7 +346,7 @@ function saveFun(){
 	params.skuPriceJson = JSON.stringify(skuPrice);
 	
 	//util.loading();
-	$("#save-form").ajaxSubmit({
+	/*$("#save-form").ajaxSubmit({
 		type:"post",
 		url:url,
 		data:params,
@@ -355,7 +362,85 @@ function saveFun(){
 				}
 			}
 		},
+	});*/
+	$.ajaxFileUpload({
+		url: url, //用于文件上传的服务器端请求地址
+        secureuri: false, //一般设置为false
+        fileElementId: "picture-url", //文件上传空间的id属性  <input type="file" id="file" name="file" />
+        dataType: "json", //返回值类型 一般设置为json
+        data: getParams(),
+        success: function (res, status){  //服务器成功响应处理函数
+        	console.log(res);
+        	if(res!=null){
+				if(res.result_code=="success"){
+					//操作成功后重新加载当前菜单内容
+					reloadInfoFun();
+				}else{
+					util.message(res.result_err_msg);
+				}
+			}
+        },
+        error: function (data, status, e){//服务器响应失败处理函数
+        	console.log(e);
+        }
 	});
+}
+
+/**
+ * 获取请求参数
+ * @returns
+ */
+function getParams(){
+	var params = new Object();
+	params.itemId = $("#item-id").val();//ID
+	
+	params.cid = $("#item-cid").val();//商品三级类目
+	
+	params.brand = $("#brand").val();//品牌
+	
+	params.itemName = $("#item-name").val();//商品名称
+	params.keywords = $("#keywords").val();//关键字
+	params.guidePrice = $("#guide-price").val();//商城指导价格
+	params.marketPrice = $("#market-price").val();//市场价格
+	params.marketPrice2 = $("#market-price2").val();//成本价格
+	params.inventory = $("#inventory").val();//库存数量
+	params.origin = $("#origin").val();//商品产地
+	params.packingList = $("#packing-list").val();//包装清单
+	params.volume = $("#volume").val();//商品体积
+	params.weight = $("#weight").val();//商品毛重
+	params.weightUnit = $("#weight-unit").val();//重量单位
+	
+	var createTimeStr = $("#create-time-str").val();
+	var createtime = null;
+	if(createTimeStr==null || createTimeStr==""){
+		createtime = new Date();
+	}else{
+		createtime = parserDate(createTimeStr);
+	}
+	console.log("创建时间（毫秒）："+createtime.getTime());
+	
+	params.created = createtime;//创建时间
+	params.modified = new Date();//修改时间
+	params.describeUrl = getContent("item-ueditor");
+	try{
+		params.attributes = getItemAttr().toString();
+		params.attrSale = getSaleAttr().toString();
+	}catch(err){
+		params.attributes = "";
+		params.attrSale = "";
+		console.log(err);
+	}
+	
+	//sku
+	var skuObj = getSkuInfo();
+	var sku = skuObj.sku;
+	var skuPrice = skuObj.skuPrice;
+	console.log("insert sku:"+JSON.stringify(sku));
+	console.log("insert sku price:"+JSON.stringify(skuPrice));
+	params.skuJson = JSON.stringify(sku);
+	params.skuPriceJson = JSON.stringify(skuPrice);
+	
+	return params;
 }
 
 /*
@@ -387,6 +472,29 @@ function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
 	$('#save-form')[0].reset();
+	if(isIE()) {// 此处判断是否是IE
+	    $('#picture-url').replaceWith($('#upload').clone(true));
+	} else {
+	    $('#picture-url').val('');
+	}
+	$("#thumbnail-portrait").empty();
+	$("#attr-page").empty();
+	setContent("item-ueditor", "");//商品详情
+	$('#tabs-edit-item a[href="#tab-5"]').tab('show');
+}
+
+/**
+ * 判断是否是IE浏览器
+ * @returns
+ */
+function isIE(){ //ie?
+	if(!!window.ActiveXObject || "ActiveXObject" in window){
+		console.log("浏览器是IE");
+		return true;
+	}else{
+		console.log("浏览器不是IE");
+		return false; 
+	}
 }
 
 /*

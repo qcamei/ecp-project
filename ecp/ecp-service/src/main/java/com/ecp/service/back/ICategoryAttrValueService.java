@@ -11,4 +11,11 @@ public interface ICategoryAttrValueService extends IBaseService<CategoryAttrValu
 	 * @return
 	 */
 	public CategoryAttrValue getByValueId(Long valueId);
+	
+	/**
+	 * 根据属性值ID删除类目属性值
+	 * @param valueId
+	 * @return
+	 */
+	public int deleteByValueId(Long valueId);
 }

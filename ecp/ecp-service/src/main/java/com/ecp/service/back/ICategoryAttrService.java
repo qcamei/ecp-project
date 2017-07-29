@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.ecp.bean.CategoryAttrBean;
+import com.ecp.entity.Attribute;
+import com.ecp.entity.AttributeValue;
 import com.ecp.entity.CategoryAttr;
+import com.ecp.entity.CategoryAttrValue;
 import com.ecp.service.IBaseService;
 
 public interface ICategoryAttrService extends IBaseService<CategoryAttr, Long> {	
@@ -17,7 +20,13 @@ public interface ICategoryAttrService extends IBaseService<CategoryAttr, Long> {
 	
 	public List<CategoryAttr> findByCid(Long cid);  //test function
 	
-	public void saveCategoryAttr(CategoryAttrBean cateAttrBean);  //保存类目属性
+	/**
+	 * 保存类目属性（添加或修改）
+	 * @param attribute
+	 * @param categoryAttr
+	 * @return
+	 */
+	public int saveCategoryAttr(Attribute attribute, CategoryAttr categoryAttr);  //保存类目属性
 	
 	/**
 	 * @Description //读取类目属性值列表
@@ -37,12 +46,12 @@ public interface ICategoryAttrService extends IBaseService<CategoryAttr, Long> {
 	public List<Map<String,String>> getCategoryAttrValList(Long cid,Long attrId); 
 	
 	/**
-	 * @Description 保存 类目-属性值
-	 * @param cid  类目id
-	 * @param attrId  类目属性id
-	 * @param valueName   值名称
+	 * 保存类目属性值（添加或修改）
+	 * @param attrValue
+	 * @param categoryAttrValue
+	 * @return
 	 */
-	public void saveCategoryAttrValue(Long cid,Long attrId,String valueName);
+	public int saveCategoryAttrValue(AttributeValue attrValue, CategoryAttrValue categoryAttrValue);
 	
 	/**
 	 * 根据属性ID查询类目属性表
@@ -50,5 +59,19 @@ public interface ICategoryAttrService extends IBaseService<CategoryAttr, Long> {
 	 * @return
 	 */
 	public CategoryAttr getByAttrId(Long attrId);
+	
+	/**
+	 * 根据属性ID删除属性
+	 * @param attrId
+	 * @return
+	 */
+	public int delCategoryAttr(Long attrId);
+	
+	/**
+	 * 根据属性值ID删除属性值
+	 * @param valueId
+	 * @return
+	 */
+	public int delCategoryAttrVal(Long valueId);
 	
 }

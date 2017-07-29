@@ -7,6 +7,8 @@ import com.ecp.entity.ItemAttrValue;
 import com.ecp.service.back.IItemAttrValueService;
 import com.ecp.service.impl.AbstractBaseService;
 
+import tk.mybatis.mapper.entity.Example;
+
 @Service("itemAttrValueServiceBean")
 public class ItemAttrValueServiceImpl extends AbstractBaseService<ItemAttrValue, Long> implements IItemAttrValueService {
 
@@ -19,6 +21,17 @@ public class ItemAttrValueServiceImpl extends AbstractBaseService<ItemAttrValue,
 	public void setItemAttrValueMapper(ItemAttrValueMapper itemAttrValueMapper) {
 		this.itemAttrValueMapper = itemAttrValueMapper;
 		this.setMapper(itemAttrValueMapper);
+	}
+
+	/**
+	 * @see com.ecp.service.back.IItemAttrValueService#deleteByItemId(Long)
+	 * 根据商品ID删除
+	 */
+	@Override
+	public int deleteByItemId(Long itemId) {
+		Example example = new Example(ItemAttrValue.class);
+		example.createCriteria().andEqualTo("itemId", itemId);
+		return itemAttrValueMapper.deleteByExample(example);
 	}
 
 }

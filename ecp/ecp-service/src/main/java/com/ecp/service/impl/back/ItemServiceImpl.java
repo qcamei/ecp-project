@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.dao.ItemMapper;
@@ -112,6 +113,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		try {
 			//添加商品 item
 			item.setHasPrice(1);
+			
 			int rows = itemMapper.insertSelective(item);
 			if(rows>0){
 				log.info("添加商品 item 成功");
@@ -124,6 +126,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				
 			}else{
 				//TODO 此处添加默认图片
+				filePathList = new ArrayList<String>();
 				filePathList.add(DefaultConstants.DEFAULT_PICTURE_PATH);
 			}
 			
@@ -142,14 +145,27 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			
 			if(rows>0){
 				//添加商品属性值关系表
-				if(StringUtils.isBlank(item.getAttrSale())){
+				if(StringUtils.isNotBlank(item.getAttrSale())){
 					//TODO 如果销售属性为空时，是否添加？
+					rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
 				}
-				rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
 				if(rows>0){
 					//添加SKU信息
-					if(StringUtils.isBlank(skuJson)){
-						//TODO 如果没有SKU信息时，手动创建一个SKU；注：商品需要有默认图片和默认SKU
+					if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
+						//TODO 如果没有SKU信息时，手动创建一个SKU，此处添加默认SKU；注：商品需要有默认图片和默认SKU
+						List<Sku> skuList = new ArrayList<Sku>();
+						Sku sku = new Sku();
+						sku.setVolume(item.getVolume());
+						sku.setWeight(item.getWeight());
+						skuList.add(sku);
+						skuJson = JSON.toJSONString(skuList);
+						List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
+						SkuPrice skuPrice = new SkuPrice();
+						skuPrice.setCostPrice(item.getMarketPrice2());
+						skuPrice.setMarketPrice(item.getMarketPrice());
+						skuPrice.setSellPrice(item.getMarketPrice());
+						skuPriceList.add(skuPrice);
+						skuPriceJson = JSON.toJSONString(skuPriceList);
 					}
 					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
 					if(rows>0){
@@ -177,8 +193,99 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	 * 修改商品
 	 */
 	@Override
+	@Transactional
 	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson) {
-		// TODO Auto-generated method stub
+		try {
+			if(item.getItemId()==null || item.getItemId()<=0){
+				return 0;
+			}
+			//修改商品 item
+			int rows = itemMapper.updateByPrimaryKey(item);
+			if(rows>0){
+				log.info("修改商品 item 成功");
+			}
+			//TODO 修改商品图片 item_picture
+			//处理上传缩略图
+			List<String> filePathList = this.processUploadFile(request, new ArrayList<ItemPicture>());
+			//如果上传图片为空时，添加默认图片
+			if(filePathList!=null && filePathList.size()>0){
+				//根据上传图片数量创建商品图片List集合
+				List<ItemPicture> pictureList = new ArrayList<ItemPicture>();
+				for(String filePath : filePathList){
+					pictureList.add(new ItemPicture(item.getItemId(), filePath));
+				}
+				//删除原来的图片数据
+				itemPictureService.deleteByItemId(item.getItemId());
+				
+				//循环商品图片List集合，添加商品图片信息
+				for(int i=0; i<pictureList.size(); i++){
+					ItemPicture picture = pictureList.get(i);
+					//添加商品图片
+					rows = itemPictureService.insertSelective(picture);
+				}
+			}else{
+				//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
+			}
+			
+			if(rows>0){
+				//修改商品属性值关系表
+				//添加新商品属性值关系之前先删除该商品对应原来数据
+				itemAttrValueService.deleteByItemId(item.getItemId());
+				
+				//添加新商品属性值关系
+				if(StringUtils.isNotBlank(item.getAttrSale())){
+					rows = this.saveItemAttrValue(item.getItemId(), item.getAttrSale());
+				}else{
+					//TODO 如果销售属性为空时，是否添加？如何添加？
+				}
+				if(rows>0){
+					//修改SKU信息
+					//添加新SKU信息前先删除该商品对应的SKU信息
+					List<Long> skuIds = new ArrayList<Long>();
+					List<Sku> skuListTemp = skuService.getByItemId(item.getItemId());
+					for(Sku sku : skuListTemp){
+						skuIds.add(sku.getItemId());
+					}
+					if(skuIds!=null && skuIds.size()>0){
+						skuService.deleteByItemId(item.getItemId());
+						skuPictureService.deleteBySkuIds(skuIds);
+					}
+					
+					
+					//添加新SKU信息
+					if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
+						//TODO 如果没有SKU信息时，手动创建一个SKU，此处添加默认SKU；注：商品需要有默认图片和默认SKU
+						List<Sku> skuList = new ArrayList<Sku>();
+						Sku sku = new Sku();
+						sku.setVolume(item.getVolume());
+						sku.setWeight(item.getWeight());
+						skuList.add(sku);
+						skuJson = JSON.toJSONString(skuList);
+						List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
+						SkuPrice skuPrice = new SkuPrice();
+						skuPrice.setCostPrice(item.getMarketPrice2());
+						skuPrice.setMarketPrice(item.getMarketPrice());
+						skuPrice.setSellPrice(item.getMarketPrice());
+						skuPriceList.add(skuPrice);
+						skuPriceJson = JSON.toJSONString(skuPriceList);
+					}
+					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
+					if(rows>0){
+						return rows;
+					}else{
+						log.error("修改SKU相关数据异常");
+					}
+				}else{
+					log.error("修改商品属性值关系 item_attr_value_item 异常");
+				}
+			}else{
+				log.error("修改商品图片 item_picture 异常");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("修改商品异常，事务回滚！", e);
+		}
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		return 0;
 	}
 	
@@ -219,6 +326,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 						if(filePathList!=null && filePathList.size()>0){
 							for(String filePath : filePathList){
 								SkuPicture skuPicture = new SkuPicture();
+								skuPrice.setMarketPrice(item.getMarketPrice());
 								skuPicture.setCreated(new Date());
 								skuPicture.setModified(new Date());
 								skuPicture.setPictureStatus((byte)1);
@@ -275,7 +383,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				String str = attrSaleArrStr[i];
 				String[] attrSaleStr = str.split(":");
 				Long attrId = Long.valueOf(attrSaleStr[0].toString());
-				Long valueId = Long.valueOf(attrSaleStr[0].toString());
+				Long valueId = Long.valueOf(attrSaleStr[1].toString());
 				CategoryAttr attr = categoryAttrService.getByAttrId(attrId);
 				CategoryAttrValue value = categoryAttrValueService.getByValueId(valueId);
 				ItemAttrValue temp = new ItemAttrValue();
@@ -326,12 +434,24 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			}
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			log.error("上传文件异常", e);
 		} catch (Exception e) {
-			log.error("删除上传文件异常", e);
+			e.printStackTrace();
 		}
+		log.error("上传文件异常，返回null");
 		return null;
+	}
+	
+	/**
+	 * 修改商品状态
+	 * @param itemId
+	 * @param itemStatus
+	 * @return
+	 */
+	public int updateStatusById(Long itemId, Integer itemStatus){
+		Item item = new Item();
+		item.setItemId(itemId);
+		item.setItemStatus(itemStatus);
+		return itemMapper.updateByPrimaryKey(item);
 	}
 	
 	public static void main(String[] args) {

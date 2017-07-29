@@ -14,6 +14,8 @@
 						aria-expanded="false">商品图片</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-7"
 						aria-expanded="false">属性和SKU</a></li>
+					<li class=""><a data-toggle="tab" href="#tab-8"
+						aria-expanded="false">商品详情</a></li>
 				</ul>
 				<div class="tab-content">
 					<div id="tab-5" class="tab-pane active">
@@ -28,12 +30,12 @@
 											<form class="form-horizontal" id="save-form">
 												<!-- 商品ID -->
 												<input type="hidden" id="item-id" name="itemId" value="" />
-												<!-- 商品类目ID -->
-												<!-- <input type="hidden" id="item-cid" name="cid" value="" /> -->
+												<!-- 当前商品类目ID（要修改的商品类目ID） -->
+												<input type="hidden" id="curr-item-cid" name="" value="" />
 												<div class="form-group">
 													<label class="col-sm-2 control-label">商品类目</label>
 													<div class="col-sm-10">
-														<select class="form-control" id="item-cid" name="cid">
+														<select class="form-control" id="item-cid" name="cid" onchange="javascript:changeItemCategory();">
 															<c:forEach items="${categoryList}" var="category">
 																<option value="${category.cid}">${category.cName}</option>
 															</c:forEach>
@@ -136,20 +138,13 @@
 															onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 													</div>
 												</div>
-												<div class="form-group">
+												<!-- <div class="form-group">
 													<label class="col-md-2 control-label">描述</label>
 													<div class="col-md-10 ">
 														<script id="item-ueditor" type="text/plain"
 															style="width: 100%; height: 500px;"></script>
 													</div>
-												</div>
-												<!-- <div class="form-group">
-											<label class="col-sm-2 control-label">&nbsp;</label>
-											<div class="col-sm-10">
-												<button type="button" class="btn btn-primary"
-													id="save-submit-btn">保存</button>
-											</div>
-										</div> -->
+												</div> -->
 											</form>
 										</div>
 										<div class="panel-footer">商品基本信息</div>
@@ -200,8 +195,7 @@
 										<div class="panel-body">
 											<form class="form-horizontal" id="">
 												<div class="form-group">
-													<label for="name" class="col-sm-2 control-label">&nbsp;</label>
-													<div class="col-sm-10" id="">
+													<div class="col-sm-12" id="">
 														<div id="attr-page">
 															<%-- <%@ include file="attrPage.jsp"%> --%>
 														</div>
@@ -214,6 +208,31 @@
 											</form>
 										</div>
 										<div class="panel-footer">属性和SKU</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tab-8" class="tab-pane">
+						<div class="container-fluid" style="margin-top: 20px;">
+							<div class="row clearfix">
+								<div class="col-md-12 column">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">商品详情</h3>
+										</div>
+										<div class="panel-body">
+											<form class="form-horizontal" id="">
+												<div class="form-group">
+													<label class="col-md-2 control-label">描述</label>
+													<div class="col-md-10 ">
+														<script id="item-ueditor" type="text/plain"
+															style="width: 100%; height: 500px;"></script>
+													</div>
+												</div>
+											</form>
+										</div>
+										<div class="panel-footer">商品详情</div>
 									</div>
 								</div>
 							</div>

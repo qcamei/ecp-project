@@ -3,6 +3,7 @@ package com.ecp.common.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -48,6 +49,9 @@ public class FileUploadUtil {
 		try {
 			savePath = getSavePath();
 			String realPath = getRealPath(request, savePath);
+			if(StringUtils.isBlank(realPath)){
+				return null;
+			}
 			saveRootPath = realPath;
 		} catch (Exception e) {
 			log.error("获取保存路径异常", e);
@@ -89,6 +93,9 @@ public class FileUploadUtil {
 		try {
 			savePath = getSavePath(typeDir);
 			String realPath = getRealPath(request, savePath);
+			if(StringUtils.isBlank(realPath)){
+				return null;
+			}
 			saveRootPath = realPath;
 		} catch (Exception e) {
 			log.error("获取保存路径异常", e);
@@ -119,11 +126,15 @@ public class FileUploadUtil {
 	 */
 	public static String uploadFile(MultipartFile file, String savePath, String realPath)
 			throws IOException {
+		try {
+			String fileName = getRandomFileName(file);
+			FileUtils.copyInputStreamToFile(file.getInputStream(), new File(realPath, fileName));
 
-		String fileName = getRandomFileName(file);
-		FileUtils.copyInputStreamToFile(file.getInputStream(), new File(realPath, fileName));
-
-		return fileName;
+			return fileName;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -416,31 +427,43 @@ public class FileUploadUtil {
 	 * <p>Author: srd </p>
 	 * <p>Date: 2017年7月15日 下午16:11:01</p>
 	 */
-	public static List<String> getFiles2UploadPath(HttpServletRequest request, String typeDir, String fileName) throws IOException{
-		// 创建一个通用的多部分解析器.  
-        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
-        // 设置编码  
-        commonsMultipartResolver.setDefaultEncoding("utf-8");  
-        // 判断是否有文件上传  
-        if (commonsMultipartResolver.isMultipart(request)) {//有文件上传  
-        	// 转型为MultipartHttpRequest：
-    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-    		// 获得文件：
-    		List<MultipartFile> fileList = multipartRequest.getFiles(fileName);
-    		List<String> filePathList = new ArrayList<String>();
-    		for(MultipartFile file : fileList){
-    			if (file!=null) {
-    				String uploadPath = uploadFile(request, typeDir, file);
-    				if(StringUtils.isNotBlank(uploadPath)){
-    					filePathList.add(uploadPath);
-    					log.debug("上传文件成功   文件保存路径 : "+uploadPath);
-    				}
-        		}
-    		}
-    		if(!filePathList.isEmpty() && filePathList.size()>0){
-    			return filePathList;
-    		}
-        }
+	public static List<String> getFiles2UploadPath(HttpServletRequest request, String typeDir, String fileName){
+		try {
+			// 创建一个通用的多部分解析器.  
+	        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
+	        // 设置编码  
+	        commonsMultipartResolver.setDefaultEncoding("utf-8");  
+	        // 判断是否有文件上传  
+	        if (commonsMultipartResolver.isMultipart(request)) {//有文件上传  
+	        	// 转型为MultipartHttpRequest：
+	    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+	    		/*Iterator<String> it = multipartRequest.getFileNames();
+	    		while (it.hasNext()) {
+					String string = (String) it.next();
+					System.out.println(string);
+				}*/
+	    		// 获得文件：
+	    		List<MultipartFile> fileList = multipartRequest.getFiles(fileName);
+	    		List<String> filePathList = new ArrayList<String>();
+	    		for(MultipartFile file : fileList){
+	    			if (file!=null) {
+	    				String uploadPath = uploadFile(request, typeDir, file);
+	    				if(StringUtils.isNotBlank(uploadPath)){
+	    					filePathList.add(uploadPath);
+	    					log.debug("上传文件成功   文件保存路径 : "+uploadPath);
+	    				}
+	        		}
+	    		}
+	    		if(!filePathList.isEmpty() && filePathList.size()>0){
+	    			return filePathList;
+	    		}
+	        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("获取上传文件异常，或上传文件异常，返回null");
 		return null;
     }
 	

@@ -19,7 +19,7 @@
 			<div class="col-md-12 column">
 				<div class="tabbable" id="tabs-819446">
 					<ul class="nav nav-tabs">
-						<li class="active" onclick="javascript:resetFun();"><a href="#panel-508461" data-toggle="tab">类目列表</a>
+						<li class="active" onclick="javascript:resetCateAttrAndValTab();"><a href="#panel-508461" data-toggle="tab">类目列表</a>
 						</li>
 						<li><a href="#panel-355189" data-toggle="tab">添加/编辑</a></li>
 					</ul>
@@ -30,7 +30,7 @@
 									<div class="col-md-12 column">
 										<div class="panel panel-default">
 											<div class="panel-heading">
-												<button type="button" class="btn btn-default btn-primary" id="edit-btn" onclick="javascript:editCategoryAttrIem();">编辑类目属性</button>
+												<button type="button" class="btn btn-default btn-primary" id="edit-btn" onclick="javascript:selectCategoryAttrIem();">编辑类目属性</button>
 											</div>
 											<div class="panel-body">
 												<ul id="ztree-category" class="ztree"></ul>
@@ -45,42 +45,29 @@
 							<div class="container-fluid" style="margin-top: 20px;">
 								<div class="row clearfix">
 									<div class="col-md-12 column">
-										<div class="tabbable" id="tabs-819447">
-											<ul class="nav nav-tabs">
-												<li class="active"><a href="#panel-508462" data-toggle="tab">类目属性列表</a></li>
-												<li><a href="#panel-355190" data-toggle="tab">类目属性值列表</a></li>
-											</ul>
-											<div class="tab-content">
-												<div class="tab-pane active" id="panel-508462">
-													<div class="container-fluid" style="margin-top: 20px;">
-														<div class="row clearfix">
-															<div class="col-md-12 column">
-																<div class="panel panel-default">
-																	<div class="panel-heading">
-																		<h3 class="panel-title">
-																			类目属性列表
-																		</h3>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<b>您选择的三级类目和属性是：<i id="third-category-name"></i><i id="third-category-attr-name"></i></b>
+											</div>
+											<div class="panel-body">
+												<div class="container-fluid" style="margin-top: 20px;">
+													<div class="row clearfix">
+														<div class="col-md-12 column">
+															<div class="tabbable" id="tabs-819447">
+																<ul class="nav nav-tabs">
+																	<li class="active" onclick="javascript:resetCateAttrValTab();"><a href="#panel-508462" data-toggle="tab">类目属性列表</a></li>
+																	<li><a href="#panel-355190" data-toggle="tab">类目属性值列表</a></li>
+																</ul>
+																<div class="tab-content">
+																	<div class="tab-pane active" id="panel-508462">
+																		<div id="category-attr-item">
+																			<!-- 类目属性列表 -->
+																		</div>
 																	</div>
-																	<div class="panel-body" id="category-attr-item">
-																		<!-- 类目属性列表 -->
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="tab-pane" id="panel-355190">
-													<div class="container-fluid" style="margin-top: 20px;">
-														<div class="row clearfix">
-															<div class="col-md-12 column">
-																<div class="panel panel-default">
-																	<div class="panel-heading">
-																		<h3 class="panel-title">
-																			类目属性值列表
-																		</h3>
-																	</div>
-																	<div class="panel-body" id="category-attr-value-item">
-																		<!-- 类目属性值列表 -->
+																	<div class="tab-pane" id="panel-355190">
+																		<div id="category-attr-value-item">
+																			<!-- 类目属性值列表 -->
+																		</div>
 																	</div>
 																</div>
 															</div>
@@ -92,6 +79,7 @@
 									</div>
 								</div>
 							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -139,6 +127,7 @@
 			console.log(treeNode.cid + ", " + treeNode.c_name + " ," + treeNode.level);
 			$("#category-id").val(treeNode.cid);
 			$("#category-level").val(treeNode.level);
+			$("#third-category-name").text(treeNode.c_name);
 		};
 
 		/* 初始化ztree（类目） */
@@ -195,17 +184,17 @@
 		});
 		
 		/*
-		 * 编辑类目属性和类目属性值信息
+		 * 查询类目属性列表
 		 * 		函数功能：判断用户选择是否选择类目，如果已选择则根据类目ID查询类目属性，如果未选择则提示用户
 		 */
-		function editCategoryAttrIem(){
+		function selectCategoryAttrIem(){
 			var level = $("#category-level").val();
 			if(level==null || level==""){
 				util.message("请选择类目！");
 			}else if (level == 2) {
 				$('#tabs-819446 a[href="#panel-355189"]').tab('show');//显示编辑类目属性选项卡
 				var params = new Object();
-				selectCateAttrByCategoryId(params);//获取类目ID查询类目属性
+				selectCategoryAttrItemByPagehelper(params);//获取类目ID查询类目属性
 			} else {
 				console.log("级别：" + g_level + " （从0开始，0为级别1）");
 				util.message("您所选择的级别是 " + g_level + " ，请选择叶子节点。");
@@ -216,13 +205,15 @@
 		 * 点击类目属性页面中的页码执行此函数
 		 * 		函数功能：根据页码数请求当前页内容
 		 */
-		function selectCateAttrByCategoryId(params){
+		function selectCategoryAttrItemByPagehelper(params){
 			var cid = $("#category-id").val();
 			if(cid==null || cid==""){
 				util.message("请选择类目！");
 				return;
 			}
-			var url = "back/attr/getCategoryAttrItem?categoryId="+cid+"&pagehelperFun=selectCateAttrByCategoryId";
+			var url = "back/attr/getCategoryAttrItem";
+			params.categoryId = cid;
+			params.pagehelperFun = "selectCategoryAttrItemByPagehelper";
 			//util.loading();
 			$("#category-attr-item").load(url, params, function(){
 				console.log("类目属性列表加载完成！");
@@ -230,12 +221,11 @@
 		}
 		
 		/*
-		 * 重置form表单
+		 * 重置
 		 */
-		function resetFun(){
-			//$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
-			//bootstrapValidateFun();//启用验证
-			//$('#save-form')[0].reset();
+		function resetCateAttrAndValTab(){
+			$("#third-category-name").text("");//清空用户选择的三级类目
+			$("#third-category-attr-name").text("");//清空用户选择的类目属性
 			$("#category-attr-item").empty();//清空类目属性列表
 			$("#category-attr-value-item").empty();//清空类目属性值列表
 			$('#tabs-819447 a[href="#panel-508462"]').tab('show');//显示类目属性列表选项卡

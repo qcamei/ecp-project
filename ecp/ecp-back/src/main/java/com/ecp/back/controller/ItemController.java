@@ -218,9 +218,8 @@ public class ItemController {
 	@ResponseBody
 	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson) {
 		log.info("update item:"+item);
-		this.processUploadFile(request, null);
 		try {
-			int rows = iItemService.updateByPrimaryKeySelective(item);
+			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson);
 			if(rows>0){
 				return RequestResultUtil.getResultUpdateSuccess();
 			}
@@ -260,12 +259,30 @@ public class ItemController {
 			}
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			log.error("上传文件异常", e);
 		} catch (Exception e) {
-			log.error("删除上传文件异常", e);
+			e.printStackTrace();
 		}
+		log.error("上传文件异常");
 		return null;
+	}
+	
+	
+	/**
+	 * 修改订单状态
+	 * @param request
+	 * @param response
+	 * @param itemId
+	 * @param itemStatus
+	 * @return
+	 */
+	@RequestMapping("/updateStatusById")
+	@ResponseBody
+	public Map<String, Object> updateStatusById(HttpServletRequest request, HttpServletResponse response, Long itemId, Integer itemStatus) {
+		int rows = iItemService.updateStatusById(itemId, itemStatus);
+		if(rows>0){
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+		return RequestResultUtil.getResultUpdateWarn();
 	}
 	
 	/**
