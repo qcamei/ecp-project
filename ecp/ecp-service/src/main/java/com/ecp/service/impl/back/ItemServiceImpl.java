@@ -17,6 +17,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.ecp.bean.ItemStatusType;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.dao.ItemMapper;
 import com.ecp.entity.CategoryAttr;
@@ -113,6 +114,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		try {
 			//添加商品 item
 			item.setHasPrice(1);
+			item.setItemStatus(ItemStatusType.IS_PUT_OFF_SHELVES);
 			
 			int rows = itemMapper.insertSelective(item);
 			if(rows>0){
@@ -451,7 +453,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		Item item = new Item();
 		item.setItemId(itemId);
 		item.setItemStatus(itemStatus);
-		return itemMapper.updateByPrimaryKey(item);
+		return itemMapper.updateByPrimaryKeySelective(item);
 	}
 	
 	public static void main(String[] args) {
