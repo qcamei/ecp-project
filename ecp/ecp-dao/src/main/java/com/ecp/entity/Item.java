@@ -41,7 +41,7 @@ public class Item {
     private String itemName;
 
     @Column(name = "item_status")
-    private Integer itemStatus;
+    private Integer itemStatus;//4：上架，5下架
 
     private String keywords;
 
@@ -268,6 +268,7 @@ public class Item {
     }
 
     /**
+     * 获取商品状态	4：上架，5下架
      * @return item_status
      */
     public Integer getItemStatus() {
@@ -275,6 +276,7 @@ public class Item {
     }
 
     /**
+     * 设置商品状态	4：上架，5下架
      * @param itemStatus
      */
     public void setItemStatus(Integer itemStatus) {
