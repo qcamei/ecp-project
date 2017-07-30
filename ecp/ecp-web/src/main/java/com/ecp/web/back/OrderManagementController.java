@@ -11,7 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ecp.entity.Orders;
+import com.ecp.entity.UserExtends;
+import com.ecp.service.front.IOrderItemService;
 import com.ecp.service.front.IOrderService;
+import com.ecp.service.front.IUserAgentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -27,6 +31,7 @@ import com.github.pagehelper.PageInfo;
 public class OrderManagementController {
 	final String RESPONSE_THYMELEAF_BACK = "thymeleaf/back/";
 	final String RESPONSE_FRONT="/front/";
+	final String RESPONSE_THYMELEAF = "thymeleaf/front/";
 	final String RESPONSE_JSP = "jsps/front/";
 
 	private final int PAGE_SIZE = 8;
@@ -35,6 +40,10 @@ public class OrderManagementController {
 
 	@Autowired
 	IOrderService orderService;  //订单服务
+	@Autowired
+	IOrderItemService orderItemService; //订单条目
+	@Autowired
+	IUserAgentService userAgentService; //代理商
 	
 
 	/**
@@ -135,7 +144,21 @@ public class OrderManagementController {
 	 */
 	@RequestMapping(value = "/detailtable")
 	public String order_detail_table(Long id,Model model,HttpServletRequest request){
-		return "forward:"+RESPONSE_FRONT + "order/"+"detailtable";
+		//return "forward:"+RESPONSE_FRONT + "order/"+"detailtable";
+		//(1)读取订单
+		Orders order=orderService.selectByPrimaryKey(id);		
+		//(2)读取订单商品列表
+		List<Map<String, String>> orderItems = orderItemService.selectItemsByOrderId(order.getOrderId());
+		//(3)收货人信息(此信息已经保存至订单中)		
+		//(4)代理商信息
+		//UserExtends agent=userAgentService.selectByPrimaryKey(order.getBuyerId());
+		UserExtends agent=userAgentService.getUserAgentByUserId(order.getBuyerId());
+		
+		model.addAttribute("order", order);
+		model.addAttribute("orderItems", orderItems);
+		model.addAttribute("agent", agent);
+		
+		return RESPONSE_THYMELEAF + "order_detail_table";
 	}
 	
 

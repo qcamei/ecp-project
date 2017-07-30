@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -121,23 +122,27 @@ public class CartController {
 
 			// get sku attr value names
 			// 将sku attribute 分隔
-			String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+			
 			String skuName = item.getItemName();
-			for (String attrValuePair : skuAttrArray) {
-				String skuValueName = "";
+			if(StringUtils.isNotBlank(skuPriceBean.getAttributes())){
+				String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+				for (String attrValuePair : skuAttrArray) {
+					String skuValueName = "";
 
-				String[] avPair = attrValuePair.split(":");
-				long attrId = Long.parseLong(avPair[0]);
-				long valueId = Long.parseLong(avPair[1]);
+					String[] avPair = attrValuePair.split(":");
+					long attrId = Long.parseLong(avPair[0]);
+					long valueId = Long.parseLong(avPair[1]);
 
-				AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
-				Attribute attr = attriubteService.getAttributeById(attrId);
+					AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
+					Attribute attr = attriubteService.getAttributeById(attrId);
 
-				skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
-				itemBean.getSkuAttrValueNames().add(skuValueName);
+					skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
+					itemBean.getSkuAttrValueNames().add(skuValueName);
 
-				skuName = skuName + skuValueName; // 生成sku name 生成sku
+					skuName = skuName + skuValueName; // 生成sku name 生成sku
+				}
 			}
+			
 			itemBean.setSkuName(skuName);
 
 			// get sku picture
@@ -412,24 +417,26 @@ public class CartController {
 			itemBean.setSkuWeight(skuPriceBean.getWeight());
 
 			// get sku attr value names
-			// 将sku attribute 分隔
-			String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+			// 将sku attribute 分隔   //TODO 程序代码合并优化
 			String skuName = item.getItemName();
-			for (String attrValuePair : skuAttrArray) {
-				String skuValueName = "";
+			if(StringUtils.isNotBlank(skuPriceBean.getAttributes())){
+				String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+				for (String attrValuePair : skuAttrArray) {
+					String skuValueName = "";
 
-				String[] avPair = attrValuePair.split(":");
-				long attrId = Long.parseLong(avPair[0]);
-				long valueId = Long.parseLong(avPair[1]);
+					String[] avPair = attrValuePair.split(":");
+					long attrId = Long.parseLong(avPair[0]);
+					long valueId = Long.parseLong(avPair[1]);
 
-				AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
-				Attribute attr = attriubteService.getAttributeById(attrId);
+					AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
+					Attribute attr = attriubteService.getAttributeById(attrId);
 
-				skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
-				itemBean.getSkuAttrValueNames().add(skuValueName);
+					skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
+					itemBean.getSkuAttrValueNames().add(skuValueName);
 
-				skuName = skuName + skuValueName; // 生成sku name 生成sku
-			}
+					skuName = skuName + skuValueName; // 生成sku name 生成sku
+				}
+			}			
 			itemBean.setSkuName(skuName);
 
 			// get sku picture
