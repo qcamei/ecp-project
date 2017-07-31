@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -192,6 +193,21 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	public List<Category> selectByLev(int lev) {
 		Example example = new Example(Category.class);
 		example.createCriteria().andEqualTo("lev", lev);
+		return categoryMapper.selectByExample(example);
+	}
+
+	/**
+	 * @see com.ecp.service.back.ICategoryService#getAll(java.lang.String)
+	 * 获取所有类目（默认为sort_number正序，多个用英文逗号隔离）
+	 * 		sort参数说明：表字段+空格+排序（正序：ASC,倒序：DESC）
+	 */
+	@Override
+	public List<Category> getAll(String sort) {
+		if(StringUtils.isBlank(sort)){
+			sort = "sort_number ASC";
+		}
+		Example example = new Example(Category.class);
+		example.setOrderByClause(sort);
 		return categoryMapper.selectByExample(example);
 	}
 

@@ -69,7 +69,7 @@ public class CategoryController {
 		Subject subject = SecurityUtils.getSubject();
 		UserBean user = (UserBean)subject.getPrincipal();
 
-		List<Category> categoryList = iCategoryService.selectAll();
+		List<Category> categoryList = iCategoryService.getAll(null);
 		log.info("List:" + categoryList);
 		mav.addObject("categoryList", categoryList);
 		// request.setAttribute("categoryList", categoryList);
@@ -143,6 +143,12 @@ public class CategoryController {
 		Subject subject = SecurityUtils.getSubject();
 		UserBean userBean = (UserBean)subject.getPrincipal();
 		if (userBean != null) {
+			if(category.getLev()!=null && category.getLev()==3){
+				category.setHasLeaf(1);
+			}else{
+				category.setHasLeaf(2);
+			}
+			
 			int rows = iCategoryService.insertSelective(category);
 			if (rows > 0) {
 				return RequestResultUtil.getResultAddSuccess();

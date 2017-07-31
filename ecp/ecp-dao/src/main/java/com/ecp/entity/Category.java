@@ -15,7 +15,7 @@ public class Category {
     private Date created;
 
     @Column(name = "has_leaf")
-    private Integer hasLeaf;
+    private Integer hasLeaf;//是否叶子节点：1=叶子节点  2=非叶子节点
 
     @Column(name = "home_show")
     private Integer homeShow;
@@ -75,6 +75,7 @@ public class Category {
     }
 
     /**
+     * 获取是否叶子节点：1=叶子节点  2=非叶子节点
      * @return has_leaf
      */
     public Integer getHasLeaf() {
@@ -82,6 +83,7 @@ public class Category {
     }
 
     /**
+     * 设置是否叶子节点：1=叶子节点  2=非叶子节点
      * @param hasLeaf
      */
     public void setHasLeaf(Integer hasLeaf) {

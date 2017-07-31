@@ -16,9 +16,9 @@
 				<div class="card">
 					<div class="tabs-container" id="tabs-243687">
 						<ul class="nav nav-tabs" id="top_tab">
-							<li class="active"><a data-toggle="tab" href="#tab-1"
+							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true">类目列表</a></li>
-							<li class="" onclick="javascript:resetFun();"><a data-toggle="tab" id="edit-tab" href="#tab-2"
+							<li class="hide" id="edit-category-tab"><a data-toggle="tab" id="edit-tab" href="#tab-2"
 								aria-expanded="false">新增/编辑</a></li>
 						</ul>
 						<div class="tab-content">
@@ -29,7 +29,7 @@
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h3 class="panel-title">
-														<button type="button" id="add-btn" class="btn btn-default btn-primary" onclick="javascript:add(0, '默认为根节点', 1);">新增</button>
+														<button type="button" id="add-btn" class="btn btn-default btn-primary" onclick="javascript:add(0, '默认为根节点', 0);">新增</button>
 														<button type="button" id="edit-btn" class="btn btn-default btn-info" onclick="javascript:edit(0);">编辑</button>
 														<button type="button" id="del-btn" class="btn btn-default btn-danger" onclick="javascript:del(0);">删除</button>
 													</h3>
@@ -58,7 +58,7 @@
 														<div class="form-group">
 															<label class="col-sm-2 control-label">名称</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control" id="category-name" name="cName" value="" />
+																<input type="text" class="form-control" id="category-name" name="cName" value="" placeholder="名称" />
 															</div>
 														</div>
 														<!-- <div class="form-group">
@@ -67,7 +67,7 @@
 																<input type="text" class="form-control" id="category-level" name="level" value="" />
 															</div>
 														</div> -->
-														<input type="hidden" class="form-control" id="category-level" name="level" value="0" placeholder="级别" />
+														<input type="hidden" class="form-control" id="category-level" name="lev" value="0" placeholder="级别" />
 														<div class="form-group">
 															<label class="col-sm-2 control-label">父类型</label>
 															<div class="col-sm-10">
@@ -77,6 +77,12 @@
 																		<option value="${category.cid}">${category.cName}</option>
 																	</c:forEach>
 																</select>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-sm-2 control-label">排序</label>
+															<div class="col-sm-10">
+																<input type="number" class="form-control" id="sort-number" name="sortNumber" value="" placeholder="排序" />
 															</div>
 														</div>
 														<div class="form-group">
@@ -225,8 +231,8 @@
 				console.log("click:"+JSON.stringify(treeNode));
 				console.log(treeNode.cid + ", " + treeNode.cName + ", " + treeNode.parentCid);
 			    //$("#add-btn").attr("onclick", "javascript:add(&quot;"+treeNode.id+"&quot;);");
-				$("#add-btn").attr("onclick", "javascript:add("+treeNode.cid+", '"+treeNode.cName+"', "+treeNode.level+");");//修改添加按钮click事件
-				$("#edit-btn").attr("onclick", "javascript:edit("+treeNode.cid+", '"+treeNode.cName+"', '"+treeNode.parentCid+"', "+treeNode.level+");");//修改编辑按钮click事件
+				$("#add-btn").attr("onclick", "javascript:add("+treeNode.cid+", '"+treeNode.cName+"', "+treeNode.lev+");");//修改添加按钮click事件
+				$("#edit-btn").attr("onclick", "javascript:edit("+treeNode.cid+", '"+treeNode.cName+"', '"+treeNode.parentCid+"', "+treeNode.lev+", "+treeNode.sortNumber+");");//修改编辑按钮click事件
 				$("#del-btn").attr("onclick", "javascript:del("+treeNode.cid+", '"+treeNode.cName+"', '"+treeNode.parentCid+"');");//修改删除按钮click事件
 			};
 			var zNodes = ${categoryListJson};

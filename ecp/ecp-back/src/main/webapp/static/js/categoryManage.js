@@ -202,6 +202,13 @@ function reloadInfoFun(){
  */
 function add(id, name, level){
 	
+	if(level>=3){
+		util.message("类目最多为三级！");
+		return;
+	}
+	
+	$("#edit-category-tab").removeClass("hide");
+	
 	$("#category-parentid").val(id);//父类型ID
 	$("#category-level").val((level+1));//级别
 	//$("#category-parentname").val(name);//父类型名称
@@ -212,15 +219,19 @@ function add(id, name, level){
 /*
  * 点击编辑按钮时执行，打开编辑选项卡
  */
-function edit(id, name, parentid, level){
+function edit(id, name, parentid, level, sortNumber){
 	if(id==0){
-		alert("请选择要修改的商品类型");
+		util.message("请选择要修改的商品类型");
 		return;
 	}
+	
+	$("#edit-category-tab").removeClass("hide");
+	
 	$("#category-id").val(id);//父类型名称
 	$("#category-name").val(name);//父类型名称
 	$("#category-level").val(level);//级别
 	$("#category-parentid").val(parentid);//父类型ID
+	$("#sort-number").val(sortNumber);//排序
 	
 	$('#tabs-243687 a[href="#tab-2"]').tab('show');
 }
@@ -232,6 +243,7 @@ function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
 	$('#save-form')[0].reset();
+	$("#edit-category-tab").addClass("hide");
 }
 
 /*

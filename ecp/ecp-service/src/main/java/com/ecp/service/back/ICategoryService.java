@@ -38,4 +38,12 @@ public interface ICategoryService extends IBaseService<Category, Integer> {
 	
 	public List<CategoryAttrBean> getCategoryAttrListByCid(Long cid);
 	
+	/**
+	 * 获取所有类目（默认为sort_number正序，多个用英文逗号隔离）
+	 * @param sort
+	 * 			参数说明：表字段+空格+排序（正序：ASC,倒序：DESC）
+	 * @return
+	 */
+	public List<Category> getAll(String sort);
+	
 }
