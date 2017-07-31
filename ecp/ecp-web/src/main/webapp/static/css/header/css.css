@@ -465,6 +465,7 @@ i {
 }
 
 .subitem {
+	height:500px;
     width: 790px;
     padding: 6px 0 0 20px;
     overflow: hidden;
