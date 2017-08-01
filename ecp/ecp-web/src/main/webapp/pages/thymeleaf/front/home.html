@@ -21,13 +21,17 @@
 		<div id="content" class="row clearfix">
 			<div id="content" class="col-md-12 column content">
 				<!-- 在此处加入频道内容 -->
-				
 				<!-- 主页商品展示1 -->
 			    <div  id="channel-one" ></div>
 			    
 			    <!-- 主页商品展示2 -->
 			    <div  id="channel-two" ></div>
-    			
+			    <br>
+			    <hr>	
+			    <br>
+			    <div class="banner-order">
+                	<img th:src="@{/static/images/banner-order.png}" >
+            	</div>			    			
 			</div>
 		</div>
 		
@@ -41,16 +45,16 @@
 	<script type="text/javascript">
 		/* 加载channel-one */
 		function loadChannelOne() {
-			var url = "/front/home/channel/?cid=13";
+			var url = "/front/home/channel/?cid=67";
 			var parms = null;
-			var callbackFunc = null; //load页面 完毕后加调函数
+			var callbackFunc = loadChannelTwo; //load页面 完毕后加调函数
 			var containerId = "#channel-one";
 			loadPage(containerId, url, parms, callbackFunc);
 		}
 		
 		/* 加载channel-two */
 		function loadChannelTwo() {
-			var url = "/front/home/channel?cid=13";
+			var url = "/front/home/channel2?cid=49";
 			var parms = null;
 			var callbackFunc = null; //load页面 完毕后加调函数
 			var containerId = "#channel-two";
@@ -59,7 +63,7 @@
 		
 		$(function(){
 			loadChannelOne();	
-			loadChannelTwo();
+			//loadChannelTwo();
 		});
 		
 		
