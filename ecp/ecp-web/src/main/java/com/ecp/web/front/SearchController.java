@@ -479,7 +479,7 @@ public class SearchController {
 			}
 
 			//处理用户选择的品牌条件		
-			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); //获取二级类目ID
+			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); 
 
 			// 获取二级类目ID
 			Map<Long, Long> secondLevMap = new HashMap<Long, Long>();
@@ -503,6 +503,11 @@ public class SearchController {
 			}
 
 			List<Long> thirdCategoryCids = processCategoryCond_Cids(categoryCond); //获取三级类目id列表
+			
+			if(thirdCategoryCids==null){  //如果没有选择条件
+				thirdCategoryCids=getThirdCategoryIds(categoryId);
+			}
+			
 
 			//查询SPU并分页
 			if (pageNum != 0)
@@ -546,6 +551,24 @@ public class SearchController {
 		return url;
 
 	}
+	
+	/**
+	 * @Description 获取二级类目下的三级类目ID列表
+	 * @param secondLevCid 二级类目ID
+	 * @return
+	 */
+	private List<Long> getThirdCategoryIds(Long secondLevCid){
+		List<Long> idList=new ArrayList<Long>();
+		List<Category> thirdCategoryList = categoryService.getCategoryByParentCid(secondLevCid);
+		for(Category cate:thirdCategoryList){
+			idList.add(cate.getCid());
+		}		
+		if(idList.size()==0)
+			return null;
+		else
+			return idList;
+	}
+	
 
 	/**
 	 * @Description 通过SPU关键字查询
