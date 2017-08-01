@@ -111,6 +111,7 @@
 		 *		函数功能：打开添加属性对话框
 		 */
 		function addCategoryAttr(){
+			resetAttrForm();
 			$("#attr-modal-title").text("添加属性");
 			var cid = $("#category-id").val();
 			$("#attr-form-cid").val(cid);
@@ -136,7 +137,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true" onclick="javascript:resetAttrForm();">×</button>
+					aria-hidden="true">×</button>
 				<h4 class="modal-title" id="attr-modal-title">标题</h4>
 			</div>
 			<div class="modal-body">
@@ -200,7 +201,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:resetAttrForm();">关闭</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 				<button type="button" class="btn btn-primary" id="save-attr-submit-btn">保存</button>
 			</div>
 		</div>

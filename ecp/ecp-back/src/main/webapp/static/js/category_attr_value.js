@@ -96,6 +96,7 @@ function saveAttrValueFun(){
  * 查看详细信息
  */
 function selectAttrValDetails(valueId){
+	resetAttrValueForm();
 	var url = "back/attr/selectAttrValUpdateById";
 	var params = {"valueId":valueId};
 	$.post(url, params, function(res){
@@ -192,7 +193,12 @@ function checkAttrValAll(obj){
 function resetAttrValueForm(){
 	$("#save-attr-value-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-attr-value-form')[0].reset();
+	//$('#save-attr-value-form')[0].reset();
+	$(":input","#save-attr-value-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 }
 
 /*

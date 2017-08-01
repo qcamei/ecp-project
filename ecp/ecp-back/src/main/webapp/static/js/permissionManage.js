@@ -47,6 +47,7 @@ function bootstrapValidateFun(){
  * 查看详细信息
  */
 function selectDetails(permissionId){
+	resetFun();
 	var url = "front/permission/selectUpdateById";
 	var params = {"permissionId":permissionId};
 	$.post(url, params, function(res){
@@ -74,6 +75,7 @@ function selectDetails(permissionId){
  * 点击会员列表选项卡时把编辑选项卡标题改为新增
  */
 function updateTabTitle(){
+	resetFun();
 	$("#edit-tab").text("新增权限");//修改选项卡标题为新增权限
 }
 
@@ -193,7 +195,12 @@ function checkAll(obj){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 }
 
 /*

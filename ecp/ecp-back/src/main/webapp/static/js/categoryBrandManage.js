@@ -214,7 +214,7 @@ function clickPageBtnRequestFun(params){
  * 点击添加按钮时执行，打开添加选项卡
  */
 function add(id, name, level){
-	
+	resetFun();
 	$("#category-parentid").val(id);//父类型ID
 	$("#category-level").val((level+1));//级别
 	//$("#category-parentname").val(name);//父类型名称
@@ -226,6 +226,7 @@ function add(id, name, level){
  * 点击编辑按钮时执行，打开编辑选项卡
  */
 function edit(id, name, parentid, level){
+	resetFun();
 	if(id==0){
 		alert("请选择要修改的商品类型");
 		return;
@@ -244,7 +245,12 @@ function edit(id, name, parentid, level){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 }
 
 /*

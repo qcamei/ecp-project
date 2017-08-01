@@ -120,7 +120,12 @@ function saveFun(){
 function resetFun(){
 	$("#update-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#update-form')[0].reset();
+	//$('#update-form')[0].reset();
+	$(":input","#update-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 }
 
 /*

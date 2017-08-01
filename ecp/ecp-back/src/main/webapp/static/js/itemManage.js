@@ -213,6 +213,7 @@ function getAttrAndValueFun(id, cid){
  * ajax请求获取商品信息
  */
 function ajaxRequestGetItemInfo(id){
+	resetFun();
 	var url = "back/item/selectUpdateById";
 	var params = {"id":id};
 	$.post(url, params, function(res){
@@ -666,7 +667,12 @@ function checkAll(obj){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 	if(isIE()) {// 此处判断是否是IE
 	    $('#picture-url').replaceWith($('#upload').clone(true));
 	} else {

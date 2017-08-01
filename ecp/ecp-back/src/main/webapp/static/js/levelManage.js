@@ -74,6 +74,7 @@ function selectDetails(levelId){
  * 点击会员列表选项卡时把编辑会员选项卡标题改为新增会员
  */
 function updateTabTitle(){
+	resetFun();
 	$("#edit-tab").text("新增等级");//修改选项卡标题为新增等级
 }
 
@@ -87,6 +88,7 @@ $("#save-submit-btn").click(function(){
  * 保存内容
  */
 function saveFun(){
+	resetFun();
 	var url = null;
 	var levelId = $("#level-id").val();
 	if(levelId==null || levelId==""){
@@ -236,7 +238,12 @@ function checkAll(obj){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 }
 
 /*

@@ -43,6 +43,7 @@ function bootstrapValidateFun(){
  * 查看详细信息
  */
 function selectDetails(id){
+	resetFun();
 	var url = "back/role/selectUpdateById";
 	var params = {"id":id};
 	$.post(url, params, function(res){
@@ -183,7 +184,12 @@ function checkAll(obj){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 	$.fn.zTree.init($("#menu-perms-ztree"), setting, zNodes);
 	menuPermsArr.length = 0;
 }

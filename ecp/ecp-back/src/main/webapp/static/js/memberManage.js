@@ -87,6 +87,7 @@ function bootstrapValidateFun(){
  * 查看详细信息
  */
 function selectDetails(memberId){
+	resetFun();
 	var url = "front/member/selectUpdateById";
 	var params = {"memberId":memberId};
 	$.post(url, params, function(res){
@@ -120,6 +121,7 @@ function selectDetails(memberId){
  * 点击会员列表选项卡时把编辑会员选项卡标题改为新增会员
  */
 function updateTabTitle(){
+	resetFun();
 	$("#edit-tab").text("新增会员");//修改选项卡标题为编辑会员
 }
 
@@ -294,7 +296,12 @@ function checkAll(obj){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 	$("#link-img-portrait").html("");
 }
 

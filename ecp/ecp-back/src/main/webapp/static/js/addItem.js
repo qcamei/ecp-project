@@ -471,7 +471,12 @@ function validateImgFileSizeFun(file){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 	if(isIE()) {// 此处判断是否是IE
 	    $('#picture-url').replaceWith($('#upload').clone(true));
 	} else {

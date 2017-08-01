@@ -218,7 +218,7 @@ function reloadInfoFun(){
  * 点击添加按钮时执行，打开添加选项卡
  */
 function add(id, name, pid){
-	
+	resetFun();
 	$("#parent-id").val(id);//父类型ID
 	
 	$('#tabs-243687 a[href="#tab-2"]').tab('show');
@@ -253,7 +253,12 @@ function edit(id, name, icon, description, pid, url, sort){
 function resetFun(){
 	$("#save-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
 	bootstrapValidateFun();//启用验证
-	$('#save-form')[0].reset();
+	//$('#save-form')[0].reset();
+	$(":input","#save-form")  
+	 .not(":button, :submit, :reset")  
+	 .val("")
+	 //.removeAttr("checked")  
+	 .removeAttr("selected");
 }
 
 /*
