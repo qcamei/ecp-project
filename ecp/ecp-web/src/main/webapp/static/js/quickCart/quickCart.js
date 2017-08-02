@@ -1,8 +1,8 @@
 /* 删除购物车中的条目 */
-function deleteFunc(e) {
+function deleteCartItemFunc(e) {
 	// console.log("delete cart item!");
 	var cartItemId = $(e).attr("data-bind"); // 获取需要删除的购物车条目
-	// util.delConfirm("确认删除？", cartItemId, "deleteInfoAjaxRequest");
+	// util.delConfirm("确认删除？", cartItemId, "deleteCartItemAjaxRequest");
 	deleteInfoAjaxRequest(cartItemId);
 
 	// console.log("delete cart item after confirm!");
@@ -13,7 +13,8 @@ function deleteFunc(e) {
  * @param id
  * @returns
  */
-function updateCartItemNum(id){
+
+function updateQuickCartItemNum(id){
 	var oldNum=$("#itemNum").text();
 	var sub=1;
 	$("#itemNum").text(oldNum-sub);
@@ -36,7 +37,7 @@ function updateCartItemTotalPrice(id){
 /*
  * 采用ajax 删除购物车条目
  */
-function deleteInfoAjaxRequest(id) {
+function deleteCartItemAjaxRequest(id) {
 	var url = BASE_CONTEXT_PATH + "/front/cart/delete"; // 需要提交的 url
 
 	$.ajax({
@@ -53,7 +54,7 @@ function deleteInfoAjaxRequest(id) {
 				if (obj.result_code == "success") {
 					// util.message(obj.result_msg); //显示删除成功能对话框，此处省略
 					$("#cartProduct"+id).hide();
-					updateCartItemNum(id);
+					updateQuickCartItemNum(id);
 					updateCartItemTotalPrice(id);
 					//loadQuickCart();  // 操作成功后重新加载购物车列表
 				} else {
@@ -65,6 +66,3 @@ function deleteInfoAjaxRequest(id) {
 	});
 }
 
-$(function() {
-
-});
