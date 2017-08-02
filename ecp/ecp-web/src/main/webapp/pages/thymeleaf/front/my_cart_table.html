@@ -71,15 +71,15 @@
 						<td th:text="'￥'+${cartItem.skuPrice}"></td>
 						<td>
 							<input
-							th:attr="id='num_'+${cartItem.itemId}+'-'+${cartItem.skuId},data-cart-id=${cartItem.id}"
+							th:attr="id='num_'+${cartItem.itemId}+'-'+${cartItem.skuId},data-cart-id=${cartItem.id},data-skuprice=${cartItem.skuPrice}, data-skuweight=${cartItem.skuWeight},data-weightunit=${cartItem.weightUnit}"
 							type="number" name="数量" th:value="${cartItem.quantity}"
 							onkeyup="onkeyup_check(this);" 
 							onchange="onkeyup_check(this);updateNum(this)"
 							onafterpaste="paste_check(this);" /> </br> <!-- <span>有货</span> -->
 						</td>
-						<td><label
+						<td><label th:attr="id='totalprice-'+${cartItem.id}"
 							th:text="'￥'+${cartItem.skuPrice}* ${cartItem.quantity}">小计：5188</label></br>
-							<span
+							<span th:attr="id='totalweight-'+${cartItem.id}"
 							th:text="${cartItem.skuWeight}*${cartItem.quantity}+${cartItem.weightUnit}">小计：重量：5.6kg</span>
 						</td>
 						<td><a href="javascript:void(0)" class="operate_delete" th:attr="data-id=${cartItem.id}">删除</a></br> 

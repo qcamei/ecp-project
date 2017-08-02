@@ -399,6 +399,7 @@ function getSelectedCartItems(){
 function updateCartItemNum(cartItemId,quantity) {
 	var url = BASE_CONTEXT_PATH + "/front/cart/updatequantity"; // 需要提交的 url
 
+	console.log("ajax update!");
 	$.ajax({
 		type : "post", // 提交方式 get/post
 		url : url, // 需要提交的 url
@@ -416,6 +417,7 @@ function updateCartItemNum(cartItemId,quantity) {
 					//util.message(obj.result_msg); //显示加入对话框，此处省略
 					//loadCart(); // 操作成功后重新加载购物车列表，
 					var amount = calcAmount();
+					console.log("amount:"+amount);
 					displayAmount(amount);
 				} else {
 					util.message(obj.result_err_msg);
@@ -427,18 +429,53 @@ function updateCartItemNum(cartItemId,quantity) {
 }
 
 /**
+ * 数量修改后,同步修改"金额小计"与"重量小计"
+ * @param cartItemId
+ * @param quantity
+ * @param skuPrice
+ * @param skuWeigh
+ * @param skuWeightUnit
+ * @returns
+ */
+function updateCartItemInfo(cartItemId,quantity,skuPrice,skuWeight,skuWeightUnit){
+	var totalPrice='￥'+(skuPrice*quantity).toFixed(2);
+	var totalWeight=(skuWeight*quantity).toFixed(2)+skuWeightUnit;
+	$("#totalprice-"+cartItemId).text(totalPrice);
+	$("#totalweight-"+cartItemId).text(totalWeight);
+}
+
+
+/**
  * 更新购物车条目数量
  * @param e
  * @returns
  */
 function updateNum(e){
-	var quantity=$(e).val();  //更新后的数量
-	var cartItemId=$(e).attr("data-cart-id");
+	
+	var quantity=$(e).val();  //更新后的数量	
+	
+	var cartItemId=$(e).attr("data-cart-id");	
+	var skuPrice=$(e).attr("data-skuprice");  //sku价格	
+	var skuWeight=$(e).attr("data-skuweight");  //sku单重
+	var skuWeightUnit=$(e).attr("data-weightunit");  //sku重量单位
+	//console.log("price:"+skuPrice);
+	//console.log("skuweight:"+skuWeight);
+	//console.log("skuweightunit:"+skuWeightUnit);
+	
+	updateCartItemInfo(cartItemId,quantity,skuPrice,skuWeight,skuWeightUnit);
+	
+	
 	console.log("cart item id:"+cartItemId);
 	console.log("quantity:"+quantity);
-	updateCartItemNum(cartItemId,quantity);
+	
+	
+	updateCartItemNum(cartItemId,quantity);	
+	
+	
 	
 }
+
+
 
 
 // page loaded ready
