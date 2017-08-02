@@ -184,7 +184,7 @@ function selectOne(cartItemId) {
  * @param id 购物车条目   id
  * @returns
  */
-function deleteInfoAjaxRequest(id) {
+function deleteMyCartItemAjaxRequest(id) {
 	var url = BASE_CONTEXT_PATH + "/front/cart/delete"; // 需要提交的 url
 
 	$.ajax({
@@ -583,7 +583,7 @@ $(function() {
 	$(".operate_delete").on('click',function(){
 		var cartItemId = $(this).attr("data-id"); // 获取需要删除的购物车条目
 		// util.delConfirm("确认删除？", cartItemId, "deleteInfoAjaxRequest");
-		deleteInfoAjaxRequest(cartItemId);
+		deleteMyCartItemAjaxRequest(cartItemId);
 		//calcAmount();
 	});
 	

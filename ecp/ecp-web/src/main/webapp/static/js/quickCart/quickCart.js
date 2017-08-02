@@ -3,7 +3,8 @@ function deleteCartItemFunc(e) {
 	// console.log("delete cart item!");
 	var cartItemId = $(e).attr("data-bind"); // 获取需要删除的购物车条目
 	// util.delConfirm("确认删除？", cartItemId, "deleteCartItemAjaxRequest");
-	deleteInfoAjaxRequest(cartItemId);
+	deleteCartItemAjaxRequest(cartItemId);  
+	deleteMyCartItemAjaxRequest(cartItemId);
 
 	// console.log("delete cart item after confirm!");
 }
