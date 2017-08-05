@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryTreeNode;
 import com.ecp.dao.CategoryMapper;
 import com.ecp.entity.Category;
+import com.ecp.service.back.ICategoryBrandService;
 import com.ecp.service.back.ICategoryService;
 import com.ecp.service.impl.AbstractBaseService;
 
@@ -32,6 +35,9 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 		this.setMapper(categoryMapper);
 	}
 
+	@Resource(name="categoryBrandServiceBean")
+	private ICategoryBrandService iCategoryBrandService;// 类目品牌
+	
 	/** 
 	 * (non-Javadoc)
 	 * @see com.ecp.service.ICategoryService#deleteById(java.lang.Long)
@@ -63,7 +69,13 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 			rows = deleteNodes(cate.getCid());
 			if(rows>0){
 				rows = categoryMapper.deleteByPrimaryKey(cate.getCid());
-				if(rows<=0){
+				if(rows>0){
+					if(cate.getLev()==3){
+						//如果此类目为三级目录则删除类目相关联的品牌
+						iCategoryBrandService.deleteByThirdLevCid(cate.getCid());
+					}
+					return rows;
+				}else{
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return 0;
 				}
@@ -73,7 +85,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 			}
 		}
 		
-		return rows;
+		return 0;
 	}
 	
 	/* (非 Javadoc)

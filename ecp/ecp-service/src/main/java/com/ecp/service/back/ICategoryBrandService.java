@@ -12,5 +12,11 @@ public interface ICategoryBrandService extends IBaseService<CategoryBrand, Long>
 	 */
 	public int saveCategoryBrand(Long secondLevCid, Long thirdLevCid, String brandListJson);
 	
+	/**
+	 * 根据三级类目ID删除
+	 * @param thirdLevCid
+	 * @return
+	 */
+	public int deleteByThirdLevCid(Long thirdLevCid);
 	
 }

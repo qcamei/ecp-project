@@ -69,15 +69,25 @@
 															</div>
 														</div> -->
 														<div class="form-group">
+															<label for="name" class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10">
+																<b style="color:red;">默认密码：123456，首次登录系统请先修改密码！</b>
+															</div>
+														</div>
+														<div class="form-group">
 															<label for="name" class="col-sm-2 control-label">角色</label>
 															<div class="col-sm-10" id="role-item">
-																<ul>
+																<%-- <ul>
 																	<c:forEach items="${roleList}" var="role">
 																		<li>
 																			<label><input type="checkbox" id="role-${role.roleId}" name="role" value="${role.roleId}" />&nbsp;&nbsp;&nbsp;${role.roleName}</label>
 																		</li>
 																	</c:forEach>
-																</ul>
+																</ul> --%>
+																<c:forEach items="${roleList}" var="role">
+																			<label><input type="checkbox" id="role-${role.roleId}" name="role" value="${role.roleId}" />&nbsp;&nbsp;&nbsp;${role.roleName}</label>
+																			<br>
+																</c:forEach>
 															</div>
 														</div>
 														<div class="form-group">

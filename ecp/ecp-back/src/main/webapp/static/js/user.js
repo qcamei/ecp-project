@@ -148,6 +148,7 @@ function saveFun(){
 	});
 	
 	console.log("用户角色："+roleIds.toString());
+	
 	//util.loading();
 	$("#save-form").ajaxSubmit({
 		type:"post",
@@ -251,10 +252,13 @@ function resetFun(){
 	bootstrapValidateFun();//启用验证
 	//$('#save-form')[0].reset();
 	$(":input","#save-form")  
-	 .not(":button, :submit, :reset")  
+	 .not(":button, :submit, :reset, :checkbox, :radio")  
 	 .val("")
-	 //.removeAttr("checked")  
+	 .removeAttr("checked")  
 	 .removeAttr("selected");
+	$("#role-item input[name='role']").each(function(){
+		$(this).prop("checked", false);//设置checkbox未选中
+	});
 	$("#password").attr("disabled", false);
 }
 

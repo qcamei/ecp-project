@@ -19,6 +19,8 @@ import com.ecp.service.back.IBrandService;
 import com.ecp.service.back.ICategoryBrandService;
 import com.ecp.service.impl.AbstractBaseService;
 
+import tk.mybatis.mapper.entity.Example;
+
 @Service("categoryBrandServiceBean")
 public class CategoryBrandServiceImpl extends AbstractBaseService<CategoryBrand, Long> implements ICategoryBrandService {
 
@@ -127,6 +129,17 @@ public class CategoryBrandServiceImpl extends AbstractBaseService<CategoryBrand,
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		return 0;
+	}
+
+	/**
+	 * @see com.ecp.service.back.ICategoryBrandService#deleteByThirdLevCid(java.lang.Long)
+	 * 根据三级类目ID删除
+	 */
+	@Override
+	public int deleteByThirdLevCid(Long thirdLevCid) {
+		Example example = new Example(CategoryBrand.class);
+		example.createCriteria().andEqualTo("thirdLevCid", thirdLevCid);
+		return categoryBrandMapper.deleteByExample(example);
 	}
 
 }
