@@ -1,5 +1,6 @@
 package com.ecp.back.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,8 +98,15 @@ public class RoleController {
 		try {
 			Role role = roleService.selectByPrimaryKey(id);
 			List<RolePermission> rolePermsList = rolePermissionService.getByRoleId(id);
+			List<Long> menuIds = new ArrayList<Long>();
+			for(RolePermission rp : rolePermsList){
+				menuIds.add(rp.getPermissionId());
+			}
+			List<Menu> menuList = menuService.getByMenuIds(menuIds);
+			
 			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
 			respM.put("role", role);
+			respM.put("menuList", menuList);
 			return respM;
 		} catch (Exception e) {
 			log.error("查询异常", e);

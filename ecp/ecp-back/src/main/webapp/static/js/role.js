@@ -56,6 +56,21 @@ function selectDetails(id){
 				$("#role-name").val(role.roleName);//角色名称
 				$("#role-description").val(role.roleDescription);//角色描述
 				
+				var menuList = resp.menuList;
+				var treeObj = $.fn.zTree.getZTreeObj("menu-perms-ztree");//获取菜单zTree对象
+				$.each(menuList, function(){
+					var nodes = treeObj.getNodesByParam("menuId", this.menuId, null);//获取需要设置的zTree对象节点（集合[{}]）
+					var currNode = nodes[0];
+					//console.log("被选择的节点："+JSON.stringify(nodes));
+					//console.log("被选择的第0个节点："+JSON.stringify(currNode));
+					if(currNode.isParent){//如果是父节点，选择时不联动
+						treeObj.expandNode(nodes[0], true, false, false);//如果是父节点，则展开此节点
+						treeObj.checkNode(nodes[0], true, false, true);//选择当前节点时不联动操作
+					}else{//如果不是父节点时，选择时联动
+						treeObj.checkNode(nodes[0], true, true, true);//选择当前节点时联动操作
+					}
+				});
+				
 				$('#tabs-243687 a[href="#tab-2"]').tab('show');
 				return;
 			}

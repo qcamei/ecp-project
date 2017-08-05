@@ -247,9 +247,10 @@
 			console.log("menuPermsListJson:"+JSON.stringify(zNodes));
 			
 			//$(document).ready(function() {
-			$.fn.zTree.init($("#menu-perms-ztree"), setting, zNodes);
+			var menuPermsObj = $.fn.zTree.init($("#menu-perms-ztree"), setting, zNodes);
 			
 			//});
+			
 			
 			/*
 			 * 数组去重

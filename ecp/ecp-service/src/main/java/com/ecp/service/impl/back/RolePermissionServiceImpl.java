@@ -56,4 +56,15 @@ public class RolePermissionServiceImpl extends AbstractBaseService<RolePermissio
 		return rolePermisstionMapper.getByRoleIds(roleIds);
 	}
 
+	/**
+	 * @see com.ecp.service.back.IRolePermissionService#deleteByPermissionId(java.lang.Long)
+	 * 根据菜单权限删除 角色权限关系表
+	 */
+	@Override
+	public int deleteByPermissionId(Long menuId) {
+		Example example = new Example(RolePermission.class);
+		example.createCriteria().andEqualTo("permissionId", menuId);
+		return rolePermisstionMapper.deleteByExample(example);
+	}
+
 }

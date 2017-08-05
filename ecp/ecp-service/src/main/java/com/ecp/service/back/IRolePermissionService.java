@@ -28,4 +28,11 @@ public interface IRolePermissionService extends IBaseService<RolePermission, Lon
 	 */
 	public int deleteByRoleId(Long roleId);
 	
+	/**
+	 * 根据菜单权限删除 角色权限关系表
+	 * @param menuId
+	 * @return
+	 */
+	public int deleteByPermissionId(Long menuId);
+	
 }
