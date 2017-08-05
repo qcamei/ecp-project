@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ecp.bean.AccountStatusType;
+import com.ecp.bean.DeletedType;
 import com.ecp.bean.UserType;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.common.util.RequestResultUtil;
@@ -138,6 +139,7 @@ public class UserAgentController {
 	public Object user_agent_dispatch(HttpServletRequest request){
 		
 		String loginName=request.getParameter("loginName");
+		String nickName=request.getParameter("nickName");
 		String password=request.getParameter("password");
 		long agentId=Long.parseLong(request.getParameter("agentId"));
 		
@@ -145,10 +147,12 @@ public class UserAgentController {
 		User user=new User();
 		user.setCreatedTime(new Date());
 		user.setUsername(loginName);
+		user.setNickname(nickName);
 		String md5Pass=genMD5Password(loginName,password);
 		user.setPassword(md5Pass);
 		user.setStatus(AccountStatusType.VALID);
 		user.setType(UserType.AGENT);  //帐号类型
+		user.setDeleted(DeletedType.NO);//删除类型：1=未删除，2=已删除
 		
 		int row =userService.insertSelective(user);
 		if(row>0){

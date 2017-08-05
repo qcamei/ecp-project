@@ -132,8 +132,9 @@ function updateUIOrderTime(orderTimeCond){
  */
 function validUserAccount(){
 	var loginName=$("#loginName").val();
+	var nickName = $("#nickName").val();//默认的昵称为手机号码
 	var password=$("#password").val();
-	if($.isBlank(loginName) || $.isBlank(password)){
+	if($.isBlank(loginName) || $.isBlank(nickName) || $.isBlank(password)){
 		return 2;
 	}
 	else{
@@ -148,6 +149,7 @@ function validUserAccount(){
  */
 function dispatchAccount(){
 	var loginName=$("#loginName").val();
+	var nickName = $("#nickName").val();//默认的昵称为手机号码
 	var password=$("#password").val();
 	var agentId=$("#agentId").val();
 	var url = BASE_CONTEXT_PATH + "/back/agent/dispatch"; // 需要提交的 url
@@ -157,6 +159,7 @@ function dispatchAccount(){
 		// dataType: "application/json",
 		data : {
 			"loginName" : loginName,
+			"nickName" : nickName,
 			"password"	: password,
 			"agentId"	: agentId
 		},
@@ -191,7 +194,7 @@ function hasSameLoginName(){
 		url : url, // 需要提交的 url
 		// dataType: "application/json",
 		data : {
-			'loginName' : loginName			
+			'loginName' : loginName,
 		},
 		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
 			console.log(res);
@@ -283,8 +286,9 @@ $(function() {
 					displayWindow();
 					$("#agentId").val(agentId);
 					$("#myModalLabel").text("分配帐户(" + companyName + "_" + artificialPersonName	+ ")");
-					$("#loginName").val(contactPhone);    //默认的帐户名称为手机号码
-					$("#password").val(defaultPassword);  //默认的帐户密码是：123456
+					$("#loginName").val(contactPhone);//默认的帐户名称为手机号码
+					$("#nickName").val(contactPhone);//默认的昵称为手机号码
+					$("#password").val(defaultPassword);//默认的帐户密码是：123456
 				}
 				
 				
