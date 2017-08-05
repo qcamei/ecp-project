@@ -5,7 +5,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.util.WebUtils;
 
 import com.google.code.kaptcha.Constants;
 
@@ -39,6 +42,20 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 			return true; 
 		}
 		return super.onAccessDenied(request, response);
+	}
+
+	/**
+	 * @see org.apache.shiro.web.filter.authc.FormAuthenticationFilter#onLoginSuccess(org.apache.shiro.authc.AuthenticationToken, org.apache.shiro.subject.Subject, javax.servlet.ServletRequest, javax.servlet.ServletResponse)
+	 * 重写 FormAuthenticationFilter 的 onLoginSuccess 方法
+	 */
+	@Override
+	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
+			ServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		WebUtils.getAndClearSavedRequest(request);//清除原先的地址
+		WebUtils.redirectToSavedRequest(request, response, "/back/main");//设置重定向地址
+		//return super.onLoginSuccess(token, subject, request, response);
+		return false;
 	}
 
 		
