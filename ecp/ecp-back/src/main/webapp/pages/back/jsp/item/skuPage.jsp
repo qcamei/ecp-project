@@ -5,7 +5,7 @@
 
 
 <div class="fieldset" id="sku">
-	<div class="legend" onclick="getSkuInfo();">sku</div>
+	<div class="legend" onclick="getSkuInfo();" title="选择销售属性自动创建SKU">SKU</div>
 	<div id="sku-content">
 		<table class="table table-striped table-bordered table-hover " id="sku-table"
 	style="width: 100%;"center">

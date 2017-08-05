@@ -32,9 +32,9 @@
 <body class="gray-bg">
 	<div class="tabs-container" id="tabs-add-item">
 		<ul class="nav nav-tabs" id="top_tab">
-			<li class="active"><a data-toggle="tab" href="#tab-3"
+			<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-3"
 				aria-expanded="true">选择类目</a></li>
-			<li class="" onclick="javascript:resetFun();"><a
+			<li class="hide" id="item-info-li"><a
 				data-toggle="tab" href="#tab-4" aria-expanded="false">商品信息</a></li>
 		</ul>
 		<div class="tab-content">
@@ -388,6 +388,7 @@
 	 * 点击下一步按钮时执行，显示添加商品基本信息选项卡
 	 */
 	$("#next-step-btn").click(function(){
+		$("#item-info-li").removeClass("hide");//显示商品信息选项卡
 		var cid = $("#item-cid").val();
 		var url = "back/category/selectAttrAndValue";
 		var params = {"cid": cid};

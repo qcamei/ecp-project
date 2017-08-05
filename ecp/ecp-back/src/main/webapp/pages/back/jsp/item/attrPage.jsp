@@ -23,11 +23,28 @@
 	}
 </style>
 
+<div class=" fieldset" id="category-brand">
+	<div class=" legend">品牌</div>
+	<div id="brand-body">
+		<div class="form-group">
+			<label class="col-sm-2 control-label">品牌</label>
+			<div class="col-sm-10">
+				<select class="form-control" id="brand" name="brand">
+					<option value="0">请选择</option>
+					<c:forEach items="${brandMapList}" var="brandMap">
+						<option value="${brandMap.brand_id}">${brandMap.brand_name}</option>
+					</c:forEach>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
 <div class=" fieldset" id="item-attr">
 	<div class=" legend" onclick="javascript:alert(getItemAttr());">商品属性</div>
 	<div id="item-attr-body">
-		<%-- <%@ include file="attrPage.jsp"%> --%>
-		<c:if test="${not empty brandMapList}">
+		<%-- <c:if test="${not empty brandMapList}">
 			<div class="form-group">
 				<label class="col-sm-2 control-label">品牌</label>
 				<div class="col-sm-10">
@@ -39,7 +56,7 @@
 					</select>
 				</div>
 			</div>
-		</c:if>
+		</c:if> --%>
 		
 		<c:forEach items="${attrList}" var="attr">
 			<c:if test="${not empty attr.valList}">
@@ -56,6 +73,7 @@
 	</div>
 </div>
 <br>
+
 <div class=" fieldset" id="sale-attr">
 	<div class=" legend" onclick="javascript:alert(getSaleAttr());">销售属性</div>
 	<div id="sale-attr-body">
@@ -87,9 +105,12 @@
 		</c:forEach>
 	</div>
 </div>
+<br>
+
 <div id="sku">
 	<%@ include file="skuPage.jsp"%>
 </div>
+
 <script>
 /* 如果商品属性为空时不显示标题 */
 var itemAttrBody = $("#item-attr-body").html().trim();
