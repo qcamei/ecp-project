@@ -87,15 +87,16 @@ public class SearchController {
 
 		if (keywords.trim() == "")
 			resultUrl = url;
-
+		
 		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_category(keywords); //按类目查询
+			resultUrl = keywordsSearch_SPU_Keywords(model, keywords, "", "", 1, PAGE_SIZE); //按SPU的关键字查询
 		}
+	
 		if (resultUrl.equals("")) {
 			resultUrl = keywordsSearch_brand(model, keywords, "", "", 1, PAGE_SIZE); //按品牌查询
 		}
 		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_SPU_Keywords(model, keywords, "", "", 1, PAGE_SIZE); //按SPU的关键字查询
+			resultUrl = keywordsSearch_category(keywords); //按类目查询
 		}
 
 		if (!resultUrl.equals("")) {
@@ -140,15 +141,17 @@ public class SearchController {
 
 		if (keywords.trim() == "")
 			resultUrl = url;
-
+		
 		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_category(keywords); //按类目查询
+			resultUrl = keywordsSearch_SPU_Keywords(model, keywords, brandCond, categoryCond, pageNum, pageSize); //按SPU的关键字查询
 		}
+		
 		if (resultUrl.equals("")) {
 			resultUrl = keywordsSearch_brand(model, keywords, brandCond, categoryCond, pageNum, pageSize); //按品牌查询
 		}
+		
 		if (resultUrl.equals("")) {
-			resultUrl = keywordsSearch_SPU_Keywords(model, keywords, brandCond, categoryCond, pageNum, pageSize); //按SPU的关键字查询
+			resultUrl = keywordsSearch_category(keywords); //按类目查询
 		}
 
 		if (!resultUrl.equals("")) {
@@ -265,6 +268,18 @@ public class SearchController {
 	public String home_channel_search(@PathVariable("categoryId") Long categoryId, Model model) {
 		getSPU(model, categoryId, PAGE_SIZE);
 		return RESPONSE_THYMELEAF + "channel";
+	}
+	
+	/**
+	 * @Description 主机频道查询
+	 * @param cid 三级类目ID
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/channel2/{categoryId}")
+	public String home_channel2_search(@PathVariable("categoryId") Long categoryId, Model model) {
+		getSPU(model, categoryId, PAGE_SIZE);
+		return RESPONSE_THYMELEAF + "channel2";
 	}
 
 
@@ -479,7 +494,7 @@ public class SearchController {
 			}
 
 			//处理用户选择的品牌条件		
-			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); //获取二级类目ID
+			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); 
 
 			// 获取二级类目ID
 			Map<Long, Long> secondLevMap = new HashMap<Long, Long>();
@@ -503,6 +518,11 @@ public class SearchController {
 			}
 
 			List<Long> thirdCategoryCids = processCategoryCond_Cids(categoryCond); //获取三级类目id列表
+			
+			if(thirdCategoryCids==null){  //如果没有选择条件
+				thirdCategoryCids=getThirdCategoryIds(categoryId);
+			}
+			
 
 			//查询SPU并分页
 			if (pageNum != 0)
@@ -546,6 +566,24 @@ public class SearchController {
 		return url;
 
 	}
+	
+	/**
+	 * @Description 获取二级类目下的三级类目ID列表
+	 * @param secondLevCid 二级类目ID
+	 * @return
+	 */
+	private List<Long> getThirdCategoryIds(Long secondLevCid){
+		List<Long> idList=new ArrayList<Long>();
+		List<Category> thirdCategoryList = categoryService.getCategoryByParentCid(secondLevCid);
+		for(Category cate:thirdCategoryList){
+			idList.add(cate.getCid());
+		}		
+		if(idList.size()==0)
+			return null;
+		else
+			return idList;
+	}
+	
 
 	/**
 	 * @Description 通过SPU关键字查询
@@ -580,29 +618,37 @@ public class SearchController {
 
 		List<Item> itemList = itemService.getItemByKeywordsAndBrandAndCid(keywords, brands, thirdCategoryCids,ItemStatusType.IS_SALING); //查询商品列表
 
-		PageInfo<Item> pageInfo = new PageInfo<>(itemList);
-		//setPageInfo(model, pageInfo); // 向前台传递分页信息
-		model.addAttribute("pageInfo", pageInfo);
+		PageInfo<Item> pageInfo = new PageInfo<>(itemList);		
+		model.addAttribute("pageInfo", pageInfo);  //setPageInfo(model, pageInfo); // 向前台传递分页信息
 
-		if (itemList.size() > 0) {
+		List<Item> itemList1 = itemService.getItemByKeywordsAndBrandAndCid(keywords, brands, thirdCategoryCids,ItemStatusType.IS_SALING); //查询商品列表
+		
+		if (itemList1.size() > 0) {
 			// 生成筛选条件，按品牌搜索的方式处理
 			// 获取商品列表中的品牌id
-			Map<Long, Long> tempMap = new HashMap<Long, Long>();
+			// TODO 可通过数据库来处理
+			Map<Long, Long> tempMap = new HashMap<Long, Long>();  // 过滤重复品牌（获取品牌列表）
+			Map<Long,Long> filterThirdLevCidMap=new HashMap<Long,Long>();  //商品的三级类目id
 			List<Long> brandIdList = new ArrayList<Long>();
-			for (Item item : itemList) {
+			for (Item item : itemList1) {
 				if (tempMap.get(item.getBrand()) == null) {
 					tempMap.put(item.getBrand(), item.getBrand());
 					brandIdList.add(item.getBrand());
 				}
+				
+				//商品三级类目id列表
+				if(filterThirdLevCidMap.get(item.getCid())==null){
+					filterThirdLevCidMap.put(item.getCid(), item.getCid());
+				}
+				
 			}
 
 			// 以下与品牌查询相同
-			cateBrandList = cateBrandService.getCategoryByBrandIds(brandIdList); // 品牌列表
-			// 过滤重复品牌（获取品牌列表）
-			// TODO 可通过数据库来处理
+			cateBrandList = cateBrandService.getCategoryByBrandIds(brandIdList); // 根据品牌读取三级类目-品牌
+			
+			
 			//处理用户选择的品牌条件		
 			Map<Long, Long> brandCondMap = processBrandCond(brandCond);
-
 			Map<Long, Long> brandMap = new HashMap<Long, Long>();
 			for (CategoryBrandBean cateBrand : cateBrandList) {
 				if (brandMap.get(cateBrand.getBrandId()) == null) {
@@ -612,24 +658,34 @@ public class SearchController {
 				}
 			}
 
-			//处理用户选择的品牌条件		
-			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); //获取二级类目ID
+			//处理用户选择的类目条件		
+			Map<Long, Long> categoryCondMap = processCategoryCond(categoryCond); 
 
 			// 获取二级类目ID
 			Map<Long, Long> secondLevMap = new HashMap<Long, Long>();
 			for (CategoryBrandBean cateBrand : cateBrandList) {
 				if (secondLevMap.get(cateBrand.getSecondLevCid()) == null) {
-					if (categoryCondMap.size() == 0)
+					if (categoryCondMap.size() == 0 && filterThirdLevCidMap.get(cateBrand.getThirdLevCid())!=null)
 						secondLevMap.put(cateBrand.getSecondLevCid(), cateBrand.getSecondLevCid());
 				}
 			}
+			
 			// 读取二级类目
 			for (long secondLevCid : secondLevMap.keySet()) {
 				Category secondCategory = categoryService.getCategoryByCid(secondLevCid);
 				Map<String, Object> condMap = new HashMap<String, Object>();
 				condMap.put("secondCategory", secondCategory);
 				// 读取三级类目列表
-				List<Category> thirdCategoryList = categoryService.getCategoryByParentCid(secondLevCid);
+				List<Category> thirdCategoryList1 = categoryService.getCategoryByParentCid(secondLevCid);
+				List<Category> thirdCategoryList=new ArrayList<Category>();
+				//过滤不符合条件的三级类目
+				for(Category cate:thirdCategoryList1){
+					if(filterThirdLevCidMap.get(cate.getCid())!=null){
+						//thirdCategoryList.remove(cate);
+						thirdCategoryList.add(cate);
+					}
+				}
+				
 				condMap.put("thirdCategoryList", thirdCategoryList);
 
 				filterList.add(condMap);

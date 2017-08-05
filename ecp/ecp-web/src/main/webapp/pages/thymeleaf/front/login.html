@@ -75,7 +75,7 @@
 															<span class="glyphicon glyphicon glyphicon-lock"
 																aria-hidden="true"></span>
 														</div>
-														<input type="password" class="form-control"
+														<input type="password" class="form-control" 
 															id="password" name="password" placeholder="请输入密码" required>
 
 													</div>
@@ -150,11 +150,26 @@
 				},
 			});
 		}
-	
-		//登录按钮
-		$("#btn-login").on("click",function(){
-			login();
+		
+		$(function(){
+			//登录按钮
+			$("#btn-login").on("click",function(){
+				login();
+			});
+			
+			//在口令输入框按下回车键后,开始登录
+			$("#password").on('keyup',function(event){
+				if (event.keyCode==13) 
+					login();
+			});
+			
 		});
+	
+		
+		
+		
+		
+		
 	</script>
 
 

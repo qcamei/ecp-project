@@ -236,7 +236,7 @@ i {
     top: 100%;
     left: inherit;
     right: 0;
-    width: 240px;
+    width: 250px;
     background-color: rgba(65,65,65,.8);
     border-radius: 0;
     color: #f6f6f6;
@@ -338,6 +338,11 @@ i {
 .productPrice>a{
 	cursor: pointer;
 }
+
+.productPrice>a:hover{
+	color: lightblue;
+}
+
 .dropdownCart .popover-footer{
 	background-color: #414141;
 	height: 45px;

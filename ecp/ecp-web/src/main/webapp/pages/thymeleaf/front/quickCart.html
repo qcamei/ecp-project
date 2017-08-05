@@ -18,7 +18,7 @@
 		<div class="productPrice">
 			<p th:text="'￥'+${cartItem.skuPrice}" th:attr="id='skuPrice'+${cartItem.id},data-price=${cartItem.skuPrice}">￥14532</p>
 			<p th:text="'*'+${cartItem.quantity}" th:attr="id='quantity'+${cartItem.id},data-quantity=${cartItem.quantity}">*88</p>
-			<a class="delete-cart-item" th:attr="data-bind=${cartItem.id}" onclick="deleteFunc(this)" >删除</a>
+			<a class="delete-cart-item" th:attr="data-bind=${cartItem.id}" onclick="deleteCartItemFunc(this)" >删除</a>
 		</div>
 	</div>
 
@@ -28,7 +28,7 @@
      
 		var g_cartItemList = [[${cartItemList}]];  //购物车中商品行项目
 		var g_cartItemNum=[[${itemNum}]];  //购物车中商品行项目
-		var g_cartItemTotalPrice=[[${cartItemTotalPrice}]];  //购物车中总金额
+		var g_cartItemTotalPrice=[[${cartItemTotalPrice}]];  //购物车中总金额 
 		//console.log("商品数量1:"+g_cartItemList.length);
 		//console.log("商品数量2:"+g_cartItemNum);
 		//console.log("总金额:"+g_cartItemTotalPrice);

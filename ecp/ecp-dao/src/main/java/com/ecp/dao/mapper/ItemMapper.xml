@@ -149,6 +149,7 @@
 		<where>
 			(
 			<if test="keywords!=null">
+				(
 				<foreach collection="keywords" item="keyword" index="index"
 					open="(" close=")" separator=" or ">
 					item_name like
@@ -161,7 +162,7 @@
 					keywords like
 					CONCAT('%',#{keyword},'%' )
 				</foreach>
-
+				)
 			</if>
 			<if test="brands!=null">
 				AND brand IN

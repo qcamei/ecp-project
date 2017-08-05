@@ -362,11 +362,12 @@ public class CartController {
 	@ResponseBody
 	public Object cartItem_delete(Integer id,HttpServletRequest request){
 		int row = cartService.deleteByPrimaryKey(id);
-		if (row > 0) {
+		return RequestResultUtil.getResultDeleteSuccess();
+		/*if (row > 0) {
 			return RequestResultUtil.getResultDeleteSuccess();
 		}
 
-		return RequestResultUtil.getResultDeleteWarn();
+		return RequestResultUtil.getResultDeleteWarn();*/
 	}
 	
 	

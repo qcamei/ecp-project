@@ -94,6 +94,17 @@ public class HomeController {
 		return "redirect:/front/search/channel/" + cid;
 	}
 	
+	/**
+	 * @Description 加载channel-one
+	 * @return channel_one页面
+	 */
+	@RequestMapping(value = "/channel2")
+	public String channel_two(long cid){
+		
+		//return RESPONSE_THYMELEAF + "channel_one";
+		return "redirect:/front/search/channel2/" + cid;
+	}
+	
 	/** 
 	 * @Description 显示购物车中的商品列表
 	 * @param model
