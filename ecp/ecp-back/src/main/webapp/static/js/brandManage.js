@@ -27,7 +27,7 @@ function bootstrapValidateFun(){
 	                    message: "品牌名称不能为空"
 	                },
 	                regexp: {
-		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\\\\\/]+$",
+		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\|\\\\\/]+$",
 		                message: "请勿输入特殊符号"
 	                },
 	                stringLength: {

@@ -156,7 +156,7 @@ function bootstrapValidateFun(){
 	                    message: "商品名称不能为空"
 	                },
 	                regexp: {
-		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\\\\\/]+$",
+		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.\\\\\/]+$",
 		                message: "请勿输入特殊符号"
 	                },
 	                stringLength: {
@@ -192,6 +192,7 @@ function bootstrapValidateFun(){
  * 点击查看详细信息按钮时执行，获取当前类目下属性和属性值，成功后请求获取商品信息
  */
 function selectDetails(id, cid){
+	resetFun();
 	getAttrAndValueFun(id, cid);//查询属性和属性值
 	//ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
 }
@@ -213,7 +214,6 @@ function getAttrAndValueFun(id, cid){
  * ajax请求获取商品信息
  */
 function ajaxRequestGetItemInfo(id){
-	resetFun();
 	var url = "back/item/selectUpdateById";
 	var params = {"id":id};
 	$.post(url, params, function(res){
@@ -221,6 +221,8 @@ function ajaxRequestGetItemInfo(id){
 		if(res!=null){
 			var resp = $.parseJSON(res);
 			if(resp.result_code=="success"){
+				$("#edit-item-li").removeClass("hide");//显示编辑商品选项卡
+				
 				var item =resp.item;
 				$("#item-id").val(item.itemId);//ID
 				
@@ -681,6 +683,7 @@ function resetFun(){
 	$("#thumbnail-portrait").empty();
 	$("#attr-page").empty();
 	setContent("item-ueditor", "");//商品详情
+	$("#edit-item-li").addClass("hide");//隐藏编辑商品选项卡
 	$('#tabs-edit-item a[href="#tab-5"]').tab('show');
 }
 
