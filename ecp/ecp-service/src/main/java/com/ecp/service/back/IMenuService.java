@@ -20,4 +20,11 @@ public interface IMenuService extends IBaseService<Menu, Long> {
 	 */
 	public List<Menu> getListAllByAsc();
 	
+	/**
+	 * 删除菜单
+	 * @param menuId
+	 * @return
+	 */
+	public int deleteById(Long menuId);
+	
 }

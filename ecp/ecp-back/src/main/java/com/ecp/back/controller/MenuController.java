@@ -35,7 +35,7 @@ public class MenuController {
 	private final Logger log = Logger.getLogger(getClass());
 
 	@Resource(name="menuServiceBean")
-	private IMenuService menuService;//菜单
+	private IMenuService menuService;//菜单权限
 
 	/**
 	 * 方法功能：查询列表
@@ -144,7 +144,7 @@ public class MenuController {
 	@RequestMapping("/deleteById")
 	@ResponseBody
 	public Map<String, Object> deleteById(HttpServletRequest request, HttpServletResponse response, Long id) {
-		int rows = menuService.deleteByPrimaryKey(id);
+		int rows = menuService.deleteById(id);
 		if (rows > 0) {
 			return RequestResultUtil.getResultDeleteSuccess();
 		}

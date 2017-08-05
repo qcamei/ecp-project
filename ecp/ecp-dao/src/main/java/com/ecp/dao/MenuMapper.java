@@ -3,6 +3,7 @@ package com.ecp.dao;
 import java.util.List;
 
 import com.ecp.entity.Menu;
+
 import tk.mybatis.mapper.common.Mapper;
 
 public interface MenuMapper extends Mapper<Menu> {
