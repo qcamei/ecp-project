@@ -209,6 +209,15 @@
 			item_brand b 
 		ON 
 			i.brand=b.brand_id 
+		<where>
+			<if test="search_keywords!=null and search_keywords!=''">
+				c.c_name like CONCAT('%',#{search_keywords},'%' )
+				or 
+				b.brand_name like CONCAT('%',#{search_keywords},'%' )
+				or 
+				i.item_name like CONCAT('%',#{search_keywords},'%' )
+			</if>
+		</where>
 		ORDER BY i.item_id DESC
 	</select>
 

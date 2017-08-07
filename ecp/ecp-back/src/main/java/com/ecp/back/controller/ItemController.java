@@ -1,7 +1,7 @@
 package com.ecp.back.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -22,9 +23,6 @@ import com.ecp.bean.PageBean;
 import com.ecp.bean.UserBean;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.common.util.RequestResultUtil;
-import com.ecp.entity.Attribute;
-import com.ecp.entity.AttributeValue;
-import com.ecp.entity.Brand;
 import com.ecp.entity.Category;
 import com.ecp.entity.Item;
 import com.ecp.entity.ItemPicture;
@@ -103,13 +101,19 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/selectItems")
-	public ModelAndView selectLinkItem(HttpServletRequest request, HttpServletResponse response, Boolean clickPageBtn, PageBean pageBean, String pagehelperFun) {
+	public ModelAndView selectLinkItem(HttpServletRequest request, HttpServletResponse response, Boolean clickPageBtn, PageBean pageBean, String pagehelperFun, String search_keywords) {
 		ModelAndView mav = new ModelAndView();
 		Subject subject = SecurityUtils.getSubject();
 		UserBean user = (UserBean)subject.getPrincipal();
 		
+		Map<String, Object> param = new HashMap<String, Object>();
+		if(StringUtils.isNotBlank(search_keywords)){
+			param.put("search_keywords", search_keywords);
+		}else{
+			param = null;
+		}
 		PageHelper.startPage(pageBean.getPageNum(), pageBean.getPageSize());
-		List<Map<String, Object>> itemList = iItemService.selectItemsByCondition(null);
+		List<Map<String, Object>> itemList = iItemService.selectItemsByCondition(param);
 		PageInfo<Map<String, Object>> pagehelper = new PageInfo<Map<String, Object>>(itemList);
 		mav.addObject("pagehelper", pagehelper);
 		

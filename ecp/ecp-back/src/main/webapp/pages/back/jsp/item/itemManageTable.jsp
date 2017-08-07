@@ -52,8 +52,8 @@
 				<td>${item.inventory}</td>
 				<td class="center ">
 					<div style="text-align: center; height: auto;" class="datagrid-cell datagrid-cell-c1-action">
-						<button class="btn btn-primary delet_btn" onclick="javascript:selectDetails(${item.item_id}, ${item.cid});">详情</button>	
-						<button class="btn btn-danger delet_btn" onclick="javascript:deleteInfoFun(${item.item_id});">删除</button>
+						<button class="btn btn-primary" onclick="javascript:selectDetails(${item.item_id}, ${item.cid});">详情</button>	
+						<button class="btn btn-danger" onclick="javascript:deleteInfoFun(${item.item_id});">删除</button>
 					</div>
 				</td>
 			</tr>

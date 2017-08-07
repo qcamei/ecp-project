@@ -43,14 +43,46 @@
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
-								<div class="card-content">
-									<div class="table-responsive"
-										style="background: #fff; margin-top: 10px; border: 1px solid #e5e5e5;">
-										<div id="dataTables-example_wrapper"
-											class="dataTables_wrapper form-inline" role="grid">
-											<div id="item-div" style="margin: 20px">
-												<%@ include file="itemManageTable.jsp"%>
+								<div class="container-fluid" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														查询面板
+													</h3>
+												</div>
+												<div class="panel-body">
+													<form class="form-horizontal" id="search-form">
+														<div class="form-group">
+															<label class="col-md-2 control-label">关键字</label>
+															<div class="col-md-10">
+																<input type="text" id="search-keywords" name="search-keywords" class="form-control" placeholder="类目名称 / 品牌名称 / 商品名称">
+															</div>
+														</div>
+														<div class="form-group">
+															<label for="name" class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10">
+																<button type="button" class="btn btn-primary" id="search-submit-btn">查询</button>
+																<button type="button" class="btn btn-danger" id="search-reset-btn">重置</button>
+															</div>
+														</div>
+													</form>
+												</div>
 											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														商品列表
+													</h3>
+												</div>
+												<div class="panel-body">
+													<div id="item-div" style="margin: 20px">
+														<%@ include file="itemManageTable.jsp"%>
+													</div>
+												</div>
+											</div>
+											
 										</div>
 									</div>
 								</div>

@@ -316,7 +316,7 @@ function ajaxRequestGetItemInfo(id){
  * 		参数1：父ID
  * 		参数2：第n级类目
  */
-function selectCategoryByPid(pid, index){
+/*function selectCategoryByPid(pid, index){
 	
 	index++;
 	var url = "back/category/selectByPid";
@@ -356,9 +356,9 @@ function selectCategoryByPid(pid, index){
 		
 	});
 }
-/*
+
  * 创建类目HTML字符串
- */
+ 
 function createCategoryHtmlStr(category, index){	//debugger;
 	var htmlStr = "";
 	if(index>=3){
@@ -373,22 +373,22 @@ function createCategoryHtmlStr(category, index){	//debugger;
 	return htmlStr;
 }
 
-/*
+
  * 加载属性页面
- */
+ 
 function loadAttrPage(cid, cname){
 	//alert("选择的类目是 "+cname);
 	$("#item-cid").val(cid);
-	/*var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
+	var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");
-	});*/
+	});
 }
 
-/*
+
  * 给类目绑定点击事件，选择后把当前选择的突出显示
- */
+ 
 function bindClickEven(index){
 	if(index==1){
 		$(".item-category ul#first-category").on("click", "li", function(){
@@ -419,6 +419,7 @@ function bindClickEven(index){
 	}
 }
 bindClickEven(1);//给一级类目绑定点击事件，选择后把当前选择的突出显示
+*/
 
 /*
  * 保存内容提交
@@ -622,7 +623,7 @@ function clickPageBtnRequestFun(params){
 	params.clickPageBtn = true;
 	//util.loading();
 	$("#item-div").load(action, params, function(){
-		
+		//加载完成
 	});
 }
 
@@ -721,7 +722,7 @@ function reloadAttrAndValuePage(cid){
 };
 
 /**
- * 取消改为商品类目ID
+ * 取消改为商品原类目ID
  */
 function cancelChangeItemCantegory(){
 	var curr_item_cid = $("#curr-item-cid").val();
@@ -766,6 +767,39 @@ function updateItemStatus(itemId, status){
 			}
 		}
 		
+	});
+}
+
+/**
+ * 点击查询面板中的查询按钮时执行
+ * 		功能：根据条件过滤查询商品列表
+ */
+$("#search-submit-btn").click(function(){
+	var params = new Object();
+	params.pagehelperFun="filterItemFun";
+	filterItemFun(params);
+});
+
+/**
+ * 点击查询面板中的重置按钮时执行
+ * 		功能：重置查询面板中的form表单
+ */
+$("#search-reset-btn").click(function(){
+	$("#search-form")[0].reset();
+});
+
+/*
+ * 点击页面中的页码执行此函数
+ * 		函数功能：根据页码数请求当前页内容
+ */
+function filterItemFun(params){
+	var action = "back/item/selectItems";
+	params.clickPageBtn = true;
+	var keywords = $("#search-keywords").val();
+	params.search_keywords = keywords;
+	//util.loading();
+	$("#item-div").load(action, params, function(){
+		//加载完成
 	});
 }
 
