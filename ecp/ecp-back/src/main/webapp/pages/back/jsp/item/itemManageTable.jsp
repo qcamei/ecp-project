@@ -34,27 +34,25 @@
 				<td>${item.item_name}</td>
 				<td>
 					<c:if test="${item.item_status==null || item.item_status==''}">
-						<button class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);">上架</button>	
-						<button class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);">下架</button>
+						<button type="button" class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);">上架</button>	
+						<button type="button" class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);">下架</button>
 					</c:if>
 					<c:if test="${item.item_status==4}">
-						<button class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);" disabled="disabled">上架</button>	
-						<button class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);">下架</button>
+						<button type="button" class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);" disabled="disabled">上架</button>	
+						<button type="button" class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);">下架</button>
 					</c:if>
 					<c:if test="${item.item_status==5}">
-						<button class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);">上架</button>	
-						<button class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);" disabled="disabled">下架</button>
+						<button type="button" class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);">上架</button>	
+						<button type="button" class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);" disabled="disabled">下架</button>
 					</c:if>
 				</td>
 				<td>￥${item.guide_price}</td>
 				<td>￥${item.market_price}</td>
 				<td>￥${item.market_price2}</td>
 				<td>${item.inventory}</td>
-				<td class="center ">
-					<div style="text-align: center; height: auto;" class="datagrid-cell datagrid-cell-c1-action">
-						<button class="btn btn-primary" onclick="javascript:selectDetails(${item.item_id}, ${item.cid});">详情</button>	
-						<button class="btn btn-danger" onclick="javascript:deleteInfoFun(${item.item_id});">删除</button>
-					</div>
+				<td class="center">
+					<button type="button" class="btn btn-primary" onclick="javascript:selectDetails(${item.item_id}, ${item.cid});">详情</button>	
+					<button type="button" class="btn btn-danger" onclick="javascript:deleteInfoFun(${item.item_id});">删除</button>
 				</td>
 			</tr>
 		</c:forEach>

@@ -20,7 +20,7 @@
 					</span>
 					</a>
 				</div>
-				<div class="logo-element"><img alt="凌美" src="static/images/lm.jpg" style="height:28px;" /></div>
+				<div class="logo-element"><img alt="凌美信息" src="static/images/lm.jpg" style="height:28px;" /></div>
 			</li>
 			<li class="line dk"></li>
 
