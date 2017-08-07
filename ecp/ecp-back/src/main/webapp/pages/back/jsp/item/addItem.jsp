@@ -390,7 +390,7 @@
 	$("#next-step-btn").click(function(){
 		$("#item-info-li").removeClass("hide");//显示商品信息选项卡
 		var cid = $("#item-cid").val();
-		var url = "back/category/selectAttrAndValue";
+		var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 		var params = {"cid": cid};
 		$("#attr-page").load(url, params, function(){
 			console.log("加载属性页面完成");

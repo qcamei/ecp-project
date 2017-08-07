@@ -202,7 +202,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				return 0;
 			}
 			//修改商品 item
-			int rows = itemMapper.updateByPrimaryKey(item);
+			int rows = itemMapper.updateByPrimaryKeySelective(item);
 			if(rows>0){
 				log.info("修改商品 item 成功");
 			}
@@ -211,12 +211,19 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			List<String> filePathList = this.processUploadFile(request, new ArrayList<ItemPicture>());
 			//如果上传图片为空时，添加默认图片
 			if(filePathList!=null && filePathList.size()>0){
+				
 				//根据上传图片数量创建商品图片List集合
 				List<ItemPicture> pictureList = new ArrayList<ItemPicture>();
 				for(String filePath : filePathList){
 					pictureList.add(new ItemPicture(item.getItemId(), filePath));
 				}
 				//删除原来的图片数据
+				//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
+				List<ItemPicture> pictList = itemPictureService.getByItemId(item.getItemId());
+				for(int i=0; i<pictList.size(); i++){
+					ItemPicture pict = pictList.get(i);
+					FileUploadUtil.deleteFile(request, pict.getPictureUrl());
+				}
 				itemPictureService.deleteByItemId(item.getItemId());
 				
 				//循环商品图片List集合，添加商品图片信息
@@ -226,7 +233,17 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					rows = itemPictureService.insertSelective(picture);
 				}
 			}else{
+				filePathList = new ArrayList<String>();
 				//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
+				List<ItemPicture> pictureList = itemPictureService.getByItemId(item.getItemId());
+				//循环商品图片List集，获取商品图片信息并添加到缩略图集合（filePathList）
+				for(int i=0; i<pictureList.size(); i++){
+					ItemPicture picture = pictureList.get(i);
+					//商品图片不为空则添加到缩略图集合
+					if(StringUtils.isNotBlank(picture.getPictureUrl())){
+						filePathList.add(picture.getPictureUrl());
+					}
+				}
 			}
 			
 			if(rows>0){
@@ -241,20 +258,20 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					//TODO 如果销售属性为空时，是否添加？如何添加？
 				}
 				if(rows>0){
-					//修改SKU信息
-					//添加新SKU信息前先删除该商品对应的SKU信息
+					//修改SKU相关信息
+					//添加新SKU相关信息前先删除该商品对应的SKU相关信息
 					List<Long> skuIds = new ArrayList<Long>();
 					List<Sku> skuListTemp = skuService.getByItemId(item.getItemId());
 					for(Sku sku : skuListTemp){
 						skuIds.add(sku.getItemId());
 					}
 					if(skuIds!=null && skuIds.size()>0){
-						skuService.deleteByItemId(item.getItemId());
-						skuPictureService.deleteBySkuIds(skuIds);
+						skuService.deleteByItemId(item.getItemId());//删除SKU信息
+						skuPriceService.deleteByItemId(item.getItemId());//删除SKU价格信息
+						skuPictureService.deleteBySkuIds(skuIds);//删除SKU图片信息
 					}
 					
-					
-					//添加新SKU信息
+					//添加新SKU相关信息
 					if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
 						//TODO 如果没有SKU信息时，手动创建一个SKU，此处添加默认SKU；注：商品需要有默认图片和默认SKU
 						List<Sku> skuList = new ArrayList<Sku>();
@@ -436,10 +453,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			}
 		} catch (NullPointerException e) {
 			e.printStackTrace();
+			log.info("上传文件为空，返回null");
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("上传文件异常，返回null");
 		}
-		log.error("上传文件异常，返回null");
+		
 		return null;
 	}
 	

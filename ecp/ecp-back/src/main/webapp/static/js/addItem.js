@@ -256,7 +256,7 @@ function createCategoryHtmlStr(category, index){	//debugger;
 function loadAttrPage(cid, cname){
 	//alert("选择的类目是 "+cname);
 	$("#item-cid").val(cid);
-	/*var url = "back/category/selectAttrAndValue";
+	/*var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");

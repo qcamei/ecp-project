@@ -88,7 +88,6 @@
 		</where>
 	</select>
 
-
 	<!-- 通过品牌及类目属性查询 -->
 	<select id="getItemByBrandAndCid" resultMap="BaseResultMap">
 		select * from item
@@ -111,10 +110,7 @@
 				</foreach>
 			</if>
 		</where>
-
 	</select>
-
-
 
 	<!-- 通过关键字查询 查询字段：SPU关键字，SPU名称 -->
 	<select id="getItemByKeywords" resultMap="BaseResultMap">
@@ -141,7 +137,6 @@
 		</where>
 
 	</select>
-
 
 	<!-- 通过关键字查询 查询字段：SPU关键字，SPU名称；品牌；类目 -->
 	<select id="getItemByKeywordsAndBrandAndCid" resultMap="BaseResultMap">
@@ -183,13 +178,7 @@
 				AND item_status=#{itemStatus}
 			</if>
 		</where>
-
-
-
 	</select>
-
-
-
 
 	<select id="getItemByBrandIds" resultMap="BaseResultMap">
 		select * from item
@@ -205,12 +194,22 @@
 		</where>
 	</select>
 
+	<!-- 根据条件（map中的参数）查询商品 -->
 	<select id="selectItemsByCondition" parameterType="map"
 		resultType="map">
-		SELECT * FROM item
+		SELECT 
+			i.*, c.c_name, b.brand_name 
+		FROM 
+			item i 
+		LEFT JOIN 
+			item_category c 
+		ON 
+			i.cid=c.cid 
+		LEFT JOIN 
+			item_brand b 
+		ON 
+			i.brand=b.brand_id 
+		ORDER BY i.item_id DESC
 	</select>
-
-
-
 
 </mapper>

@@ -77,7 +77,7 @@ public class ItemController {
 	private IAttributeValueService iAttributeValueService;//类目的属性值
 	
 	/**
-	 * 方法功能：添加商品
+	 * 方法功能：进入添加商品页面
 	 * @param request
 	 * @param response
 	 * @return
@@ -113,14 +113,14 @@ public class ItemController {
 		PageInfo<Map<String, Object>> pagehelper = new PageInfo<Map<String, Object>>(itemList);
 		mav.addObject("pagehelper", pagehelper);
 		
-		//品牌
-		List<Brand> brandList = iBrandService.selectAll();
-		mav.addObject("brandList", brandList);
-		
 		//类目
 		//List<Category> categoryList = iCategoryService.selectByPid(0l);
 		List<Category> categoryList = iCategoryService.selectByLev(3);
 		mav.addObject("categoryList", categoryList);
+		
+		/*//品牌
+		List<Brand> brandList = iBrandService.selectAll();
+		mav.addObject("brandList", brandList);
 		
 		//属性
 		List<Attribute> attrList = iAttributeService.selectAll();
@@ -128,7 +128,7 @@ public class ItemController {
 		
 		//属性值
 		List<AttributeValue> attrValueList = iAttributeValueService.selectAll();
-		mav.addObject("attrValueList", attrValueList);
+		mav.addObject("attrValueList", attrValueList);*/
 		
 		if(clickPageBtn!=null && clickPageBtn){
 			mav.setViewName(StaticConstants.ITEM_MANAGE_TABLE_PAGE);

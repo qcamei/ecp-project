@@ -198,10 +198,10 @@ function selectDetails(id, cid){
 }
 
 /**
- * 加载属性和属性值
+ * 加载品牌、属性和属性值
  */
 function getAttrAndValueFun(id, cid){
-	var url = "back/category/selectAttrAndValue";
+	var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");
@@ -379,7 +379,7 @@ function createCategoryHtmlStr(category, index){	//debugger;
 function loadAttrPage(cid, cname){
 	//alert("选择的类目是 "+cname);
 	$("#item-cid").val(cid);
-	/*var url = "back/category/selectAttrAndValue";
+	/*var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");
@@ -710,10 +710,10 @@ function changeItemCategory(){
 }
 
 /**
- * 根据类目ID重新加载属性和属性值
+ * 根据类目ID重新加载品牌、属性和属性值
  */
 function reloadAttrAndValuePage(cid){
-	var url = "back/category/selectAttrAndValue";
+	var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");

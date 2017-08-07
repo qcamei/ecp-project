@@ -89,6 +89,11 @@ public class FileUploadUtil {
 	public static String uploadFile(HttpServletRequest request, String typeDir, MultipartFile file)
 			throws IOException {
 
+		String fileName = uploadFile(file, null, saveRootPath);
+		if(StringUtils.isBlank(fileName)){
+			return null;
+		}
+		
 		String savePath = "";
 		try {
 			savePath = getSavePath(typeDir);
@@ -110,8 +115,6 @@ public class FileUploadUtil {
 			log.debug("目录存在 : "+filePath);
 		}
 		
-		
-		String fileName = uploadFile(file, null, saveRootPath);
 		String reqPath = StringUtils.replace(savePath + File.separator + fileName, File.separator, "/");
 		return reqPath;
 	}
@@ -128,6 +131,9 @@ public class FileUploadUtil {
 			throws IOException {
 		try {
 			String fileName = getRandomFileName(file);
+			if(StringUtils.isBlank(fileName)){
+				return null;
+			}
 			FileUtils.copyInputStreamToFile(file.getInputStream(), new File(realPath, fileName));
 
 			return fileName;
@@ -227,6 +233,9 @@ public class FileUploadUtil {
 			String fileName = "";
 
 			String oldFilename = file.getOriginalFilename();
+			if(StringUtils.isBlank(oldFilename)){
+				return null;
+			}
 			String bufix = oldFilename.substring(oldFilename.indexOf("."));
 			String random = Integer.toString(new Random().nextInt(89999) + 10000);
 			fileName = DateUtils.getDateRandom() + random + bufix;
@@ -460,10 +469,14 @@ public class FileUploadUtil {
 	        }
 		} catch (IOException e) {
 			e.printStackTrace();
+			log.info("上传文件IO异常，返回null");
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			log.info("上传文件为空，返回null");
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.info("上传文件异常，返回null");
 		}
-		log.error("获取上传文件异常，或上传文件异常，返回null");
 		return null;
     }
 	

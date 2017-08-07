@@ -200,14 +200,14 @@ public class CategoryController {
 	}
 
 	/**
-	 * 根据类目ID查询属性和属性值
+	 * 根据类目ID查询品牌、属性和属性值
 	 * @param request
 	 * @param response
 	 * @param cid
 	 * @return
 	 */
-	@RequestMapping("/selectAttrAndValue")
-	public ModelAndView selectAttrAndValue(HttpServletRequest request, HttpServletResponse response,
+	@RequestMapping("/selectBrandAndAttr")
+	public ModelAndView selectBrandAndAttr(HttpServletRequest request, HttpServletResponse response,
 			Long cid) {
 		ModelAndView mav = new ModelAndView();
 		// 品牌
