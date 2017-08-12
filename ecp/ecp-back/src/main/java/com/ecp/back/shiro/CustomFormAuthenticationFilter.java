@@ -10,6 +10,8 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 
+import com.ecp.service.commons.RandomValidateCode;
+import com.ecp.service.commons.ValidateCode;
 import com.google.code.kaptcha.Constants;
 
 /**
@@ -30,12 +32,15 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpSession session =httpServletRequest.getSession();
 		//取出session的验证码（正确的验证码）
-		String validateCode = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+		//String validateCode = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+		String validateCode = (String) session.getAttribute(RandomValidateCode.RANDOMCODEKEY);
+		//String validateCode = (String) session.getAttribute(ValidateCode.RANDOM_CODE_SESSION_KEY);
+		
 		
 		//取出页面的验证码
 		//输入的验证和session中的验证进行对比 
 		String randomcode = httpServletRequest.getParameter("kaptcha_code");
-		if(randomcode!=null && validateCode!=null && !randomcode.equals(validateCode)){
+		if(randomcode!=null && validateCode!=null && !randomcode.equalsIgnoreCase(validateCode)){
 			//如果校验失败，将验证码错误失败信息，通过shiroLoginFailure设置到request中
 			httpServletRequest.setAttribute("shiroLoginFailure", "randomCodeError");
 			//拒绝访问，不再校验账号和密码 
