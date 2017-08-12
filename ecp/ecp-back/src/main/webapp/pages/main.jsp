@@ -12,7 +12,13 @@
  * 点击左侧菜单时，在右侧iframe中加载相关内容
  */
 function iframeLoading(href){
+	util.loading();
 	$("#J_iframe").attr("src", href);
+	//iframe加载完毕以后执行的事件
+	$("#J_iframe").load(function(){  
+		console.log('加载完毕');
+		util.loaded();
+	});
 }
 /*
  * 点击左侧菜单时，在右侧iframe中加载相关内容完成后执行
@@ -20,6 +26,7 @@ function iframeLoading(href){
 function iframeLoaded(){
 	window.frames['J_iframe'].iframeLoaded();
 }
+
 </script>
 </head>
 
