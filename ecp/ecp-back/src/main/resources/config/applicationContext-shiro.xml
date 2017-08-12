@@ -49,6 +49,7 @@
 				<!-- 验证码，可匿名访问 -->
 				<!-- /kaptcha.jpg = anon -->
 				/back/getValidateCode = anon
+				/back/getOperationValidateCode = anon
 				
 				<!-- 请求 logout地址，shiro去清除session-->
 				/logout = logout
