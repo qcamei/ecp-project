@@ -177,7 +177,7 @@ function saveFun(){
 function deleteInfoAjaxRequest(id){
 	var url = "back/menu/deleteById";
 	var params = {"id":id};
-	util.loading();
+	//util.loading();
 	$.post(url, params, function(res){
 		console.log(res);
 		if(res!=null && res!=""){

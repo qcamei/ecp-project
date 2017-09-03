@@ -46,11 +46,27 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	@Override
 	@Transactional
 	public int deleteById(Long id) {
-		int rows = deleteNodes(id);
-		if(rows>0){
-			rows = categoryMapper.deleteByPrimaryKey(id);
+		try {
+			int rows = 0;
+			Category category = categoryMapper.selectByPrimaryKey(id);
+			if(category.getHasLeaf()==1){//如果是叶子节点（没有子节点）
+				//如果此类目为三级目录则删除类目相关联的品牌
+				iCategoryBrandService.deleteByThirdLevCid(category.getCid());
+				rows = 1;
+			}else{
+				rows = deleteNodes(id);
+			}
+			
+			if(rows>0){
+				rows = categoryMapper.deleteByPrimaryKey(id);
+			}
+			return rows;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return rows;
+		
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
 	}
 	
 	/**
@@ -58,23 +74,29 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	@Transactional
-	private int deleteNodes(Long pid){
+	private int deleteNodes(Long pid) throws Exception{
+		System.out.println("删除节点 pid："+pid);
 		//LmCategory category = lmCategoryMapper.selectByPrimaryKey(id);
 		Example example = new Example(Category.class);
 		example.createCriteria().andEqualTo("parentCid", pid);
 		List<Category> categoryList = categoryMapper.selectByExample(example);
 		int rows = 1;
-		for(Category cate : categoryList){
-			rows = deleteNodes(cate.getCid());
+		for(int i=0; i<categoryList.size(); i++){
+			Category cate = categoryList.get(i);
+			System.out.println("for循环 类目："+cate.toString());
+			if(cate.getHasLeaf()==2){//如果不是叶子节点（有子节点）
+				rows = deleteNodes(cate.getCid());
+			}
+			//rows = deleteNodes(cate.getCid());
 			if(rows>0){
 				rows = categoryMapper.deleteByPrimaryKey(cate.getCid());
 				if(rows>0){
-					if(cate.getLev()==3){
+					if(cate.getHasLeaf()==1){//如果是叶子节点（没有子节点）
 						//如果此类目为三级目录则删除类目相关联的品牌
 						iCategoryBrandService.deleteByThirdLevCid(cate.getCid());
 					}
-					return rows;
 				}else{
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return 0;
@@ -84,8 +106,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 				return 0;
 			}
 		}
-		
-		return 0;
+		return rows;
 	}
 	
 	/* (非 Javadoc)
