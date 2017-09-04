@@ -129,8 +129,8 @@ a:hover { text-decoration:none; }
 									<table class="table">
 										<thead>
 											<tr>
-												<th>类型</th>
-												<th>类型值</th>
+												<th></th>  <!-- 商品关键属性 -->
+												<th></th>  <!-- 商品关键属性值 -->
 											</tr>
 										</thead>
 										<tbody>
@@ -152,25 +152,27 @@ a:hover { text-decoration:none; }
 							</div>
 							<div class="row clearfix">
 								<div class="col-md-12 column">
-									<table class="table">
-										<thead>
-											<tr>
-												<th>类型</th>
-												<th>类型值</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr class="" th:each="attrValue : ${attrValueList}">
-												<td th:text="${attrValue.attrName}">选择颜色</td>
-												<td><ul>
-														<li th:each="value : ${attrValue.valueList}"
-															class="attrValue"
-															th:attr="data-bind=${value.attr_id}+':'+${value.value_id}"><span
-															th:text="${value.value_name}">属性值</span></li>
-													</ul></td>
-											</tr>
-										</tbody>
-									</table>
+									<div th:if="${not #lists.isEmpty(attrValueList)}" class="select-sku" th:remove:"tag">
+										<table class="table">
+											<thead>
+												<tr>
+													<th></th>  <!-- 商品销售属性 -->
+													<th></th>  <!-- 商品销售属性值 -->
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="" th:each="attrValue : ${attrValueList}">
+													<td th:text="${attrValue.attrName}">选择颜色</td>
+													<td><ul>
+															<li th:each="value : ${attrValue.valueList}"
+																class="attrValue"
+																th:attr="data-bind=${value.attr_id}+':'+${value.value_id}"><span
+																th:text="${value.value_name}">属性值</span></li>
+														</ul></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 							<br>

@@ -1,6 +1,15 @@
 	var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
 		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,
 				BASE_CONTEXT_PATH.length - 1);
+		
+		//==============通用函数===================
+
+		/*用于判定是否为空*/
+		(function($){
+			$.isBlank = function(obj){
+			return(!obj || $.trim(obj) === "");
+				  };
+		})(jQuery);
 
 		/*
 			在加入购物车前
@@ -198,7 +207,13 @@
 			});
 
 			var itemName = $("#itemName").text();
-			var skuName = itemName + "(" + attrPart + ")";
+			
+			var skuName ="";  
+			if(!$.isBlank(attrPart))  //如果有选定的sku时,则显示相应SKU名称(商品名称+销售属性值)
+				skuName=itemName + "(" + attrPart + ")";
+			else
+				skuName=itemName;
+			
 			$("#itemName").text(skuName); //在界面显示sku 名称
 		}
 
