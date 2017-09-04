@@ -15,12 +15,15 @@ $(function() {
 		util.loading();
 		var myReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/; // 邮件正则
 		if ($('#username').val() == '') {
+			util.loaded();
 			util.message('登录名还没填呢！');
 			$('#username').focus();
 		}else if ($('#password').val() == '') {
+			util.loaded();
 			util.message('密码还没填呢！');
 			$('#password').focus();
 		} else if ($('#kaptcha').val() == '') {
+			util.loaded();
 			util.message('验证码还没填呢！');
 			$('#kaptcha').focus();
 		} else {

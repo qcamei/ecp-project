@@ -332,7 +332,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				sku.setSkuType(1);
 				rows = skuService.insertSelective(sku);
 				if(rows>0){
-					//添加sku价格 item_sku_price
+					//添加sku价格 trade_sku_price
 					List<SkuPrice> skuPriceList = JSONArray.parseArray(skuPriceJson, SkuPrice.class);
 					SkuPrice skuPrice = skuPriceList.get(i);
 					skuPrice.setCreateTime(new Date());
