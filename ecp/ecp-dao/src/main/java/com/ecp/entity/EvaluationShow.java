@@ -89,18 +89,27 @@ public class EvaluationShow {
         this.skuId = skuId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", evaluationId=").append(evaluationId);
-        sb.append(", imgurl=").append(imgurl);
-        sb.append(", isDelete=").append(isDelete);
-        sb.append(", skuId=").append(skuId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "EvaluationShow [id=" + id + ", evaluationId=" + evaluationId + ", imgurl=" + imgurl + ", isDelete="
+				+ isDelete + ", skuId=" + skuId + ", deleted=" + deleted + "]";
+	}
+	
 }

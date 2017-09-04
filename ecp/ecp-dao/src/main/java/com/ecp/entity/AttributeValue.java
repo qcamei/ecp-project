@@ -24,7 +24,24 @@ public class AttributeValue {
 
     @Column(name = "value_name")
     private String valueName;
+    
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
 
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+	
     /**
      * @return value_id
      */
@@ -123,20 +140,11 @@ public class AttributeValue {
         this.valueName = valueName == null ? null : valueName.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", valueId=").append(valueId);
-        sb.append(", attrId=").append(attrId);
-        sb.append(", created=").append(created);
-        sb.append(", indexKey=").append(indexKey);
-        sb.append(", modified=").append(modified);
-        sb.append(", status=").append(status);
-        sb.append(", valueName=").append(valueName);
-        sb.append("]");
-        return sb.toString();
-    }
+	@Override
+	public String toString() {
+		return "AttributeValue [valueId=" + valueId + ", attrId=" + attrId + ", created=" + created + ", indexKey="
+				+ indexKey + ", modified=" + modified + ", status=" + status + ", valueName=" + valueName + ", deleted="
+				+ deleted + "]";
+	}
+
 }

@@ -206,25 +206,28 @@ public class Sku {
         this.skuSpec = skuSpec == null ? null : skuSpec.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", skuId=").append(skuId);
-        sb.append(", ad=").append(ad);
-        sb.append(", attributes=").append(attributes);
-        sb.append(", created=").append(created);
-        sb.append(", itemId=").append(itemId);
-        sb.append(", modified=").append(modified);
-        sb.append(", productId=").append(productId);
-        sb.append(", skuStatus=").append(skuStatus);
-        sb.append(", skuType=").append(skuType);
-        sb.append(", volume=").append(volume);
-        sb.append(", weight=").append(weight);
-        sb.append(", skuSpec=").append(skuSpec);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "Sku [skuId=" + skuId + ", ad=" + ad + ", attributes=" + attributes + ", created=" + created
+				+ ", itemId=" + itemId + ", modified=" + modified + ", productId=" + productId + ", skuStatus="
+				+ skuStatus + ", skuType=" + skuType + ", volume=" + volume + ", weight=" + weight + ", skuSpec="
+				+ skuSpec + ", deleted=" + deleted + "]";
+	}
 }

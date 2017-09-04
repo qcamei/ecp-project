@@ -327,32 +327,32 @@ public class Invoice {
         this.taxpayerCode = taxpayerCode == null ? null : taxpayerCode.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", bankAccount=").append(bankAccount);
-        sb.append(", bankName=").append(bankName);
-        sb.append(", buyerId=").append(buyerId);
-        sb.append(", cityId=").append(cityId);
-        sb.append(", companyName=").append(companyName);
-        sb.append(", consigneeMobile=").append(consigneeMobile);
-        sb.append(", consigneeName=").append(consigneeName);
-        sb.append(", countyId=").append(countyId);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", detailAddress=").append(detailAddress);
-        sb.append(", fullAddress=").append(fullAddress);
-        sb.append(", invoice=").append(invoice);
-        sb.append(", invoiceTitle=").append(invoiceTitle);
-        sb.append(", normalContent=").append(normalContent);
-        sb.append(", provinceId=").append(provinceId);
-        sb.append(", registeredAddress=").append(registeredAddress);
-        sb.append(", registeredPhone=").append(registeredPhone);
-        sb.append(", taxpayerCode=").append(taxpayerCode);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "Invoice [id=" + id + ", bankAccount=" + bankAccount + ", bankName=" + bankName + ", buyerId=" + buyerId
+				+ ", cityId=" + cityId + ", companyName=" + companyName + ", consigneeMobile=" + consigneeMobile
+				+ ", consigneeName=" + consigneeName + ", countyId=" + countyId + ", createTime=" + createTime
+				+ ", detailAddress=" + detailAddress + ", fullAddress=" + fullAddress + ", invoice=" + invoice
+				+ ", invoiceTitle=" + invoiceTitle + ", normalContent=" + normalContent + ", provinceId=" + provinceId
+				+ ", registeredAddress=" + registeredAddress + ", registeredPhone=" + registeredPhone
+				+ ", taxpayerCode=" + taxpayerCode + ", deleted=" + deleted + "]";
+	}
+	
 }

@@ -193,24 +193,28 @@ public class UserIntegralTrajectory {
         this.usingTime = usingTime;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", insertBy=").append(insertBy);
-        sb.append(", insertTime=").append(insertTime);
-        sb.append(", integralType=").append(integralType);
-        sb.append(", integralValue=").append(integralValue);
-        sb.append(", orderId=").append(orderId);
-        sb.append(", shopId=").append(shopId);
-        sb.append(", updateBy=").append(updateBy);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", userId=").append(userId);
-        sb.append(", usingTime=").append(usingTime);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "UserIntegralTrajectory [id=" + id + ", insertBy=" + insertBy + ", insertTime=" + insertTime
+				+ ", integralType=" + integralType + ", integralValue=" + integralValue + ", orderId=" + orderId
+				+ ", shopId=" + shopId + ", updateBy=" + updateBy + ", updateTime=" + updateTime + ", userId=" + userId
+				+ ", usingTime=" + usingTime + ", deleted=" + deleted + "]";
+	}
 }

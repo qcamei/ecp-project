@@ -156,22 +156,29 @@ public class InventoryOperationLog {
         this.skuId = skuId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", created=").append(created);
-        sb.append(", description=").append(description);
-        sb.append(", inventoryChange=").append(inventoryChange);
-        sb.append(", occupiedInventoryChange=").append(occupiedInventoryChange);
-        sb.append(", operateKey=").append(operateKey);
-        sb.append(", operateType=").append(operateType);
-        sb.append(", operator=").append(operator);
-        sb.append(", skuId=").append(skuId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "InventoryOperationLog [id=" + id + ", created=" + created + ", description=" + description
+				+ ", inventoryChange=" + inventoryChange + ", occupiedInventoryChange=" + occupiedInventoryChange
+				+ ", operateKey=" + operateKey + ", operateType=" + operateType + ", operator=" + operator + ", skuId="
+				+ skuId + ", deleted=" + deleted + "]";
+	}
+	
 }

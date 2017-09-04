@@ -11,12 +11,13 @@
     <result column="permission_url" jdbcType="VARCHAR" property="permissionUrl" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="sort_num" jdbcType="INTEGER" property="sortNum" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
     permission_id, permission_name, permission_description, permission_url, parent_id, 
-    sort_num
+    sort_num, deleted
   </sql>
 </mapper>

@@ -235,27 +235,28 @@ public class Theme {
         this.userid = userid == null ? null : userid.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", addressid=").append(addressid);
-        sb.append(", cid=").append(cid);
-        sb.append(", clev=").append(clev);
-        sb.append(", color=").append(color);
-        sb.append(", colorB=").append(colorB);
-        sb.append(", created=").append(created);
-        sb.append(", modified=").append(modified);
-        sb.append(", primaryCid=").append(primaryCid);
-        sb.append(", sortNum=").append(sortNum);
-        sb.append(", status=").append(status);
-        sb.append(", themeName=").append(themeName);
-        sb.append(", type=").append(type);
-        sb.append(", userid=").append(userid);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "Theme [id=" + id + ", addressid=" + addressid + ", cid=" + cid + ", clev=" + clev + ", color=" + color
+				+ ", colorB=" + colorB + ", created=" + created + ", modified=" + modified + ", primaryCid="
+				+ primaryCid + ", sortNum=" + sortNum + ", status=" + status + ", themeName=" + themeName + ", type="
+				+ type + ", userid=" + userid + ", deleted=" + deleted + "]";
+	}
 }

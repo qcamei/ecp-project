@@ -107,19 +107,26 @@ public class UserFavorite {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", addTime=").append(addTime);
-        sb.append(", favoriteId=").append(favoriteId);
-        sb.append(", idType=").append(idType);
-        sb.append(", status=").append(status);
-        sb.append(", userId=").append(userId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "UserFavorite [id=" + id + ", addTime=" + addTime + ", favoriteId=" + favoriteId + ", idType=" + idType
+				+ ", status=" + status + ", userId=" + userId + ", deleted=" + deleted + "]";
+	}
 }

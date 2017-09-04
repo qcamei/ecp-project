@@ -12,12 +12,13 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
-    id, created_date, item_id, sku_id, user_id, quantity, status
+    id, created_date, item_id, sku_id, user_id, quantity, status, deleted
   </sql>
   
   <update id="addQuqntityById">

@@ -17,6 +17,7 @@
     <result column="contact_address" jdbcType="VARCHAR" property="contactAddress" />
     <result column="account_state" jdbcType="INTEGER" property="accountState" />
     <result column="create_dt" jdbcType="TIMESTAMP" property="createDt" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -24,6 +25,6 @@
     -->
     extend_id, user_id, business_licence_pic_src, tax_registration_certificate_pic_src, 
     organization_pic_src, company_name, contact_email, artificial_person_name, contact_phone, 
-    contact_address, account_state, create_dt
+    contact_address, account_state, create_dt, deleted
   </sql>
 </mapper>

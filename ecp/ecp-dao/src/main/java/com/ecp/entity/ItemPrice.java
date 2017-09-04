@@ -226,26 +226,28 @@ public class ItemPrice {
         this.stepIndex = stepIndex;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", areaId=").append(areaId);
-        sb.append(", areaName=").append(areaName);
-        sb.append(", created=").append(created);
-        sb.append(", itemId=").append(itemId);
-        sb.append(", maxNum=").append(maxNum);
-        sb.append(", minNum=").append(minNum);
-        sb.append(", modified=").append(modified);
-        sb.append(", priceStatus=").append(priceStatus);
-        sb.append(", sellPrice=").append(sellPrice);
-        sb.append(", sellerId=").append(sellerId);
-        sb.append(", shopId=").append(shopId);
-        sb.append(", stepIndex=").append(stepIndex);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "ItemPrice [id=" + id + ", areaId=" + areaId + ", areaName=" + areaName + ", created=" + created
+				+ ", itemId=" + itemId + ", maxNum=" + maxNum + ", minNum=" + minNum + ", modified=" + modified
+				+ ", priceStatus=" + priceStatus + ", sellPrice=" + sellPrice + ", sellerId=" + sellerId + ", shopId="
+				+ shopId + ", stepIndex=" + stepIndex + ", deleted=" + deleted + "]";
+	}
 }

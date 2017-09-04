@@ -138,21 +138,28 @@ public class DeliveryAddressbase {
         this.yn = yn;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", code=").append(code);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", level=").append(level);
-        sb.append(", name=").append(name);
-        sb.append(", parentCode=").append(parentCode);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", yn=").append(yn);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "DeliveryAddressbase [id=" + id + ", code=" + code + ", createTime=" + createTime + ", level=" + level
+				+ ", name=" + name + ", parentCode=" + parentCode + ", updateTime=" + updateTime + ", yn=" + yn
+				+ ", deleted=" + deleted + "]";
+	}
+	
 }

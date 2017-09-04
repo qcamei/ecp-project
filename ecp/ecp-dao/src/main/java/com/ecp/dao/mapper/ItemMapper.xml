@@ -1,67 +1,62 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ecp.dao.ItemMapper">
-	<resultMap id="BaseResultMap" type="com.ecp.entity.Item">
-		<!-- WARNING - @mbggenerated -->
-		<id column="item_id" property="itemId" jdbcType="BIGINT" />
-		<result column="ad" property="ad" jdbcType="VARCHAR" />
-		<result column="after_service" property="afterService"
-			jdbcType="VARCHAR" />
-		<result column="attr_sale" property="attrSale" jdbcType="VARCHAR" />
-		<result column="attributes" property="attributes" jdbcType="VARCHAR" />
-		<result column="brand" property="brand" jdbcType="BIGINT" />
-		<result column="cid" property="cid" jdbcType="BIGINT" />
-		<result column="created" property="created" jdbcType="TIMESTAMP" />
-		<result column="delisting_time" property="delistingTime"
-			jdbcType="TIMESTAMP" />
-		<result column="guide_price" property="guidePrice" jdbcType="DECIMAL" />
-		<result column="has_price" property="hasPrice" jdbcType="INTEGER" />
-		<result column="inventory" property="inventory" jdbcType="INTEGER" />
-		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
-		<result column="item_status" property="itemStatus" jdbcType="INTEGER" />
-		<result column="keywords" property="keywords" jdbcType="VARCHAR" />
-		<result column="listting_time" property="listtingTime"
-			jdbcType="TIMESTAMP" />
-		<result column="market_price" property="marketPrice" jdbcType="DECIMAL" />
-		<result column="market_price2" property="marketPrice2"
-			jdbcType="DECIMAL" />
-		<result column="modified" property="modified" jdbcType="TIMESTAMP" />
-		<result column="operator" property="operator" jdbcType="INTEGER" />
-		<result column="origin" property="origin" jdbcType="VARCHAR" />
-		<result column="packing_list" property="packingList" jdbcType="VARCHAR" />
-		<result column="plat_link_status" property="platLinkStatus"
-			jdbcType="INTEGER" />
-		<result column="product_id" property="productId" jdbcType="BIGINT" />
-		<result column="status_change_reason" property="statusChangeReason"
-			jdbcType="VARCHAR" />
-		<result column="timing_listing" property="timingListing"
-			jdbcType="TIMESTAMP" />
-		<result column="volume" property="volume" jdbcType="DECIMAL" />
-		<result column="weight" property="weight" jdbcType="DECIMAL" />
-		<result column="weight_unit" property="weightUnit" jdbcType="VARCHAR" />
-	</resultMap>
-	<resultMap id="ResultMapWithBLOBs" type="com.ecp.entity.Item"
-		extends="BaseResultMap">
-		<!-- WARNING - @mbggenerated -->
-		<result column="describe_url" property="describeUrl" jdbcType="LONGVARCHAR" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		<!-- WARNING - @mbggenerated -->
-		item_id, ad, after_service, attr_sale, attributes, brand, cid,
-		created, delisting_time,
-		guide_price, has_price, inventory, item_name,
-		item_status, keywords,
-		listting_time,
-		market_price, market_price2,
-		modified, operator, origin, packing_list,
-		plat_link_status,
-		product_id,
-		status_change_reason, timing_listing, volume, weight, weight_unit
-	</sql>
-	<sql id="Blob_Column_List">
-		<!-- WARNING - @mbggenerated -->
-		describe_url
-	</sql>
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Item">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="ad" jdbcType="VARCHAR" property="ad" />
+    <result column="after_service" jdbcType="VARCHAR" property="afterService" />
+    <result column="attr_sale" jdbcType="VARCHAR" property="attrSale" />
+    <result column="attributes" jdbcType="VARCHAR" property="attributes" />
+    <result column="brand" jdbcType="BIGINT" property="brand" />
+    <result column="cid" jdbcType="BIGINT" property="cid" />
+    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="delisting_time" jdbcType="TIMESTAMP" property="delistingTime" />
+    <result column="guide_price" jdbcType="DECIMAL" property="guidePrice" />
+    <result column="has_price" jdbcType="INTEGER" property="hasPrice" />
+    <result column="inventory" jdbcType="INTEGER" property="inventory" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_status" jdbcType="INTEGER" property="itemStatus" />
+    <result column="keywords" jdbcType="VARCHAR" property="keywords" />
+    <result column="listting_time" jdbcType="TIMESTAMP" property="listtingTime" />
+    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+    <result column="market_price2" jdbcType="DECIMAL" property="marketPrice2" />
+    <result column="modified" jdbcType="TIMESTAMP" property="modified" />
+    <result column="operator" jdbcType="INTEGER" property="operator" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="packing_list" jdbcType="VARCHAR" property="packingList" />
+    <result column="plat_link_status" jdbcType="INTEGER" property="platLinkStatus" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="status_change_reason" jdbcType="VARCHAR" property="statusChangeReason" />
+    <result column="timing_listing" jdbcType="TIMESTAMP" property="timingListing" />
+    <result column="volume" jdbcType="DECIMAL" property="volume" />
+    <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="weight_unit" jdbcType="VARCHAR" property="weightUnit" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ecp.entity.Item">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <result column="describe_url" jdbcType="LONGVARCHAR" property="describeUrl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    item_id, ad, after_service, attr_sale, attributes, brand, cid, created, delisting_time, 
+    guide_price, has_price, inventory, item_name, item_status, keywords, listting_time, 
+    market_price, market_price2, modified, operator, origin, packing_list, plat_link_status, 
+    product_id, status_change_reason, timing_listing, volume, weight, weight_unit, deleted
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    describe_url
+  </sql>
 
 	<!-- 通过品牌及类目属性查询 -->
 	<select id="getItemByBrandAndAttr" resultMap="BaseResultMap">
@@ -73,15 +68,13 @@
 			</if>
 			<if test="brands!=null">
 				AND brand IN
-				<foreach collection="brands" item="item" index="index" open="("
-					close=")" separator=",">
+				<foreach close=")" collection="brands" index="index" item="item" open="(" separator=",">
 					#{item}
 				</foreach>
 			</if>
 			<if test="attrValPairs!=null">
 				AND
-				<foreach collection="attrValPairs" item="item" index="index"
-					open="(" close=")" separator=" and ">
+				<foreach close=")" collection="attrValPairs" index="index" item="item" open="(" separator=" and ">
 					find_in_set(#{item},attributes)
 				</foreach>
 			</if>
@@ -97,15 +90,13 @@
 			</if>
 			<if test="brands!=null">
 				AND brand IN
-				<foreach collection="brands" item="brand" index="index"
-					open="(" close=")" separator=",">
+				<foreach close=")" collection="brands" index="index" item="brand" open="(" separator=",">
 					#{brand}
 				</foreach>
 			</if>
 			<if test="cids!=null">
 				AND cid IN
-				<foreach collection="cids" item="cid" index="index" open="("
-					close=")" separator=",">
+				<foreach close=")" collection="cids" index="index" item="cid" open="(" separator=",">
 					#{cid}
 				</foreach>
 			</if>
@@ -117,15 +108,13 @@
 		select * from item
 		<where>
 			(
-			<foreach collection="keywords" item="keyword" index="index"
-				open="(" close=")" separator=" or ">
+			<foreach close=")" collection="keywords" index="index" item="keyword" open="(" separator=" or ">
 				item_name like
 				CONCAT('%',#{keyword},'%' )
 			</foreach>
 			<if test="keywords!=null">
 				OR
-				<foreach collection="keywords" item="keyword" index="index"
-					open="(" close=")" separator=" or ">
+				<foreach close=")" collection="keywords" index="index" item="keyword" open="(" separator=" or ">
 					keywords like
 					CONCAT('%',#{keyword},'%' )
 				</foreach>
@@ -145,15 +134,13 @@
 			(
 			<if test="keywords!=null">
 				(
-				<foreach collection="keywords" item="keyword" index="index"
-					open="(" close=")" separator=" or ">
+				<foreach close=")" collection="keywords" index="index" item="keyword" open="(" separator=" or ">
 					item_name like
 					CONCAT('%',#{keyword},'%' )
 				</foreach>
 
 				OR
-				<foreach collection="keywords" item="keyword" index="index"
-					open="(" close=")" separator=" or ">
+				<foreach close=")" collection="keywords" index="index" item="keyword" open="(" separator=" or ">
 					keywords like
 					CONCAT('%',#{keyword},'%' )
 				</foreach>
@@ -161,15 +148,13 @@
 			</if>
 			<if test="brands!=null">
 				AND brand IN
-				<foreach collection="brands" item="brand" index="index"
-					open="(" close=")" separator=",">
+				<foreach close=")" collection="brands" index="index" item="brand" open="(" separator=",">
 					#{brand}
 				</foreach>
 			</if>
 			<if test="cids!=null">
 				AND cid IN
-				<foreach collection="cids" item="cid" index="index" open="("
-					close=")" separator=",">
+				<foreach close=")" collection="cids" index="index" item="cid" open="(" separator=",">
 					#{cid}
 				</foreach>
 			</if>
@@ -184,8 +169,7 @@
 		select * from item
 		<where>
 			brand in
-			<foreach collection="ids" item="id" index="index" open="("
-				close=")" separator=" , ">
+			<foreach close=")" collection="ids" index="index" item="id" open="(" separator=" , ">
 				#{id}
 			</foreach>
 			<if test="itemStatus!=0">
@@ -195,8 +179,7 @@
 	</select>
 
 	<!-- 根据条件（map中的参数）查询商品 -->
-	<select id="selectItemsByCondition" parameterType="map"
-		resultType="map">
+	<select id="selectItemsByCondition" parameterType="map" resultType="map">
 		SELECT 
 			i.*, c.c_name, b.brand_name 
 		FROM 

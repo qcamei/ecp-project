@@ -1,22 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ecp.dao.AttributeMapper" >
-  <resultMap id="BaseResultMap" type="com.ecp.entity.Attribute" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecp.dao.AttributeMapper">
+  <resultMap id="BaseResultMap" type="com.ecp.entity.Attribute">
     <!--
       WARNING - @mbggenerated
     -->
-    <id column="attr_id" property="attrId" jdbcType="BIGINT" />
-    <result column="attr_name" property="attrName" jdbcType="VARCHAR" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-    <result column="is_senior" property="isSenior" jdbcType="INTEGER" />
-    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="INTEGER" />
+    <id column="attr_id" jdbcType="BIGINT" property="attrId" />
+    <result column="attr_name" jdbcType="VARCHAR" property="attrName" />
+    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="is_senior" jdbcType="INTEGER" property="isSenior" />
+    <result column="modified" jdbcType="TIMESTAMP" property="modified" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
-    attr_id, attr_name, created, is_senior, modified, status
+    attr_id, attr_name, created, is_senior, modified, status, deleted
   </sql>
   
   <!-- 根据map中的条件查询属性 -->

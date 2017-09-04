@@ -16,6 +16,7 @@
     <result column="sku_type" jdbcType="INTEGER" property="skuType" />
     <result column="volume" jdbcType="DECIMAL" property="volume" />
     <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ecp.entity.Sku">
     <!--
@@ -28,7 +29,7 @@
       WARNING - @mbggenerated
     -->
     sku_id, ad, attributes, created, item_id, modified, product_id, sku_status, sku_type, 
-    volume, weight
+    volume, weight, deleted
   </sql>
   <sql id="Blob_Column_List">
     <!--

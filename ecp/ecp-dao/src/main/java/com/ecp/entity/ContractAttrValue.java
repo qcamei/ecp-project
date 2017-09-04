@@ -90,18 +90,27 @@ public class ContractAttrValue {
         this.attrValue = attrValue == null ? null : attrValue.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", attrId=").append(attrId);
-        sb.append(", templateId=").append(templateId);
-        sb.append(", contractId=").append(contractId);
-        sb.append(", attrValue=").append(attrValue);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "ContractAttrValue [id=" + id + ", attrId=" + attrId + ", templateId=" + templateId + ", contractId="
+				+ contractId + ", attrValue=" + attrValue + ", deleted=" + deleted + "]";
+	}
+	
 }

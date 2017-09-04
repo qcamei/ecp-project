@@ -138,21 +138,28 @@ public class CategoryAttrValue {
         this.valueId = valueId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", attrId=").append(attrId);
-        sb.append(", cid=").append(cid);
-        sb.append(", created=").append(created);
-        sb.append(", modified=").append(modified);
-        sb.append(", sortNumber=").append(sortNumber);
-        sb.append(", status=").append(status);
-        sb.append(", valueId=").append(valueId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "CategoryAttrValue [id=" + id + ", attrId=" + attrId + ", cid=" + cid + ", created=" + created
+				+ ", modified=" + modified + ", sortNumber=" + sortNumber + ", status=" + status + ", valueId="
+				+ valueId + ", deleted=" + deleted + "]";
+	}
+	
 }

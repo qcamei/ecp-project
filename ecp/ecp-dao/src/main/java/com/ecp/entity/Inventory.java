@@ -172,23 +172,29 @@ public class Inventory {
         this.yn = yn;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", createUser=").append(createUser);
-        sb.append(", created=").append(created);
-        sb.append(", modified=").append(modified);
-        sb.append(", occupiedInventory=").append(occupiedInventory);
-        sb.append(", skuId=").append(skuId);
-        sb.append(", state=").append(state);
-        sb.append(", totalInventory=").append(totalInventory);
-        sb.append(", updateUser=").append(updateUser);
-        sb.append(", yn=").append(yn);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "Inventory [id=" + id + ", createUser=" + createUser + ", created=" + created + ", modified=" + modified
+				+ ", occupiedInventory=" + occupiedInventory + ", skuId=" + skuId + ", state=" + state
+				+ ", totalInventory=" + totalInventory + ", updateUser=" + updateUser + ", yn=" + yn + ", deleted="
+				+ deleted + "]";
+	}
+	
 }

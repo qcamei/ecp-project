@@ -262,28 +262,29 @@ public class SkuPrice {
         this.updateUser = updateUser == null ? null : updateUser.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", areaId=").append(areaId);
-        sb.append(", areaName=").append(areaName);
-        sb.append(", areaNumber=").append(areaNumber);
-        sb.append(", costPrice=").append(costPrice);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", createUser=").append(createUser);
-        sb.append(", itemId=").append(itemId);
-        sb.append(", marketPrice=").append(marketPrice);
-        sb.append(", maxNum=").append(maxNum);
-        sb.append(", minNum=").append(minNum);
-        sb.append(", sellPrice=").append(sellPrice);
-        sb.append(", skuId=").append(skuId);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", updateUser=").append(updateUser);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "SkuPrice [id=" + id + ", areaId=" + areaId + ", areaName=" + areaName + ", areaNumber=" + areaNumber
+				+ ", costPrice=" + costPrice + ", createTime=" + createTime + ", createUser=" + createUser + ", itemId="
+				+ itemId + ", marketPrice=" + marketPrice + ", maxNum=" + maxNum + ", minNum=" + minNum + ", sellPrice="
+				+ sellPrice + ", skuId=" + skuId + ", updateTime=" + updateTime + ", updateUser=" + updateUser
+				+ ", deleted=" + deleted + "]";
+	}
 }

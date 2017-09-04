@@ -39,7 +39,24 @@ public class Banner {
     private Long themeId;
 
     private String title;
+    
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
 
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+	
     /**
      * @return id
      */
@@ -222,26 +239,12 @@ public class Banner {
         this.title = title == null ? null : title.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", bannerLink=").append(bannerLink);
-        sb.append(", bannerType=").append(bannerType);
-        sb.append(", bannerUrl=").append(bannerUrl);
-        sb.append(", created=").append(created);
-        sb.append(", integral=").append(integral);
-        sb.append(", modified=").append(modified);
-        sb.append(", skuId=").append(skuId);
-        sb.append(", sortNumber=").append(sortNumber);
-        sb.append(", startTime=").append(startTime);
-        sb.append(", status=").append(status);
-        sb.append(", themeId=").append(themeId);
-        sb.append(", title=").append(title);
-        sb.append("]");
-        return sb.toString();
-    }
+	@Override
+	public String toString() {
+		return "Banner [id=" + id + ", bannerLink=" + bannerLink + ", bannerType=" + bannerType + ", bannerUrl="
+				+ bannerUrl + ", created=" + created + ", integral=" + integral + ", modified=" + modified + ", skuId="
+				+ skuId + ", sortNumber=" + sortNumber + ", startTime=" + startTime + ", status=" + status
+				+ ", themeId=" + themeId + ", title=" + title + ", deleted=" + deleted + "]";
+	}
+
 }
