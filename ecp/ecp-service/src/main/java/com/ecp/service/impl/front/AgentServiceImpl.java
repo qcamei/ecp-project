@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecp.bean.UserStatusType;
 import com.ecp.dao.UserMapper;
 import com.ecp.entity.User;
 import com.ecp.service.front.IAgentService;
@@ -38,7 +39,9 @@ public class AgentServiceImpl extends AbstractBaseService<User, Long> implements
 		User user = new User();
 		user.setUsername(loginName);
 		user.setPassword(password);
+		user.setStatus(UserStatusType.VALID_USER);
 		List<User> userList = userMapper.select(user);
+		
 		if(userList!=null && userList.size()>0){
 			return userList.get(0);
 		}
