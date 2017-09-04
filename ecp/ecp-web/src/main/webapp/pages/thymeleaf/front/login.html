@@ -7,6 +7,7 @@
 <!-- The above 2 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <meta name="description" content="">
 <meta name="author" content="">
+<!-- <meta  HTTP-EQUIV="nocache"   CONTENT="no-cache"> -->
 
 <!-- Note there is no responsive meta tag here -->
 <title>用户登录</title>
@@ -42,8 +43,8 @@
 						<div class="col-md-12 column">
 							<div class="tabbable" id="tabs-login">
 								<ul class="nav nav-tabs">
-									<li><a href="#panel-850312" data-toggle="tab"><!-- 扫码登录 --></a></li>
-									<li class="active"><a href="#panel-569183"
+									<!-- <li><a href="#panel-850312" data-toggle="tab"> </a></li> --> <!-- 扫码登录 -->
+									<li class="active" style="margin-left:50px"><a href="#panel-569183"
 										data-toggle="tab">账户登录</a></li>
 								</ul>
 								<div class="tab-content ">
@@ -83,8 +84,9 @@
 											</div>
 											<div class="form-group ">
 												<div class="col-sm-offset-1 col-sm-10 linktxt">
-													<div class="checkbox">
-														<label><a href="#">忘记密码</a></label>
+													<div class="tip">
+														<!-- <label><a href="#">忘记密码</a></label> -->
+														<label>注:请在登录后修改默认口令!</label>
 													</div>
 												</div>
 											</div>
@@ -97,7 +99,7 @@
 											<div class="form-group">
 												<div class="col-sm-offset-1 col-sm-10 linktxt">
 													<div class="checkbox">
-														<label><a href="#">免费注册</a></label>
+														<!-- <label><a href="#">免费注册</a></label> -->
 													</div>
 												</div>
 											</div>
@@ -116,62 +118,12 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script th:src="@{/static/jquery/1.11.3/jquery-1.11.3.min.js}"></script>
 	<script th:src="@{/static/jquery/jquery.form.js}"></script>
-	<script th:src="@{/static/js/common/ajaxSetup.js}"></script>
-		<script th:src="@{/static/js/common/util.js}"></script>
+	<!-- <script th:src="@{/static/js/common/ajaxSetup.js}"></script> -->
+	<script th:src="@{/static/js/common/util.js}"></script>
 	<script th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 	
-	<script type="text/javascript">
-		var BASE_CONTEXT_PATH = $('meta[name=context-path]').attr("content");
-		BASE_CONTEXT_PATH = BASE_CONTEXT_PATH.substr(0,	BASE_CONTEXT_PATH.length - 1);
-	</script> 
-	
-	<script type="text/javascript">
-		/* AJAX登录 */
-		function login(){
-			
-			var url = BASE_CONTEXT_PATH + "/login/agent/login"; //登录地址
-			var mainPageUrl=BASE_CONTEXT_PATH + "/front/home/home";  //主页地址
-			
-			$("#login-form").ajaxSubmit({
-				type : "post",
-				url : url,
-				success : function(res) {
-					//console.log(res);
-					if (res != null) {
-						var obj = $.parseJSON(res);
-						if (obj.result_code == "success") {
-							//util.message(obj.result_msg);
-							self.location.href=mainPageUrl;
-						} else {
-							//util.message(obj.result_err_msg);
-							util.message("用户名称或口令错误！");
-						}
-					}
-				},
-			});
-		}
-		
-		$(function(){
-			//登录按钮
-			$("#btn-login").on("click",function(){
-				login();
-			});
-			
-			//在口令输入框按下回车键后,开始登录
-			$("#password").on('keyup',function(event){
-				if (event.keyCode==13) 
-					login();
-			});
-			
-		});
-	
-		
-		
-		
-		
-		
-	</script>
-
+	<!-- 业务JS -->
+	<script th:src="@{/static/js/login/login.js}"></script>
 
 
 </body>
