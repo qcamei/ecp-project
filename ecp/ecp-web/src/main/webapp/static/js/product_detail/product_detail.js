@@ -204,7 +204,7 @@
 					attrPart = attrPart + "|" + $(this).text();
 				}
 
-			});
+			}); 
 
 			var itemName = $("#itemName").text();
 			
