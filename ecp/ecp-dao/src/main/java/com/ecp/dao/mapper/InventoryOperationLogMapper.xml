@@ -14,12 +14,13 @@
     <result column="operate_type" jdbcType="TINYINT" property="operateType" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="sku_id" jdbcType="BIGINT" property="skuId" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbggenerated
     -->
     id, created, description, inventory_change, occupied_inventory_change, operate_key, 
-    operate_type, operator, sku_id
+    operate_type, operator, sku_id, deleted
   </sql>
 </mapper>
