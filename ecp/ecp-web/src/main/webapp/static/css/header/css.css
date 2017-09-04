@@ -517,7 +517,7 @@ i {
     width: 620px;
     padding: 6px 0;
     float: left;
-    border-bottom: 1px solid #666;
+    /* border-bottom: 1px solid #666; */
     line-height: 2em;
 }
 
