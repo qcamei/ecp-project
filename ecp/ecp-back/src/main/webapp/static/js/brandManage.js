@@ -271,7 +271,7 @@ function deleteImgAjaxRequestFun(imgFlag){
 	
 	
 	
-	util.loading();
+	//util.loading();
 	$.post(url, params, function(res){
 		console.log(res);
 		if(res!=null && res!=""){

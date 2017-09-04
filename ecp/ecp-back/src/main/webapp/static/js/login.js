@@ -12,7 +12,7 @@ document.onkeydown = function(e) {
 $(function() {
 	// 提交表单
 	$('#submit_btn').click(function() {
-		util.loading
+		util.loading();
 		var myReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/; // 邮件正则
 		if ($('#username').val() == '') {
 			util.message('登录名还没填呢！');
