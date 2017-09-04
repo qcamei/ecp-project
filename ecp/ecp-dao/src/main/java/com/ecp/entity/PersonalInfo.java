@@ -301,31 +301,30 @@ public class PersonalInfo {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", add1=").append(add1);
-        sb.append(", add2=").append(add2);
-        sb.append(", add3=").append(add3);
-        sb.append(", address=").append(address);
-        sb.append(", birthday=").append(birthday);
-        sb.append(", blood=").append(blood);
-        sb.append(", createDt=").append(createDt);
-        sb.append(", deletedFlag=").append(deletedFlag);
-        sb.append(", evaluate=").append(evaluate);
-        sb.append(", hobby=").append(hobby);
-        sb.append(", homePage=").append(homePage);
-        sb.append(", income=").append(income);
-        sb.append(", lastUpdDt=").append(lastUpdDt);
-        sb.append(", nikeName=").append(nikeName);
-        sb.append(", origin=").append(origin);
-        sb.append(", sex=").append(sex);
-        sb.append(", userId=").append(userId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "PersonalInfo [id=" + id + ", add1=" + add1 + ", add2=" + add2 + ", add3=" + add3 + ", address="
+				+ address + ", birthday=" + birthday + ", blood=" + blood + ", createDt=" + createDt + ", deletedFlag="
+				+ deletedFlag + ", evaluate=" + evaluate + ", hobby=" + hobby + ", homePage=" + homePage + ", income="
+				+ income + ", lastUpdDt=" + lastUpdDt + ", nikeName=" + nikeName + ", origin=" + origin + ", sex=" + sex
+				+ ", userId=" + userId + ", deleted=" + deleted + "]";
+	}
+	
 }

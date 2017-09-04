@@ -396,36 +396,32 @@ public class UserAddressInfo {
         this.countyName = countyName == null ? null : countyName.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", attachAddress=").append(attachAddress);
-        sb.append(", buyerId=").append(buyerId);
-        sb.append(", cityCode=").append(cityCode);
-        sb.append(", contactEmail=").append(contactEmail);
-        sb.append(", contactPerson=").append(contactPerson);
-        sb.append(", contactPhone=").append(contactPhone);
-        sb.append(", contactTel=").append(contactTel);
-        sb.append(", countyCode=").append(countyCode);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", emergencyPerson=").append(emergencyPerson);
-        sb.append(", emergencyPhone=").append(emergencyPhone);
-        sb.append(", fullAddress=").append(fullAddress);
-        sb.append(", isDefault=").append(isDefault);
-        sb.append(", postalCode=").append(postalCode);
-        sb.append(", provinceCode=").append(provinceCode);
-        sb.append(", townCode=").append(townCode);
-        sb.append(", updteTime=").append(updteTime);
-        sb.append(", villageCode=").append(villageCode);
-        sb.append(", yn=").append(yn);
-        sb.append(", provinceName=").append(provinceName);
-        sb.append(", cityName=").append(cityName);
-        sb.append(", countyName=").append(countyName);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "UserAddressInfo [id=" + id + ", attachAddress=" + attachAddress + ", buyerId=" + buyerId + ", cityCode="
+				+ cityCode + ", contactEmail=" + contactEmail + ", contactPerson=" + contactPerson + ", contactPhone="
+				+ contactPhone + ", contactTel=" + contactTel + ", countyCode=" + countyCode + ", createTime="
+				+ createTime + ", emergencyPerson=" + emergencyPerson + ", emergencyPhone=" + emergencyPhone
+				+ ", fullAddress=" + fullAddress + ", isDefault=" + isDefault + ", postalCode=" + postalCode
+				+ ", provinceCode=" + provinceCode + ", townCode=" + townCode + ", updteTime=" + updteTime
+				+ ", villageCode=" + villageCode + ", yn=" + yn + ", provinceName=" + provinceName + ", cityName="
+				+ cityName + ", countyName=" + countyName + ", deleted=" + deleted + "]";
+	}
 }

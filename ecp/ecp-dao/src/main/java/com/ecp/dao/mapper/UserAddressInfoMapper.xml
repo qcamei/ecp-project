@@ -28,6 +28,7 @@
     <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
     <result column="city_name" jdbcType="VARCHAR" property="cityName" />
     <result column="county_name" jdbcType="VARCHAR" property="countyName" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -36,6 +37,6 @@
     id, attach_address, buyer_id, city_code, contact_email, contact_person, contact_phone, 
     contact_tel, county_code, create_time, emergency_person, emergency_phone, full_address, 
     is_default, postal_code, province_code, town_code, updte_time, village_code, yn, 
-    province_name, city_name, county_name
+    province_name, city_name, county_name, deleted
   </sql>
 </mapper>

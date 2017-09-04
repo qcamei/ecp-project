@@ -123,20 +123,27 @@ public class Favourite {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", createdDate=").append(createdDate);
-        sb.append(", itemId=").append(itemId);
-        sb.append(", skuId=").append(skuId);
-        sb.append(", userId=").append(userId);
-        sb.append(", quantity=").append(quantity);
-        sb.append(", status=").append(status);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "Favourite [id=" + id + ", createdDate=" + createdDate + ", itemId=" + itemId + ", skuId=" + skuId
+				+ ", userId=" + userId + ", quantity=" + quantity + ", status=" + status + ", deleted=" + deleted + "]";
+	}
+	
 }

@@ -53,8 +53,25 @@ public class Advertise {
 
     @Column(name = "theme_id")
     private Integer themeId;
+    
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
 
     /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	/**
      * @return id
      */
     public Integer getId() {
@@ -306,31 +323,13 @@ public class Advertise {
         this.themeId = themeId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", adSrc=").append(adSrc);
-        sb.append(", adTitle=").append(adTitle);
-        sb.append(", adType=").append(adType);
-        sb.append(", adUrl=").append(adUrl);
-        sb.append(", advType=").append(advType);
-        sb.append(", cid=").append(cid);
-        sb.append(", close=").append(close);
-        sb.append(", created=").append(created);
-        sb.append(", endTime=").append(endTime);
-        sb.append(", integral=").append(integral);
-        sb.append(", isDelete=").append(isDelete);
-        sb.append(", modified=").append(modified);
-        sb.append(", skuId=").append(skuId);
-        sb.append(", sortNum=").append(sortNum);
-        sb.append(", startTime=").append(startTime);
-        sb.append(", status=").append(status);
-        sb.append(", themeId=").append(themeId);
-        sb.append("]");
-        return sb.toString();
-    }
+	@Override
+	public String toString() {
+		return "Advertise [id=" + id + ", adSrc=" + adSrc + ", adTitle=" + adTitle + ", adType=" + adType + ", adUrl="
+				+ adUrl + ", advType=" + advType + ", cid=" + cid + ", close=" + close + ", created=" + created
+				+ ", endTime=" + endTime + ", integral=" + integral + ", isDelete=" + isDelete + ", modified="
+				+ modified + ", skuId=" + skuId + ", sortNum=" + sortNum + ", startTime=" + startTime + ", status="
+				+ status + ", themeId=" + themeId + ", deleted=" + deleted + "]";
+	}
+
 }

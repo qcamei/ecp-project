@@ -158,22 +158,27 @@ public class UserAuditLog {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", auditDiate=").append(auditDiate);
-        sb.append(", auditId=").append(auditId);
-        sb.append(", auditStatus=").append(auditStatus);
-        sb.append(", createDt=").append(createDt);
-        sb.append(", deletedFlag=").append(deletedFlag);
-        sb.append(", lastUpdDt=").append(lastUpdDt);
-        sb.append(", remark=").append(remark);
-        sb.append(", userId=").append(userId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "UserAuditLog [id=" + id + ", auditDiate=" + auditDiate + ", auditId=" + auditId + ", auditStatus="
+				+ auditStatus + ", createDt=" + createDt + ", deletedFlag=" + deletedFlag + ", lastUpdDt=" + lastUpdDt
+				+ ", remark=" + remark + ", userId=" + userId + ", deleted=" + deleted + "]";
+	}
 }

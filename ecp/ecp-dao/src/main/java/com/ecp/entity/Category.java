@@ -31,7 +31,24 @@ public class Category {
     private Integer sortNumber;
 
     private Integer status;
+    
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
 
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+	
     /**
      * @return cid
      */
@@ -174,12 +191,11 @@ public class Category {
         this.status = status;
     }
 
-
 	@Override
 	public String toString() {
 		return "Category [cid=" + cid + ", cName=" + cName + ", created=" + created + ", hasLeaf=" + hasLeaf
 				+ ", homeShow=" + homeShow + ", lev=" + lev + ", modified=" + modified + ", parentCid=" + parentCid
-				+ ", sortNumber=" + sortNumber + ", status=" + status + "]";
+				+ ", sortNumber=" + sortNumber + ", status=" + status + ", deleted=" + deleted + "]";
 	}
 
 	@Override
@@ -196,6 +212,7 @@ public class Category {
 		result = prime * result + ((parentCid == null) ? 0 : parentCid.hashCode());
 		result = prime * result + ((sortNumber == null) ? 0 : sortNumber.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((status == null) ? 0 : deleted.hashCode());
 		return result;
 	}
 
@@ -257,6 +274,11 @@ public class Category {
 			if (other.status != null)
 				return false;
 		} else if (!status.equals(other.status))
+			return false;
+		if (deleted == null) {
+			if (other.deleted != null)
+				return false;
+		}else if (!deleted.equals(other.deleted))
 			return false;
 		return true;
 	}

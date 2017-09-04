@@ -17,7 +17,7 @@
     <result column="delay" jdbcType="TINYINT" property="delay" />
     <result column="delay_over_time" jdbcType="TIMESTAMP" property="delayOverTime" />
     <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
-    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="deliver_time" jdbcType="TIMESTAMP" property="deliverTime" />
     <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
     <result column="discount_amount" jdbcType="DECIMAL" property="discountAmount" />
@@ -85,7 +85,7 @@
   	SELECT * FROM trade_orders <where>
   		buyer_id=#{buyerId} 
   		AND 
-  		create_time>=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH) 
+  		create_time&gt;=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH) 
   		AND
   		deleted=1
   		<!-- AND 
@@ -102,7 +102,7 @@
   	SELECT * FROM trade_orders <where>
   		deleted=1 
   		AND 
-  		create_time>=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH)  		
+  		create_time&gt;=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH)  		
   		<!-- AND 
   			contract_state=#{dealStateCond} -->
   		<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
@@ -116,7 +116,7 @@
   	 SELECT * FROM trade_orders <where>
   	 	deleted=1
   	 	AND
-  	 	create_time>=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH)
+  	 	create_time&gt;=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH)
   	 	<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
   			AND 
   			contract_state=#{dealStateCond}	
@@ -143,7 +143,7 @@
   	 select * from trade_orders o LEFT JOIN   user_extends a on(o.buyer_id=a.user_id) <where>
   	 	o.deleted=1
   	 	AND
-  	 	o.create_time>=DATE_ADD(o.create_time,INTERVAL #{orderTimeCond} MONTH)
+  	 	o.create_time&gt;=DATE_ADD(o.create_time,INTERVAL #{orderTimeCond} MONTH)
   	 	<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
   			AND 
   			o.contract_state=#{dealStateCond}	

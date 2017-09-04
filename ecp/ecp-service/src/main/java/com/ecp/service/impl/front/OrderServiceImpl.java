@@ -41,7 +41,7 @@ public class OrderServiceImpl extends AbstractBaseService<Orders, Long> implemen
 	public List<Orders> selectOrderByUserId(long buyerId) {
 		Orders record = new Orders();
 		record.setBuyerId(buyerId);
-		record.setDeleted((byte) DeletedType.NO); //选择未删除的记录
+		record.setDeleted(DeletedType.NO); //选择未删除的记录
 
 		return ordersMapper.select(record);
 

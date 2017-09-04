@@ -53,7 +53,7 @@ public class ApprovedOrders {
     @Column(name = "delete_time")
     private Date deleteTime;
 
-    private Boolean deleted;
+    private Integer deleted;
 
     @Column(name = "deliver_time")
     private Date deliverTime;
@@ -175,7 +175,7 @@ public class ApprovedOrders {
     private Date updateTime;
 
     private Integer yn;
-
+    
     /**
      * @return id
      */
@@ -401,18 +401,18 @@ public class ApprovedOrders {
     }
 
     /**
-     * @return deleted
+     * @return	是否删除（1-未删除，2-删除，默认1）
      */
-    public Boolean getDeleted() {
-        return deleted;
-    }
+    public Integer getDeleted() {
+		return deleted;
+	}
 
-    /**
-     * @param deleted
-     */
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
 
     /**
      * @return deliver_time

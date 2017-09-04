@@ -395,36 +395,32 @@ public class OrderItems {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", activitesDetailId=").append(activitesDetailId);
-        sb.append(", areaId=").append(areaId);
-        sb.append(", cid=").append(cid);
-        sb.append(", contractNo=").append(contractNo);
-        sb.append(", couponDiscount=").append(couponDiscount);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", deliveryType=").append(deliveryType);
-        sb.append(", integral=").append(integral);
-        sb.append(", integralDiscount=").append(integralDiscount);
-        sb.append(", itemId=").append(itemId);
-        sb.append(", num=").append(num);
-        sb.append(", orderId=").append(orderId);
-        sb.append(", payPrice=").append(payPrice);
-        sb.append(", payPriceTotal=").append(payPriceTotal);
-        sb.append(", primitivePrice=").append(primitivePrice);
-        sb.append(", promotionDiscount=").append(promotionDiscount);
-        sb.append(", promotionId=").append(promotionId);
-        sb.append(", promotionType=").append(promotionType);
-        sb.append(", shopFreightTemplateId=").append(shopFreightTemplateId);
-        sb.append(", skuId=").append(skuId);
-        sb.append(", skuName=").append(skuName);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderItems [id=" + id + ", activitesDetailId=" + activitesDetailId + ", areaId=" + areaId + ", cid="
+				+ cid + ", contractNo=" + contractNo + ", couponDiscount=" + couponDiscount + ", createTime="
+				+ createTime + ", deliveryType=" + deliveryType + ", integral=" + integral + ", integralDiscount="
+				+ integralDiscount + ", itemId=" + itemId + ", num=" + num + ", orderId=" + orderId + ", payPrice="
+				+ payPrice + ", payPriceTotal=" + payPriceTotal + ", primitivePrice=" + primitivePrice
+				+ ", promotionDiscount=" + promotionDiscount + ", promotionId=" + promotionId + ", promotionType="
+				+ promotionType + ", shopFreightTemplateId=" + shopFreightTemplateId + ", skuId=" + skuId + ", skuName="
+				+ skuName + ", updateTime=" + updateTime + ", deleted=" + deleted + "]";
+	}
 }

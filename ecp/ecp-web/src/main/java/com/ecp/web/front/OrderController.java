@@ -145,7 +145,7 @@ public class OrderController {
 	public Object order_delete(Long id,HttpServletRequest request){
 		Orders entity=new Orders();
 		entity.setId(id);
-		entity.setDeleted((byte)DeletedType.YES);
+		entity.setDeleted(DeletedType.YES);
 		entity.setDeleteTime(new Date());
 		
 		int row=orderService.updateByPrimaryKeySelective(entity);

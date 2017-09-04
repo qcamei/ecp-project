@@ -42,7 +42,7 @@ public class Orders {
     @Column(name = "delete_time")
     private Date deleteTime;
 
-    private Byte deleted;
+    private Integer deleted;
 
     @Column(name = "deliver_time")
     private Date deliverTime;
@@ -340,18 +340,18 @@ public class Orders {
     }
 
     /**
-     * @return deleted
+     * @return	是否删除（1-未删除，2-删除，默认1）
      */
-    public Byte getDeleted() {
-        return deleted;
-    }
+    public Integer getDeleted() {
+		return deleted;
+	}
 
-    /**
-     * @param deleted
-     */
-    public void setDeleted(Byte deleted) {
-        this.deleted = deleted;
-    }
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
 
     /**
      * @return deliver_time
@@ -1011,73 +1011,28 @@ public class Orders {
         this.contractState = contractState;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", afterService=").append(afterService);
-        sb.append(", buyerId=").append(buyerId);
-        sb.append(", cancelTime=").append(cancelTime);
-        sb.append(", changePaymentPriceTime=").append(changePaymentPriceTime);
-        sb.append(", cityId=").append(cityId);
-        sb.append(", confirmReceiptTime=").append(confirmReceiptTime);
-        sb.append(", countyId=").append(countyId);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", delay=").append(delay);
-        sb.append(", delayOverTime=").append(delayOverTime);
-        sb.append(", deleteTime=").append(deleteTime);
-        sb.append(", deleted=").append(deleted);
-        sb.append(", deliverTime=").append(deliverTime);
-        sb.append(", detailAddress=").append(detailAddress);
-        sb.append(", discountAmount=").append(discountAmount);
-        sb.append(", email=").append(email);
-        sb.append(", evaluate=").append(evaluate);
-        sb.append(", exchangeRate=").append(exchangeRate);
-        sb.append(", freight=").append(freight);
-        sb.append(", fullAddress=").append(fullAddress);
-        sb.append(", integral=").append(integral);
-        sb.append(", integralDiscount=").append(integralDiscount);
-        sb.append(", invoice=").append(invoice);
-        sb.append(", invoiceTitle=").append(invoiceTitle);
-        sb.append(", lockTime=").append(lockTime);
-        sb.append(", locked=").append(locked);
-        sb.append(", logisticsCompany=").append(logisticsCompany);
-        sb.append(", logisticsNo=").append(logisticsNo);
-        sb.append(", logisticsRemark=").append(logisticsRemark);
-        sb.append(", memo=").append(memo);
-        sb.append(", mobile=").append(mobile);
-        sb.append(", name=").append(name);
-        sb.append(", orderFinishTime=").append(orderFinishTime);
-        sb.append(", orderId=").append(orderId);
-        sb.append(", orderJfsKey=").append(orderJfsKey);
-        sb.append(", orderTime=").append(orderTime);
-        sb.append(", orderType=").append(orderType);
-        sb.append(", paid=").append(paid);
-        sb.append(", parentOrderId=").append(parentOrderId);
-        sb.append(", payPeriod=").append(payPeriod);
-        sb.append(", paymentMethod=").append(paymentMethod);
-        sb.append(", paymentPrice=").append(paymentPrice);
-        sb.append(", paymentTime=").append(paymentTime);
-        sb.append(", paymentType=").append(paymentType);
-        sb.append(", phone=").append(phone);
-        sb.append(", promoCode=").append(promoCode);
-        sb.append(", provinceId=").append(provinceId);
-        sb.append(", refund=").append(refund);
-        sb.append(", refundTime=").append(refundTime);
-        sb.append(", sellerEvaluate=").append(sellerEvaluate);
-        sb.append(", shipmentType=").append(shipmentType);
-        sb.append(", state=").append(state);
-        sb.append(", totalDiscount=").append(totalDiscount);
-        sb.append(", totalPrice=").append(totalPrice);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", yn=").append(yn);
-        sb.append(", contractNo=").append(contractNo);
-        sb.append(", contractId=").append(contractId);
-        sb.append(", contractState=").append(contractState);
-        sb.append("]");
-        return sb.toString();
-    }
+	@Override
+	public String toString() {
+		return "Orders [id=" + id + ", afterService=" + afterService + ", buyerId=" + buyerId + ", cancelTime="
+				+ cancelTime + ", changePaymentPriceTime=" + changePaymentPriceTime + ", cityId=" + cityId
+				+ ", confirmReceiptTime=" + confirmReceiptTime + ", countyId=" + countyId + ", createTime=" + createTime
+				+ ", delay=" + delay + ", delayOverTime=" + delayOverTime + ", deleteTime=" + deleteTime + ", deleted="
+				+ deleted + ", deliverTime=" + deliverTime + ", detailAddress=" + detailAddress + ", discountAmount="
+				+ discountAmount + ", email=" + email + ", evaluate=" + evaluate + ", exchangeRate=" + exchangeRate
+				+ ", freight=" + freight + ", fullAddress=" + fullAddress + ", integral=" + integral
+				+ ", integralDiscount=" + integralDiscount + ", invoice=" + invoice + ", invoiceTitle=" + invoiceTitle
+				+ ", lockTime=" + lockTime + ", locked=" + locked + ", logisticsCompany=" + logisticsCompany
+				+ ", logisticsNo=" + logisticsNo + ", logisticsRemark=" + logisticsRemark + ", memo=" + memo
+				+ ", mobile=" + mobile + ", name=" + name + ", orderFinishTime=" + orderFinishTime + ", orderId="
+				+ orderId + ", orderJfsKey=" + orderJfsKey + ", orderTime=" + orderTime + ", orderType=" + orderType
+				+ ", paid=" + paid + ", parentOrderId=" + parentOrderId + ", payPeriod=" + payPeriod
+				+ ", paymentMethod=" + paymentMethod + ", paymentPrice=" + paymentPrice + ", paymentTime=" + paymentTime
+				+ ", paymentType=" + paymentType + ", phone=" + phone + ", promoCode=" + promoCode + ", provinceId="
+				+ provinceId + ", refund=" + refund + ", refundTime=" + refundTime + ", sellerEvaluate="
+				+ sellerEvaluate + ", shipmentType=" + shipmentType + ", state=" + state + ", totalDiscount="
+				+ totalDiscount + ", totalPrice=" + totalPrice + ", updateTime=" + updateTime + ", yn=" + yn
+				+ ", contractNo=" + contractNo + ", contractId=" + contractId + ", contractState=" + contractState
+				+ "]";
+	}
+
 }

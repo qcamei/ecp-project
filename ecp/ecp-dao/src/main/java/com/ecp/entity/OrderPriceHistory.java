@@ -245,27 +245,30 @@ public class OrderPriceHistory {
         this.sellerId = sellerId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", afterFreight=").append(afterFreight);
-        sb.append(", afterPaymentPrice=").append(afterPaymentPrice);
-        sb.append(", afterTotalDiscount=").append(afterTotalDiscount);
-        sb.append(", afterTotalPrice=").append(afterTotalPrice);
-        sb.append(", beforeFreight=").append(beforeFreight);
-        sb.append(", beforePaymentPrice=").append(beforePaymentPrice);
-        sb.append(", beforeTotalDiscount=").append(beforeTotalDiscount);
-        sb.append(", beforeTotalPrice=").append(beforeTotalPrice);
-        sb.append(", buyerId=").append(buyerId);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", operationUser=").append(operationUser);
-        sb.append(", orderId=").append(orderId);
-        sb.append(", sellerId=").append(sellerId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderPriceHistory [id=" + id + ", afterFreight=" + afterFreight + ", afterPaymentPrice="
+				+ afterPaymentPrice + ", afterTotalDiscount=" + afterTotalDiscount + ", afterTotalPrice="
+				+ afterTotalPrice + ", beforeFreight=" + beforeFreight + ", beforePaymentPrice=" + beforePaymentPrice
+				+ ", beforeTotalDiscount=" + beforeTotalDiscount + ", beforeTotalPrice=" + beforeTotalPrice
+				+ ", buyerId=" + buyerId + ", createTime=" + createTime + ", operationUser=" + operationUser
+				+ ", orderId=" + orderId + ", sellerId=" + sellerId + ", deleted=" + deleted + "]";
+	}
 }

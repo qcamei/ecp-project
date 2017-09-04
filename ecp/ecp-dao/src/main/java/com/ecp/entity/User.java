@@ -115,18 +115,18 @@ public class User {
     }
 
     /**
-     * @return deleted
+     * @return	是否删除（1-未删除，2-删除，默认1）
      */
     public Integer getDeleted() {
-        return deleted;
-    }
+		return deleted;
+	}
 
-    /**
-     * @param deleted
-     */
-    public void setDeleted(Integer deleted) {
-        this.deleted = deleted;
-    }
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
 
     /**
      * @return department
@@ -352,34 +352,15 @@ public class User {
         this.username = username == null ? null : username.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", auditRemark=").append(auditRemark);
-        sb.append(", auditor=").append(auditor);
-        sb.append(", createdTime=").append(createdTime);
-        sb.append(", deleted=").append(deleted);
-        sb.append(", department=").append(department);
-        sb.append(", email=").append(email);
-        sb.append(", growthValue=").append(growthValue);
-        sb.append(", linkMan=").append(linkMan);
-        sb.append(", linkPhoneNum=").append(linkPhoneNum);
-        sb.append(", mobile=").append(mobile);
-        sb.append(", nickname=").append(nickname);
-        sb.append(", oldpassword=").append(oldpassword);
-        sb.append(", parentId=").append(parentId);
-        sb.append(", password=").append(password);
-        sb.append(", quickType=").append(quickType);
-        sb.append(", securityLevel=").append(securityLevel);
-        sb.append(", status=").append(status);
-        sb.append(", type=").append(type);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", username=").append(username);
-        sb.append("]");
-        return sb.toString();
-    }
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", auditRemark=" + auditRemark + ", auditor=" + auditor + ", createdTime="
+				+ createdTime + ", deleted=" + deleted + ", department=" + department + ", email=" + email
+				+ ", growthValue=" + growthValue + ", linkMan=" + linkMan + ", linkPhoneNum=" + linkPhoneNum
+				+ ", mobile=" + mobile + ", nickname=" + nickname + ", oldpassword=" + oldpassword + ", parentId="
+				+ parentId + ", password=" + password + ", quickType=" + quickType + ", securityLevel=" + securityLevel
+				+ ", status=" + status + ", type=" + type + ", updateTime=" + updateTime + ", username=" + username
+				+ "]";
+	}
+
 }

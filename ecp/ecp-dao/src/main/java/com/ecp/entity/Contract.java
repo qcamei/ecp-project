@@ -243,27 +243,31 @@ public class Contract {
         this.agentId = agentId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", contractTemplateId=").append(contractTemplateId);
-        sb.append(", contractNo=").append(contractNo);
-        sb.append(", orderNo=").append(orderNo);
-        sb.append(", orderId=").append(orderId);
-        sb.append(", createDate=").append(createDate);
-        sb.append(", createUser=").append(createUser);
-        sb.append(", confirmDateSecondParty=").append(confirmDateSecondParty);
-        sb.append(", confirmUserSecondParty=").append(confirmUserSecondParty);
-        sb.append(", confirmDateFirstParty=").append(confirmDateFirstParty);
-        sb.append(", confirmUserFirstParty=").append(confirmUserFirstParty);
-        sb.append(", confirmStatus=").append(confirmStatus);
-        sb.append(", contractStatus=").append(contractStatus);
-        sb.append(", agentId=").append(agentId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "Contract [id=" + id + ", contractTemplateId=" + contractTemplateId + ", contractNo=" + contractNo
+				+ ", orderNo=" + orderNo + ", orderId=" + orderId + ", createDate=" + createDate + ", createUser="
+				+ createUser + ", confirmDateSecondParty=" + confirmDateSecondParty + ", confirmUserSecondParty="
+				+ confirmUserSecondParty + ", confirmDateFirstParty=" + confirmDateFirstParty
+				+ ", confirmUserFirstParty=" + confirmUserFirstParty + ", confirmStatus=" + confirmStatus
+				+ ", contractStatus=" + contractStatus + ", agentId=" + agentId + ", deleted=" + deleted + "]";
+	}
+	
 }

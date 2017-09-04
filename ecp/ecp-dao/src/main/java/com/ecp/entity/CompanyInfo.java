@@ -106,19 +106,27 @@ public class CompanyInfo {
         this.bankAccount = bankAccount == null ? null : bankAccount.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", companyName=").append(companyName);
-        sb.append(", contactMan=").append(contactMan);
-        sb.append(", tel=").append(tel);
-        sb.append(", bankName=").append(bankName);
-        sb.append(", bankAccount=").append(bankAccount);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "CompanyInfo [id=" + id + ", companyName=" + companyName + ", contactMan=" + contactMan + ", tel=" + tel
+				+ ", bankName=" + bankName + ", bankAccount=" + bankAccount + ", deleted=" + deleted + "]";
+	}
+	
 }

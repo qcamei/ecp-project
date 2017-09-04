@@ -295,30 +295,30 @@ public class ItemSection {
         this.weightStart = weightStart;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", basePriceEnd=").append(basePriceEnd);
-        sb.append(", basePriceStart=").append(basePriceStart);
-        sb.append(", createBy=").append(createBy);
-        sb.append(", createDate=").append(createDate);
-        sb.append(", itervalType=").append(itervalType);
-        sb.append(", itemid=").append(itemid);
-        sb.append(", marketPriceEnd=").append(marketPriceEnd);
-        sb.append(", marketPriceStart=").append(marketPriceStart);
-        sb.append(", quotedPriceEnd=").append(quotedPriceEnd);
-        sb.append(", auotedPriceStart=").append(auotedPriceStart);
-        sb.append(", updateBy=").append(updateBy);
-        sb.append(", updateDate=").append(updateDate);
-        sb.append(", volumeEnd=").append(volumeEnd);
-        sb.append(", volumeStart=").append(volumeStart);
-        sb.append(", weightEnd=").append(weightEnd);
-        sb.append(", weightStart=").append(weightStart);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "ItemSection [id=" + id + ", basePriceEnd=" + basePriceEnd + ", basePriceStart=" + basePriceStart
+				+ ", createBy=" + createBy + ", createDate=" + createDate + ", itervalType=" + itervalType + ", itemid="
+				+ itemid + ", marketPriceEnd=" + marketPriceEnd + ", marketPriceStart=" + marketPriceStart
+				+ ", quotedPriceEnd=" + quotedPriceEnd + ", auotedPriceStart=" + auotedPriceStart + ", updateBy="
+				+ updateBy + ", updateDate=" + updateDate + ", volumeEnd=" + volumeEnd + ", volumeStart=" + volumeStart
+				+ ", weightEnd=" + weightEnd + ", weightStart=" + weightStart + ", deleted=" + deleted + "]";
+	}
 }

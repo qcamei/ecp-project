@@ -211,25 +211,30 @@ public class UserExtends {
         this.createDt = createDt;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", extendId=").append(extendId);
-        sb.append(", userId=").append(userId);
-        sb.append(", businessLicencePicSrc=").append(businessLicencePicSrc);
-        sb.append(", taxRegistrationCertificatePicSrc=").append(taxRegistrationCertificatePicSrc);
-        sb.append(", organizationPicSrc=").append(organizationPicSrc);
-        sb.append(", companyName=").append(companyName);
-        sb.append(", contactEmail=").append(contactEmail);
-        sb.append(", artificialPersonName=").append(artificialPersonName);
-        sb.append(", contactPhone=").append(contactPhone);
-        sb.append(", contactAddress=").append(contactAddress);
-        sb.append(", accountState=").append(accountState);
-        sb.append(", createDt=").append(createDt);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "UserExtends [extendId=" + extendId + ", userId=" + userId + ", businessLicencePicSrc="
+				+ businessLicencePicSrc + ", taxRegistrationCertificatePicSrc=" + taxRegistrationCertificatePicSrc
+				+ ", organizationPicSrc=" + organizationPicSrc + ", companyName=" + companyName + ", contactEmail="
+				+ contactEmail + ", artificialPersonName=" + artificialPersonName + ", contactPhone=" + contactPhone
+				+ ", contactAddress=" + contactAddress + ", accountState=" + accountState + ", createDt=" + createDt
+				+ ", deleted=" + deleted + "]";
+	}
 }

@@ -277,29 +277,31 @@ public class OrderItemsDiscount {
         this.skuId = skuId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", couponDiscount=").append(couponDiscount);
-        sb.append(", couponId=").append(couponId);
-        sb.append(", couponType=").append(couponType);
-        sb.append(", fullReductionDiscount=").append(fullReductionDiscount);
-        sb.append(", fullReductionId=").append(fullReductionId);
-        sb.append(", fullReductionType=").append(fullReductionType);
-        sb.append(", integral=").append(integral);
-        sb.append(", integralDiscount=").append(integralDiscount);
-        sb.append(", integralType=").append(integralType);
-        sb.append(", markdownDiscount=").append(markdownDiscount);
-        sb.append(", markdownId=").append(markdownId);
-        sb.append(", markdownType=").append(markdownType);
-        sb.append(", orderId=").append(orderId);
-        sb.append(", orderItemId=").append(orderItemId);
-        sb.append(", skuId=").append(skuId);
-        sb.append("]");
-        return sb.toString();
-    }
+    @Column(name = "deleted")
+    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
+
+    /**
+     * @return	是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
+	 */
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderItemsDiscount [id=" + id + ", couponDiscount=" + couponDiscount + ", couponId=" + couponId
+				+ ", couponType=" + couponType + ", fullReductionDiscount=" + fullReductionDiscount
+				+ ", fullReductionId=" + fullReductionId + ", fullReductionType=" + fullReductionType + ", integral="
+				+ integral + ", integralDiscount=" + integralDiscount + ", integralType=" + integralType
+				+ ", markdownDiscount=" + markdownDiscount + ", markdownId=" + markdownId + ", markdownType="
+				+ markdownType + ", orderId=" + orderId + ", orderItemId=" + orderItemId + ", skuId=" + skuId
+				+ ", deleted=" + deleted + "]";
+	}
 }
