@@ -13,6 +13,7 @@ public class CartToOrderItemList {
 private long addrId;  //订单中用户收货地址ID
 private String buyerComment;  //订单备注
 private List<AddSkuToOrderBean> cartItemList;  //购物车中所选商品
+private String memo; //订单备注
 
 public List<AddSkuToOrderBean> getCartItemList() {
 	return cartItemList;
@@ -36,5 +37,13 @@ public String getBuyerComment() {
 
 public void setBuyerComment(String buyerComment) {
 	this.buyerComment = buyerComment;
+}
+
+public String getMemo() {
+	return memo;
+}
+
+public void setMemo(String memo) {
+	this.memo = memo;
 }
 }

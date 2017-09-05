@@ -356,7 +356,9 @@ function commitOrder() {
 	} else {
 		var url = BASE_CONTEXT_PATH + "/front/order/add"; // 需要提交的 url
 		var addrId = getSelectedAddressId();
-		createFormAndCommit(url, cartItemList, addrId); // 确认订单
+		var memo=$("#memo").val();
+		console.log(memo);
+		createFormAndCommit(url, cartItemList, addrId,memo); // 确认订单
 	}
 }
 
@@ -385,8 +387,11 @@ var generateHideElement = function(name, value) {
  *            cartItemList 用户已选商品列表
  * @param {Object}
  *            addrId 送货地址id
+ * @param {Object}
+ *            memo 订单备注           
+ *            
  */
-function createFormAndCommit(url, cartItemList, addrId) {
+function createFormAndCommit(url, cartItemList, addrId,memo) {
 	var form = document.createElement("form");
 	form.id = "test";
 	form.name = "test";
@@ -423,6 +428,10 @@ function createFormAndCommit(url, cartItemList, addrId) {
 	// 用户所选地址id
 	var addrId = generateHideElement("addrId", addrId);
 	form.appendChild(addrId);
+	
+	//订单备注
+	var memo=generateHideElement("memo", memo);
+	form.appendChild(memo);
 
 	form.method = "post";
 	form.action = url;

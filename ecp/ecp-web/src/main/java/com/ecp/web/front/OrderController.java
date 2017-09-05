@@ -74,7 +74,7 @@ public class OrderController {
 		/*HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(SessionConstants.USER);*/
 
-		String orderId = createOrder(cartItemList, addr); //增加订单
+		String orderId = createOrder(cartItemList, addr,cartToOrderItemList.getMemo()); //增加订单
 		orderItemService.addItemIntoOrder(cartItemList, orderId); //增加订单条目
 		delSelectedCartItem(cartItemList); //自购购物车删除用户已下单商品
 
@@ -256,9 +256,11 @@ public class OrderController {
 	 *            用户所选商品列表
 	 * @param addr
 	 *            收货地址
+	 * @param memo
+	 * 			 订单备注
 	 * @return 订单号
 	 */
-	private String createOrder(List<AddSkuToOrderBean> cartItemList, UserAddressInfo addr) {
+	private String createOrder(List<AddSkuToOrderBean> cartItemList, UserAddressInfo addr,String memo) {
 		String orderId = OrderIdGenerator.getOrderIdByUUId(); //生成订单号
 		Orders order = new Orders();
 
@@ -271,6 +273,7 @@ public class OrderController {
 		order.setMobile(addr.getContactPhone()); //收货人手机号码
 		order.setEmail(addr.getContactEmail()); //收货人邮件
 		order.setFullAddress(addr.getFullAddress()); //收货全地址
+		order.setMemo(memo);
 		BigDecimal totalPrice = calcCartItemTotalPayable(cartItemList); //calc total_price  计算优惠前总金额
 		order.setTotalPrice(totalPrice); //优惠前总金额
 
