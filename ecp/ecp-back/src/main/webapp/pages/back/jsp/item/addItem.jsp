@@ -127,7 +127,7 @@
 									<label class="col-sm-2 control-label">&nbsp;</label>
 									<div class="col-sm-10" id="">
 										<button type="button" class="btn btn-default btn-primary"
-											id="next-step-btn">下一步</button>
+											id="next-step-btn" disabled="disabled">下一步</button>
 									</div>
 								</div>
 							</div>
@@ -149,6 +149,8 @@
 										aria-expanded="false">属性和SKU</a></li>
 									<li class=""><a data-toggle="tab" href="#tab-8"
 										aria-expanded="false">商品详情</a></li>
+									<li class=""><a data-toggle="tab" href="#tab-9"
+										aria-expanded="false">售后服务</a></li>
 								</ul>
 								<div class="tab-content">
 									<div id="tab-5" class="tab-pane active">
@@ -166,14 +168,22 @@
 																<!-- 商品类目ID -->
 																<input type="hidden" id="item-cid" name="cid" value="" />
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">商品名称</label>
+																	<label class="col-sm-2 control-label">品牌<b style="color:red;">&nbsp;*</b></label>
+																	<div class="col-sm-10">
+																		<select class="form-control" id="brand" name="brand">
+																			<option value="0">请选择</option>
+																		</select>
+																	</div>
+																</div>
+																<div class="form-group">
+																	<label class="col-sm-2 control-label">商品名称<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="item-name" name="itemName"
 																			class="form-control" placeholder="商品名称" />
 																	</div>
 																</div>
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">关键字</label>
+																	<label class="col-sm-2 control-label">关键字<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="keywords" name="keywords"
 																			class="form-control" placeholder="关键字" />
@@ -187,42 +197,42 @@
 															</div>
 														</div> -->
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">商城指导价格</label>
+																	<label class="col-sm-2 control-label">商城指导价格<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="guide-price" name="guidePrice"
 																			class="form-control" placeholder="商城指导价格">
 																	</div>
 																</div>
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">市场价格</label>
+																	<label class="col-sm-2 control-label">市场价格<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="market-price" name="marketPrice"
 																			class="form-control" placeholder="市场价格">
 																	</div>
 																</div>
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">成本价格</label>
+																	<label class="col-sm-2 control-label">成本价格<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="market-price2" name="marketPrice2"
 																			class="form-control" placeholder="成本价格">
 																	</div>
 																</div>
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">库存数量</label>
+																	<label class="col-sm-2 control-label">库存数量<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="inventory" name="inventory"
 																			class="form-control" placeholder="库存数量">
 																	</div>
 																</div>
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">商品产地</label>
+																	<label class="col-sm-2 control-label">商品产地<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="origin" name="origin"
 																			class="form-control" placeholder="商品产地">
 																	</div>
 																</div>
 																<div class="form-group">
-																	<label class="col-sm-2 control-label">包装清单</label>
+																	<label class="col-sm-2 control-label">包装清单<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-sm-10">
 																		<input type="text" id="packing-list" name="packingList"
 																			class="form-control" placeholder="包装清单">
@@ -287,11 +297,15 @@
 														<div class="panel-body">
 															<form class="form-horizontal" id="">
 																<div class="form-group">
-																	<label class="col-md-2 control-label">缩略图</label>
+																	<label for="name" class="col-sm-2 control-label">&nbsp;</label>
+																	<div class="col-sm-10" style="color:red;">注：请上传&nbsp;450*450&nbsp;的JPG图片！</div>
+																</div>
+																<div class="form-group">
+																	<label class="col-md-2 control-label">缩略图<b style="color:red;">&nbsp;*</b></label>
 																	<div class="col-md-5 ">
 																		<input type="file" id="picture-url" name="pictureImg"
 																			onchange="javascript:validateImgFileSizeFun(this);"
-																			accept="image/*" multiple="multiple" /> <input
+																			accept="image/jpeg" multiple="multiple" /> <input
 																			type="hidden" id="brand-logo-url" name="pictureUrl" />
 																	</div>
 																</div>
@@ -361,6 +375,31 @@
 											</div>
 										</div>
 									</div>
+									<div id="tab-9" class="tab-pane">
+										<div class="container-fluid" style="margin-top: 20px;">
+											<div class="row clearfix">
+												<div class="col-md-12 column">
+													<div class="panel panel-default">
+														<div class="panel-heading">
+															<h3 class="panel-title">售后服务</h3>
+														</div>
+														<div class="panel-body">
+															<form class="form-horizontal" id="">
+																<div class="form-group">
+																	<label class="col-md-2 control-label">售后服务</label>
+																	<div class="col-md-10 ">
+																		<script id="after-service" type="text/plain"
+																			style="width: 100%; height: 500px;"></script>
+																	</div>
+																</div>
+															</form>
+														</div>
+														<div class="panel-footer">售后服务</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -390,8 +429,28 @@
 	$("#next-step-btn").click(function(){
 		$("#item-info-li").removeClass("hide");//显示商品信息选项卡
 		var cid = $("#item-cid").val();
-		var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
+		
+		var url = "back/brand/selectByCid";
 		var params = {"cid": cid};
+		$.post(url, params, function(ret){//查询品牌
+			var obj = $.parseJSON(ret);
+			if(obj.result_code=="success"){
+				var brandList = obj.brandList;
+				console.log(JSON.stringify(brandList));
+				if(brandList!=null){
+					$("#brand").empty();
+					var htmlStr = "<option value='0'>请选择</option>";
+					$.each(brandList,function(i,n){
+						htmlStr += "<option value='"+this.brand_id+"'>"+this.brand_name+"</option>";
+					});
+					$("#brand").append(htmlStr);
+				}else{
+					util.message("类目品牌为空！");
+				}
+			}
+		});
+		
+		url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 		$("#attr-page").load(url, params, function(){
 			console.log("加载属性页面完成");
 			$('#tabs-add-item a[href="#tab-4"]').tab('show');

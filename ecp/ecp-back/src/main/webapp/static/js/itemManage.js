@@ -125,8 +125,13 @@ var editorOption = {
 		]
 	};
 
+//商品详情（描述）
 var detail = new UE.ui.Editor(editorOption);  
 detail.render("item-ueditor");
+
+//售后服务
+var after_service = new UE.ui.Editor(editorOption);  
+after_service.render("after-service");
 
 //$(function(){
 	
@@ -156,7 +161,7 @@ function bootstrapValidateFun(){
 	                    message: "商品名称不能为空"
 	                },
 	                regexp: {
-		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.\\\\\/]+$",
+		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.()]+$",
 		                message: "请勿输入特殊符号"
 	                },
 	                stringLength: {
@@ -201,13 +206,35 @@ function selectDetails(id, cid){
  * 加载品牌、属性和属性值
  */
 function getAttrAndValueFun(id, cid){
-	var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
+	
+	var url = "back/brand/selectByCid";
 	var params = {"cid": cid};
-	$("#attr-page").load(url, params, function(){
-		console.log("加载属性页面完成");
-		//$('#tabs-edit-item a[href="#tab-7"]').tab('show');
-		ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
+	$.post(url, params, function(ret){//查询品牌
+		var obj = $.parseJSON(ret);
+		if(obj.result_code=="success"){
+			var brandList = obj.brandList;
+			console.log(JSON.stringify(brandList));
+			if(brandList!=null){
+				$("#brand").empty();
+				var htmlStr = "<option value='0'>请选择</option>";
+				$.each(brandList,function(i,n){
+					htmlStr += "<option value='"+this.brand_id+"'>"+this.brand_name+"</option>";
+				});
+				$("#brand").append(htmlStr);
+			}else{
+				util.message("类目品牌为空！");
+			}
+			
+			var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
+			var params = {"cid": cid};
+			$("#attr-page").load(url, params, function(){
+				console.log("加载属性页面完成");
+				//$('#tabs-edit-item a[href="#tab-7"]').tab('show');
+				ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
+			});
+		}
 	});
+	
 };
 
 /**
@@ -247,7 +274,12 @@ function ajaxRequestGetItemInfo(id){
 				
 				var describe = item.describeUrl;
 				if(describe!=null && describe!=""){
-					setContent("item-ueditor", describe);//商品详情
+					setContent("item-ueditor", describe);//商品详情（描述）
+				}
+				
+				var afterService = item.afterService;
+				if(afterService!=null && afterService!=""){
+					setContent("after-service", afterService);//售后服务
 				}
 				
 				var pictureList =resp.pictureList;
@@ -303,6 +335,13 @@ function ajaxRequestGetItemInfo(id){
 				
 				$('#tabs-243687 a[href="#tab-2"]').tab('show');
 				$('#tabs-edit-item a[href="#tab-5"]').tab('show');
+				
+				var status = item.itemStatus;
+				if(status!=null && status==4){
+					$("#save-submit-btn").attr("disabled", true);
+				}else{
+					$("#save-submit-btn").attr("disabled", false);
+				}
 				return;
 			}
 		}
@@ -457,7 +496,9 @@ function saveFun(){
 	console.log("创建时间（毫秒）："+createtime.getTime());
 	var params = new Object();
 	params.createstr = createtime.getTime();
-	params.describeUrl = getContent("item-ueditor");
+	params.describeUrl = getContent("item-ueditor");//商品详情（描述）
+	params.afterService = getContent("after-service");//售后服务
+	
 	try{
 		params.attributes = getItemAttr().toString();
 		params.attrSale = getSaleAttr().toString();
@@ -555,7 +596,9 @@ function getParams(){
 	
 	params.created = createtime;//创建时间
 	params.modified = new Date();//修改时间
-	params.describeUrl = getContent("item-ueditor");
+	params.describeUrl = getContent("item-ueditor");//商品详情（描述）
+	params.afterService = getContent("after-service");//售后服务
+	//alert(JSON.stringify(params));
 	try{
 		params.attributes = getItemAttr().toString();
 		params.attrSale = getSaleAttr().toString();
@@ -683,7 +726,8 @@ function resetFun(){
 	}
 	$("#thumbnail-portrait").empty();
 	$("#attr-page").empty();
-	setContent("item-ueditor", "");//商品详情
+	setContent("item-ueditor", "");//商品详情（描述）
+	setContent("after-service", "");//售后服务
 	$("#edit-item-li").addClass("hide");//隐藏编辑商品选项卡
 	$('#tabs-edit-item a[href="#tab-5"]').tab('show');
 }

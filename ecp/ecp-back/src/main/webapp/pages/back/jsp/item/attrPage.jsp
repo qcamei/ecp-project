@@ -23,7 +23,7 @@
 	}
 </style>
 
-<div class=" fieldset" id="category-brand">
+<%-- <div class=" fieldset" id="category-brand">
 	<div class=" legend">品牌</div>
 	<div id="brand-body">
 		<div class="form-group">
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 </div>
-<br>
+<br> --%>
 
 <div class=" fieldset" id="item-attr">
 	<div class=" legend" onclick="javascript:alert(getItemAttr());">商品属性</div>
@@ -60,14 +60,16 @@
 		
 		<c:forEach items="${attrList}" var="attr">
 			<c:if test="${not empty attr.valList}">
-				<div class="form-group">
-					<label class="col-sm-2 control-label">${attr.attr_name}</label>
-					<div class="col-sm-10">
-						<c:forEach items="${attr.valList}" var="val">
-							<label><input type="checkbox" id="" name="itemAttr" value="${attr.attr_id}:${val.value_id}" />&nbsp;${val.value_name}</label>&nbsp;&nbsp;&nbsp;
-						</c:forEach>
+				<c:if test="${attr.attr_type==1}"><!-- 1=关键属性;2=不可变属性;3=可变属性;4=销售属性 -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">${attr.attr_name}</label>
+						<div class="col-sm-10">
+							<c:forEach items="${attr.valList}" var="val">
+								<label><input type="checkbox" id="" name="itemAttr" value="${attr.attr_id}:${val.value_id}" />&nbsp;${val.value_name}</label>&nbsp;&nbsp;&nbsp;
+							</c:forEach>
+						</div>
 					</div>
-				</div>
+				</c:if>
 			</c:if>
 		</c:forEach>
 	</div>
@@ -78,7 +80,7 @@
 	<div class=" legend" onclick="javascript:alert(getSaleAttr());">销售属性</div>
 	<div id="sale-attr-body">
 		<c:forEach items="${attrList}" var="attr">
-			<c:if test="${attr.attr_type==4}">
+			<c:if test="${attr.attr_type==4}"><!-- 1=关键属性;2=不可变属性;3=可变属性;4=销售属性 -->
 				<div class="form-group" id="attr-${attr.attr_id}">
 					<!-- 属性ID -->
 					<input type="hidden" id="attr-id-${attr.attr_id}" name="attrId" value="${attr.attr_id}" />
