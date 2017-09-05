@@ -82,6 +82,19 @@
 								</div>
 							</div>
 							
+							
+							<!-- 增加用户质保条款 -->
+							<span id="group_user_guarantee_item">
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">用户质保条款</label>
+									<div class="col-sm-6">
+										<textarea id="user_guarantee_item" name="user_guarantee_item" rows="5" cols="80"
+										  th:inline="text" th:attr="data-id=${attrValue.user_guarantee_item.id}"
+										  placeholder="请输入用户质保条款">[[${attrValue.user_guarantee_item.val}]]</textarea>
+									</div>
+								</div>
+							</span>
+							
 							<div class="form-group">
 								<label for="delivery_time" class="col-sm-3 control-label">交货时间</label>
 								<div class="col-sm-6">
@@ -120,40 +133,66 @@
 								</div>
 							</div>
 							
-							<div class="form-group pay-type-1" >
-								<label for="payment_percent_signed" class="col-sm-offset-2 col-sm-3 control-label">合同签定后甲方支付合同百分比</label>
-								<div class="col-sm-4" >
-									<input class="form-control" id="payment_percent_signed" name="payment_percent_signed"
-										type="text" title="输入百分比数据值后自动计算金额"   th:value="${attrValue.payment_percent_signed.val}" th:attr="data-id=${attrValue.payment_percent_signed.id}" />
+							<span id="group_pay_type_1">
+								<div class="form-group pay-type-1" >
+									<label for="payment_percent_signed" class="col-sm-offset-2 col-sm-3 control-label">合同签定后甲方支付合同百分比</label>
+									<div class="col-sm-4" >
+										<input class="form-control" id="payment_percent_signed" name="payment_percent_signed"
+											type="text" title="输入百分比数据值后自动计算金额"   th:value="${attrValue.payment_percent_signed.val}" th:attr="data-id=${attrValue.payment_percent_signed.id}" />
+									</div>
+									<label for="payment_percent_signed" class="control-label" style="vertical-aline:middle">%</label>
 								</div>
-								<label for="payment_percent_signed" class="control-label" style="vertical-aline:middle">%</label>
-							</div>
-							<div class="form-group pay-type-1">
-								<label for="payment_amount_signed" class="col-sm-offset-2 col-sm-3 control-label">合同签定后甲方支付金额</label>
-								<div class="col-sm-4">
-									<input class="form-control" id="payment_amount_signed" name="payment_amount_signed"
-										type="text"  th:value="${attrValue.payment_amount_signed.val}"  th:attr="data-id=${attrValue.payment_amount_signed.id}"  />
+								<div class="form-group pay-type-1">
+									<label for="payment_amount_signed" class="col-sm-offset-2 col-sm-3 control-label">合同签定后甲方支付金额</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="payment_amount_signed" name="payment_amount_signed"
+											type="text"  th:value="${attrValue.payment_amount_signed.val}"  th:attr="data-id=${attrValue.payment_amount_signed.id}"  />
+									</div>
+									<label for="payment_amount_signed" class="control-label" style="vertical-aline:middle">元</label>
 								</div>
-								<label for="payment_amount_signed" class="control-label" style="vertical-aline:middle">元</label>
-							</div>
-							
-							<div class="form-group pay-type-1">
-								<label for="payment_percent_delivery" class="col-sm-offset-2 col-sm-3 control-label">发货前甲方支付合同百分比</label>
-								<div class="col-sm-4">
-									<input class="form-control" id="payment_percent_delivery" name="payment_percent_delivery"
-										type="text" title="输入百分比数据值后自动计算金额"  th:value="${attrValue.payment_percent_delivery.val}" th:attr="data-id=${attrValue.payment_percent_delivery.id}" />
+								
+								<div class="form-group pay-type-1">
+									<label for="payment_percent_delivery" class="col-sm-offset-2 col-sm-3 control-label">发货前甲方支付合同百分比</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="payment_percent_delivery" name="payment_percent_delivery"
+											type="text" title="输入百分比数据值后自动计算金额"  th:value="${attrValue.payment_percent_delivery.val}" th:attr="data-id=${attrValue.payment_percent_delivery.id}" />
+									</div>
+									<label for="payment_percent_delivery" class="control-label" style="vertical-aline:middle">%</label>
 								</div>
-								<label for="payment_percent_delivery" class="control-label" style="vertical-aline:middle">%</label>
-							</div>
-							
-							<div class="form-group pay-type-1">
-								<label for="payment_amount_delivery" class="col-sm-offset-2 col-sm-3 control-label">发货前甲方支付合同金额</label>
-								<div class="col-sm-4">
-									<input class="form-control" id="payment_amount_delivery" name="payment_amount_delivery"
-										type="text" th:value="${attrValue.payment_amount_delivery.val}" th:attr="data-id=${attrValue.payment_amount_delivery.id}"/>
+								
+								<div class="form-group pay-type-1">
+									<label for="payment_amount_delivery" class="col-sm-offset-2 col-sm-3 control-label">发货前甲方支付合同金额</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="payment_amount_delivery" name="payment_amount_delivery"
+											type="text" th:value="${attrValue.payment_amount_delivery.val}" th:attr="data-id=${attrValue.payment_amount_delivery.id}"/>
+									</div>
+									<label for="payment_amount_delivery" class="control-label" style="vertical-aline:middle">元</label>
 								</div>
-								<label for="payment_amount_delivery" class="control-label" style="vertical-aline:middle">元</label>
-							</div>
+								
+								<!-- 余款 -->
+								<div class="form-group">
+									<label for="balance_amount" class="col-sm-offset-2 col-sm-3 control-label">余款</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="balance_amount" name="balance_amount" 
+											th:value="${attrValue.balance_amount.val}" th:attr="data-id=${attrValue.balance_amount.id}"
+											type="text" />
+									</div>
+									<label for="balance_amount" class="control-label" style="vertical-aline:middle">元</label>
+								</div>
+								
+								<!-- 余款日期 -->
+								<div class="form-group">
+									<label for="balance_date" class="col-sm-offset-2 col-sm-3 control-label">余款付清日期</label>
+									<div class="col-sm-4">
+										<input class="datetimepicker datetime form-control" 
+											id="balance_date" name="balance_date"	
+											th:value="${attrValue.balance_date.val}" th:attr="data-id=${attrValue.balance_date.id}"									 
+											readonly="readonly" 
+											onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+											type="text" />
+									</div>
+								</div>
+							</span>
 							
 							<!-- 付款方式2 -->
 							<div class="form-group">
@@ -162,44 +201,58 @@
 									<input id="pay_type_2"  name="pay_type" type="checkbox" value="2" th:checked="${attrValue.pay_type.val=='2'}" th:attr="data-id=${attrValue.pay_type.id}"/>
 								</div>
 							</div>
-							
-							<div class="form-group pay-type-2">
-								<label for="days_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后多少日付全部货款</label>
-								<div class="col-sm-4">
-									<input class="form-control" id="days_signed" name="days_signed"
-										type="text" title="输入天数后自动按当天计算日期" th:value="${attrValue.days_signed.val}" th:attr="data-id=${attrValue.days_signed.id}"/>
+							<span id="group_pay_type_2">
+								<div class="form-group pay-type-2">
+									<label for="days_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后多少日付全部货款</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="days_signed" name="days_signed"
+											type="text" title="输入天数后自动按当天计算日期" th:value="${attrValue.days_signed.val}" th:attr="data-id=${attrValue.days_signed.id}"/>
+									</div>
+									<label for="days_signed" class="control-label" style="vertical-aline:middle">天</label>
 								</div>
-								<label for="days_signed" class="control-label" style="vertical-aline:middle">天</label>
-							</div>
-							
-							<!-- 签定后于日期前付全部货款 -->
-							<div class="form-group pay-type-2">
-								<label for="date_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后于日期前付全部货款</label>
-								<div class="col-sm-4">
-									<input class="datetimepicker datetime form-control" 
-										id="date_signed" name="date_signed"										 
-										readonly="readonly" 
-										onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
-										type="text"
-										th:value="${attrValue.date_signed.val}"  
-										th:attr="data-id=${attrValue.date_signed.id}"
-										/>
+								
+								<!-- 签定后于日期前付全部货款 -->
+								<div class="form-group pay-type-2">
+									<label for="date_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后于日期前付全部货款</label>
+									<div class="col-sm-4">
+										<input class="datetimepicker datetime form-control" 
+											id="date_signed" name="date_signed"										 
+											readonly="readonly" 
+											onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+											type="text"
+											th:value="${attrValue.date_signed.val}"  
+											th:attr="data-id=${attrValue.date_signed.id}"
+											/>
+									</div>
 								</div>
-							</div>
-							
-							<!-- 欠款资金占用费率 -->
-							<div class="form-group pay-type-2">
-								<label for="fee_rate" class="col-sm-offset-2 col-sm-3 control-label">欠款延期资金日占用费率</label>
-								<div class="col-sm-4">
-									<input class="form-control" id="fee_rate" name="fee_rate"
-										type="text" th:value="${attrValue.fee_rate.val}" th:attr="data-id=${attrValue.fee_rate.id}" />
+								
+								<!-- 欠款资金占用费率 -->
+								<div class="form-group pay-type-2">
+									<label for="fee_rate" class="col-sm-offset-2 col-sm-3 control-label">欠款延期资金日占用费率</label>
+									<div class="col-sm-4">
+										<input class="form-control" id="fee_rate" name="fee_rate"
+											placeholder="双击选择费率"
+											type="text" th:value="${attrValue.fee_rate.val}" th:attr="data-id=${attrValue.fee_rate.id}" list="ratelist" />
+										<datalist id="ratelist">
+	    									<option>万分之五</option>
+	    									<option>万分之四</option>
+	    									<option>万分之三</option>
+										</datalist>										
+									</div>
 								</div>
-							</div>
+							</span>
 
 							<div class="form-group">
 								<label for="voucher" class="col-sm-3 control-label">全款到帐后乙方开据</label>
 								<div class="col-sm-6">
-									<input class="form-control" id="voucher" name="voucher" type="text" th:value="${attrValue.voucher.val}" th:attr="data-id=${attrValue.voucher.id}" />
+									<input class="form-control" id="voucher" name="voucher"
+										placeholder="双击选择单据类型" 
+										type="text" list="itemlist" th:value="${attrValue.voucher.val}" th:attr="data-id=${attrValue.voucher.id}"  />
+									<datalist id="itemlist">
+    									<option>等额增值税发票</option>
+    									<option>等额普通发票</option>
+    									<option>等额收据</option>
+									</datalist>
 								</div>
 							</div>
 

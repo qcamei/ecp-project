@@ -36,7 +36,7 @@
 	</select>
 
 	<select id="selectContractByCond" resultType="map">
-		select * from contract c LEFT JOIN user_extends a on (c.agent_id=a.extend_id)
+		select c.*,a.company_name,a.artificial_person_name,a.contact_phone from contract c LEFT JOIN user_extends a on (c.agent_id=a.extend_id)
 		<where>
 			create_date&gt;=DATE_ADD(create_date,INTERVAL #{timeCond} MONTH)
 			<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
@@ -54,7 +54,7 @@
 					AND company_name LIKE concat(concat('%',#{condValue}),'%')
 				</when>
 				<when test="searchTypeValue==4">
-					AND artifical_person_name LIKE concat(concat('%',#{condValue}),'%')
+					AND artificial_person_name LIKE concat(concat('%',#{condValue}),'%')
 				</when>
 				<when test="searchTypeValue==5">
 					AND contact_phone LIKE concat(concat('%',#{condValue}),'%')

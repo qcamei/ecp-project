@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head th:include="/back/thymeleaf/common/_head2::head('销售合同')">
+<head th:include="/back/thymeleaf/common/_head2::headx('销售合同')">
 <meta charset="UTF-8">
 </head>
 <body>
@@ -193,11 +193,11 @@
 					<span>3.2</span><span style="font-family: 宋体">产品质保期：</span>
 						<span th:switch="${attrValue.guarantee_period}"  th:remove="tag">
 						 	<u th:case='1'><span style="font-family: 宋体">☑原厂标准质保；</span></u>
-						 	<u th:case='*'><span style="font-family: 宋体">□原厂标准质保；</span></u>
+						 	<!-- <u th:case='*'><span style="font-family: 宋体">□原厂标准质保；</span></u> -->
 						</span>
 						<span th:switch="${attrValue.guarantee_period}"  th:remove="tag">
-						 	<u th:case='2'><span style="font-family: 宋体">☑用户特殊质保；</span></u>
-						 	<u th:case='*'><span style="font-family: 宋体">□用户特殊质保；</span></u>
+						 	<u th:case='2'><span style="font-family: 宋体">☑用户特殊质保；</span><span th:text="${attrValue.user_guarantee_item}"></span></u>
+						 	<!-- <u th:case='*'><span style="font-family: 宋体">□用户特殊质保；</span></u> -->
 						</span>
 				</p>
 				<p>
@@ -225,26 +225,26 @@
 					<span>5.1</span>
 					<span>
 						<span th:switch="${attrValue.pay_type}"  th:remove="tag">
-						 	<span th:case='1' style="font-family: 宋体">☑</span>
-						 	<span th:case='*' style="font-family: 宋体">□</span>
+						 	<span th:case='1' style="font-family: 宋体">☑<span><span	style="font-family: 宋体">合同签订后甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_signed}">&nbsp;&nbsp;
+								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_signed}">&nbsp;&nbsp; </span></span>元）。
+								发货前，甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_delivery}">&nbsp;&nbsp;
+								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_delivery}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>元）。余额<u><span th:text="${attrValue.balance_amount}"></span></u>元，需在<u><span th:text="${attrValue.balance_date}" class="cndate">年&nbsp;&nbsp;月&nbsp;&nbsp;日</span></u>前付清。
+							</span></span></span>
+						 	<span th:case='2' style="font-family: 宋体"><span style="text-indent: 19px">
+								<span><span style="font-family: 宋体">
+									<span th:switch="${attrValue.pay_type}"  th:remove="tag">
+									 	<span th:case='2' style="font-family: 宋体" th:remove="tag">☑合同签订后</span>
+									 	<span th:case='*' style="font-family: 宋体" th:remove="tag">□合同签订后</span>
+									</span>
+								<u><span><span th:text="${attrValue.days_signed}">&nbsp;
+											</span></span></u>日即<u><span><span th:text="${attrValue.date_signed}" class="cndate">&nbsp; </span></span>前</u>甲方支付给乙方全部货款，每延期一日按照欠款金额的<u th:text="${attrValue.fee_rate}">万分之五</u>收取资金占用费。
+								</span></span>
+								</span>
+							</span>
 						</span>
 						
 					</span>
-					<span><span	style="font-family: 宋体">合同签订后甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_signed}">&nbsp;&nbsp;
-								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_signed}">&nbsp;&nbsp; </span></span>元）。
-								发货前，甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_delivery}">&nbsp;&nbsp;
-								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_delivery}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>元）。
-					</span></span>
-				</p>
-				<p style="text-indent: 19px">
-					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: 宋体">
-						<span th:switch="${attrValue.pay_type}"  th:remove="tag">
-						 	<span th:case='2' style="font-family: 宋体" th:remove="tag">☑合同签订后</span>
-						 	<span th:case='*' style="font-family: 宋体" th:remove="tag">□合同签订后</span>
-						</span>
-					<u><span><span th:text="${attrValue.days_signed}">&nbsp;
-								</span></span></u>日即<u><span><span th:text="${attrValue.date_signed}" class="cndate">&nbsp; </span></span>前</u>甲方支付给乙方全部货款，每延期一日按照欠款金额的<u th:text="${attrValue.fee_rate}">万分之五</u>收取资金占用费。
-					</span></span>
+					
 				</p>
 				<p style="text-indent: 25px">
 					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: 宋体">全款到账后，乙方开具等额<u><span><span th:text="${attrValue.voucher}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

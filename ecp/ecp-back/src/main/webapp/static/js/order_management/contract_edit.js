@@ -282,11 +282,75 @@ var generateHideElement = function(name, value) {
 	return tempInput;
 }
 
+
+/**
+ * 显示或隐藏用户质保条款
+ * flag
+ * 		true:显示;
+ * 		false:隐藏
+ */
+function hideOrShowGuaranteeItem(flag){
+	if(flag)
+		$("#group_user_guarantee_item").show()
+	else
+		$("#group_user_guarantee_item").hide();  
+		
+}
+
+/**
+ * 显示或隐藏付款方式组
+ * 
+ * payType:
+ * 		1:付款方式1;2:付款方式2
+ * flag:
+ * 		true:显示; false:隐藏
+ */
+function hideOrShowPayType(payType,flag){
+	switch(payType)
+	{
+	case 1:
+	  if(flag)
+		  $("#group_pay_type_1").show();
+	  else
+		  $("#group_pay_type_1").hide();
+	  break;
+	case 2:
+		if(flag)
+			  $("#group_pay_type_2").show();
+		  else
+			  $("#group_pay_type_2").hide();
+	  break;
+	default:
+	  
+	}
+}
+
+/*
+ * 初始化合同属性
+ */
+function initContractAttr() {
+	if($("input[name='guarantee_period']").eq(0).attr("checked")=="checked")   //如果质保方式为:原厂标准质保  
+		hideOrShowGuaranteeItem(false);  //用户质保条款定制隐藏
+	else
+		hideOrShowGuaranteeItem(true);  //用户质保条款定制隐藏
+	
+	
+	if($("#pay_type_1").attr("checked")=="checked"){  //如果是付款方式1		
+		//hideOrShowPayType(1,true);   //付款方式1条款show
+		hideOrShowPayType(2,false);  //付款方式2条款hide
+	}
+	else{		
+		//hideOrShowPayType(2,true);  //付款方式2条款show
+		hideOrShowPayType(1,false);  //付款方式1条款hide
+	}
+}
+
+
 // ==================页面-READY-初始化======================
 $(function() {
 
 	displaySumAmount(calcSumAmount());
-	//initContractAttr(); // 初始化合同属性
+	initContractAttr(); // 初始化合同属性
 	
 	/*折减对话框显示后，折减输入框自动获取focus*/
 	$('#modal-container-273078').on('shown.bs.modal', function (e) {
@@ -322,6 +386,11 @@ $(function() {
 		});
 
 		this.checked = true;
+		
+		if($(this).attr("id")=="guarantee_period_2")
+			hideOrShowGuaranteeItem(true);
+		else
+			hideOrShowGuaranteeItem(false);
 
 	});
 
@@ -333,6 +402,15 @@ $(function() {
 		});
 
 		this.checked = true;
+		
+		if($(this).attr("id")=="pay_type_1"){
+			hideOrShowPayType(1,true);
+			hideOrShowPayType(2,false);
+		}
+		else{
+			hideOrShowPayType(2,true);
+			hideOrShowPayType(1,false);
+		}
 
 	});
 

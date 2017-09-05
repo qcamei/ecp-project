@@ -183,12 +183,57 @@ function getGuaranteePeriod() {
 	return val;
 }
 
+/**
+ * 显示或隐藏用户质保条款
+ * flag
+ * 		true:显示;
+ * 		false:隐藏
+ */
+function hideOrShowGuaranteeItem(flag){
+	if(flag)
+		$("#group_user_guarantee_item").show()
+	else
+		$("#group_user_guarantee_item").hide();  
+		
+}
+
+/**
+ * 显示或隐藏付款方式组
+ * 
+ * payType:
+ * 		1:付款方式1;2:付款方式2
+ * flag:
+ * 		true:显示; false:隐藏
+ */
+function hideOrShowPayType(payType,flag){
+	switch(payType)
+	{
+	case 1:
+	  if(flag)
+		  $("#group_pay_type_1").show();
+	  else
+		  $("#group_pay_type_1").hide();
+	  break;
+	case 2:
+		if(flag)
+			  $("#group_pay_type_2").show();
+		  else
+			  $("#group_pay_type_2").hide();
+	  break;
+	default:
+	  
+	}
+}
+
+
 /*
  * 初始化合同属性
  */
 function initContractAttr() {
-	$("input[name='guarantee_period']").eq(0).attr("checked", true);
-	$("input[name='pay_type']").eq(0).attr("checked", true);
+	$("input[name='guarantee_period']").eq(0).attr("checked", true); //设置质保方式为:原厂标准质保  
+	hideOrShowGuaranteeItem(false)  //用户质保条款定制隐藏
+	$("input[name='pay_type']").eq(0).attr("checked", true);  //设置付款方式1为默认
+	hideOrShowPayType(2,false);  //付款方式2条款显示
 }
 
 /* 收集合同属性 */
@@ -197,7 +242,7 @@ function getContractAttrValue(contractAttrList) {
 	/*
 	 * guarantee_period delivery_time delivery_address transport_charge
 	 * payment_percent_signed payment_amount_signed payment_percent_delivery
-	 * payment_amount_delivery days_signed date_signed fee_rate voucher pay_type
+	 * payment_amount_delivery days_signed date_signed fee_rate voucher pay_type 
 	 */
 
 	contractAttrList.forEach(function(item, index) {
@@ -348,6 +393,11 @@ $(function() {
 		});
 
 		this.checked = true;
+		
+		if($(this).attr("id")=="guarantee_period_2")
+			hideOrShowGuaranteeItem(true);
+		else
+			hideOrShowGuaranteeItem(false);
 
 	});
 
@@ -359,6 +409,18 @@ $(function() {
 		});
 
 		this.checked = true;
+		
+		if($(this).attr("id")=="pay_type_1"){
+			hideOrShowPayType(1,true);
+			hideOrShowPayType(2,false);
+		}
+		else{
+			hideOrShowPayType(2,true);
+			hideOrShowPayType(1,false);
+		}
+			
+		
+		
 
 	});
 
