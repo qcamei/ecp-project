@@ -13,7 +13,10 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title">
-								<span  th:text="'合同号:'+${contract.contractNo}"></span>								
+								<span  th:text="'合同号1:'+${contract.contractNo}"></span>
+								<a  th:href="@{/back/contract/open(id=${contract.id})}" target="_blank" title="打开合同">
+									<i class="icon-folder-close-alt icon-large" style="color:darkblue;"></i> 
+								</a>								
 								<span  th:text="'建立时间:'+${#calendars.format(contract.createDate,'yyyy-MM-dd HH:MM:SS')}" style="margin-left:50px;"></span>
 							</h3>
 						</div>
