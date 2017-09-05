@@ -52,7 +52,7 @@ public class CategoryController {
 	@Autowired	
 	private IAttributeValueService iAttributeValueService;// 类目的属性值
 
-	List<Category> resultList = new ArrayList<Category>();
+	List<Category> resultList = new ArrayList<Category>();//用户保存类目排序结果
 	
 	/**
 	 * 方法功能：查询列表
@@ -93,7 +93,12 @@ public class CategoryController {
 		return mav;
 	}
 	
-	public void sortList(List<Category> categoryList,Long cid) {  
+	/**
+	 * List排序
+	 * @param categoryList
+	 * @param cid
+	 */
+	private void sortList(List<Category> categoryList,Long cid) {  
         for(Category category :categoryList){
             if(category.getParentCid()==cid){
                 resultList.add(category);

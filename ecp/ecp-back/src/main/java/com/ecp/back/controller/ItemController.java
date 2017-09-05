@@ -74,6 +74,8 @@ public class ItemController {
 	@Resource(name="attributeValueServiceBean")
 	private IAttributeValueService iAttributeValueService;//类目的属性值
 	
+	List<Category> resultList = new ArrayList<Category>();//用户保存类目排序结果
+	
 	/**
 	 * 方法功能：进入添加商品页面
 	 * @param request
@@ -118,9 +120,17 @@ public class ItemController {
 		mav.addObject("pagehelper", pagehelper);
 		
 		//类目
-		//List<Category> categoryList = iCategoryService.selectByPid(0l);
-		List<Category> categoryList = iCategoryService.selectByLev(3);
-		mav.addObject("categoryList", categoryList);
+		List<Category> categoryList = iCategoryService.getAll(null);
+		//List<Category> categoryList = iCategoryService.selectByLev(3);
+		resultList.clear();
+		for(int i=0; i<categoryList.size(); i++){
+			Category category = categoryList.get(i);
+			if(category.getParentCid()==0){
+				resultList.add(category);
+				sortList(categoryList,category.getCid());
+			}
+		}
+		mav.addObject("categoryList", resultList);
 		
 		/*//品牌
 		List<Brand> brandList = iBrandService.selectAll();
@@ -143,6 +153,20 @@ public class ItemController {
 		mav.addObject("pagehelperFun", pagehelperFun);
 		return mav;
 	}
+	
+	/**
+	 * List排序
+	 * @param categoryList
+	 * @param cid
+	 */
+	private void sortList(List<Category> categoryList,Long cid) {  
+        for(Category category :categoryList){
+            if(category.getParentCid()==cid){
+                resultList.add(category);
+                sortList(categoryList,category.getCid());
+            }
+        }
+    }
 	
 	/**
 	 * 方法功能：查询要修改的信息

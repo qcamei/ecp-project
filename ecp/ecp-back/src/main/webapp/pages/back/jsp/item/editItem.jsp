@@ -37,9 +37,23 @@
 												<div class="form-group">
 													<label class="col-sm-2 control-label">商品类目<b style="color:red;">&nbsp;*</b></label>
 													<div class="col-sm-10">
-														<select class="form-control" id="item-cid" name="cid" onchange="javascript:changeItemCategory();">
-															<c:forEach items="${categoryList}" var="category">
+														<select class="form-control" id="item-cid" name="cid">
+															<%-- <c:forEach items="${categoryList}" var="category">
 																<option value="${category.cid}">${category.cName}</option>
+															</c:forEach> --%>
+															<c:forEach items="${categoryList}" var="category">
+																<c:if test="${category.lev==1}">
+																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																</c:if>
+																<c:if test="${category.lev==2}">
+																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																</c:if>
+																<c:if test="${category.lev==3}">
+																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																</c:if>
+																<c:if test="${category.lev!=1 && category.lev!=2 && category.lev!=3}">
+																	<option value="${category.cid}" level="${category.lev}">${category.cName}</option>
+																</c:if>
 															</c:forEach>
 														</select>
 													</div>
@@ -294,3 +308,20 @@
 	</div>
 </div>
 <!-- <script type="text/javascript" src="static/js/addItem.js"></script> -->
+<script type="text/javascript">
+/**
+ * 绑定类目父节点的change事件
+ */
+$("#item-cid").bind("change",function(){
+	var cid = $(this).val();
+    //获取自定义属性的值
+    var lev = $(this).find("option:selected").attr("level");
+    console.log("level:"+lev);
+	if(lev!=3){
+		$(this).val(cid);
+		util.message("请选择三级类目！");
+	}else{
+		changeItemCategory();
+	}
+});
+</script>
