@@ -2,6 +2,8 @@ package com.ecp.service;
 
 import java.util.List;
 
+import tk.mybatis.mapper.entity.Example;
+
 /**
  * @ClassName IBaseService
  * @Description 通用数据库接口
@@ -63,6 +65,14 @@ public interface IBaseService<T,ID> {
      * <p>Date: 2017年1月10日 下午6:01:20</p>
      */
     public int updateByPrimaryKeySelective(T entity);
+    
+    /**
+     * 根据条件查询
+     * @param entity	要修改的内容
+     * @param example	条件
+     * @return
+     */
+    public int updateByExampleSelective(T entity, Example example);
     
     /**
      * 方法功能：根据主键删除

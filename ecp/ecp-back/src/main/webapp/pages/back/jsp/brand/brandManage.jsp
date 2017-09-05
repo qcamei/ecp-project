@@ -48,18 +48,22 @@
 													<form class="form-horizontal" id="save-form">
 														<input type="hidden" id="brand-id" name="brandId" value="" />
 														<div class="form-group">
-															<label class="col-sm-2 control-label">品牌名称</label>
+															<label class="col-sm-2 control-label">品牌名称<b style="color:red;">&nbsp;*</b></label>
 															<div class="col-sm-10">
 																<input type="text" id="brand-name" name="brandName"
 																	class="form-control" placeholder="品牌名称" />
 															</div>
 														</div>
 														<div class="form-group">
-															<label class="col-md-2 control-label">品牌LOGO</label>
+															<label for="name" class="col-sm-2 control-label">&nbsp;</label>
+															<div class="col-sm-10"><b style="color:red;">注：请上传&nbsp;102*36&nbsp;的JPG图片！</b></div>
+														</div>
+														<div class="form-group">
+															<label class="col-md-2 control-label">品牌LOGO<b style="color:red;">&nbsp;*</b></label>
 															<div class="col-md-5 ">
 																<input type="file" id="brand-logo-file" name="logo"
 																	onchange="javascript:validateImgFileSizeFun(this);"
-																	accept="image/*" /> <input type="hidden"
+																	accept="image/jpeg" /> <input type="hidden"
 																	id="brand-logo-url" name="brandLogoUrl" />
 															</div>
 															<!-- <div class="col-md-5">

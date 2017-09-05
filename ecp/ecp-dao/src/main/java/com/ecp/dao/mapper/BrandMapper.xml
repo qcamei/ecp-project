@@ -44,6 +44,7 @@
 		ON 
 			b.brand_id=cb.brand_id 
 		WHERE 
+			b.deleted=1 and 
 			cb.third_lev_cid=#{categoryId}
 		
 	</select>

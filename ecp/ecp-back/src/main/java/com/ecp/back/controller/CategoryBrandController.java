@@ -57,10 +57,10 @@ public class CategoryBrandController {
 	public ModelAndView goBrandPage(HttpServletRequest request, HttpServletResponse response){
 		ModelAndView mav = new ModelAndView();
 		
-		List<Category> categoryList = iCategoryService.selectAll();
+		List<Category> categoryList = iCategoryService.getAll("sort_number DESC");
 		mav.addObject("ztreeNodes", JSON.toJSONString(categoryList));
 		
-		List<Brand> brandList = iBrandService.selectAll();
+		List<Brand> brandList = iBrandService.getAll();
 		mav.addObject("brandList", brandList);
 		
 		mav.setViewName(StaticConstants.CATEGORY_BRAND_MANAGE_PAGE);
@@ -79,7 +79,7 @@ public class CategoryBrandController {
 	@ResponseBody
 	public Map<String, Object> selectBrandByCid(HttpServletRequest request, HttpServletResponse response, Long categoryId) {
 		try {
-			List<Brand> brandList = iBrandService.selectAll();//查询所有品牌
+			List<Brand> brandList = iBrandService.getAll();//查询所有品牌
 			List<Map<String, Object>> brandMapList = iBrandService.getBrandByCategoryId(categoryId);//查询当前类目的品牌
 			
 			for(Map<String, Object> map : brandMapList){

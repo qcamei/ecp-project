@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.MenuMapper;
 import com.ecp.entity.Category;
 import com.ecp.entity.Menu;
+import com.ecp.entity.RolePermission;
 import com.ecp.service.back.IMenuService;
 import com.ecp.service.back.IRolePermissionService;
 import com.ecp.service.impl.AbstractBaseService;
@@ -50,6 +52,7 @@ public class MenuServiceImpl extends AbstractBaseService<Menu, Long> implements 
 	@Override
 	public List<Menu> getListAllByAsc() {
 		Example example = new Example(Menu.class);
+		example.createCriteria().andEqualTo("deleted", DeletedType.NO);
 		example.setOrderByClause("sort_num ASC");
 		return menuMapper.selectByExample(example);
 	}
@@ -59,7 +62,10 @@ public class MenuServiceImpl extends AbstractBaseService<Menu, Long> implements 
 	public int deleteById(Long menuId) {
 		int rows = deleteNodes(menuId);
 		if(rows>0){
-			rows = menuMapper.deleteByPrimaryKey(menuId);
+			Menu menu = new Menu();
+			menu.setMenuId(menuId);
+			menu.setDeleted(DeletedType.YES);
+			rows = menuMapper.updateByPrimaryKeySelective(menu);
 		}
 		return rows;
 	}
@@ -79,11 +85,17 @@ public class MenuServiceImpl extends AbstractBaseService<Menu, Long> implements 
 		for(Menu menu : menuList){
 			rows = deleteNodes(menu.getMenuId());
 			if(rows>0){
-				rows = menuMapper.deleteByPrimaryKey(menu.getMenuId());
+				Menu temp = new Menu();
+				temp.setMenuId(menu.getMenuId());
+				temp.setDeleted(DeletedType.YES);
+				rows = menuMapper.updateByPrimaryKeySelective(temp);
 				if(rows>0){
 					//删除 角色关系 表
-					rolePermissionService.deleteByPermissionId(menu.getMenuId());
-					return rows;
+					Example e = new Example(Category.class);
+					e.createCriteria().andEqualTo("permissionId", menu.getMenuId());
+					RolePermission perms = new RolePermission();
+					perms.setDeleted(DeletedType.YES);
+					rolePermissionService.updateByExampleSelective(perms, e);
 				}else{
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return 0;
@@ -94,7 +106,7 @@ public class MenuServiceImpl extends AbstractBaseService<Menu, Long> implements 
 			}
 		}
 		
-		return 0;
+		return rows;
 	}
 
 }

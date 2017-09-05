@@ -63,7 +63,7 @@ public class BrandController {
 		UserBean user = (UserBean)subject.getPrincipal();
 		
 		PageHelper.startPage(pageBean.getPageNum(), pageBean.getPageSize());
-		List<Brand> brandList = iBrandService.selectAll();
+		List<Brand> brandList = iBrandService.getAll();
 		PageInfo<Brand> pagehelper = new PageInfo<Brand>(brandList);
 		
 		mav.addObject("pagehelper", pagehelper);
@@ -76,6 +76,27 @@ public class BrandController {
 		
 		mav.addObject("pagehelperFun", pagehelperFun);
 		return mav;
+	}
+	
+	/**
+	 * 根据类目查询品牌
+	 * @param request
+	 * @param response
+	 * @param cid
+	 * @return
+	 */
+	@RequestMapping("/selectByCid")
+	@ResponseBody
+	public Map<String, Object> selectByCid(HttpServletRequest request, HttpServletResponse response, Long cid) {
+		try {
+			List<Map<String, Object>> brandList = iBrandService.getBrandByCategoryId(cid);
+			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
+			respM.put("brandList", brandList);
+			return respM;
+		} catch (Exception e) {
+			log.error("查询异常", e);
+			return RequestResultUtil.getResultSelectWarn();
+		}
 	}
 	
 	/**
@@ -159,7 +180,7 @@ public class BrandController {
 	}
 	
 	/**
-	 * 方法功能：删除
+	 * 方法功能：删除（逻辑删除）
 	 * @param request
 	 * @param response
 	 * @param id
@@ -168,7 +189,7 @@ public class BrandController {
 	@RequestMapping("/deleteById")
 	@ResponseBody
 	public Map<String, Object> deleteById(HttpServletRequest request, HttpServletResponse response, Long id) {
-		int rows = iBrandService.deleteByPrimaryKey(id);
+		int rows = iBrandService.deleteById(id);
 		if(rows>0){
 			return RequestResultUtil.getResultDeleteSuccess();
 		}

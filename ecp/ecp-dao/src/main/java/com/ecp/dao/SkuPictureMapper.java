@@ -22,4 +22,11 @@ public interface SkuPictureMapper extends Mapper<SkuPicture> {
 	 */
 	public int deleteBySkuIds(List<Long> skuIds);
 	
+	/**
+	 * 根据skuID集合修改sku图片
+	 * @param skuIds
+	 * @return
+	 */
+	public int updateBySkuIds(List<Long> skuIds);
+	
 }

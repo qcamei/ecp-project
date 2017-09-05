@@ -13,8 +13,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryTreeNode;
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.CategoryMapper;
 import com.ecp.entity.Category;
+import com.ecp.entity.CategoryBrand;
 import com.ecp.service.back.ICategoryBrandService;
 import com.ecp.service.back.ICategoryService;
 import com.ecp.service.impl.AbstractBaseService;
@@ -39,9 +41,8 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	private ICategoryBrandService iCategoryBrandService;// 类目品牌
 	
 	/** 
-	 * (non-Javadoc)
 	 * @see com.ecp.service.ICategoryService#deleteById(java.lang.Long)
-	 * 根据主键删除（如果删除节点中有子节点一起删除）
+	 * 根据主键删除（如果删除节点中有子节点一起删除）（逻辑删除）
 	 */
 	@Override
 	@Transactional
@@ -51,14 +52,21 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 			Category category = categoryMapper.selectByPrimaryKey(id);
 			if(category.getHasLeaf()==1){//如果是叶子节点（没有子节点）
 				//如果此类目为三级目录则删除类目相关联的品牌
-				iCategoryBrandService.deleteByThirdLevCid(category.getCid());
+				Example example = new Example(CategoryBrand.class);
+				example.createCriteria().andEqualTo("thirdLevCid", category.getCid());
+				CategoryBrand brand = new CategoryBrand();
+				brand.setDeleted(DeletedType.YES);
+				iCategoryBrandService.updateByExampleSelective(brand, example);
 				rows = 1;
 			}else{
 				rows = deleteNodes(id);
 			}
 			
 			if(rows>0){
-				rows = categoryMapper.deleteByPrimaryKey(id);
+				Category cate = new Category();
+				cate.setCid(id);
+				cate.setDeleted(DeletedType.YES);
+				rows = categoryMapper.updateByPrimaryKeySelective(cate);
 			}
 			return rows;
 		} catch (Exception e) {
@@ -91,11 +99,18 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 			}
 			//rows = deleteNodes(cate.getCid());
 			if(rows>0){
-				rows = categoryMapper.deleteByPrimaryKey(cate.getCid());
+				Category tempc = new Category();
+				tempc.setCid(cate.getCid());
+				tempc.setDeleted(DeletedType.YES);
+				rows = categoryMapper.updateByPrimaryKeySelective(tempc);
 				if(rows>0){
 					if(cate.getHasLeaf()==1){//如果是叶子节点（没有子节点）
 						//如果此类目为三级目录则删除类目相关联的品牌
-						iCategoryBrandService.deleteByThirdLevCid(cate.getCid());
+						Example temp = new Example(CategoryBrand.class);
+						temp.createCriteria().andEqualTo("thirdLevCid", cate.getCid());
+						CategoryBrand brand = new CategoryBrand();
+						brand.setDeleted(DeletedType.YES);
+						iCategoryBrandService.updateByExampleSelective(brand, temp);
 					}
 				}else{
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -171,7 +186,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 
 				// 查询三级结点  均采用上层业务对象的属性
 				Example example3 = new Example(Category.class);
-				example3.createCriteria().andEqualTo("parentCid", secondLevelNode.getCid());
+				example3.createCriteria().andEqualTo("parentCid", secondLevelNode.getCid()).andEqualTo("deleted", DeletedType.NO);
 				example3.orderBy("sortNumber");
 				
 				List<Category> list3 = categoryMapper.selectByExample(example3);
@@ -214,7 +229,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	@Override
 	public List<Category> selectByPid(Long parentCid) {
 		Example example = new Example(Category.class);
-		example.createCriteria().andEqualTo("parentCid", parentCid);
+		example.createCriteria().andEqualTo("parentCid", parentCid).andEqualTo("deleted", DeletedType.NO);
 		return categoryMapper.selectByExample(example);
 	}
 
@@ -225,7 +240,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 	@Override
 	public List<Category> selectByLev(int lev) {
 		Example example = new Example(Category.class);
-		example.createCriteria().andEqualTo("lev", lev);
+		example.createCriteria().andEqualTo("lev", lev).andEqualTo("deleted", DeletedType.NO);
 		return categoryMapper.selectByExample(example);
 	}
 
@@ -240,6 +255,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 			sort = "sort_number ASC";
 		}
 		Example example = new Example(Category.class);
+		example.createCriteria().andEqualTo("deleted", DeletedType.NO);
 		example.setOrderByClause(sort);
 		return categoryMapper.selectByExample(example);
 	}
