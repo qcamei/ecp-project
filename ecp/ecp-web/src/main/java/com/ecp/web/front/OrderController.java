@@ -210,7 +210,7 @@ public class OrderController {
 	
 	/**
 	 * @Description 订单详情模块页
-	 * @param id
+	 * @param id  订单id
 	 * @param model
 	 * @param request
 	 * @return
