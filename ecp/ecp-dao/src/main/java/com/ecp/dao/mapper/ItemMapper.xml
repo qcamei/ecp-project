@@ -62,9 +62,9 @@
 	<select id="getItemByBrandAndAttr" resultMap="BaseResultMap">
 		select * from item 
 		<where>
-			cid=#{cid}
+			cid=#{cid}			
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}
+				AND item_status=#{itemStatus} AND deleted=1 
 			</if>
 			<if test="brands!=null">
 				AND brand IN
@@ -86,7 +86,7 @@
 		select * from item
 		<where>
 			<if test="itemStatus!=0">
-				item_status=#{itemStatus}
+				item_status=#{itemStatus} AND deleted=1
 			</if>
 			<if test="brands!=null">
 				AND brand IN
@@ -121,7 +121,7 @@
 			</if>
 			)
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}
+				AND item_status=#{itemStatus} AND deleted=1
 			</if>
 		</where>
 
@@ -135,14 +135,12 @@
 			<if test="keywords!=null">
 				(
 				<foreach close=")" collection="keywords" index="index" item="keyword" open="(" separator=" or ">
-					item_name like
-					CONCAT('%',#{keyword},'%' )
+					item_name like	CONCAT('%',#{keyword},'%' )
 				</foreach>
 
 				OR
 				<foreach close=")" collection="keywords" index="index" item="keyword" open="(" separator=" or ">
-					keywords like
-					CONCAT('%',#{keyword},'%' )
+					keywords like	CONCAT('%',#{keyword},'%' )
 				</foreach>
 				)
 			</if>
@@ -160,7 +158,7 @@
 			</if>
 			)
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}
+				AND item_status=#{itemStatus} AND deleted=1
 			</if>
 		</where>
 	</select>
@@ -173,7 +171,7 @@
 				#{id}
 			</foreach>
 			<if test="itemStatus!=0">
-				AND item_status=#{itemStatus}
+				AND item_status=#{itemStatus} AND deleted=1
 			</if>
 		</where>
 	</select>
@@ -199,6 +197,9 @@
 				b.brand_name like CONCAT('%',#{search_keywords},'%' )
 				or 
 				i.item_name like CONCAT('%',#{search_keywords},'%' )
+			</if>
+			<if test="itemStatus!=0">
+				item_status=4 AND deleted=1
 			</if>
 		</where>
 		ORDER BY i.item_id DESC
