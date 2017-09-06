@@ -54,10 +54,10 @@
 				<td class="center">
 					<button type="button" class="btn btn-default btn-info" onclick="javascript:selectDetails(${item.item_id}, ${item.cid});">详情</button>
 					<c:if test="${not empty item.item_status && item.item_status==4}">
-						<button type="button" class="btn btn-danger" title="已上架商品不能删除" onclick="javascript:deleteInfoFun(${item.item_id});" disabled="disabled">删除</button>
+						<button type="button" class="btn btn-danger" id="item-del-btn-${item.item_id}" title="已上架商品不能删除" onclick="javascript:deleteInfoFun(${item.item_id});" disabled="disabled">删除</button>
 					</c:if>
 					<c:if test="${empty item.item_status || item.item_status!=4}">
-						<button type="button" class="btn btn-danger" onclick="javascript:deleteInfoFun(${item.item_id});">删除</button>
+						<button type="button" class="btn btn-danger" id="item-del-btn-${item.item_id}" onclick="javascript:deleteInfoFun(${item.item_id});">删除</button>
 					</c:if>
 				</td>
 			</tr>

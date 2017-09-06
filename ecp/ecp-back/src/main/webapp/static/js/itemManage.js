@@ -801,9 +801,13 @@ function updateItemStatus(itemId, status){
 				if(status==4){
 					$("#item-status-up-"+itemId).attr("disabled", true);
 					$("#item-status-down-"+itemId).attr("disabled", false);
+					$("#item-del-btn-"+itemId).attr("disabled", true);
+					$("#item-del-btn-"+itemId).attr("title", "已上架商品不能删除");
 				}else{
 					$("#item-status-up-"+itemId).attr("disabled", false);
 					$("#item-status-down-"+itemId).attr("disabled", true);
+					$("#item-del-btn-"+itemId).attr("disabled", false);
+					$("#item-del-btn-"+itemId).attr("title", "");
 				}
 				
 			}else{
