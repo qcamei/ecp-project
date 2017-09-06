@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecp.bean.CategoryAttrBean;
 import com.ecp.bean.CategoryTreeNode;
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.CategoryMapper;
 import com.ecp.entity.Category;
 import com.ecp.service.front.ICategoryService;
@@ -44,7 +45,9 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Long> imp
 
 		// 查询一级结点 均采用上层数据对象的属性
 		Example example = new Example(Category.class);
-		example.createCriteria().andEqualTo("parentCid", FIRST_LEVEL_PARENT_ID);
+		
+		example.createCriteria().andEqualTo("parentCid", FIRST_LEVEL_PARENT_ID)
+								.andEqualTo("deleted", DeletedType.NO);
 		example.orderBy("sortNumber");
 		List<Category> list = categoryMapper.selectByExample(example);
 
@@ -67,7 +70,8 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Long> imp
 
 			// 查询二级结点
 			Example example2 = new Example(Category.class);
-			example2.createCriteria().andEqualTo("parentCid", firstLevelNode.getCid());
+			example2.createCriteria().andEqualTo("parentCid", firstLevelNode.getCid())
+										.andEqualTo("deleted", DeletedType.NO);
 			example2.orderBy("sortNumber");
 			List<Category> list2 = categoryMapper.selectByExample(example2);
 
@@ -94,7 +98,9 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Long> imp
 
 				// 查询三级结点 均采用上层业务对象的属性
 				Example example3 = new Example(Category.class);
-				example3.createCriteria().andEqualTo("parentCid", secondLevelNode.getCid());
+				
+				example3.createCriteria().andEqualTo("parentCid", secondLevelNode.getCid())
+										 .andEqualTo("deleted", DeletedType.NO);
 				example3.orderBy("sortNumber");
 
 				List<Category> list3 = categoryMapper.selectByExample(example3);
