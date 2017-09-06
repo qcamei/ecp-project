@@ -91,15 +91,14 @@ public class CartController {
 		long userId = user.getId();
 
 		// 准备数据
-		// (1)商品数量
-		int itemNum = cartService.getItemNumByUserId(user.getId());
-		model.addAttribute("itemNum", itemNum);
-
-		// (2)准备购物车条目数据
-		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();
-
-		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);
+		// (1)准备购物车条目数据
+		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();  //向前台传递的购物车条目 
+		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取条目
 		for (Favourite cartItem : cartItems) {
+			Item item = itemService.getItemById((long) cartItem.getItemId());
+			if(item==null || item.getDeleted()==DeletedType.YES) continue;
+			
+			
 			CartItemBean itemBean = new CartItemBean();
 			cartItemList.add(itemBean); // add into cartItemList
 
@@ -110,8 +109,7 @@ public class CartController {
 			itemBean.setSkuId(cartItem.getSkuId());
 			itemBean.setItemId(cartItem.getItemId());
 
-			// get item's name
-			Item item = itemService.getItemById((long) cartItem.getItemId());
+			
 			itemBean.setItemName(item.getItemName());
 			itemBean.setWeightUnit(item.getWeightUnit());
 			itemBean.setCid(item.getCid());
@@ -151,9 +149,14 @@ public class CartController {
 			itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
 
 		}
-
-		model.addAttribute("cartItemList", cartItemList); // 加入到model
-		model.addAttribute("cartItemId", cartItemId);  //需要自动选定的cart item
+		model.addAttribute("cartItemList", cartItemList); 	// 加入到model
+		
+		//需要自动选定的cart item
+		model.addAttribute("cartItemId", cartItemId);  		
+		
+		//(2)商品数量
+		int itemNum = cartItemList.size();
+		model.addAttribute("itemNum", itemNum);
 
 		return RESPONSE_THYMELEAF + "my_cart_table";
 	}
@@ -388,15 +391,14 @@ public class CartController {
 		long userId = user.getId();
 
 		// 准备数据
-		// (1)商品数量
-		int itemNum = cartService.getItemNumByUserId(user.getId());
-		model.addAttribute("itemNum", itemNum);
+		// (1)准备购物车条目数据
+		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();  //向前台传递的购物车条目列表
 
-		// (2)准备购物车条目数据
-		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();
-
-		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);
-		for (Favourite cartItem : cartItems) {
+		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取购物车条目
+		for (Favourite cartItem : cartItems) {  
+			Item item = itemService.getItemById((long) cartItem.getItemId());  //获取购物车条目商品信息
+			if(item==null || item.getDeleted()==DeletedType.YES) continue;
+			
 			CartItemBean itemBean = new CartItemBean();
 			cartItemList.add(itemBean); // add into cartItemList
 
@@ -407,53 +409,52 @@ public class CartController {
 			itemBean.setSkuId(cartItem.getSkuId());
 			itemBean.setItemId(cartItem.getItemId());
 
-			// get item's name
-			Item item = itemService.getItemById((long) cartItem.getItemId());  //获取商品
-			
-			if(item!=null && item.getDeleted()==DeletedType.NO){ //如果商品没有删除
-				itemBean.setItemName(item.getItemName());
-				itemBean.setWeightUnit(item.getWeightUnit());
-				itemBean.setCid(item.getCid());
+		
+			itemBean.setItemName(item.getItemName());
+			itemBean.setWeightUnit(item.getWeightUnit());
+			itemBean.setCid(item.getCid());
 
-				// get sku price and weight
-				SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
-				itemBean.setSkuPrice(skuPriceBean.getSell_price());
-				itemBean.setSkuWeight(skuPriceBean.getWeight());
+			// get sku price and weight
+			SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
+			itemBean.setSkuPrice(skuPriceBean.getSell_price());
+			itemBean.setSkuWeight(skuPriceBean.getWeight());
 
-				// get sku attr value names
-				// 将sku attribute 分隔   //TODO 程序代码合并优化
-				String skuName = item.getItemName();
-				if(StringUtils.isNotBlank(skuPriceBean.getAttributes())){
-					String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
-					for (String attrValuePair : skuAttrArray) {
-						String skuValueName = "";
+			// get sku attr value names
+			// 将sku attribute 分隔   //TODO 程序代码合并优化
+			String skuName = item.getItemName();
+			if(StringUtils.isNotBlank(skuPriceBean.getAttributes())){
+				String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+				for (String attrValuePair : skuAttrArray) {
+					String skuValueName = "";
 
-						String[] avPair = attrValuePair.split(":");
-						long attrId = Long.parseLong(avPair[0]);
-						long valueId = Long.parseLong(avPair[1]);
+					String[] avPair = attrValuePair.split(":");
+					long attrId = Long.parseLong(avPair[0]);
+					long valueId = Long.parseLong(avPair[1]);
 
-						AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
-						Attribute attr = attriubteService.getAttributeById(attrId);
+					AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
+					Attribute attr = attriubteService.getAttributeById(attrId);
 
-						skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
-						itemBean.getSkuAttrValueNames().add(skuValueName);
+					skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
+					itemBean.getSkuAttrValueNames().add(skuValueName);
 
-						skuName = skuName + skuValueName; // 生成sku name 生成sku
-					}
-				}			
-				itemBean.setSkuName(skuName);
+					skuName = skuName + skuValueName; // 生成sku name 生成sku
+				}
+			}			
+			itemBean.setSkuName(skuName);
 
-				// get sku picture
-				List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById((long) cartItem.getSkuId());
-				itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
-			}
+			// get sku picture
+			List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById((long) cartItem.getSkuId());
+			itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
 		}
-
 		model.addAttribute("cartItemList", cartItemList); // 加入到model
 		
-		//计算总金额
+		//(2)计算总金额
 		BigDecimal cartItemTotalPrice=calcCartItemTotalPrice(cartItemList);
 		model.addAttribute("cartItemTotalPrice", cartItemTotalPrice); // 加入到model
+		
+		//(3)商品数量
+		int itemNum = cartItemList.size();
+		model.addAttribute("itemNum", itemNum);
 		
 
 		return RESPONSE_THYMELEAF + "quickCart";
