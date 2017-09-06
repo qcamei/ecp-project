@@ -57,7 +57,7 @@ public class CategoryBrandController {
 	public ModelAndView goBrandPage(HttpServletRequest request, HttpServletResponse response){
 		ModelAndView mav = new ModelAndView();
 		
-		List<Category> categoryList = iCategoryService.getAll("sort_number DESC");
+		List<Category> categoryList = iCategoryService.getAll(null);
 		mav.addObject("ztreeNodes", JSON.toJSONString(categoryList));
 		
 		List<Brand> brandList = iBrandService.getAll();
