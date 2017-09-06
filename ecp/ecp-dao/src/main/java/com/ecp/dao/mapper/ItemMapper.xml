@@ -193,12 +193,15 @@
 		ON 
 			i.brand=b.brand_id 
 		<where>
+			i.deleted=1
 			<if test="search_keywords!=null and search_keywords!=''">
+				and (
 				c.c_name like CONCAT('%',#{search_keywords},'%' )
 				or 
 				b.brand_name like CONCAT('%',#{search_keywords},'%' )
 				or 
 				i.item_name like CONCAT('%',#{search_keywords},'%' )
+				)
 			</if>
 		</where>
 		ORDER BY i.item_id DESC

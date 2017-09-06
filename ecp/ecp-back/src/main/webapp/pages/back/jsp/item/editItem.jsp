@@ -17,7 +17,7 @@
 					<li class=""><a data-toggle="tab" href="#tab-8"
 						aria-expanded="false">商品详情</a></li>
 					<li class=""><a data-toggle="tab" href="#tab-9"
-						aria-expanded="false">商品详情</a></li>
+						aria-expanded="false">售后服务</a></li>
 				</ul>
 				<div class="tab-content">
 					<div id="tab-5" class="tab-pane active">

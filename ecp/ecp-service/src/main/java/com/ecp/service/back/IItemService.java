@@ -45,11 +45,11 @@ public interface IItemService extends IBaseService<Item, Long> {
 	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson);
 	
 	/**
-	 * 修改商品状态
-	 * @param itemId
+	 * 批量修改商品状态
+	 * @param itemIds
 	 * @param itemStatus
 	 * @return
 	 */
-	public int updateStatusById(Long itemId, Integer itemStatus);
+	public int updateStatusBatchByIds(String itemIds, Integer itemStatus);
 	
 }

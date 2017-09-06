@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.ItemPictureMapper;
 import com.ecp.entity.ItemPicture;
 import com.ecp.service.back.IItemPictureService;
@@ -32,7 +33,7 @@ public class ItemPictureServiceImpl extends AbstractBaseService<ItemPicture, Lon
 	@Override
 	public List<ItemPicture> getByItemId(Long itemId) {
 		Example example = new Example(ItemPicture.class);
-		example.createCriteria().andEqualTo("itemId", itemId);
+		example.createCriteria().andEqualTo("itemId", itemId).andEqualTo("deleted", DeletedType.NO);
 		return itemPictureMapper.selectByExample(example);
 	}
 

@@ -21,7 +21,7 @@
 					<ul class="nav nav-tabs">
 						<li class="active" onclick="javascript:resetCateAttrAndValTab();"><a href="#panel-508461" data-toggle="tab">类目列表</a>
 						</li>
-						<li><a href="#panel-355189" data-toggle="tab">添加/编辑</a></li>
+						<li class="hide" id="category-attr-li"><a href="#panel-355189" data-toggle="tab">添加/编辑</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-508461">
@@ -192,12 +192,13 @@
 			if(level==null || level==""){
 				util.message("请选择类目！");
 			}else if (level == 2) {
+				$("#category-attr-li").removeClass("hide");//隐藏添加编辑类目属性和类目属性值选项卡
 				$('#tabs-819446 a[href="#panel-355189"]').tab('show');//显示编辑类目属性选项卡
 				var params = new Object();
 				selectCategoryAttrItemByPagehelper(params);//获取类目ID查询类目属性
 			} else {
 				console.log("级别：" + g_level + " （从0开始，0为级别1）");
-				util.message("您所选择的级别是 " + g_level + " ，请选择叶子节点。");
+				util.message("请选择三级类目！");
 			}
 		}
 		
@@ -230,6 +231,7 @@
 			$("#category-attr-value-item").empty();//清空类目属性值列表
 			$('#tabs-819447 a[href="#panel-508462"]').tab('show');//显示类目属性列表选项卡
 			$('#tabs-819446 a[href="#panel-508461"]').tab('show');//显示类目列表选项卡
+			$("#category-attr-li").addClass("hide");//隐藏添加编辑类目属性和类目属性值选项卡
 		}
 		
 	</script>

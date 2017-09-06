@@ -173,6 +173,23 @@ public class RequestResultUtil {
 	}
 	
 	/**
+	 * 方法功能：获取修改异常结果集
+	 * @return
+	 * <hr>
+	 * <b>描述：</b>
+	 * <p>Description:方法功能详细说明</p> 
+	 * <p>Version: 1.0</p>
+	 * <p>Author: srd </p>
+	 * <p>Date: 2017年1月5日 下午2:05:54</p>
+	 */
+	public static Map<String, Object> getResultUpdateWarn(String msg){
+		respMap.clear();
+		respMap.put(RESULT_CODE, RESULT_CODE_FAIL);
+		respMap.put(RESULT_ERR_MSG, msg);
+		return respMap;
+	}
+	
+	/**
 	 * 方法功能：获取删除成功结果集
 	 * @return
 	 * <hr>

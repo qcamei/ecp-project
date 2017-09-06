@@ -9,24 +9,25 @@
 <head>
 <title>添加商品</title>
 <%@ include file="../../../common/headCss.jsp"%>
-<script type="text/javascript">
-	window.UEDITOR_HOME_URL = "/ecp-back/tools/ueditor/"; //一定要用这句话，否则你需要去ueditor.config.js修改路径的配置信息
-</script>
 
-<script type="text/javascript" charset="utf-8"
-	src="tools/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8"
-	src="tools/ueditor/ueditor.all.min.js"></script>
-<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
-<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-<script type="text/javascript" charset="utf-8"
-	src="tools/ueditor/lang/zh-cn/zh-cn.js"></script>
-<!-- 日期工具 -->
-<script type="text/javascript" src="static/calendar/WdatePicker.js"></script>
-
-<%@ include file="../../../common/headJs.jsp"%>
-
-<script type="text/javascript" src="static/jquery/ajaxFileUpload.js"></script>
+	<script type="text/javascript">
+		window.UEDITOR_HOME_URL = "/ecp-back/tools/ueditor/"; //一定要用这句话，否则你需要去ueditor.config.js修改路径的配置信息
+	</script>
+	
+	<script type="text/javascript" charset="utf-8"
+		src="tools/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="tools/ueditor/ueditor.all.min.js"></script>
+	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+	<script type="text/javascript" charset="utf-8"
+		src="tools/ueditor/lang/zh-cn/zh-cn.js"></script>
+	<!-- 日期工具 -->
+	<script type="text/javascript" src="static/calendar/WdatePicker.js"></script>
+	
+	<%@ include file="../../../common/headJs.jsp"%>
+	
+	<script type="text/javascript" src="static/jquery/ajaxFileUpload.js"></script>
 
 </head>
 <body class="gray-bg">
@@ -305,7 +306,7 @@
 																	<div class="col-md-5 ">
 																		<input type="file" id="picture-url" name="pictureImg"
 																			onchange="javascript:validateImgFileSizeFun(this);"
-																			accept="image/jpeg" multiple="multiple" /> <input
+																			accept="image/*" multiple="multiple" /> <input
 																			type="hidden" id="brand-logo-url" name="pictureUrl" />
 																	</div>
 																</div>
@@ -363,7 +364,7 @@
 																<div class="form-group">
 																	<label class="col-md-2 control-label">描述</label>
 																	<div class="col-md-10 ">
-																		<script id="item-ueditor" type="text/plain"
+																		<script id="item-ueditor" name="itemUeditor" type="text/plain"
 																			style="width: 100%; height: 500px;"></script>
 																	</div>
 																</div>
@@ -388,7 +389,7 @@
 																<div class="form-group">
 																	<label class="col-md-2 control-label">售后服务</label>
 																	<div class="col-md-10 ">
-																		<script id="after-service" type="text/plain"
+																		<script id="after-service" name="afterService" type="text/plain"
 																			style="width: 100%; height: 500px;"></script>
 																	</div>
 																</div>

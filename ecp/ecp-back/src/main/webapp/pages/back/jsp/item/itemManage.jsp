@@ -6,6 +6,7 @@
 <head>
 <title>商品管理</title>
 <%@ include file="../../../common/headCss.jsp"%>
+
 <script type="text/javascript">
 	window.UEDITOR_HOME_URL = "/ecp-back/tools/ueditor/"; //一定要用这句话，否则你需要去ueditor.config.js修改路径的配置信息
 </script>
@@ -63,8 +64,8 @@
 														<div class="form-group">
 															<label for="name" class="col-sm-2 control-label">&nbsp;</label>
 															<div class="col-sm-10">
-																<button type="button" class="btn btn-primary" id="search-submit-btn">查询</button>
-																<button type="button" class="btn btn-danger" id="search-reset-btn">重置</button>
+																<button type="button" class="btn btn-default btn-primary" id="search-submit-btn">查询</button>
+																<button type="button" class="btn btn-default btn-warning" id="search-reset-btn">重置</button>
 															</div>
 														</div>
 													</form>
@@ -77,9 +78,19 @@
 													</h3>
 												</div>
 												<div class="panel-body">
-													<div id="item-div" style="margin: 20px">
-														<%@ include file="itemManageTable.jsp"%>
+													<div class="panel panel-default">
+														<div class="panel-body">
+															<button type="button" class="btn btn-danger" id="batch-delete-btn">批量删除</button>
+															<button type="button" class="btn btn-default btn-warning" id="batch-shelve-btn">批量上架</button>
+															<button type="button" class="btn btn-danger" id="batch-unshelve-btn">批量下架</button>
+														</div>
 													</div>
+													<div class="panel panel-default">
+														<div id="item-div" style="margin: 20px">
+															<%@ include file="itemManageTable.jsp"%>
+														</div>
+													</div>
+													
 												</div>
 											</div>
 											
@@ -98,7 +109,7 @@
 </div>
 </div>
 </div>
-		
-		<script type="text/javascript" src="static/js/itemManage.js"></script>
+
+	<script type="text/javascript" src="static/js/itemManage.js"></script>
 </body>
 </html>

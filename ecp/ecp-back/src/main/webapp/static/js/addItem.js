@@ -128,11 +128,11 @@ var editorOption = {
 //商品详情（描述）
 var detail = new UE.ui.Editor(editorOption);  
 detail.render("item-ueditor");
-
+//var ue = UE.getEditor('item-ueditor', editorOption);
 //售后服务
 var after_service = new UE.ui.Editor(editorOption);  
 after_service.render("after-service");
-
+//var ue2 = UE.getEditor('after-service', editorOption);
 //$(function(){
 	
 	bootstrapValidateFun();//启用验证
