@@ -45,7 +45,7 @@
 					<!-- <a href="">忘记密码了？</a> -->
 					<div style="position:relative;">
 						<input id="kaptcha" value="" name="kaptcha_code" type="text" class="form-control x164 in" placeholder="请输入验证码" /> 
-						<img  id="kaptchaImage" class="" style="position:absolute;right:0;top:0;height:30px;" onclick="javascript:changeKaptchaImageFun();" alt="点击更换" title="看不清，点击换一张" src="back/getValidateCode" class="m">
+						<img  id="kaptchaImage" class="" style="position:absolute;right:1;top:1.5;" onclick="javascript:changeKaptchaImageFun();" alt="点击更换" title="看不清，点击换一张" src="back/getValidateCode" class="m">
 					</div>
 					<button type="button" class="btn btn-success btn-block" id="submit_btn">登录</button>
 				</form>

@@ -75,10 +75,10 @@
 																	<option value="0" level="0">请选择父类型（默认为根节点）</option>
 																	<c:forEach items="${categoryList}" var="category">
 																		<c:if test="${category.lev==1}">
-																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;┏&nbsp;&nbsp;${category.cName}</option>
 																		</c:if>
 																		<c:if test="${category.lev==2}">
-																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;┗&nbsp;&nbsp;${category.cName}</option>
 																		</c:if>
 																		<%-- <c:if test="${category.lev==3}">
 																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
