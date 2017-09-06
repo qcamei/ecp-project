@@ -36,6 +36,8 @@
 		P.sort_number=1 AND
 		f.`status`='1' AND
 		p.sort_number=1 AND
+		i.item_status=4 AND 
+		i.deleted=1 AND
 		f.user_id=#{userId} 
   </select>
   
@@ -57,8 +59,10 @@
 			item AS i on(f.favorite_id=i.item_id) left join
 			item_category  AS c on(i.cid=c.cid)
 	WHERE			
-			f.`status`='1' AND
-			f.user_id=#{userId}
+			f.`status`='1' AND			
+			f.user_id=#{userId} AND
+			i.item_status=4 AND 
+			i.deleted=1
 	GROUP BY
 			i.cid,
 			c.c_name
