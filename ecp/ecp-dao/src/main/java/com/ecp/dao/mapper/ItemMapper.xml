@@ -191,16 +191,19 @@
 		ON 
 			i.brand=b.brand_id 
 		<where>
-			<if test="search_keywords!=null and search_keywords!=''">
-				c.c_name like CONCAT('%',#{search_keywords},'%' )
-				or 
-				b.brand_name like CONCAT('%',#{search_keywords},'%' )
-				or 
-				i.item_name like CONCAT('%',#{search_keywords},'%' )
-			</if>
 			<if test="itemStatus!=0">
-				item_status=4 AND deleted=1
+				i.deleted=1
 			</if>
+			<if test="search_keywords!=null and search_keywords!=''">
+				AND (
+					c.c_name like CONCAT('%',#{search_keywords},'%' )
+					or 
+					b.brand_name like CONCAT('%',#{search_keywords},'%' )
+					or 
+					i.item_name like CONCAT('%',#{search_keywords},'%' )
+				)
+			</if>
+			
 		</where>
 		ORDER BY i.item_id DESC
 	</select>

@@ -44,8 +44,8 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 		
 		UserFavorite favourite=userFavoriteMapper.selectOne(record);
 		if(favourite==null){  //如果此关注不存在，则加入
-			record.setAddTime(new Date());			
-			row=userFavoriteMapper.insert(record);
+			record.setAddTime(new Date());	
+			row=userFavoriteMapper.insertSelective(record);			
 		}
 		return row;
 	}
