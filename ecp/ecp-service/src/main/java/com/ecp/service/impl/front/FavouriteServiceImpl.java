@@ -37,7 +37,7 @@ public class FavouriteServiceImpl extends AbstractBaseService<UserFavorite, Long
 		UserFavorite record=new UserFavorite();
 		record.setFavoriteId(favouriteId);
 		
-		record.setIdType("1");  //类型为商品
+		record.setIdType("1");  //类型为商品 
 		record.setStatus((byte)1);  //状态为可用
 		record.setUserId(userId);
 				
