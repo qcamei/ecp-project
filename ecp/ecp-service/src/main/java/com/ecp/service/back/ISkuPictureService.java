@@ -15,7 +15,7 @@ public interface ISkuPictureService extends IBaseService<SkuPicture, Long> {
 	public List<SkuPicture> getBySkuIds(List<Long> skuIds);
 	
 	/**
-	 * 根据skuID集合删除sku图片
+	 * 根据skuID集合删除sku图片（逻辑删除）
 	 * @param skuIds
 	 * @return
 	 */

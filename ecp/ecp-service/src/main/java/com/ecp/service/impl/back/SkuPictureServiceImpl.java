@@ -33,12 +33,12 @@ public class SkuPictureServiceImpl extends AbstractBaseService<SkuPicture, Long>
 	}
 
 	/**
-	 * @see com.ecp.service.back.ISkuPictureService#deleteBySkuIds(java.util.List)
+	 * @see com.ecp.service.back.ISkuPictureService#updateBySkuIds(java.util.List)
 	 * 根据skuID集合删除sku图片
 	 */
 	@Override
 	public int deleteBySkuIds(List<Long> skuIds) {
-		return skuPictureMapper.deleteBySkuIds(skuIds);
+		return skuPictureMapper.updateBySkuIds(skuIds);
 	}
 
 }

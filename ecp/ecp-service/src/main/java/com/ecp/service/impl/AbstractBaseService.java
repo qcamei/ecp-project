@@ -5,6 +5,7 @@ import java.util.List;
 import com.ecp.service.IBaseService;
 
 import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * Created by srd on 2017/02/21.
@@ -62,6 +63,16 @@ public abstract class AbstractBaseService<T,ID> implements IBaseService<T,ID> {
     @Override
     public int updateByPrimaryKeySelective(T entity) {
       return mapper.updateByPrimaryKeySelective(entity);
+    }
+    
+    /**
+     * @author: srd $Date: 2017年2月21日
+     * @see com.ecp.service.IBaseService#updateByExampleSelective(java.lang.Object, tk.mybatis.mapper.entity.Example)
+     * 根据条件修改
+     */
+    @Override
+    public int updateByExampleSelective(T entity, Example example) {
+      return mapper.updateByExampleSelective(entity, example);
     }
 
     /**

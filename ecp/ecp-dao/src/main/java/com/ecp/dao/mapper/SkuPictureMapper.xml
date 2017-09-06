@@ -38,4 +38,11 @@
 			#{item}
 		</foreach>
 	</delete>
+	<!-- 根据skuID集合修改sku图片 -->
+	<update id="updateBySkuIds">
+		update item_sku_picture set deleted=2 where sku_id in
+		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+			#{item}
+		</foreach>
+	</update>
 </mapper>

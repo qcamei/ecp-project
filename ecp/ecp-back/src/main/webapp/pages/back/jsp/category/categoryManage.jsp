@@ -72,9 +72,20 @@
 															<label class="col-sm-2 control-label">父类型</label>
 															<div class="col-sm-10">
 																<select class="form-control" id="category-parentid" name="parentCid">
-																	<option value="0">请选择父类型（默认为根节点）</option>
+																	<option value="0" level="0">请选择父类型（默认为根节点）</option>
 																	<c:forEach items="${categoryList}" var="category">
-																		<option value="${category.cid}">${category.cName}</option>
+																		<c:if test="${category.lev==1}">
+																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																		</c:if>
+																		<c:if test="${category.lev==2}">
+																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																		</c:if>
+																		<%-- <c:if test="${category.lev==3}">
+																			<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																		</c:if> --%>
+																		<c:if test="${category.lev!=1 && category.lev!=2 && category.lev!=3}">
+																			<option value="${category.cid}" level="${category.lev}">${category.cName}</option>
+																		</c:if>
 																	</c:forEach>
 																</select>
 															</div>
@@ -303,6 +314,15 @@
 			$.fn.zTree.init($("#category-ztree"), setting, zNodes);
 			
 			//});
+			/**
+			 * 绑定类目父节点的change事件
+			 */
+			$("#category-parentid").bind("change",function(){
+		        //获取自定义属性的值
+		        var lev = $(this).find("option:selected").attr("level");
+		        console.log("level:"+lev);
+				$("#category-level").val((parseInt(lev)+1));
+		    });
 		</SCRIPT>
 </body>
 </html>

@@ -17,6 +17,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.ecp.bean.DeletedType;
 import com.ecp.bean.ItemStatusType;
 import com.ecp.common.util.FileUploadUtil;
 import com.ecp.dao.ItemMapper;
@@ -224,7 +225,11 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					ItemPicture pict = pictList.get(i);
 					FileUploadUtil.deleteFile(request, pict.getPictureUrl());
 				}
-				itemPictureService.deleteByItemId(item.getItemId());
+				
+				ItemPicture pictureTemp = new ItemPicture();
+				pictureTemp.setItemId(item.getItemId());
+				pictureTemp.setDeleted(DeletedType.YES);
+				itemPictureService.updateByPrimaryKeySelective(pictureTemp);
 				
 				//循环商品图片List集合，添加商品图片信息
 				for(int i=0; i<pictureList.size(); i++){
@@ -249,6 +254,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			if(rows>0){
 				//修改商品属性值关系表
 				//添加新商品属性值关系之前先删除该商品对应原来数据
+				
 				itemAttrValueService.deleteByItemId(item.getItemId());
 				
 				//添加新商品属性值关系
@@ -260,16 +266,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				if(rows>0){
 					//修改SKU相关信息
 					//添加新SKU相关信息前先删除该商品对应的SKU相关信息
-					List<Long> skuIds = new ArrayList<Long>();
-					List<Sku> skuListTemp = skuService.getByItemId(item.getItemId());
-					for(Sku sku : skuListTemp){
-						skuIds.add(sku.getItemId());
-					}
-					if(skuIds!=null && skuIds.size()>0){
-						skuService.deleteByItemId(item.getItemId());//删除SKU信息
-						skuPriceService.deleteByItemId(item.getItemId());//删除SKU价格信息
-						skuPictureService.deleteBySkuIds(skuIds);//删除SKU图片信息
-					}
+					this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
 					
 					//添加新SKU相关信息
 					if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
@@ -306,6 +303,36 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		}
 		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		return 0;
+	}
+	
+	/**
+	 * 逻辑删除SKU相关数据
+	 * @param itemId
+	 */
+	@Transactional
+	private void deleteSkuRelateByItemId(Long itemId){
+		try {
+			List<Long> skuIds = new ArrayList<Long>();
+			List<Sku> skuListTemp = skuService.getByItemId(itemId);
+			for(Sku sku : skuListTemp){
+				skuIds.add(sku.getItemId());
+			}
+			if(skuIds!=null && skuIds.size()>0){
+				Sku skuTemp = new Sku();
+				skuTemp.setItemId(itemId);
+				skuTemp.setDeleted(DeletedType.YES);
+				skuService.updateByPrimaryKeySelective(skuTemp);//删除SKU信息
+				SkuPrice priceTemp = new SkuPrice();
+				priceTemp.setItemId(itemId);
+				priceTemp.setDeleted(DeletedType.YES);
+				skuPriceService.updateByPrimaryKeySelective(priceTemp);//删除SKU价格信息
+				skuPictureService.deleteBySkuIds(skuIds);//删除SKU图片信息
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return;
+		}
 	}
 	
 	/**

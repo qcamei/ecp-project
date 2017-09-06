@@ -33,7 +33,7 @@
 				<td>${item.brand}</td> --%>
 				<td>${item.item_name}</td>
 				<td>
-					<c:if test="${item.item_status==null || item.item_status==''}">
+					<c:if test="${empty item.item_status || (item.item_status!=4 && item.item_status!=5)}">
 						<button type="button" class="btn btn-primary" id="item-status-up-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 4);">上架</button>	
 						<button type="button" class="btn btn-danger" id="item-status-down-${item.item_id}" onclick="javascript:updateItemStatus(${item.item_id}, 5);">下架</button>
 					</c:if>

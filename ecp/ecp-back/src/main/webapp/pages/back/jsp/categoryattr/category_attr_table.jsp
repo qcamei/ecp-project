@@ -159,9 +159,9 @@
 						<div class="col-sm-10">
 							<select class="form-control" name="attrType" id="attr-form-attr-type">
 								<option value="1">关键属性</option>
-								<option value="2">不变属性</option>
-								<option value="3">可为属性</option>
 								<option value="4">销售属性</option>
+								<option value="3">可变属性</option>
+								<option value="2">不可变属性</option>
 							</select>
 						</div>
 					</div>

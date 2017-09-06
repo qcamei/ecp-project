@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.ecp.bean.CategoryAttrBean;
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.AttributeMapper;
 import com.ecp.dao.AttributeValueMapper;
 import com.ecp.dao.CategoryAttrMapper;
@@ -194,12 +195,16 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 	@Override
 	@Transactional
 	public int delCategoryAttr(Long attrId) {
-		// TODO Auto-generated method stub
-		int rows = attributeService.deleteByPrimaryKey(attrId);
+		Attribute attr = new Attribute();
+		attr.setAttrId(attrId);
+		attr.setDeleted(DeletedType.YES);
+		int rows = attributeService.updateByPrimaryKeySelective(attr);
 		if(rows>0){
 			Example example = new Example(CategoryAttr.class);
 			example.createCriteria().andEqualTo("attrId", attrId);
-			rows = categoryAttrMapper.deleteByExample(example);
+			CategoryAttr cAttr = new CategoryAttr();
+			cAttr.setDeleted(DeletedType.YES);
+			rows = categoryAttrMapper.updateByExampleSelective(cAttr, example);
 			if(rows>0){
 				return rows;
 			}
@@ -216,9 +221,15 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 	@Override
 	@Transactional
 	public int delCategoryAttrVal(Long valueId) {
-		// TODO Auto-generated method stub
-		int rows = attributeValueService.deleteByPrimaryKey(valueId);
+		AttributeValue value = new AttributeValue();
+		value.setValueId(valueId);
+		value.setDeleted(DeletedType.YES);
+		int rows = attributeValueService.updateByPrimaryKeySelective(value);
 		if(rows>0){
+			Example example = new Example(CategoryAttrValue.class);
+			example.createCriteria().andEqualTo("value_id", valueId);
+			CategoryAttrValue attrVal = new CategoryAttrValue();
+			attrVal.setDeleted(DeletedType.YES);
 			rows = categoryAttrValService.deleteByValueId(valueId);
 			if(rows>0){
 				return rows;

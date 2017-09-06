@@ -1,5 +1,6 @@
 package com.ecp.back.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.ecp.back.commons.SessionConstants;
 import com.ecp.back.commons.StaticConstants;
 import com.ecp.bean.UserBean;
 import com.ecp.common.util.RequestResultUtil;
-import com.ecp.entity.Brand;
 import com.ecp.entity.Category;
 import com.ecp.service.back.IAttributeService;
 import com.ecp.service.back.IAttributeValueService;
@@ -53,6 +52,8 @@ public class CategoryController {
 	@Autowired	
 	private IAttributeValueService iAttributeValueService;// 类目的属性值
 
+	List<Category> resultList = new ArrayList<Category>();//用户保存类目排序结果
+	
 	/**
 	 * 方法功能：查询列表
 	 * 
@@ -71,18 +72,62 @@ public class CategoryController {
 
 		List<Category> categoryList = iCategoryService.getAll(null);
 		log.info("List:" + categoryList);
-		mav.addObject("categoryList", categoryList);
-		// request.setAttribute("categoryList", categoryList);
-
+		
 		String categoryListJson = JSON.toJSONString(categoryList);
 		log.info("category list json string:" + categoryListJson);
 		mav.addObject("categoryListJson", categoryListJson);
+		
+		resultList.clear();
+		for(int i=0; i<categoryList.size(); i++){
+			Category category = categoryList.get(i);
+			if(category.getParentCid()==0){
+				resultList.add(category);
+				sortList(categoryList,category.getCid());
+			}
+		}
+		
+		mav.addObject("categoryList", resultList);
 
 		mav.setViewName(StaticConstants.CATEGORY_MANAGE_PAGE);
 
 		return mav;
 	}
+	
+	/**
+	 * List排序
+	 * @param categoryList
+	 * @param cid
+	 */
+	private void sortList(List<Category> categoryList,Long cid) {  
+        for(Category category :categoryList){
+            if(category.getParentCid()==cid){
+                resultList.add(category);
+                sortList(categoryList,category.getCid());
+            }
+        }
+    }
 
+	/**
+	 * 查询所有未删除的类目
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("/selectCategoryAll")
+	@ResponseBody
+	public Map<String, Object> selectCategoryAll(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<Category> categoryList = iCategoryService.getAll(null);
+			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
+			respM.put("categoryList", categoryList);
+			return respM;
+		} catch (Exception e) {
+			log.error("查询异常", e);
+			return RequestResultUtil.getResultSelectWarn();
+		}
+	}
+	
 	/**
 	 * 根据父ID查询类目
 	 * 
@@ -170,6 +215,11 @@ public class CategoryController {
 	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Category category) {
 
 		try {
+			if(category.getLev()!=null && category.getLev()==3){
+				category.setHasLeaf(1);
+			}else{
+				category.setHasLeaf(2);
+			}
 			int rows = iCategoryService.updateByPrimaryKeySelective(category);
 			if (rows > 0) {
 				return RequestResultUtil.getResultUpdateSuccess();

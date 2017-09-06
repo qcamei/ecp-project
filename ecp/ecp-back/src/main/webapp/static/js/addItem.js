@@ -125,8 +125,13 @@ var editorOption = {
 		]
 	};
 
+//商品详情（描述）
 var detail = new UE.ui.Editor(editorOption);  
 detail.render("item-ueditor");
+
+//售后服务
+var after_service = new UE.ui.Editor(editorOption);  
+after_service.render("after-service");
 
 //$(function(){
 	
@@ -156,7 +161,7 @@ function bootstrapValidateFun(){
 	                    message: "商品名称不能为空"
 	                },
 	                regexp: {
-		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.\\\\\/]+$",
+		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.()]+$",
 		                message: "请勿输入特殊符号"
 	                },
 	                stringLength: {
@@ -267,6 +272,7 @@ function loadAttrPage(cid, cname){
  * 给类目绑定点击事件，选择后把当前选择的突出显示
  */
 function bindClickEven(index){
+	$("#next-step-btn").attr("disabled", true);
 	if(index==1){
 		$(".item-category ul#first-category").on("click", "li", function(){
 			console.log("click first category");
@@ -290,6 +296,7 @@ function bindClickEven(index){
 			$(".item-category ul#third-category li").removeClass("current");
 			$(this).addClass("current");
 			$("#current-select-category #third").text("   >   "+$(this).text().replace(">", ""));
+			$("#next-step-btn").attr("disabled", false);
 		});
 	}else{
 		console.log("设置当前选中异常");
@@ -326,7 +333,9 @@ function saveFun(){
 	console.log("创建时间（毫秒）："+createtime.getTime());
 	var params = new Object();
 	params.createstr = createtime.getTime();
-	params.describeUrl = getContent("item-ueditor");
+	params.describeUrl = getContent("item-ueditor");//商品详情（描述）
+	params.afterService = getContent("after-service");//售后服务
+	console.log(getContent("after-service"));
 	try{
 		params.attributes = getItemAttr().toString();
 		params.attrSale = getSaleAttr().toString();
@@ -421,7 +430,9 @@ function getParams(){
 	
 	params.created = createtime;//创建时间
 	params.modified = new Date();//修改时间
-	params.describeUrl = getContent("item-ueditor");
+	params.describeUrl = getContent("item-ueditor");//商品详情（描述）
+	params.afterService = getContent("after-service");//售后服务
+	console.log(getContent("after-service"));
 	try{
 		params.attributes = getItemAttr().toString();
 		params.attrSale = getSaleAttr().toString();
@@ -484,7 +495,9 @@ function resetFun(){
 	}
 	$("#thumbnail-portrait").empty();
 	$("#attr-page").empty();
-	setContent("item-ueditor", "");//商品详情
+	setContent("item-ueditor", "");//商品详情（描述）
+	setContent("after-service", "");//售后服务
+	
 	$("#item-info-li").addClass("hide");//隐藏商品信息选项卡
 	$('#tabs-edit-item a[href="#tab-5"]').tab('show');
 }
