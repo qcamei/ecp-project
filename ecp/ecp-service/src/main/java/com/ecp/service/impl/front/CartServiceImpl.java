@@ -67,6 +67,7 @@ public class CartServiceImpl extends AbstractBaseService<Favourite, Integer> imp
 		record.setUserId(Integer.parseInt(Long.toString(userId)));
 		record.setStatus(status);
 		
+		
 		return favouriteMapper.select(record);
 		
 	}

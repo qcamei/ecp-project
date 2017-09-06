@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ecp.bean.AddSkuToOrderBean;
 import com.ecp.bean.CartItemBean;
 import com.ecp.bean.CartToOrderItemList;
+import com.ecp.bean.DeletedType;
 import com.ecp.bean.FollowCartItemBean;
 import com.ecp.bean.SkuPriceBean;
 import com.ecp.bean.SkuType;
@@ -407,43 +408,45 @@ public class CartController {
 			itemBean.setItemId(cartItem.getItemId());
 
 			// get item's name
-			Item item = itemService.getItemById((long) cartItem.getItemId());
-			itemBean.setItemName(item.getItemName());
-			itemBean.setWeightUnit(item.getWeightUnit());
-			itemBean.setCid(item.getCid());
+			Item item = itemService.getItemById((long) cartItem.getItemId());  //获取商品
+			
+			if(item!=null && item.getDeleted()==DeletedType.NO){ //如果商品没有删除
+				itemBean.setItemName(item.getItemName());
+				itemBean.setWeightUnit(item.getWeightUnit());
+				itemBean.setCid(item.getCid());
 
-			// get sku price and weight
-			SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
-			itemBean.setSkuPrice(skuPriceBean.getSell_price());
-			itemBean.setSkuWeight(skuPriceBean.getWeight());
+				// get sku price and weight
+				SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
+				itemBean.setSkuPrice(skuPriceBean.getSell_price());
+				itemBean.setSkuWeight(skuPriceBean.getWeight());
 
-			// get sku attr value names
-			// 将sku attribute 分隔   //TODO 程序代码合并优化
-			String skuName = item.getItemName();
-			if(StringUtils.isNotBlank(skuPriceBean.getAttributes())){
-				String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
-				for (String attrValuePair : skuAttrArray) {
-					String skuValueName = "";
+				// get sku attr value names
+				// 将sku attribute 分隔   //TODO 程序代码合并优化
+				String skuName = item.getItemName();
+				if(StringUtils.isNotBlank(skuPriceBean.getAttributes())){
+					String skuAttrArray[] = skuPriceBean.getAttributes().split(",");
+					for (String attrValuePair : skuAttrArray) {
+						String skuValueName = "";
 
-					String[] avPair = attrValuePair.split(":");
-					long attrId = Long.parseLong(avPair[0]);
-					long valueId = Long.parseLong(avPair[1]);
+						String[] avPair = attrValuePair.split(":");
+						long attrId = Long.parseLong(avPair[0]);
+						long valueId = Long.parseLong(avPair[1]);
 
-					AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
-					Attribute attr = attriubteService.getAttributeById(attrId);
+						AttributeValue attributeValue = attrValueService.getAttributeValueById(attrId, valueId);
+						Attribute attr = attriubteService.getAttributeById(attrId);
 
-					skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
-					itemBean.getSkuAttrValueNames().add(skuValueName);
+						skuValueName = attr.getAttrName() + ":" + attributeValue.getValueName();
+						itemBean.getSkuAttrValueNames().add(skuValueName);
 
-					skuName = skuName + skuValueName; // 生成sku name 生成sku
-				}
-			}			
-			itemBean.setSkuName(skuName);
+						skuName = skuName + skuValueName; // 生成sku name 生成sku
+					}
+				}			
+				itemBean.setSkuName(skuName);
 
-			// get sku picture
-			List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById((long) cartItem.getSkuId());
-			itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
-
+				// get sku picture
+				List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById((long) cartItem.getSkuId());
+				itemBean.setSkuPicture(skuPicts.get(0).getPictureUrl());
+			}
 		}
 
 		model.addAttribute("cartItemList", cartItemList); // 加入到model
