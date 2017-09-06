@@ -43,13 +43,13 @@
 															</c:forEach> --%>
 															<c:forEach items="${categoryList}" var="category">
 																<c:if test="${category.lev==1}">
-																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;┏&nbsp;&nbsp;${category.cName}</option>
 																</c:if>
 																<c:if test="${category.lev==2}">
-																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;┠&nbsp;&nbsp;${category.cName}</option>
 																</c:if>
 																<c:if test="${category.lev==3}">
-																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;╬══&nbsp;&nbsp;${category.cName}</option>
+																	<option value="${category.cid}" level="${category.lev}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ &nbsp;&nbsp;${category.cName}</option>
 																</c:if>
 																<c:if test="${category.lev!=1 && category.lev!=2 && category.lev!=3}">
 																	<option value="${category.cid}" level="${category.lev}">${category.cName}</option>
@@ -196,7 +196,7 @@
 													<div class="col-md-5 ">
 														<input type="file" id="picture-url" name="pictureImg"
 															onchange="javascript:validateImgFileSizeFun(this);"
-															accept="image/jpeg" multiple="multiple" /> <input
+															accept="image/*" multiple="multiple" /> <input
 															type="hidden" id="brand-logo-url" name="pictureUrl" />
 													</div>
 												</div>

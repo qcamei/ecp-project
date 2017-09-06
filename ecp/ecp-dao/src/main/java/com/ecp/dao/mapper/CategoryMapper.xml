@@ -36,7 +36,7 @@
   </select>
   
   <select id="getAllCategory" resultType="map">
-  	select * from item_category where deleted=1 order by cid DESC
+  	select * from item_category where deleted=1 order by sort_number ASC
   </select>
   
   

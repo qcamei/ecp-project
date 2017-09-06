@@ -1,6 +1,5 @@
 package com.ecp.service.impl.back;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +38,8 @@ import com.ecp.service.back.ISkuPriceService;
 import com.ecp.service.back.ISkuService;
 import com.ecp.service.commons.DefaultConstants;
 import com.ecp.service.impl.AbstractBaseService;
+
+import tk.mybatis.mapper.entity.Example;
 
 @Service("itemServiceBean")
 public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements IItemService {
@@ -218,18 +219,19 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				for(String filePath : filePathList){
 					pictureList.add(new ItemPicture(item.getItemId(), filePath));
 				}
-				//删除原来的图片数据
+				//逻辑删除原来的图片数据
 				//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
-				List<ItemPicture> pictList = itemPictureService.getByItemId(item.getItemId());
+				/*List<ItemPicture> pictList = itemPictureService.getByItemId(item.getItemId());
 				for(int i=0; i<pictList.size(); i++){
 					ItemPicture pict = pictList.get(i);
 					FileUploadUtil.deleteFile(request, pict.getPictureUrl());
-				}
+				}*/
 				
+				Example e = new Example(ItemPicture.class);
+				e.createCriteria().andEqualTo("itemId", item.getItemId());
 				ItemPicture pictureTemp = new ItemPicture();
-				pictureTemp.setItemId(item.getItemId());
 				pictureTemp.setDeleted(DeletedType.YES);
-				itemPictureService.updateByPrimaryKeySelective(pictureTemp);
+				itemPictureService.updateByExampleSelective(pictureTemp, e);
 				
 				//循环商品图片List集合，添加商品图片信息
 				for(int i=0; i<pictureList.size(); i++){
@@ -254,7 +256,6 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			if(rows>0){
 				//修改商品属性值关系表
 				//添加新商品属性值关系之前先删除该商品对应原来数据
-				
 				itemAttrValueService.deleteByItemId(item.getItemId());
 				
 				//添加新商品属性值关系
