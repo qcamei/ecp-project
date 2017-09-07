@@ -265,6 +265,7 @@ function createHeadHtml(arr){
 	return htmlHead;
 }
 function createBodyHtml(arr){
+	var checkInput = "onkeydown='javascript:var keynum = window.event ? event.keyCode : event.which;if((keynum>=48 && keynum<=57) || (keynum>=96 && keynum<=105) || (keynum>=37 && keynum<=40) || keynum==110 || keynum==190 || keynum==8 || keynum==9 || keynum==46){return true;}return false;'";
 	var htmlBody = ""
 	for(var i=0; i<arr.length; i++){
 		//$("#sku-body").append(createBodyHtml(tab_bodys));
@@ -277,22 +278,37 @@ function createBodyHtml(arr){
 			+"</td>";
 		}
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='cost-price-"+i+"' value='' placeholder='成本价' />"
+		htmlBody += "<input type='text' id='cost-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='成本价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='sell-price-"+i+"' value='' placeholder='销售价' />"
+		htmlBody += "<input type='text' id='sell-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='销售价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='volume-"+i+"' value='' placeholder='体积' />"
+		htmlBody += "<input type='text' id='volume-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='体积' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='weight-"+i+"' value='' placeholder='重量' />"
+		htmlBody += "<input type='text' id='weight-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='重量' />"
 		htmlBody += "</td>";
 		htmlBody += "</tr>";
 	}
 	
 	return htmlBody;
 }
+
+/**
+ * 检查输入的字符
+ */
+function checkInput(obj, e){
+	var realkey = String.fromCharCode(e.which);
+	console.log(e.keyCode+","+realkey);
+	var val = obj.value;
+	var patrn = /^([\d]+|([\d]+[.]?|[\d]+[.]?[\d]+))$/;//第一位不为.的整数或小数
+	if(patrn.test(val)){
+		return true;
+	}
+	obj.value = "";
+}
+
 function createHtmlTd(currArr){
 	var htmlBody = "";
 	for(var n=0; n<currArr.length; n++){

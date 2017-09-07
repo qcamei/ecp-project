@@ -52,9 +52,11 @@
   	 	c.attr_id,
   	 	a.attr_name
   	 from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id) 
-  	 where c.cid=#{cid} and c.deleted=1 and a.deleted=1	
+
+  	 where c.deleted=1 and a.deleted=1 c.cid=#{cid} ORDER BY sort_number ASC	
+
   </select>
-  
+ 
   
   <!-- 按cid,attr_type读取类目属性 --> 
   <select id="getCategoryAttrByCidAndType" resultMap="CategoryAttrResult">

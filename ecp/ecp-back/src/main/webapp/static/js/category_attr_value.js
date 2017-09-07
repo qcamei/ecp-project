@@ -1,14 +1,14 @@
 
 $(function(){
 	
-	bootstrapValidateFun();//启用验证
+	bootstrapValidateAttrValFun();//启用验证
 	
 });
 
 /*
  * bootstrap验证
  */
-function bootstrapValidateFun(){
+function bootstrapValidateAttrValFun(){
 	/*
 	 * bootstrapValidator验证
 	 */
@@ -192,13 +192,13 @@ function checkAttrValAll(obj){
  */
 function resetAttrValueForm(){
 	$("#save-attr-value-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
-	bootstrapValidateFun();//启用验证
+	bootstrapValidateAttrValFun();//启用验证
 	//$('#save-attr-value-form')[0].reset();
 	$(":input","#save-attr-value-form")  
-	 .not(":button, :submit, :reset")  
-	 .val("")
+	 .not(":button, :submit, :reset, :radio")  
+	 .val("");
 	 //.removeAttr("checked")  
-	 .removeAttr("selected");
+	 //.removeAttr("selected");
 }
 
 /*

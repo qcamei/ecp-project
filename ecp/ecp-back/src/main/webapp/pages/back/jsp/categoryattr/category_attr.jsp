@@ -56,7 +56,7 @@
 															<div class="tabbable" id="tabs-819447">
 																<ul class="nav nav-tabs">
 																	<li class="active" onclick="javascript:resetCateAttrValTab();"><a href="#panel-508462" data-toggle="tab">类目属性列表</a></li>
-																	<li><a href="#panel-355190" data-toggle="tab">类目属性值列表</a></li>
+																	<li class="hide" id="cate-attr-val-item-li"><a href="#panel-355190" data-toggle="tab">类目属性值列表</a></li>
 																</ul>
 																<div class="tab-content">
 																	<div class="tab-pane active" id="panel-508462">

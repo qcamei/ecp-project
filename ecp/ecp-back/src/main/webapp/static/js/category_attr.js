@@ -1,14 +1,14 @@
 
 //$(function(){
 	
-	bootstrapValidateFun();//启用验证
+	bootstrapValidateAttrFun();//启用验证
 	
 //});
 
 /*
  * bootstrap验证
  */
-function bootstrapValidateFun(){
+function bootstrapValidateAttrFun(){
 	/*
 	 * bootstrapValidator验证
 	 */
@@ -203,14 +203,20 @@ function checkAttrAll(obj){
  * 重置form表单
  */
 function resetAttrForm(){
-	$("#save-attr-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
-	bootstrapValidateFun();//启用验证
+	if($("#save-attr-form").data('bootstrapValidator')!=undefined){
+		$("#save-attr-form").data('bootstrapValidator').destroy();//销毁bootstrapValidator验证
+	}
+	
+	bootstrapValidateAttrFun();//启用验证
 	//$('#save-attr-form')[0].reset();
 	$(":input","#save-attr-form")  
-	 .not(":button, :submit, :reset")  
-	 .val("")
+	 .not(":button, :submit, :reset, :radio")  
+	 .val("");
 	 //.removeAttr("checked")  
-	 .removeAttr("selected");
+	 //.removeAttr("selected");
+	$("#attr-form-attr-type").val(1);//设置属性类型默认值
+	$("#attr-form-option-type input:radio[name='optionType'][value='2']").attr("checked",true);//是否必填//设置是否必填默认值
+	$("#attr-form-input-type").val(1);//设置属性输入类型默认值
 }
 
 /*
