@@ -314,6 +314,7 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="static/js/category_attr.js"></script>
 
 <!-- 添加/编辑属性值对话框 -->
 <div class="modal fade" id="edit-category-attr-value-modal" role="dialog"
@@ -356,6 +357,7 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="static/js/category_attr_value.js"></script>
 
 </body>
 </html>

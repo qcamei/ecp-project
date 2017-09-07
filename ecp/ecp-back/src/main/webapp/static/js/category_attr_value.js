@@ -1,5 +1,5 @@
 
-var is_continue = false;//保存后是否继续
+var is_attr_value_continue = false;//保存后是否继续
 
 $(function(){
 	
@@ -52,7 +52,6 @@ function bootstrapValidateAttrValFun(){
 	    console.log("success");
 	}).on('error.form.bv',function(e){
 	    e.preventDefault();
-	    //saveAttrFun();//验证通过保存内容
 	    console.log("error");
 	    $("#save-attr-value-submit-btn").attr("disabled", false);
 		$("#save-attr-value-submit-continue-btn").attr("disabled", false);
@@ -63,7 +62,7 @@ function bootstrapValidateAttrValFun(){
  * 保存内容提交并关闭对话框
  */
 $("#save-attr-value-submit-btn").click(function(){
-	is_continue = false;//保存后是否继续
+	is_attr_value_continue = false;//保存后是否继续
 	$("#save-attr-value-submit-btn").attr("disabled", true);
 	$("#save-attr-value-submit-continue-btn").attr("disabled", true);
 	$("#save-attr-value-form").submit();
@@ -73,7 +72,7 @@ $("#save-attr-value-submit-btn").click(function(){
  * 保存内容提交并继续，不关闭对话框
  */
 $("#save-attr-value-submit-continue-btn").click(function(){
-	is_continue = true;//保存后是否继续
+	is_attr_value_continue = true;//保存后是否继续
 	$("#save-attr-value-submit-btn").attr("disabled", true);
 	$("#save-attr-value-submit-continue-btn").attr("disabled", true);
 	$("#save-attr-value-form").submit();
@@ -116,7 +115,7 @@ function saveAttrValueFun(){
 				var obj = $.parseJSON(res);
 				if(obj.result_code=="success"){
 					
-					if(is_continue){
+					if(is_attr_value_continue){
 						resetAttrValueForm();
 						$("#attr-value-modal-title").text("添加属性值");
 						var cid = $("#category-id").val();
@@ -131,6 +130,7 @@ function saveAttrValueFun(){
 							reloadCategoryAttrValItem();
 						});
 					}
+					is_attr_value_continue = false;//保存后是否继续
 					
 				}else{
 					util.message(obj.result_err_msg);
@@ -144,10 +144,11 @@ function saveAttrValueFun(){
  * form表单绑定keydown事件
  */
 $("#save-attr-value-form").keydown(function(e){
-	if (!e)
-		e = window.event;
-	if ((e.keyCode || e.which) == 13) {
-		$("#save-attr-value-submit-continue-btn").click();
+	if ((e.keyCode) == 13) {
+		console.log("keydown");
+		//$("#save-attr-submit-continue-btn").click();
+		$("#save-attr-value-submit-continue-btn").trigger("click");
+		return false;
 	}
 });
 
