@@ -78,6 +78,8 @@
  	<foreach close=")" collection="ids" index="index" item="brandId" open="(" separator=",">
 			#{brandId}
 	</foreach>
+	and c.deleted=1 and b.deleted=1
+	
   </select>
   
   
