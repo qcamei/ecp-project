@@ -92,6 +92,20 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 		
 		int rows = 0;
 		if(attribute.getAttrId()==null || categoryAttr.getId()==null){
+			
+			//获取数据库中排序字段的最大值，然后+1设置为当前排序字段；如果数据库中为空则排序字段设置默认值1
+			Example example = new Example(CategoryAttr.class);
+			example.createCriteria().andEqualTo("deleted", DeletedType.NO).andEqualTo("cid", categoryAttr.getCid()).andEqualTo("attrType", categoryAttr.getAttrType());
+			example.setOrderByClause("sort_number DESC");
+			List<CategoryAttr> attrList = categoryAttrMapper.selectByExample(example);
+			
+			if(attrList.isEmpty() || attrList.size()<=0){
+				categoryAttr.setSortNumber(1l);
+			}else{
+				CategoryAttr temp = attrList.get(0);
+				categoryAttr.setSortNumber((temp.getSortNumber()+1));
+			}
+			
 			// (1)保存属性，
 			attribute.setCreated(new Date());
 			attribute.setStatus(VALID);
@@ -142,6 +156,20 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 		
 		int rows = 0;
 		if(attrValue.getAttrId()==null || categoryAttrValue.getId()==null){
+			
+			//获取数据库中排序字段的最大值，然后+1设置为当前排序字段；如果数据库中为空则排序字段设置默认值1
+			Example example = new Example(CategoryAttrValue.class);
+			example.createCriteria().andEqualTo("deleted", DeletedType.NO).andEqualTo("cid", categoryAttrValue.getCid()).andEqualTo("attrId", categoryAttrValue.getAttrId());
+			example.setOrderByClause("sort_number DESC");
+			List<CategoryAttrValue> attrValList = categoryAttrValueMapper.selectByExample(example);
+			
+			if(attrValList.isEmpty() || attrValList.size()<=0){
+				categoryAttrValue.setSortNumber(1l);
+			}else{
+				CategoryAttrValue temp = attrValList.get(0);
+				categoryAttrValue.setSortNumber((temp.getSortNumber()+1));
+			}
+			
 			//(1)保存至  属性-值  表中  item_attribute_value
 			attrValue.setCreated(new Date());
 			attrValue.setStatus(VALID);

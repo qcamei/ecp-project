@@ -57,6 +57,16 @@ public abstract class AbstractBaseService<T,ID> implements IBaseService<T,ID> {
     
     /**
      * @author: srd $Date: 2017年2月21日
+     * @see com.ecp.service.IBaseService#selectByExample(tk.mybatis.mapper.entity.Example)
+     * 根据Example查询
+     */
+    @Override
+	public List<T> selectByExample(Example example) {
+		return mapper.selectByExample(example);
+	}
+
+	/**
+     * @author: srd $Date: 2017年2月21日
      * @see com.ecp.service.IBaseService#updateByPrimaryKeySelective(java.lang.Object)
      * 根据主键修改
      */

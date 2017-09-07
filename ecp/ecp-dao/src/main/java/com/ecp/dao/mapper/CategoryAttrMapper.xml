@@ -101,7 +101,7 @@
   	 	v.value_name,
 		av.sort_number
   	 FROM item_attribute_value v LEFT JOIN item_category_attr_value av ON v.value_id=av.value_id
-  	 WHERE v.deleted=1 and av.cid=#{cid} and av.attr_id=#{attrId} 	
+  	 WHERE v.deleted=1 and av.cid=#{cid} and av.attr_id=#{attrId} ORDER BY av.sort_number ASC
   </select>
   
   
