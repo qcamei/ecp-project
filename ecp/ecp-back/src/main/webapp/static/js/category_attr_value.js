@@ -1,4 +1,6 @@
 
+var is_continue = false;//保存后是否继续
+
 $(function(){
 	
 	bootstrapValidateAttrValFun();//启用验证
@@ -47,26 +49,56 @@ function bootstrapValidateAttrValFun(){
 	}).on('success.form.bv',function(e){
 	    e.preventDefault();
 	    saveAttrValueFun();//验证通过保存内容
+	    console.log("success");
+	}).on('error.form.bv',function(e){
+	    e.preventDefault();
+	    //saveAttrFun();//验证通过保存内容
+	    console.log("error");
+	    $("#save-attr-value-submit-btn").attr("disabled", false);
+		$("#save-attr-value-submit-continue-btn").attr("disabled", false);
 	});
 }
 
 /*
- * 保存内容提交
+ * 保存内容提交并关闭对话框
  */
 $("#save-attr-value-submit-btn").click(function(){
+	is_continue = false;//保存后是否继续
+	$("#save-attr-value-submit-btn").attr("disabled", true);
+	$("#save-attr-value-submit-continue-btn").attr("disabled", true);
 	$("#save-attr-value-form").submit();
 });
+
+/*
+ * 保存内容提交并继续，不关闭对话框
+ */
+$("#save-attr-value-submit-continue-btn").click(function(){
+	is_continue = true;//保存后是否继续
+	$("#save-attr-value-submit-btn").attr("disabled", true);
+	$("#save-attr-value-submit-continue-btn").attr("disabled", true);
+	$("#save-attr-value-form").submit();
+});
+
+/*
+ * 关闭对话框并重新加载数据
+ */
+$("#close-attr-value-btn").click(function(){
+	$('#edit-category-attr-value-modal').modal('hide');
+	$('#edit-category-attr-value-modal').on('hidden.bs.modal', function(){
+		//操作成功后重新加载当前菜单内容
+		reloadCategoryAttrValItem();
+	});
+});
+
 /*
  * 保存内容
  */
 function saveAttrValueFun(){
-	var url = null;
+	console.log("保存内容");
+	
 	var id = $("#attr-value-form-cid").val();
-	//if(id==null || id==""){
-		url = "back/attr/saveCategoryAttrValue";
-	//}else{
-		//url = "back/attr/updateById";
-	//}
+	
+	var url = "back/attr/saveCategoryAttrValue";
 	
 	//util.loading();
 	$("#save-attr-value-form").ajaxSubmit({
@@ -75,15 +107,31 @@ function saveAttrValueFun(){
 		data:{
 		},
 		success : function(res) {
+			
+			$("#save-attr-value-submit-btn").attr("disabled", false);
+			$("#save-attr-value-submit-continue-btn").attr("disabled", false);
+			
 			console.log(res);
 			if(res!=null){
 				var obj = $.parseJSON(res);
 				if(obj.result_code=="success"){
-					$('#edit-category-attr-value-modal').modal('hide');
-					$('#edit-category-attr-value-modal').on('hidden.bs.modal', function(){
-						//操作成功后重新加载当前菜单内容
-						reloadCategoryAttrValItem();
-					});
+					
+					if(is_continue){
+						resetAttrValueForm();
+						$("#attr-value-modal-title").text("添加属性值");
+						var cid = $("#category-id").val();
+						$("#attr-value-form-cid").val(cid);
+						var attrId = $("#attribute-id").val();
+						$("#attr-value-form-attr-id").val(attrId);
+						$("#attr-value-form-attr-value-name").focus();//属性值名称获取焦点
+					}else{
+						$('#edit-category-attr-value-modal').modal('hide');
+						$('#edit-category-attr-value-modal').on('hidden.bs.modal', function(){
+							//操作成功后重新加载当前菜单内容
+							reloadCategoryAttrValItem();
+						});
+					}
+					
 				}else{
 					util.message(obj.result_err_msg);
 				}

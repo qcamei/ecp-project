@@ -235,5 +235,127 @@
 		}
 		
 	</script>
+	
+<!-- 添加/编辑属性对话框 -->
+<div class="modal fade" id="edit-category-attr-modal" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title" id="attr-modal-title">标题</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="save-attr-form">				
+					<input type="hidden" name="cid" id="attr-form-cid" value="">
+					<input type="hidden" name="attrId" id="attr-form-attr-id" value="">
+					<input type="hidden" name="id" id="attr-form-cate-attr-id" value="">
+					<!-- 属性名称------ -->
+					<div class="form-group">
+						<label for="attr-form-attr-name" class="col-sm-2 control-label">属性名称</label>
+						<div class="col-sm-10">
+							<input class="form-control" name="attrName" id="attr-form-attr-name" type="text" />
+						</div>
+					</div>					
+					
+					<!--------- 属性类型   下拉框------ -->
+					<div class="form-group">
+						<label for="attr-form-attr-type" class="col-sm-2 control-label">属性类型</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="attrType" id="attr-form-attr-type">
+								<option value="1">关键属性</option>
+								<option value="4">销售属性</option>
+								<option value="3">可变属性</option>
+								<option value="2">不可变属性</option>
+							</select>
+						</div>
+					</div>
+
+					<!-- 是否必填  单选按钮 -->
+					<div class="form-group">
+						<label for="" class="col-sm-2 control-label">是否必填</label>
+						<div class="col-sm-10" id="attr-form-option-type">
+							<input type="radio" name="optionType" id="attr-form-option-type-one" value="1" checked="checked" /> 
+							<label for="attr-form-option-type-one">必填</label>
+							<input type="radio" name="optionType" id="attr-form-option-type-two" value="2" />
+							<label for="attr-form-option-type-two">非必填</label>
+						</div>
+					</div>
+
+
+					<!-- 是否多选  下拉框  -->
+					<div class="form-group">
+						<label for="attr-form-input-type" class="col-sm-2 control-label">属性类型</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="inputType" id="attr-form-input-type">
+								<option value="1">单选</option>
+								<option value="2">多选</option>
+								<option value="3">可输入</option>								
+							</select>
+						</div>
+					</div>
+
+					<!-- 排序号 -->					
+					<!-- <div class="form-group">
+						<label for="attr-form-sort" class="col-sm-2 control-label">排列序号</label>
+						<div class="col-sm-10">
+							<input type="number" class="form-control" name="sortNumber" id="attr-form-sort" />
+						</div>
+					</div> -->
+					
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="close-attr-btn">关闭并刷新</button>
+				<button type="button" class="btn btn-primary" id="save-attr-submit-btn">保存并关闭</button>
+				<button type="button" class="btn btn-primary" id="save-attr-submit-continue-btn">保存并继续</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 添加/编辑属性值对话框 -->
+<div class="modal fade" id="edit-category-attr-value-modal" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title" id="attr-value-modal-title">标题</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="save-attr-value-form">				
+					<input type="hidden" name="cid" id="attr-value-form-cid" value="">
+					<input type="hidden" name="attrId" id="attr-value-form-attr-id" value="">
+					
+					<input type="hidden" name="valueId" id="attr-value-form-attr-value-id" value="">
+					<input type="hidden" name="id" id="attr-value-form-cate-attr-value-id" value="">
+					<!-- 属性值名称 -->	
+					<div class="form-group">
+						<label for="attr-value-form-attr-value" class="col-sm-3 control-label">属性值名称</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" name="valueName" id="attr-value-form-attr-value-name" />
+						</div>
+					</div>
+					<!-- 属性值排序-->
+					<!-- <div class="form-group">
+						<label for="attr-value-form-attr-value" class="col-sm-3 control-label">属性值排序</label>
+						<div class="col-sm-9">
+							<input type="number" class="form-control" name="sortNumber" id="attr-value-form-attr-value-sort" />
+						</div>
+					</div> -->
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="close-attr-value-btn">关闭并刷新</button>
+				<button type="button" class="btn btn-primary" id="save-attr-value-submit-btn">保存并关闭</button>
+				<button type="button" class="btn btn-primary" id="save-attr-value-submit-continue-btn">保存并继续</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 </body>
 </html>

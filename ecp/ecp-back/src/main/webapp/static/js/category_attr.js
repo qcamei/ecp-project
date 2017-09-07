@@ -1,4 +1,5 @@
 
+var is_continue = false;//保存后是否继续
 //$(function(){
 	
 	bootstrapValidateAttrFun();//启用验证
@@ -61,19 +62,51 @@ function bootstrapValidateAttrFun(){
 	}).on('success.form.bv',function(e){
 	    e.preventDefault();
 	    saveAttrFun();//验证通过保存内容
+	    console.log("success");
+	}).on('error.form.bv',function(e){
+	    e.preventDefault();
+	    //saveAttrFun();//验证通过保存内容
+	    console.log("error");
+	    $("#save-attr-submit-btn").attr("disabled", false);
+		$("#save-attr-submit-continue-btn").attr("disabled", false);
 	});
 }
 
 /*
- * 保存内容提交
+ * 保存内容提交并关闭对话框
  */
 $("#save-attr-submit-btn").click(function(){
+	is_continue = false;//保存后是否继续
+	$("#save-attr-submit-btn").attr("disabled", true);
+	$("#save-attr-submit-continue-btn").attr("disabled", true);
 	$("#save-attr-form").submit();
 });
+/*
+ * 保存内容提交并继续输入不关闭对话框
+ */
+$("#save-attr-submit-continue-btn").click(function(){
+	is_continue = true;//保存后是否继续
+	$("#save-attr-submit-btn").attr("disabled", true);
+	$("#save-attr-submit-continue-btn").attr("disabled", true);
+	$("#save-attr-form").submit();
+});
+/*
+ * 关闭对话框并重新加载数据
+ */
+$("#close-attr-btn").click(function(){
+	$('#edit-category-attr-modal').modal('hide');
+	$('#edit-category-attr-modal').on('hidden.bs.modal', function(){
+		//操作成功后重新加载当前菜单内容
+		reloadCategoryAttrItem();
+	});
+});
+
 /*
  * 保存内容
  */
 function saveAttrFun(){
+	console.log("保存内容");
+	
 	var url = "back/attr/savecategoryattr";
 	
 	//util.loading();
@@ -83,15 +116,29 @@ function saveAttrFun(){
 		data:{
 		},
 		success : function(res) {
+			
+			$("#save-attr-submit-btn").attr("disabled", false);
+			$("#save-attr-submit-continue-btn").attr("disabled", false);
+			
 			console.log(res);
 			if(res!=null){
 				var obj = $.parseJSON(res);
 				if(obj.result_code=="success"){
-					$('#edit-category-attr-modal').modal('hide');
-					$('#edit-category-attr-modal').on('hidden.bs.modal', function(){
-						//操作成功后重新加载当前菜单内容
-						reloadCategoryAttrItem();
-					});
+					
+					if(is_continue){
+						resetAttrForm();//重置form表单
+						$("#attr-modal-title").text("添加属性");
+						var cid = $("#category-id").val();
+						$("#attr-form-cid").val(cid);
+						$("#attr-form-attr-name").focus();//属性名称获取焦点
+					}else{
+						$('#edit-category-attr-modal').modal('hide');
+						$('#edit-category-attr-modal').on('hidden.bs.modal', function(){
+							//操作成功后重新加载当前菜单内容
+							reloadCategoryAttrItem();
+						});
+					}
+					
 					
 				}else{
 					util.message(obj.result_err_msg);
