@@ -32,6 +32,7 @@ import com.ecp.entity.Attribute;
 import com.ecp.entity.AttributeValue;
 import com.ecp.entity.Favourite;
 import com.ecp.entity.Item;
+import com.ecp.entity.Sku;
 import com.ecp.entity.SkuPicture;
 import com.ecp.entity.User;
 import com.ecp.entity.UserAddressInfo;
@@ -94,7 +95,15 @@ public class CartController {
 		// 准备数据
 		// (1)准备购物车条目数据
 		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();  //向前台传递的购物车条目 
-		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取条目
+		List<Favourite> tempCartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取条目
+		List<Favourite> cartItems=new ArrayList<Favourite>();
+		for(Favourite fav:tempCartItems){
+			Sku sku=skuService.selectByPrimaryKey((long)fav.getSkuId());
+			if(sku.getDeleted()==DeletedType.NO){
+				cartItems.add(fav);
+			}
+		}		
+		
 		for (Favourite cartItem : cartItems) {
 			Item item = itemService.getItemById((long) cartItem.getItemId());
 			if(item==null || item.getDeleted()==DeletedType.YES || item.getItemStatus()!=ItemStatusType.IS_SALING) continue;
@@ -392,10 +401,17 @@ public class CartController {
 		long userId = user.getId();
 
 		// 准备数据
-		// (1)准备购物车条目数据
-		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();  //向前台传递的购物车条目列表
-
-		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取购物车条目
+		// (1)准备购物车条目数据		
+		List<CartItemBean> cartItemList = new ArrayList<CartItemBean>();  //向前台传递的购物车条目 
+		List<Favourite> tempCartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取条目
+		List<Favourite> cartItems=new ArrayList<Favourite>();
+		for(Favourite fav:tempCartItems){  //过滤掉已经删除的SKU
+			Sku sku=skuService.selectByPrimaryKey((long)fav.getSkuId());
+			if(sku.getDeleted()==DeletedType.NO){
+				cartItems.add(fav);
+			}
+		}
+		
 		for (Favourite cartItem : cartItems) {  
 			Item item = itemService.getItemById((long) cartItem.getItemId());  //获取购物车条目商品信息
 			if(item==null || item.getDeleted()==DeletedType.YES || item.getItemStatus()!=ItemStatusType.IS_SALING) continue;
@@ -417,6 +433,7 @@ public class CartController {
 
 			// get sku price and weight
 			SkuPriceBean skuPriceBean = skuService.getSkuBySkuId(cartItem.getSkuId());
+			if(skuPriceBean==null) continue;
 			itemBean.setSkuPrice(skuPriceBean.getSell_price());
 			itemBean.setSkuWeight(skuPriceBean.getWeight());
 
