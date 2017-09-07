@@ -87,13 +87,21 @@
   
   <!-- getCategoryAttrValList 读取属性值列表 -->
   <select id="getCategoryAttrValList" resultType="hashmap">
-  	SELECT  	 	
+  	<!-- SELECT  	 	
   	 	c.cid,  	 	
   	 	c.attr_id,
   	 	v.value_id,
   	 	v.value_name
   	 FROM item_attribute_value v  LEFT JOIN item_category_attr c  ON(c.attr_id=v.attr_id) 
-  	 WHERE c.cid=#{cid} and c.attr_id=#{attrId} and c.deleted=1 and v.deleted=1 	
+  	 WHERE c.cid=#{cid} and c.attr_id=#{attrId} and c.deleted=1 and v.deleted=1 -->
+  	 SELECT  	 	
+  	 	av.cid,  	 	
+  	 	av.attr_id,
+  	 	v.value_id,
+  	 	v.value_name,
+		av.sort_number
+  	 FROM item_attribute_value v LEFT JOIN item_category_attr_value av ON v.value_id=av.value_id
+  	 WHERE v.deleted=1 and av.cid=#{cid} and av.attr_id=#{attrId} 	
   </select>
   
   
