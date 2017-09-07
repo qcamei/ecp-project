@@ -23,6 +23,7 @@
 								</th>
 								<th>ID</th>
 								<th>值名称</th>
+								<th>排序</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -34,6 +35,7 @@
 									</td>
 									<td>${categoryAttrVal.value_id}</td>
 									<td>${categoryAttrVal.value_name}</td>
+									<td>${categoryAttrVal.sort_number}</td>
 									<td class="center ">
 										<div style="text-align: center;; height: auto;">
 											<button class="btn btn-default btn-primary"

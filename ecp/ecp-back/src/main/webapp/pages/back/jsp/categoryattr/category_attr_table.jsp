@@ -38,9 +38,48 @@
 									</td>
 									<td>${categoryAttr.attr_id}</td>
 									<td id="attr-name-${categoryAttr.attr_id}">${categoryAttr.attr_name}</td>
-									<td>${categoryAttr.attr_type}</td>
-									<td>${categoryAttr.option_type}</td>
-									<td>${categoryAttr.input_type}</td>
+									<td>
+										<c:if test="${empty categoryAttr.attr_type || categoryAttr.attr_type==null || categoryAttr.attr_type==''}">
+											未知
+										</c:if>
+										<c:if test="${not empty categoryAttr.attr_type && categoryAttr.attr_type==1}">
+											关键属性
+										</c:if>
+										<c:if test="${not empty categoryAttr.attr_type && categoryAttr.attr_type==2}">
+											不可变属性
+										</c:if>
+										<c:if test="${not empty categoryAttr.attr_type && categoryAttr.attr_type==3}">
+											可变属性
+										</c:if>
+										<c:if test="${not empty categoryAttr.attr_type && categoryAttr.attr_type==4}">
+											销售属性
+										</c:if>
+									</td>
+									<td>
+										<c:if test="${empty categoryAttr.option_type || categoryAttr.option_type==null || categoryAttr.option_type==''}">
+											未知
+										</c:if>
+										<c:if test="${not empty categoryAttr.option_type && categoryAttr.option_type==1}">
+											必填
+										</c:if>
+										<c:if test="${not empty categoryAttr.option_type && categoryAttr.option_type==2}">
+											非必填
+										</c:if>
+									</td>
+									<td>
+										<c:if test="${empty categoryAttr.input_type || categoryAttr.input_type==null || categoryAttr.input_type==''}">
+											未知
+										</c:if>
+										<c:if test="${not empty categoryAttr.input_type && categoryAttr.input_type==1}">
+											单选
+										</c:if>
+										<c:if test="${not empty categoryAttr.input_type && categoryAttr.input_type==2}">
+											多选
+										</c:if>
+										<c:if test="${not empty categoryAttr.input_type && categoryAttr.input_type==3}">
+											可输入
+										</c:if>
+									</td>
 									<td>${categoryAttr.sort_number}</td>
 									<td class="center ">
 										<div style="text-align: center;; height: auto;">
@@ -77,6 +116,7 @@
 		 * 		函数功能：判断用户选择是否选择类目，如果已选择则根据类目ID查询类目属性，如果未选择则提示用户
 		 */
 		function selectCategoryAttrValItem(cid, attrId){
+			$("#cate-attr-val-item-li").removeClass("hide");//显示类目属性值列表选项卡
 			var attrName = $("#attr-name-"+attrId).text();
 			$("#third-category-attr-name").text("   >   "+attrName);
 			$("#attribute-id").val(attrId);
@@ -124,6 +164,7 @@
 		function resetCateAttrValTab(){
 			$("#third-category-attr-name").text("");//清空用户选择的类目属性
 			$("#category-attr-value-item").empty();//清空类目属性值列表
+			$("#cate-attr-val-item-li").addClass("hide");//隐藏类目属性值列表选项卡
 		}
 		
 	</script>

@@ -227,10 +227,10 @@ public class CategoryAttrServiceImpl extends AbstractBaseService<CategoryAttr, L
 		int rows = attributeValueService.updateByPrimaryKeySelective(value);
 		if(rows>0){
 			Example example = new Example(CategoryAttrValue.class);
-			example.createCriteria().andEqualTo("value_id", valueId);
+			example.createCriteria().andEqualTo("valueId", valueId);
 			CategoryAttrValue attrVal = new CategoryAttrValue();
 			attrVal.setDeleted(DeletedType.YES);
-			rows = categoryAttrValService.deleteByValueId(valueId);
+			rows = categoryAttrValService.updateByExampleSelective(attrVal, example);
 			if(rows>0){
 				return rows;
 			}
