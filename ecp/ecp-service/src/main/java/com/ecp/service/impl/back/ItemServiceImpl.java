@@ -145,7 +145,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			}
 			//删除商品属性值关系表	item_attr_value_item
 			itemAttrValueService.deleteByItemId(itemId);
-			this.deleteSkuRelateByItemId(itemId);//删除SKU相关数据（删除SKU表（item_sku）、删除SKU价格表（trade_sku_price）、删除SKU图片表（item_sku_picture））
+			this.deleteSkuRelateByItemId(itemId, true);//删除SKU相关数据（删除SKU表（item_sku）、删除SKU价格表（trade_sku_price）、删除SKU图片表（item_sku_picture））
 			//删除购物车中的商品	item_favourite
 			favouriteService.deleteByItemId(itemId);
 			return 1;
@@ -260,11 +260,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				log.info("修改商品 item 成功");
 			}
 			//TODO 修改商品图片 item_picture
+			boolean isDelskuPicture = false;//是否删除SKU图片
 			//处理上传缩略图
 			List<String> filePathList = this.processUploadFile(request, new ArrayList<ItemPicture>());
 			//如果上传图片为空时，添加默认图片
 			if(filePathList!=null && filePathList.size()>0){
-				
+				isDelskuPicture = true;//是否删除SKU图片
 				//根据上传图片数量创建商品图片List集合
 				List<ItemPicture> pictureList = new ArrayList<ItemPicture>();
 				for(String filePath : filePathList){
@@ -291,9 +292,11 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					rows = itemPictureService.insertSelective(picture);
 				}
 			}else{
-				filePathList = new ArrayList<String>();
 				//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
-				List<ItemPicture> pictureList = itemPictureService.getByItemId(item.getItemId());
+				filePathList = new ArrayList<String>();
+				isDelskuPicture = false;//是否删除SKU图片
+				
+				/*List<ItemPicture> pictureList = itemPictureService.getByItemId(item.getItemId());
 				//循环商品图片List集，获取商品图片信息并添加到缩略图集合（filePathList）
 				for(int i=0; i<pictureList.size(); i++){
 					ItemPicture picture = pictureList.get(i);
@@ -301,7 +304,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					if(StringUtils.isNotBlank(picture.getPictureUrl())){
 						filePathList.add(picture.getPictureUrl());
 					}
-				}
+				}*/
 			}
 			
 			if(rows>0){
@@ -318,7 +321,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				if(rows>0){
 					//修改SKU相关信息
 					//添加新SKU相关信息前先删除该商品对应的SKU相关信息
-					this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
+					this.deleteSkuRelateByItemId(item.getItemId(), isDelskuPicture);//逻辑删除SKU相关信息
 					
 					//添加新SKU相关信息
 					if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
@@ -360,26 +363,34 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	/**
 	 * 逻辑删除SKU相关数据
 	 * @param itemId
+	 * @param isDelskuPicture	是否删除SKU图片
 	 */
 	@Transactional
-	private void deleteSkuRelateByItemId(Long itemId){
+	private void deleteSkuRelateByItemId(Long itemId, boolean isDelskuPicture){
 		try {
-			List<Long> skuIds = new ArrayList<Long>();
-			List<Sku> skuListTemp = skuService.getByItemId(itemId);
-			for(Sku sku : skuListTemp){
-				skuIds.add(sku.getItemId());
+			Example skuExample = new Example(Sku.class);
+			skuExample.createCriteria().andEqualTo("itemId", itemId);
+			Sku skuTemp = new Sku();
+			skuTemp.setDeleted(DeletedType.YES);
+			skuService.updateByExampleSelective(skuTemp, skuExample);//逻辑删除SKU信息
+			
+			Example priceExample = new Example(Sku.class);
+			priceExample.createCriteria().andEqualTo("itemId", itemId);
+			SkuPrice priceTemp = new SkuPrice();
+			priceTemp.setDeleted(DeletedType.YES);
+			skuPriceService.updateByExampleSelective(priceTemp, priceExample);//逻辑删除SKU价格信息
+			
+			if(isDelskuPicture){
+				List<Long> skuIds = new ArrayList<Long>();
+				List<Sku> skuListTemp = skuService.getByItemId(itemId);
+				for(Sku sku : skuListTemp){
+					skuIds.add(sku.getSkuId());
+				}
+				if(skuIds!=null && skuIds.size()>0){
+					skuPictureService.deleteBySkuIds(skuIds);//逻辑删除SKU图片信息
+				}
 			}
-			if(skuIds!=null && skuIds.size()>0){
-				Sku skuTemp = new Sku();
-				skuTemp.setItemId(itemId);
-				skuTemp.setDeleted(DeletedType.YES);
-				skuService.updateByPrimaryKeySelective(skuTemp);//删除SKU信息
-				SkuPrice priceTemp = new SkuPrice();
-				priceTemp.setItemId(itemId);
-				priceTemp.setDeleted(DeletedType.YES);
-				skuPriceService.updateByPrimaryKeySelective(priceTemp);//删除SKU价格信息
-				skuPictureService.deleteBySkuIds(skuIds);//删除SKU图片信息
-			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
