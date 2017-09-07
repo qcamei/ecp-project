@@ -104,12 +104,12 @@
 						</div>
 					</div>
 					<!-- 属性值排序-->
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="attr-value-form-attr-value" class="col-sm-3 control-label">属性值排序</label>
 						<div class="col-sm-9">
 							<input type="number" class="form-control" name="sortNumber" id="attr-value-form-attr-value-sort" />
 						</div>
-					</div>
+					</div> -->
 				</form>
 			</div>
 			<div class="modal-footer">

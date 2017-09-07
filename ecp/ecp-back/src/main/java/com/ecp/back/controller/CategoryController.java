@@ -20,13 +20,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.ecp.back.commons.StaticConstants;
+import com.ecp.bean.DeletedType;
 import com.ecp.bean.UserBean;
 import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.Category;
+import com.ecp.entity.CategoryAttr;
 import com.ecp.service.back.IAttributeService;
 import com.ecp.service.back.IAttributeValueService;
 import com.ecp.service.back.IBrandService;
 import com.ecp.service.back.ICategoryService;
+
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * Class: CategoryController 商品分类Controller类
@@ -192,6 +196,19 @@ public class CategoryController {
 				category.setHasLeaf(1);
 			}else{
 				category.setHasLeaf(2);
+			}
+			
+			//获取数据库中排序字段的最大值，然后+1设置为当前排序字段；如果数据库中为空则排序字段设置默认值1
+			Example example = new Example(Category.class);
+			example.createCriteria().andEqualTo("deleted", DeletedType.NO).andEqualTo("parentCid", category.getParentCid());
+			example.setOrderByClause("sort_number DESC");
+			List<Category> categoryList = iCategoryService.selectByExample(example);
+			
+			if(categoryList.isEmpty() || categoryList.size()<=0){
+				category.setSortNumber(1);
+			}else{
+				Category temp = categoryList.get(0);
+				category.setSortNumber((temp.getSortNumber()+1));
 			}
 			
 			int rows = iCategoryService.insertSelective(category);

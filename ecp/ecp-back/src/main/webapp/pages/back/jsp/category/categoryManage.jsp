@@ -90,12 +90,12 @@
 																</select>
 															</div>
 														</div>
-														<div class="form-group">
+														<!-- <div class="form-group">
 															<label class="col-sm-2 control-label">排序</label>
 															<div class="col-sm-10">
 																<input type="number" class="form-control" id="sort-number" name="sortNumber" value="" placeholder="排序" />
 															</div>
-														</div>
+														</div> -->
 														<div class="form-group">
 															<label class="col-sm-2 control-label">&nbsp;</label>
 															<div class="col-sm-10">

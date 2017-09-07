@@ -122,7 +122,7 @@ function selectAttrDetails(cid, attrId){
 				$("#attr-form-cate-attr-id").val(categoryAttr.id);//类目属性ID
 				$("#attr-form-attr-type").val(categoryAttr.attrType);//属性类型
 				console.log(categoryAttr.optionType);
-				$("#attr-form-option-type input:radio[name='optionType'][value='"+categoryAttr.optionType+"']").attr("checked",true);//是否必填
+				$("#attr-form-option-type input:radio[name='optionType'][value='"+categoryAttr.optionType+"']").prop("checked",true);//是否必填
 				$("#attr-form-input-type").val(categoryAttr.inputType);//属性输入类型
 				$("#attr-form-sort").val(categoryAttr.sortNumber);//排列序号
 				
@@ -215,7 +215,7 @@ function resetAttrForm(){
 	 //.removeAttr("checked")  
 	 //.removeAttr("selected");
 	$("#attr-form-attr-type").val(1);//设置属性类型默认值
-	$("#attr-form-option-type input:radio[name='optionType'][value='2']").attr("checked",true);//是否必填//设置是否必填默认值
+	$("#attr-form-option-type input:radio[name='optionType'][value='1']").prop("checked",true);//是否必填//设置是否必填默认值
 	$("#attr-form-input-type").val(1);//设置属性输入类型默认值
 }
 

@@ -232,12 +232,12 @@
 					</div>
 
 					<!-- 排序号 -->					
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="attr-form-sort" class="col-sm-2 control-label">排列序号</label>
 						<div class="col-sm-10">
 							<input type="number" class="form-control" name="sortNumber" id="attr-form-sort" />
 						</div>
-					</div>
+					</div> -->
 					
 				</form>
 			</div>
