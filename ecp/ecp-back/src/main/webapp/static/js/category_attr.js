@@ -148,6 +148,17 @@ function saveAttrFun(){
 	});
 }
 
+/**
+ * form表单绑定keydown事件
+ */
+$("#save-attr-form").keydown(function(e){
+	if (!e)
+		e = window.event;
+	if ((e.keyCode || e.which) == 13) {
+		$("#save-attr-submit-continue-btn").click();
+	}
+});
+
 /*
  * 查看详细信息
  */
