@@ -20,33 +20,33 @@
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
-							<div class="container-fluid" style="margin-top: 20px;">
-								<div class="row clearfix">
-									<div class="col-md-12 column">
-										<div class="panel panel-default">
-											<div class="panel-heading">
-												<h3 class="panel-title">
-													用户列表
-												</h3>
-											</div>
-											<div class="panel-body">
+								<div class="container-fluid" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
 											<div class="panel panel-default">
-												<div class="panel-body">
-													<button type="button" class="btn btn-default btn-primary" id="add-user-btn">添加用户</button>
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														用户列表
+													</h3>
 												</div>
-											</div>
-											<div class="panel panel-default">
 												<div class="panel-body">
-													<div id="item-div" style="margin: 20px">
-														<%@ include file="user_table.jsp"%>
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<button type="button" class="btn btn-default btn-primary" id="add-user-btn">添加用户</button>
 													</div>
 												</div>
-											</div>
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<div id="item-div" style="margin: 20px">
+															<%@ include file="user_table.jsp"%>
+														</div>
+													</div>
+												</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
 								<%-- <div class="card-content">
 									<div class="table-responsive"
 										style="background: #fff; margin-top: 10px; border: 1px solid #e5e5e5;">

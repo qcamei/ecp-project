@@ -13,14 +13,41 @@
 				<div class="card">
 					<div class="tabs-container" id="tabs-243687">
 						<ul class="nav nav-tabs" id="top_tab">
-							<li class="active"><a data-toggle="tab" href="#tab-1"
+							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true">品牌列表</a></li>
-							<li class="" onclick="javascript:resetFun();"><a
+							<li class="hide" id="edit-brand-li"><a
 								data-toggle="tab" href="#tab-2" aria-expanded="false">添加/编辑</a></li>
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
-								<div class="card-content">
+								<div class="container-fluid" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														品牌列表
+													</h3>
+												</div>
+												<div class="panel-body">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<button type="button" class="btn btn-default btn-primary" id="add-brand-btn">添加品牌</button>
+													</div>
+												</div>
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<div id="item-div" style="margin: 20px">
+															<%@ include file="brandManageTable.jsp"%>
+														</div>
+													</div>
+												</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<%-- <div class="card-content">
 									<div class="table-responsive"
 										style="background: #fff; margin-top: 10px; border: 1px solid #e5e5e5;">
 										<div id="dataTables-example_wrapper"
@@ -32,7 +59,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> --%>
 							</div>
 							<div id="tab-2" class="tab-pane">
 								<div class="container-fluid" style="margin-top: 20px;">
@@ -56,7 +83,7 @@
 														</div>
 														<div class="form-group">
 															<label for="name" class="col-sm-2 control-label">&nbsp;</label>
-															<div class="col-sm-10"><b style="color:red;">注：请上传&nbsp;102*36&nbsp;的JPG图片！</b></div>
+															<div class="col-sm-10"><b style="color:red;">注：请上传&nbsp;102*36&nbsp;的图片！</b></div>
 														</div>
 														<div class="form-group">
 															<label class="col-md-2 control-label">品牌LOGO<b style="color:red;">&nbsp;*</b></label>
