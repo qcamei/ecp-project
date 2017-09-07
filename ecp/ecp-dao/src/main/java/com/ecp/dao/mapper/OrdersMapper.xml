@@ -132,7 +132,7 @@
   				AND name LIKE concat(concat('%',#{condValue}),'%') 
   			</when>
   			<when test="searchTypeValue==4">
-  				AND phone LIKE concat(concat('%',#{condValue}),'%') 
+  				AND mobile LIKE concat(concat('%',#{condValue}),'%') 
   			</when>
   		</choose>		
   		  	 
