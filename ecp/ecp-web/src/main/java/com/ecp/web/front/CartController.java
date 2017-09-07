@@ -23,6 +23,7 @@ import com.ecp.bean.CartItemBean;
 import com.ecp.bean.CartToOrderItemList;
 import com.ecp.bean.DeletedType;
 import com.ecp.bean.FollowCartItemBean;
+import com.ecp.bean.ItemStatusType;
 import com.ecp.bean.SkuPriceBean;
 import com.ecp.bean.SkuType;
 import com.ecp.common.SessionConstants;
@@ -96,7 +97,7 @@ public class CartController {
 		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取条目
 		for (Favourite cartItem : cartItems) {
 			Item item = itemService.getItemById((long) cartItem.getItemId());
-			if(item==null || item.getDeleted()==DeletedType.YES) continue;
+			if(item==null || item.getDeleted()==DeletedType.YES || item.getItemStatus()!=ItemStatusType.IS_SALING) continue;
 			
 			
 			CartItemBean itemBean = new CartItemBean();
@@ -397,7 +398,7 @@ public class CartController {
 		List<Favourite> cartItems = cartService.getCartItemByUserId(userId, (byte) 1);  //自购物车中读取购物车条目
 		for (Favourite cartItem : cartItems) {  
 			Item item = itemService.getItemById((long) cartItem.getItemId());  //获取购物车条目商品信息
-			if(item==null || item.getDeleted()==DeletedType.YES) continue;
+			if(item==null || item.getDeleted()==DeletedType.YES || item.getItemStatus()!=ItemStatusType.IS_SALING) continue;
 			
 			CartItemBean itemBean = new CartItemBean();
 			cartItemList.add(itemBean); // add into cartItemList
