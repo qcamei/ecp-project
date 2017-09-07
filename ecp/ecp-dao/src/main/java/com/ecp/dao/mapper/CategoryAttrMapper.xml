@@ -53,7 +53,7 @@
   	 	a.attr_name
   	 from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id) 
 
-  	 where c.deleted=1 and a.deleted=1 and c.cid=#{cid} ORDER BY sort_number ASC	
+  	 where c.deleted=1 and a.deleted=1 and c.cid=#{cid} ORDER BY c.attr_type,c.sort_number ASC	
 
   </select>
  
