@@ -28,7 +28,7 @@
   	FROM 
   		item_attribute_value 
   	WHERE 
-  		attr_id=#{attrId}
+  		deleted=1 and attr_id=#{attrId}
   </select>
   
   

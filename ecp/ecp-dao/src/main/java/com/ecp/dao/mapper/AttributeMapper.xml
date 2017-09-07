@@ -31,7 +31,7 @@
   	ON 
   		ca.attr_id=a.attr_id 
   	WHERE 
-  		ca.cid=#{cid}
+  		ca.deleted=1 and ca.cid=#{cid}
   </select>
   
   
