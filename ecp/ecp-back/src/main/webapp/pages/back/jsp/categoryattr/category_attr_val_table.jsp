@@ -53,8 +53,6 @@
 		</div>
 	</div>
 </div>
-
-	
 <%@include file="../../../common/pagehelper.jsp"%><!-- 分页页面 -->
 
 	<script type="text/javascript">
@@ -78,5 +76,3 @@
 		}
 		
 	</script>
-
-<script type="text/javascript" src="static/js/category_attr_value.js"></script>

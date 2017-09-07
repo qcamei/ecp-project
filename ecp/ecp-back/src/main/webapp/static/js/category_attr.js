@@ -1,5 +1,5 @@
 
-var is_continue = false;//保存后是否继续
+var is_attr_continue = false;//保存后是否继续
 //$(function(){
 	
 	bootstrapValidateAttrFun();//启用验证
@@ -65,7 +65,6 @@ function bootstrapValidateAttrFun(){
 	    console.log("success");
 	}).on('error.form.bv',function(e){
 	    e.preventDefault();
-	    //saveAttrFun();//验证通过保存内容
 	    console.log("error");
 	    $("#save-attr-submit-btn").attr("disabled", false);
 		$("#save-attr-submit-continue-btn").attr("disabled", false);
@@ -76,7 +75,8 @@ function bootstrapValidateAttrFun(){
  * 保存内容提交并关闭对话框
  */
 $("#save-attr-submit-btn").click(function(){
-	is_continue = false;//保存后是否继续
+	console.log("no continue");
+	is_attr_continue = false;//保存后是否继续
 	$("#save-attr-submit-btn").attr("disabled", true);
 	$("#save-attr-submit-continue-btn").attr("disabled", true);
 	$("#save-attr-form").submit();
@@ -85,7 +85,8 @@ $("#save-attr-submit-btn").click(function(){
  * 保存内容提交并继续输入不关闭对话框
  */
 $("#save-attr-submit-continue-btn").click(function(){
-	is_continue = true;//保存后是否继续
+	console.log("continue");
+	is_attr_continue = true;//保存后是否继续
 	$("#save-attr-submit-btn").attr("disabled", true);
 	$("#save-attr-submit-continue-btn").attr("disabled", true);
 	$("#save-attr-form").submit();
@@ -106,7 +107,6 @@ $("#close-attr-btn").click(function(){
  */
 function saveAttrFun(){
 	console.log("保存内容");
-	
 	var url = "back/attr/savecategoryattr";
 	
 	//util.loading();
@@ -125,7 +125,7 @@ function saveAttrFun(){
 				var obj = $.parseJSON(res);
 				if(obj.result_code=="success"){
 					
-					if(is_continue){
+					if(is_attr_continue){
 						resetAttrForm();//重置form表单
 						$("#attr-modal-title").text("添加属性");
 						var cid = $("#category-id").val();
@@ -138,7 +138,7 @@ function saveAttrFun(){
 							reloadCategoryAttrItem();
 						});
 					}
-					
+					is_attr_continue = false;//保存后是否继续
 					
 				}else{
 					util.message(obj.result_err_msg);
@@ -152,10 +152,11 @@ function saveAttrFun(){
  * form表单绑定keydown事件
  */
 $("#save-attr-form").keydown(function(e){
-	if (!e)
-		e = window.event;
-	if ((e.keyCode || e.which) == 13) {
-		$("#save-attr-submit-continue-btn").click();
+	if ((e.keyCode) == 13) {
+		console.log("keydown");
+		//$("#save-attr-submit-continue-btn").click();
+		$("#save-attr-submit-continue-btn").trigger("click");
+		return false;
 	}
 });
 

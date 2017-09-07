@@ -100,7 +100,7 @@
 		</div>
 	</div>
 </div>
-
+<%@include file="../../../common/pagehelper.jsp"%><!-- 分页页面 -->
 
 <!-- 用于保存用户选择属性的ID，用于分页查询 -->
 <input type="hidden" id="attribute-id" value="" />
@@ -168,7 +168,3 @@
 		}
 		
 	</script>
-
-<%@include file="../../../common/pagehelper.jsp"%><!-- 分页页面 -->
-
-<script type="text/javascript" src="static/js/category_attr.js"></script>
