@@ -16,9 +16,9 @@
 				<div class="card">
 					<div class="tabs-container" id="tabs-243687">
 						<ul class="nav nav-tabs" id="top_tab">
-							<li class="active"><a data-toggle="tab" href="#tab-1"
+							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true">菜单列表</a></li>
-							<li class="" onclick="javascript:resetFun();"><a data-toggle="tab" id="edit-tab" href="#tab-2"
+							<li class="hide" id="edit-menu-li"><a data-toggle="tab" id="edit-tab" href="#tab-2"
 								aria-expanded="false">新增/编辑</a></li>
 						</ul>
 						<div class="tab-content">

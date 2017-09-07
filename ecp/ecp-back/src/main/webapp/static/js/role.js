@@ -51,6 +51,7 @@ function selectDetails(id){
 		if(res!=null){
 			var resp = $.parseJSON(res);
 			if(resp.result_code=="success"){
+				$("#edit-role-li").removeClass("hide");
 				var role =resp.role;
 				$("#role-id").val(role.roleId);//ID
 				$("#role-name").val(role.roleName);//角色名称
@@ -193,6 +194,14 @@ function checkAll(obj){
 	$("#role-table tbody input[type='checkbox']").prop('checked', $(obj).prop('checked'));
 }
 
+/**
+ * 点击添加按钮显示编辑选项卡
+ */
+$("#add-role-btn").click(function(){
+	$("#edit-role-li").removeClass("hide");
+	$('#tabs-243687 a[href="#tab-2"]').tab('show');
+});
+
 /*
  * 重置form表单
  */
@@ -207,6 +216,7 @@ function resetFun(){
 	 .removeAttr("selected");
 	$.fn.zTree.init($("#menu-perms-ztree"), setting, zNodes);
 	menuPermsArr.length = 0;
+	$("#edit-role-li").addClass("hide");
 }
 
 /*

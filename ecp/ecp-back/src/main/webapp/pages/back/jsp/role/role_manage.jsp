@@ -16,14 +16,41 @@
 				<div class="card">
 					<div class="tabs-container" id="tabs-243687">
 						<ul class="nav nav-tabs" id="top_tab">
-							<li class="active"><a data-toggle="tab" href="#tab-1"
+							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true">角色列表</a></li>
-							<li class="" onclick="javascript:resetFun();"><a
+							<li class="hide" id="edit-role-li"><a
 								data-toggle="tab" href="#tab-2" aria-expanded="false">添加/编辑</a></li>
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
-								<div class="card-content">
+								<div class="container-fluid" style="margin-top: 20px;">
+									<div class="row clearfix">
+										<div class="col-md-12 column">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														角色列表
+													</h3>
+												</div>
+												<div class="panel-body">
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<button type="button" id="add-role-btn" class="btn btn-default btn-primary">添加角色</button>
+													</div>
+												</div>
+												<div class="panel panel-default">
+													<div class="panel-body">
+														<div id="item-div" style="margin: 20px">
+															<%@ include file="role_table.jsp"%>
+														</div>
+													</div>
+												</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<%-- <div class="card-content">
 									<div class="table-responsive"
 										style="background: #fff; margin-top: 10px; border: 1px solid #e5e5e5;">
 										<div id="dataTables-example_wrapper"
@@ -35,7 +62,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> --%>
 							</div>
 							<div id="tab-2" class="tab-pane">
 								<div class="container-fluid" style="margin-top: 20px;">

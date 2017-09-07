@@ -219,6 +219,7 @@ function reloadInfoFun(){
  */
 function add(id, name, pid){
 	resetFun();
+	$("#edit-menu-li").removeClass("hide");
 	$("#parent-id").val(id);//父类型ID
 	
 	$('#tabs-243687 a[href="#tab-2"]').tab('show');
@@ -233,6 +234,7 @@ function edit(id, name, icon, description, pid, url, sort){
 		return;
 	}
 	resetFun();
+	$("#edit-menu-li").removeClass("hide");
 	if((icon && icon!="undefined") || icon>0){
 		$("#menu-icon").val(icon);//菜单图标样式
 	}
@@ -259,6 +261,7 @@ function resetFun(){
 	 .val("")
 	 //.removeAttr("checked")  
 	 .removeAttr("selected");
+	$("#edit-menu-li").addClass("hide");
 }
 
 /*

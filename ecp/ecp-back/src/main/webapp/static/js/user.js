@@ -103,6 +103,7 @@ function selectDetails(id){
 		if(res!=null){
 			var resp = $.parseJSON(res);
 			if(resp.result_code=="success"){
+				$("#edit-user-li").removeClass("hide");
 				var user =resp.user;
 				var userRoleList = resp.userRoleList;
 				$("#user-id").val(user.id);//ID
@@ -244,6 +245,14 @@ function checkAll(obj){
 	$("#user-table tbody input[type='checkbox']").prop('checked', $(obj).prop('checked'));
 }
 
+/**
+ * 点击添加按钮显示添加编辑选项卡
+ */
+$("#add-user-btn").click(function(){
+	$("#edit-user-li").removeClass("hide");
+	$('#tabs-243687 a[href="#tab-2"]').tab('show');
+});
+
 /*
  * 重置form表单
  */
@@ -260,6 +269,7 @@ function resetFun(){
 		$(this).prop("checked", false);//设置checkbox未选中
 	});
 	$("#password").attr("disabled", false);
+	$("#edit-user-li").addClass("hide");
 }
 
 /*
