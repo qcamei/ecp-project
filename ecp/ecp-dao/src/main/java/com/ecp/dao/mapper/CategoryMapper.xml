@@ -32,7 +32,7 @@
 				c_name like  CONCAT('%',#{keyword},'%' )
 		</foreach>      
   	</where>
-  	AND lev=3
+  	AND lev=3 AND deleted=1
   </select>
   
   <select id="getAllCategory" resultType="map">

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.ItemPictureMapper;
 import com.ecp.entity.ItemPicture;
 import com.ecp.service.front.IItemPictureService;
@@ -26,6 +27,7 @@ public class ItemPictureServiceImpl extends AbstractBaseService<ItemPicture, Lon
 		//通过一个对象查询
 		ItemPicture itemPict=new ItemPicture();
 		itemPict.setItemId(itemId);
+		itemPict.setDeleted(DeletedType.NO);  //未删除标记
 		return itemPictureMapper.select(itemPict);			
 	}		
 	

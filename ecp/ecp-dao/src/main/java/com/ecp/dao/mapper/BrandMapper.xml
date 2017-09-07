@@ -30,7 +30,7 @@
 				brand_name like CONCAT('%',#{keyword},'%' )
 			</foreach>
 		</where>
-		and brand_status=1
+		and brand_status=1 and deleted=1
 		
 	</select>
 	<select id="getBrandByCategoryid" parameterType="map" resultType="map">
@@ -44,7 +44,7 @@
 		ON 
 			b.brand_id=cb.brand_id 
 		WHERE 
-			b.deleted=1 and 
+			b.deleted=1 and cb.deleted=1
 			cb.third_lev_cid=#{categoryId}
 		
 	</select>

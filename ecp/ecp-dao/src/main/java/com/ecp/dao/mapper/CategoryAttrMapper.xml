@@ -31,13 +31,13 @@
   </select> -->
   
   <select id="findByCid" parameterType="java.lang.Long" resultType="com.ecp.entity.CategoryAttr">
-		select * from item_category_attr where cid=#{cid}
+		select * from item_category_attr a where cid=#{cid} and a.deleted=1 
   </select>
   
   
   <select id="getCategoryAttrListByCid1" parameterType="java.lang.Long" resultType="map">
   	select c.id,c.cid,a.attr_id,a.attr_name, from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id)
-      where c.cid=#{cid}  	
+      where c.cid=#{cid}  and c.deleted=1 and a.deleted=1	
   </select>
   
   <!-- 按cid读取类目属性 -->
@@ -52,7 +52,7 @@
   	 	c.attr_id,
   	 	a.attr_name
   	 from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id) 
-  	 where c.cid=#{cid}  	
+  	 where c.cid=#{cid} and c.deleted=1 and a.deleted=1	
   </select>
   
   
@@ -68,7 +68,7 @@
   	 	c.attr_id,
   	 	a.attr_name
   	 from item_category_attr c left join item_attribute a on(c.attr_id=a.attr_id) 
-  	 where c.cid=#{cid} and c.attr_type=#{attr_type} 	
+  	 where c.cid=#{cid} and c.attr_type=#{attr_type} and c.deleted=1 and a.deleted=1	
   </select>
   
   
@@ -91,7 +91,7 @@
   	 	v.value_id,
   	 	v.value_name
   	 FROM item_attribute_value v  LEFT JOIN item_category_attr c  ON(c.attr_id=v.attr_id) 
-  	 WHERE c.cid=#{cid} and c.attr_id=#{attrId}  	
+  	 WHERE c.cid=#{cid} and c.attr_id=#{attrId} and c.deleted=1 and v.deleted=1 	
   </select>
   
   

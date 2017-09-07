@@ -30,7 +30,7 @@
   		b.brand_logo_url,
   		b.brand_name
   	from item_category_brand c left join item_brand b on(c.brand_id=b.brand_id) 
-  	where c.third_lev_cid=#{cid} 
+  	where c.third_lev_cid=#{cid} and c.deleted=1 and b.deleted=1
   		 
   </select>
   
@@ -43,7 +43,7 @@
  		b.brand_logo_url,
  		b.brand_name
   	FROM item_category_brand c LEFT JOIN item_brand b ON(c.brand_id=b.brand_id) 
-  	WHERE c.second_lev_cid=#{cid} 
+  	WHERE c.second_lev_cid=#{cid}  and c.deleted=1 and b.deleted=1
   		 
   </select>
   
@@ -59,9 +59,10 @@
  		b.brand_name  
  	from item_category_brand as c left join item_brand as b on(c.brand_id=b.brand_id) 
  	where  
- 	<foreach close=")" collection="brands" index="index" item="brand" open="(" separator=" or ">
+ 	<foreach open="(" close=")" collection="brands" index="index" item="brand"  separator=" or ">
 			brand_name like  CONCAT('%',#{brand},'%' )
 	</foreach>
+	and c.deleted=1 and b.deleted=1
   </select>
   
   <!-- 通过品牌获取类目 -->
