@@ -299,7 +299,7 @@
 															<form class="form-horizontal" id="">
 																<div class="form-group">
 																	<label for="name" class="col-sm-2 control-label">&nbsp;</label>
-																	<div class="col-sm-10" style="color:red;">注：请上传&nbsp;450*450&nbsp;的JPG图片！</div>
+																	<div class="col-sm-10" style="color:red;">注：请上传&nbsp;450*450&nbsp;的图片！</div>
 																</div>
 																<div class="form-group">
 																	<label class="col-md-2 control-label">缩略图<b style="color:red;">&nbsp;*</b></label>

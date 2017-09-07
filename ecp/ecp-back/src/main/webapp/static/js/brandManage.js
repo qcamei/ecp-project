@@ -55,6 +55,7 @@ function selectDetails(id){
 		if(res!=null){
 			var resp = $.parseJSON(res);
 			if(resp.result_code=="success"){
+				$("#edit-brand-li").removeClass("hide");
 				var brand =resp.brand;
 				$("#brand-id").val(brand.brandId);//ID
 				$("#brand-name").val(brand.brandName);//等级名称
@@ -223,6 +224,14 @@ function checkAll(obj){
 	$("#brand-table tbody input[type='checkbox']").prop('checked', $(obj).prop('checked'));
 }
 
+/**
+ * 点击添加按钮时显示编辑选项卡
+ */
+$("#add-brand-btn").click(function(){
+	$("#edit-brand-li").removeClass("hide");
+	$('#tabs-243687 a[href="#tab-2"]').tab('show');
+});
+
 /*
  * 重置form表单
  */
@@ -235,6 +244,7 @@ function resetFun(){
 	 .val("")
 	 //.removeAttr("checked")  
 	 .removeAttr("selected");
+	$("#edit-brand-li").addClass("hide");
 }
 
 /*
