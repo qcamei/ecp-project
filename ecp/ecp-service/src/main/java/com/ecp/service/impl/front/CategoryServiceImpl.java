@@ -155,6 +155,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Long> imp
 	public Category getCategoryByCid(long cid) {
 		Category record =new Category();
 		record.setCid(cid);
+		record.setDeleted(DeletedType.NO);
 		return  categoryMapper.selectOne(record);
 		
 	}
@@ -162,6 +163,7 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Long> imp
 	@Override
 	public List<Category> getCategoryByParentCid(long parentCid) {
 		Category record=new Category();
+		record.setDeleted(DeletedType.NO);
 		record.setParentCid(parentCid);
 		return categoryMapper.select(record);
 		
