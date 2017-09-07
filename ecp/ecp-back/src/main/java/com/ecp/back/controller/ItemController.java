@@ -305,8 +305,28 @@ public class ItemController {
 	 */
 	@RequestMapping("/updateStatusById")
 	@ResponseBody
-	public Map<String, Object> updateStatusById(HttpServletRequest request, HttpServletResponse response, Long itemId, Integer itemStatus) {
-		int rows = iItemService.updateStatusById(itemId, itemStatus);
+	public Map<String, Object> updateStatusById(HttpServletRequest request, HttpServletResponse response, String itemId, Integer itemStatus) {
+		
+		if(StringUtils.isBlank(itemId)){
+			return RequestResultUtil.getResultUpdateWarn("参数为空");
+		}
+		
+		int rows = iItemService.updateStatusBatchByIds(itemId, itemStatus);
+		if(rows>0){
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+		return RequestResultUtil.getResultUpdateWarn();
+	}
+	
+	@RequestMapping("/updateStatusByIds")
+	@ResponseBody
+	public Map<String, Object> updateStatusBatchByIds(HttpServletRequest request, HttpServletResponse response, String itemIds, Integer itemStatus) {
+		
+		if(StringUtils.isBlank(itemIds)){
+			return RequestResultUtil.getResultUpdateWarn("参数为空");
+		}
+		
+		int rows = iItemService.updateStatusBatchByIds(itemIds, itemStatus);
 		if(rows>0){
 			return RequestResultUtil.getResultUpdateSuccess();
 		}
@@ -314,7 +334,7 @@ public class ItemController {
 	}
 	
 	/**
-	 * 方法功能：删除
+	 * 方法功能：删除（逻辑删除）
 	 * @param request
 	 * @param response
 	 * @param id
@@ -323,7 +343,7 @@ public class ItemController {
 	@RequestMapping("/deleteById")
 	@ResponseBody
 	public Map<String, Object> deleteById(HttpServletRequest request, HttpServletResponse response, Long id) {
-		int rows = iItemService.deleteByPrimaryKey(id);
+		int rows = iItemService.deleteByIds(id.toString());
 		if(rows>0){
 			return RequestResultUtil.getResultDeleteSuccess();
 		}
@@ -331,7 +351,7 @@ public class ItemController {
 	}
 	
 	/**
-	 * 方法功能：批量删除
+	 * 方法功能：批量删除（逻辑删除）
 	 * @param request
 	 * @param response
 	 * @param ids

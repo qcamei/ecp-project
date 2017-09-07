@@ -89,11 +89,6 @@ public class FileUploadUtil {
 	public static String uploadFile(HttpServletRequest request, String typeDir, MultipartFile file)
 			throws IOException {
 
-		String fileName = uploadFile(file, null, saveRootPath);
-		if(StringUtils.isBlank(fileName)){
-			return null;
-		}
-		
 		String savePath = "";
 		try {
 			savePath = getSavePath(typeDir);
@@ -109,10 +104,15 @@ public class FileUploadUtil {
 		File filePath =new File(saveRootPath);    
 		//如果文件夹不存在则创建    
 		if (!filePath.exists() && !filePath.isDirectory()) {
-			log.debug("目录不存在   创建目录: "+filePath);
-			filePath.mkdir();
+			boolean flag = filePath.mkdirs();
+			log.debug("目录不存在   创建目录: "+filePath+" 结果："+flag);
 		} else {
 			log.debug("目录存在 : "+filePath);
+		}
+		
+		String fileName = uploadFile(file, null, saveRootPath);
+		if(StringUtils.isBlank(fileName)){
+			return null;
 		}
 		
 		String reqPath = StringUtils.replace(savePath + File.separator + fileName, File.separator, "/");
@@ -134,7 +134,8 @@ public class FileUploadUtil {
 			if(StringUtils.isBlank(fileName)){
 				return null;
 			}
-			FileUtils.copyInputStreamToFile(file.getInputStream(), new File(realPath, fileName));
+			//FileUtils.copyInputStreamToFile(file.getInputStream(), new File(realPath, fileName));
+			file.transferTo(new File(realPath, fileName));
 
 			return fileName;
 		} catch (Exception e) {
@@ -269,10 +270,10 @@ public class FileUploadUtil {
 		String subFolderName = DateUtils.getDate("yyyyMMdd");
 
 		if (StringUtils.isNotBlank(typeDir)) {
-			savePath = File.separator + "upload" + File.separator + "invitation" + File.separator 
+			savePath = File.separator + "upload" + File.separator 
 					+ typeDir + File.separator + subFolderName;
 		} else {
-			savePath = File.separator + "upload" + File.separator + "invitation" + File.separator 
+			savePath = File.separator + "upload" + File.separator 
 					+ subFolderName;
 		}
 

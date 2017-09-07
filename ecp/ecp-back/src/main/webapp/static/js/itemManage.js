@@ -206,7 +206,6 @@ function selectDetails(id, cid){
  * 加载品牌、属性和属性值
  */
 function getAttrAndValueFun(id, cid){
-	
 	var url = "back/brand/selectByCid";
 	var params = {"cid": cid};
 	$.post(url, params, function(ret){//查询品牌
@@ -339,6 +338,7 @@ function ajaxRequestGetItemInfo(id){
 				var status = item.itemStatus;
 				if(status!=null && status==4){
 					$("#save-submit-btn").attr("disabled", true);
+					$("#save-submit-btn").attr("title", "已上架的商品不能保存编辑");
 				}else{
 					$("#save-submit-btn").attr("disabled", false);
 				}
@@ -801,9 +801,13 @@ function updateItemStatus(itemId, status){
 				if(status==4){
 					$("#item-status-up-"+itemId).attr("disabled", true);
 					$("#item-status-down-"+itemId).attr("disabled", false);
+					$("#item-del-btn-"+itemId).attr("disabled", true);
+					$("#item-del-btn-"+itemId).attr("title", "已上架商品不能删除");
 				}else{
 					$("#item-status-up-"+itemId).attr("disabled", false);
 					$("#item-status-down-"+itemId).attr("disabled", true);
+					$("#item-del-btn-"+itemId).attr("disabled", false);
+					$("#item-del-btn-"+itemId).attr("title", "");
 				}
 				
 			}else{
@@ -832,6 +836,101 @@ $("#search-reset-btn").click(function(){
 	$("#search-form")[0].reset();
 });
 
+/**
+ * 点击批量删除按钮时执行
+ * 		功能：批量删除商品（逻辑删除）
+ */
+$("#batch-delete-btn").click(function(){
+	var itemIds = getCheckedItem();
+	if(itemIds.length<=0){
+		util.message("请选择需要删除的商品！");
+		return;
+	}
+	deleteInfoByBatch();//批量删除确认
+});
+
+/*
+ * 批量删除确认
+ */
+function deleteInfoByBatch(){
+	util.delConfirm("确认删除？", 0, "ajaxRequestDelByBatch");
+}
+
+/**
+ * 批量删除ajax请求
+ * @returns
+ */
+function ajaxRequestDelByBatch(){
+	var itemIds = getCheckedItem();
+	if(itemIds.length<=0){
+		util.message("请选择需要删除的商品！");
+		return;
+	}
+	var url = "back/item/deleteByIds";
+	var params = {"ids":itemIds};
+	//util.loading();
+	$.post(url, params, function(res){
+		console.log(res);
+		if(res!=null && res!=""){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				reloadInfoFun();//删除成功重新刷新列表
+			}else{
+				util.message(obj.result_err_msg);
+			}
+		}
+	});
+}
+
+/**
+ * 点击批量上架按钮时执行
+ * 		功能：批量上架商品
+ * 		4=上架；5=下架
+ */
+$("#batch-shelve-btn").click(function(){
+	var itemIds = getCheckedItem(4);
+	if(itemIds==undefined || itemIds==null || itemIds==""){
+		util.message("请选择需要上架的商品（不包括已上架的商品）！");
+		return;
+	}
+	ajaxRequestUpdateStatusByBatch(itemIds, 4);//ajax请求批量修改商品上下架状态
+});
+
+/**
+ * 点击批量下架按钮时执行
+ * 		功能：批量下架商品
+ * 		4=上架；5=下架
+ */
+$("#batch-unshelve-btn").click(function(){
+	var itemIds = getCheckedItem(5);
+	if(itemIds==undefined || itemIds==null || itemIds==""){
+		util.message("请选择需要下架的商品（不包括已下架的商品）！");
+		return;
+	}
+	ajaxRequestUpdateStatusByBatch(itemIds, 5);//ajax请求批量修改商品上下架状态
+});
+
+/**
+ * ajax请求批量修改商品上下架状态
+ * @returns
+ */
+function ajaxRequestUpdateStatusByBatch(itemIds, status){
+	var url = "back/item/updateStatusByIds";
+	var params = {"itemIds":itemIds, "itemStatus":status};
+	//util.loading();
+	$.post(url, params, function(res){
+		console.log(res);
+		if(res!=null && res!=""){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				reloadInfoFun();//删除成功重新刷新列表
+			}else{
+				util.message(obj.result_err_msg);
+			}
+		}
+	});
+}
+
 /*
  * 点击页面中的页码执行此函数
  * 		函数功能：根据页码数请求当前页内容
@@ -845,6 +944,31 @@ function filterItemFun(params){
 	$("#item-div").load(action, params, function(){
 		//加载完成
 	});
+}
+
+/**
+ * 获取用户选中的checkbox值
+ * 4=上架；5=下架
+ * @returns
+ */
+function getCheckedItem(status){
+	var itemIds = new Array();
+	$("#product-table tbody input:checkbox[name='itemCheckbox']:checked").each(function(i){
+		var itemId = $(this).val();
+		var currStatus = $("#item-status-"+itemId).val();
+		
+		if(status==undefined || status==null || status==""){//为空
+			itemIds.push(itemId);
+		}else{
+			if(status==4 && currStatus!=4){
+				itemIds.push(itemId);
+			}else if(status==5 && currStatus!=5){
+				itemIds.push(itemId);
+			}
+		}
+	});
+	console.log("用户选择的商品ID："+itemIds);
+	return itemIds.toString();
 }
 
 /*

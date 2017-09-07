@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.SkuMapper;
 import com.ecp.entity.Sku;
 import com.ecp.service.back.ISkuService;
@@ -32,7 +33,7 @@ public class SkuServiceImpl extends AbstractBaseService<Sku, Long> implements IS
 	@Override
 	public List<Sku> getByItemId(Long itemId) {
 		Example example = new Example(Sku.class);
-		example.createCriteria().andEqualTo("itemId", itemId);
+		example.createCriteria().andEqualTo("itemId", itemId).andEqualTo("deleted", DeletedType.NO);
 		return skuMapper.selectByExample(example);
 	}
 

@@ -112,6 +112,8 @@ function getContent(editorId) {
  * 		content:设置富文本编辑器内显示的内容
  */
 function setContent(editorId, content) {
-	var isAppendTo = false;
-    UE.getEditor(editorId).setContent(content, isAppendTo);
+	UE.getEditor(editorId).addListener("ready", function () {
+		var isAppendTo = false;
+	    UE.getEditor(editorId).setContent(content, isAppendTo);
+	});
 }

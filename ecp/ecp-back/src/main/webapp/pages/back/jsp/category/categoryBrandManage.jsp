@@ -42,7 +42,7 @@
 						<ul class="nav nav-tabs" id="top_tab">
 							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true">类目列表</a></li>
-							<li class=""><a data-toggle="tab" href="#tab-2"
+							<li class="hide" id="edit-category-brand-li"><a data-toggle="tab" href="#tab-2"
 								aria-expanded="true">编辑类目品牌</a></li>
 						</ul>
 						<div class="tab-content">
@@ -199,6 +199,7 @@
 					if(ret!=null){
 						var res = $.parseJSON(ret);
 						if(res.result_code=="success"){
+							$("#edit-category-brand-li").removeClass("hide");
 							var brandList = res.noBrandList;//未选择的品牌集合
 							var brandMapList = res.yesBrandMapList;//已选择的品牌集合
 							//初始化未选择的品牌
@@ -367,6 +368,7 @@
 				$("#third-category-name").text("");
 				$("#associate-yes").find("ul").html("");
 				$("#associate-no").find("ul").html("");
+				$("#edit-category-brand-li").addClass("hide");//隐藏编辑选项卡
 			}
 			//});
 		</SCRIPT>

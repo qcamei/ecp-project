@@ -30,6 +30,7 @@ import com.ecp.entity.SkuPicture;
 import com.ecp.entity.SkuPrice;
 import com.ecp.service.back.ICategoryAttrService;
 import com.ecp.service.back.ICategoryAttrValueService;
+import com.ecp.service.back.IFavouriteService;
 import com.ecp.service.back.IItemAttrValueService;
 import com.ecp.service.back.IItemPictureService;
 import com.ecp.service.back.IItemService;
@@ -75,6 +76,10 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	@Resource(name="itemAttrValueServiceBean")
 	private IItemAttrValueService itemAttrValueService;//商品-属性值关系
 	
+	@Resource(name="favouriteServiceBean")
+	private IFavouriteService favouriteService;//购物车
+	
+	
 	/** 
 	 * (non-Javadoc)
 	 * @see com.ecp.service.IProductService#selectItemsByCondition(java.util.Map)
@@ -88,21 +93,67 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	/** 
 	 * (non-Javadoc)
 	 * @see com.ecp.service.IProductService#deleteByIds(java.lang.String)
-	 * 批量删除
+	 * 批量删除（逻辑删除）
 	 */
 	@Override
+	@Transactional
 	public int deleteByIds(String ids) {
-		String[] idArr = ids.split(",");
-		int rows = 0;
-		for(int i=0; i<idArr.length; i++){
-			rows = itemMapper.deleteByPrimaryKey(idArr[i]);
-			if(rows<=0){
-				log.error("删除 id 为 "+idArr[i]+" 的商品信息异常，回滚sql");
-				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-				return 0;
+		try {
+			String[] idArr = ids.split(",");
+			int rows = 0;
+			for(int i=0; i<idArr.length; i++){
+				String itemId = idArr[i];
+				if(StringUtils.isNotBlank(itemId)){
+					rows = this.deleteByItemId(Long.valueOf(itemId));
+					if(rows<=0){
+						log.error("删除 id 为 "+idArr[i]+" 的商品信息异常，回滚sql");
+						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						return 0;
+					}
+				}
 			}
+			return rows;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return rows;
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
+	}
+	
+	/**
+	 * 删除单个商品（逻辑删除）
+	 * @param itemId
+	 * @return
+	 */
+	@Transactional
+	private int deleteByItemId(Long itemId){
+		try {
+			int rows = 0;
+			//删除商品表	item
+			Example example = new Example(Item.class);
+			example.createCriteria().andEqualTo("itemId", itemId);
+			Item itemTemp = new Item();
+			itemTemp.setDeleted(DeletedType.YES);
+			rows = itemMapper.updateByExampleSelective(itemTemp, example);
+			if(rows>0){
+				//删除商品图片表	item_picture
+				Example e = new Example(ItemPicture.class);
+				e.createCriteria().andEqualTo("itemId", itemId);
+				ItemPicture pictureTemp = new ItemPicture();
+				pictureTemp.setDeleted(DeletedType.YES);
+				itemPictureService.updateByExampleSelective(pictureTemp, e);
+			}
+			//删除商品属性值关系表	item_attr_value_item
+			itemAttrValueService.deleteByItemId(itemId);
+			this.deleteSkuRelateByItemId(itemId);//删除SKU相关数据（删除SKU表（item_sku）、删除SKU价格表（trade_sku_price）、删除SKU图片表（item_sku_picture））
+			//删除购物车中的商品	item_favourite
+			favouriteService.deleteByItemId(itemId);
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		return 0;
 	}
 
 	/**
@@ -491,16 +542,28 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 	
 	/**
-	 * 修改商品状态
-	 * @param itemId
-	 * @param itemStatus
-	 * @return
+	 * 批量修改商品状态
+	 * @see com.ecp.service.back.IItemService#updateStatusBatchByIds(java.lang.String, java.lang.Integer)
 	 */
-	public int updateStatusById(Long itemId, Integer itemStatus){
-		Item item = new Item();
-		item.setItemId(itemId);
-		item.setItemStatus(itemStatus);
-		return itemMapper.updateByPrimaryKeySelective(item);
+	@Override
+	public int updateStatusBatchByIds(String itemIds, Integer itemStatus){
+		String[] itemIdArr = itemIds.split(",");
+		int rows = 0;
+		for(int i=0; i<itemIdArr.length; i++){
+			String itemId = itemIdArr[i];
+			if(StringUtils.isNotBlank(itemId)){
+				Item item = new Item();
+				item.setItemId(Long.valueOf(itemId));
+				item.setItemStatus(itemStatus);
+				rows = itemMapper.updateByPrimaryKeySelective(item);
+				if(rows<=0){
+					log.error("修改 id 为 "+itemIdArr[i]+" 的商品上下架状态异常，回滚sql");
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					return 0;
+				}
+			}
+		}
+		return rows;
 	}
 	
 	public static void main(String[] args) {
