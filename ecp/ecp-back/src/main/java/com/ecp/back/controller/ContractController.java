@@ -329,32 +329,6 @@ public class ContractController {
 	
 	
 	/**
-	 * @Description 根据属性:属性值对返回属性名:属性值名  字符串
-	 * @param attrs  属性id:属性值id,属性id:属性值id pairs
-	 * @return 返回  属性名:属性值名,属性名:属性值名
-	 */
-	private String getAttrStr(String attrs){
-		if(StringUtil.isEmpty(attrs)) return  "";		
-		//先按","号进行分隔
-		String parmStr="";
-		String[] keyValues=attrs.split(",");
-		for(String keyValue:keyValues){
-			//按":"进行分隔
-			String[] ids=keyValue.split(":");
-			String keyName=attributeService.selectByPrimaryKey(Long.parseLong(ids[0])).getAttrName();
-			String valueName=attributeValueService.selectByPrimaryKey(Long.parseLong(ids[1])).getValueName();
-			if(StringUtil.isEmpty(parmStr)){
-				parmStr=keyName+":"+valueName;
-			}
-			else{
-				parmStr=parmStr+","+keyName+":"+valueName;
-			}
-		}
-		return parmStr;
-	}
-	
-	
-	/**
 	 * @Description 打开合同(打开已经生成的合同)
 	 * @param id  合同ID(PK)
 	 * @param model
@@ -456,7 +430,7 @@ public class ContractController {
 	}
 	
 	/**
-	 * @Description 更新合同属性
+	 * @Description 更新合同
 	 * @param contractAttrVals
 	 * @param model
 	 * @return
@@ -559,6 +533,32 @@ public class ContractController {
 	private  final  int BACK_CONTRACT_CONFIRM=2;
 	private  final 	int FRONT_CONTRACT_CONFIRM=1; 
 	
+	/**
+	 * @Description 根据属性:属性值对返回属性名:属性值名  字符串
+	 * @param attrs  属性id:属性值id,属性id:属性值id pairs
+	 * @return 返回  属性名:属性值名,属性名:属性值名
+	 */
+	private String getAttrStr(String attrs){
+		if(StringUtil.isEmpty(attrs)) return  "";		
+		//先按","号进行分隔
+		String parmStr="";
+		String[] keyValues=attrs.split(",");
+		for(String keyValue:keyValues){
+			//按":"进行分隔
+			String[] ids=keyValue.split(":");
+			String keyName=attributeService.selectByPrimaryKey(Long.parseLong(ids[0])).getAttrName();
+			String valueName=attributeValueService.selectByPrimaryKey(Long.parseLong(ids[1])).getValueName();
+			if(StringUtil.isEmpty(parmStr)){
+				parmStr=keyName+":"+valueName;
+			}
+			else{
+				parmStr=parmStr+","+keyName+":"+valueName;
+			}
+		}
+		return parmStr;
+	}
+
+
 	/**
 	 * @Description 设置合同状态
 	 * @param orderId
@@ -723,6 +723,35 @@ public class ContractController {
 			record.setPayPrice(orderItem.getPayPrice());  //实际支付价格
 			record.setNum(orderItem.getNum());  //商品数量
 			record.setPayPriceTotal(orderItem.getPayPriceTotal());  //小计
+			
+			//(1)查询SPU 准备查询数据
+			Item spu=itemService.selectByPrimaryKey(orderItem.getItemId());
+			//(2)查询型号			
+			//dispBean.setModel(item.getModel());
+			record.setModel("加入字段");
+			//(3)查询品牌
+			Brand brand=brandService.selectByPrimaryKey(spu.getBrand());
+			record.setBrandName(brand.getBrandName());			
+			//(4)查询基本参数
+			String spuNormAttr=spu.getAttributes();  //关键属性
+			//String spuSaleAttr=spu.getAttrSale();  //销售属性
+			String normAttrStr=getAttrStr(spuNormAttr);
+			
+			Sku sku=skuService.selectByPrimaryKey(orderItem.getSkuId());
+			String skuAttr=sku.getAttributes();
+			String saleAttrStr=getAttrStr(skuAttr);
+			
+			String parmStr="";
+			if(StringUtil.isNotEmpty(normAttrStr)){
+				parmStr=parmStr+normAttrStr;
+				if(StringUtil.isNotEmpty(saleAttrStr)){
+					parmStr=parmStr+","+saleAttrStr;
+				}
+			}
+			else{
+				parmStr=saleAttrStr;
+			}			
+			record.setParms(parmStr); //设置技术参数
 			
 			
 			record.setCreateTime(new Date());
