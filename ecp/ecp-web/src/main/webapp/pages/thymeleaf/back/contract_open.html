@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head th:include="/thymeleaf/common/_head2::headx('销售合同')">
+<head th:include="/back/thymeleaf/common/_head2::headx('销售合同')">
 <meta charset="UTF-8">
 </head>
 <body>
 	<div class="container">
 		<div class="row clearfix">
-			<div class="col-md-12 column">
+			<div class="col-sm-offset-2 col-md-8 column">
 				<p style="text-align: center">
 					<b><span style="font-size: 32px; font-family: 黑体; color: black">销售合同</span></b>
 				</p>
-				<p>
-					<span style="font-family: 宋体"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;</span><span>&nbsp;</span></span><span
-						style="font-family: 宋体">合同编号：<span th:text="${contract.contractNo}">LM-XS-17-05-046</span>合同签订地点：<span>石家庄</span>
+				<p style="text-align:right;">
+					<span style="font-family: 宋体;">
+						合同编号：<span th:text="${contract.contractNo}">LM-XS-17-05-046</span>合同签订地点：<span>石家庄</span>
 					</span>
 				</p>
 				<p style="text-indent: 28px; line-height: normal">
@@ -113,21 +112,24 @@
 								width="73" valign="top"><p>
 									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.sku_name}">&nbsp;</span>
 								</p></td>
-							
+								
+							<!-- 品牌  -->
 							<td
 								style="width: 54px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="54" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" >&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.brand_name}">&nbsp;</span>
 								</p></td>
+							<!-- 型号 -->
 							<td
 								style="width: 78px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="78" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.model}" >&nbsp;</span>
 								</p></td>
+							<!-- 参数 -->
 							<td
 								style="width: 92px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="92" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.parms}">&nbsp;</span>
 								</p></td>
 							<!-- 网示单价 -->
 							<td
@@ -205,7 +207,7 @@
 				</p>
 				<p style="text-indent: 21px">
 					<span>4.1</span><span><span style="font-family: 宋体">时</span><span><span>&nbsp;&nbsp;&nbsp;
-						</span></span></span><span><span style="font-family: 宋体">间：<u th:text="${attrValue.delivery_time}" class="cndate">选择时钟，自动生成</u></span><u></u></span>
+						</span></span></span><span><span style="font-family: 宋体">间：<u th:text="${attrValue.delivery_time}" >选择时钟，自动生成</u></span><u></u></span>
 				</p>
 				<p style="text-indent: 21px">
 					<span><span>4.2</span></span><span><span
@@ -228,7 +230,14 @@
 						 	<span th:case='1' style="font-family: 宋体">☑<span><span	style="font-family: 宋体">合同签订后甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_signed}">&nbsp;&nbsp;
 								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_signed}">&nbsp;&nbsp; </span></span>元）。
 								发货前，甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_delivery}">&nbsp;&nbsp;
-								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_delivery}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>元）。余额<u><span th:text="${attrValue.balance_amount}"></span></u>元，需在<u><span th:text="${attrValue.balance_date}" class="cndate">年&nbsp;&nbsp;月&nbsp;&nbsp;日</span></u>前付清。
+								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_delivery}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>元）。
+								
+								<span th:if="${attrValue.balance_amount} neq '0.00'" th:remove="tag">									
+									<span>
+										余额<u><span th:text="${attrValue.balance_amount}"></span></u>元，需在<u><span th:text="${attrValue.balance_date}" >年&nbsp;&nbsp;月&nbsp;&nbsp;日</span></u>前付清。
+									</span>
+								</span>
+								
 							</span></span></span>
 						 	<span th:case='2' style="font-family: 宋体"><span style="text-indent: 19px">
 								<span><span style="font-family: 宋体">
@@ -254,8 +263,7 @@
 				<p style="text-indent: 19px">
 					<span><span>5.2</span></span><span><span
 						style="font-family: 宋体">乙方收款账户：<u th:text="${companyInfo.companyName}">河北菱美信息技术有限公司</u>，开户行：<u th:text="${companyInfo.bankName}">中信石家庄体育北大街支行</u><span
-							style="color: black">，</span></span><span style="color: black"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						</span><span>&nbsp;&nbsp;&nbsp;</span></span></span><span><span
+							style="color: black">，</span></span><span style="color: black"><span>&nbsp;&nbsp;&nbsp;</span></span></span><span><span
 						style="font-family: 宋体; color: black">账号：</span><u><span th:text="${companyInfo.bankAccount}">7241510182600080029</span></u></span>
 				</p>
 				<p style="text-indent: 21px">
@@ -297,10 +305,12 @@
 				</p>
 				<p style="margin-left: 14px">
 					<span style="font-family: 宋体;width:350px;display:inline-block">
-						日期：<span th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd')}" class="cndate">2017年10月10日</span>
+						日期：<!-- <span th:text="${#calendars.format(now,'yyyy-MM-dd')}" class="cndate">2017年10月10日 </span> -->
+						<span th:text="${attrValue.contract_signed_date}" class="cndate">2017年10月10日 </span>
 					</span>					 
 					<span style="font-family: 宋体">
-						日期：<span th:text="${#calendars.format(contract.createDate,'yyyy-MM-dd')}" class="cndate">2017年10月10日 </span>
+						日期：<!-- <span th:text="${#calendars.format(now,'yyyy-MM-dd')}"  class="cndate">2017年10月10日 </span> -->
+						<span th:text="${attrValue.contract_signed_date}" class="cndate">2017年10月10日 </span>
 					</span>
 				</p>
 				<p style="margin-left: 14px">
@@ -332,5 +342,6 @@
 		
 	});
 	</script>
+
 </body>
 </html>
