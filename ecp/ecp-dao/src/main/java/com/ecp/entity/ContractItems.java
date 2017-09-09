@@ -77,6 +77,18 @@ public class ContractItems {
     private BigDecimal discountPrice;
 
     /**
+     * 是否删除（1-未删除，2-删除，默认1）
+     */
+    private Integer deleted;
+
+    private String model;
+
+    @Column(name = "brand_name")
+    private String brandName;
+
+    private String parms;
+
+    /**
      * @return id
      */
     public Long getId() {
@@ -412,34 +424,101 @@ public class ContractItems {
         this.discountPrice = discountPrice;
     }
 
-    @Column(name = "deleted")
-    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
-
     /**
-     * @return	是否删除（1-未删除，2-删除，默认1）
+     * 获取是否删除（1-未删除，2-删除，默认1）
+     *
+     * @return deleted - 是否删除（1-未删除，2-删除，默认1）
      */
     public Integer getDeleted() {
-		return deleted;
-	}
+        return deleted;
+    }
 
-	/**
-	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
-	 */
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
+    /**
+     * 设置是否删除（1-未删除，2-删除，默认1）
+     *
+     * @param deleted 是否删除（1-未删除，2-删除，默认1）
+     */
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
 
-	@Override
-	public String toString() {
-		return "ContractItems [id=" + id + ", activitesDetailId=" + activitesDetailId + ", areaId=" + areaId + ", cid="
-				+ cid + ", contractNo=" + contractNo + ", couponDiscount=" + couponDiscount + ", createTime="
-				+ createTime + ", deliveryType=" + deliveryType + ", integral=" + integral + ", integralDiscount="
-				+ integralDiscount + ", itemId=" + itemId + ", num=" + num + ", orderId=" + orderId + ", payPrice="
-				+ payPrice + ", payPriceTotal=" + payPriceTotal + ", primitivePrice=" + primitivePrice
-				+ ", promotionDiscount=" + promotionDiscount + ", promotionId=" + promotionId + ", promotionType="
-				+ promotionType + ", shopFreightTemplateId=" + shopFreightTemplateId + ", skuId=" + skuId + ", skuName="
-				+ skuName + ", updateTime=" + updateTime + ", discountPrice=" + discountPrice + ", deleted=" + deleted
-				+ "]";
-	}
-	
+    /**
+     * @return model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model
+     */
+    public void setModel(String model) {
+        this.model = model == null ? null : model.trim();
+    }
+
+    /**
+     * @return brand_name
+     */
+    public String getBrandName() {
+        return brandName;
+    }
+
+    /**
+     * @param brandName
+     */
+    public void setBrandName(String brandName) {
+        this.brandName = brandName == null ? null : brandName.trim();
+    }
+
+    /**
+     * @return parms
+     */
+    public String getParms() {
+        return parms;
+    }
+
+    /**
+     * @param parms
+     */
+    public void setParms(String parms) {
+        this.parms = parms == null ? null : parms.trim();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", activitesDetailId=").append(activitesDetailId);
+        sb.append(", areaId=").append(areaId);
+        sb.append(", cid=").append(cid);
+        sb.append(", contractNo=").append(contractNo);
+        sb.append(", couponDiscount=").append(couponDiscount);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", deliveryType=").append(deliveryType);
+        sb.append(", integral=").append(integral);
+        sb.append(", integralDiscount=").append(integralDiscount);
+        sb.append(", itemId=").append(itemId);
+        sb.append(", num=").append(num);
+        sb.append(", orderId=").append(orderId);
+        sb.append(", payPrice=").append(payPrice);
+        sb.append(", payPriceTotal=").append(payPriceTotal);
+        sb.append(", primitivePrice=").append(primitivePrice);
+        sb.append(", promotionDiscount=").append(promotionDiscount);
+        sb.append(", promotionId=").append(promotionId);
+        sb.append(", promotionType=").append(promotionType);
+        sb.append(", shopFreightTemplateId=").append(shopFreightTemplateId);
+        sb.append(", skuId=").append(skuId);
+        sb.append(", skuName=").append(skuName);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", discountPrice=").append(discountPrice);
+        sb.append(", deleted=").append(deleted);
+        sb.append(", model=").append(model);
+        sb.append(", brandName=").append(brandName);
+        sb.append(", parms=").append(parms);
+        sb.append("]");
+        return sb.toString();
+    }
 }

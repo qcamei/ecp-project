@@ -35,6 +35,7 @@
     <result column="weight" jdbcType="DECIMAL" property="weight" />
     <result column="weight_unit" jdbcType="VARCHAR" property="weightUnit" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ecp.entity.Item">
     <!--
@@ -49,7 +50,8 @@
     item_id, ad, after_service, attr_sale, attributes, brand, cid, created, delisting_time, 
     guide_price, has_price, inventory, item_name, item_status, keywords, listting_time, 
     market_price, market_price2, modified, operator, origin, packing_list, plat_link_status, 
-    product_id, status_change_reason, timing_listing, volume, weight, weight_unit, deleted
+    product_id, status_change_reason, timing_listing, volume, weight, weight_unit, deleted, 
+    model
   </sql>
   <sql id="Blob_Column_List">
     <!--

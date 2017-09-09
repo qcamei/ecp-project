@@ -41,7 +41,7 @@ public class Item {
     private String itemName;
 
     @Column(name = "item_status")
-    private Integer itemStatus;//4：上架，5下架
+    private Integer itemStatus;
 
     private String keywords;
 
@@ -81,6 +81,13 @@ public class Item {
 
     @Column(name = "weight_unit")
     private String weightUnit;
+
+    /**
+     * 是否删除（1-未删除，2-删除，默认1）
+     */
+    private Integer deleted;
+
+    private String model;
 
     @Column(name = "describe_url")
     private String describeUrl;
@@ -268,7 +275,6 @@ public class Item {
     }
 
     /**
-     * 获取商品状态	4：上架，5下架
      * @return item_status
      */
     public Integer getItemStatus() {
@@ -276,7 +282,6 @@ public class Item {
     }
 
     /**
-     * 设置商品状态	4：上架，5下架
      * @param itemStatus
      */
     public void setItemStatus(Integer itemStatus) {
@@ -494,6 +499,38 @@ public class Item {
     }
 
     /**
+     * 获取是否删除（1-未删除，2-删除，默认1）
+     *
+     * @return deleted - 是否删除（1-未删除，2-删除，默认1）
+     */
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    /**
+     * 设置是否删除（1-未删除，2-删除，默认1）
+     *
+     * @param deleted 是否删除（1-未删除，2-删除，默认1）
+     */
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    /**
+     * @return model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model
+     */
+    public void setModel(String model) {
+        this.model = model == null ? null : model.trim();
+    }
+
+    /**
      * @return describe_url
      */
     public String getDescribeUrl() {
@@ -507,35 +544,45 @@ public class Item {
         this.describeUrl = describeUrl == null ? null : describeUrl.trim();
     }
 
-    @Column(name = "deleted")
-    private Integer deleted;//是否删除（1-未删除，2-删除，默认1）
-
-    /**
-     * @return	是否删除（1-未删除，2-删除，默认1）
-     */
-    public Integer getDeleted() {
-		return deleted;
-	}
-
-	/**
-	 * @param deleted 是否删除（1-未删除，2-删除，默认1）
-	 */
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
-
-	@Override
-	public String toString() {
-		return "Item [itemId=" + itemId + ", ad=" + ad + ", afterService=" + afterService + ", attrSale=" + attrSale
-				+ ", attributes=" + attributes + ", brand=" + brand + ", cid=" + cid + ", created=" + created
-				+ ", delistingTime=" + delistingTime + ", guidePrice=" + guidePrice + ", hasPrice=" + hasPrice
-				+ ", inventory=" + inventory + ", itemName=" + itemName + ", itemStatus=" + itemStatus + ", keywords="
-				+ keywords + ", listtingTime=" + listtingTime + ", marketPrice=" + marketPrice + ", marketPrice2="
-				+ marketPrice2 + ", modified=" + modified + ", operator=" + operator + ", origin=" + origin
-				+ ", packingList=" + packingList + ", platLinkStatus=" + platLinkStatus + ", productId=" + productId
-				+ ", statusChangeReason=" + statusChangeReason + ", timingListing=" + timingListing + ", volume="
-				+ volume + ", weight=" + weight + ", weightUnit=" + weightUnit + ", describeUrl=" + describeUrl
-				+ ", deleted=" + deleted + "]";
-	}
-    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", itemId=").append(itemId);
+        sb.append(", ad=").append(ad);
+        sb.append(", afterService=").append(afterService);
+        sb.append(", attrSale=").append(attrSale);
+        sb.append(", attributes=").append(attributes);
+        sb.append(", brand=").append(brand);
+        sb.append(", cid=").append(cid);
+        sb.append(", created=").append(created);
+        sb.append(", delistingTime=").append(delistingTime);
+        sb.append(", guidePrice=").append(guidePrice);
+        sb.append(", hasPrice=").append(hasPrice);
+        sb.append(", inventory=").append(inventory);
+        sb.append(", itemName=").append(itemName);
+        sb.append(", itemStatus=").append(itemStatus);
+        sb.append(", keywords=").append(keywords);
+        sb.append(", listtingTime=").append(listtingTime);
+        sb.append(", marketPrice=").append(marketPrice);
+        sb.append(", marketPrice2=").append(marketPrice2);
+        sb.append(", modified=").append(modified);
+        sb.append(", operator=").append(operator);
+        sb.append(", origin=").append(origin);
+        sb.append(", packingList=").append(packingList);
+        sb.append(", platLinkStatus=").append(platLinkStatus);
+        sb.append(", productId=").append(productId);
+        sb.append(", statusChangeReason=").append(statusChangeReason);
+        sb.append(", timingListing=").append(timingListing);
+        sb.append(", volume=").append(volume);
+        sb.append(", weight=").append(weight);
+        sb.append(", weightUnit=").append(weightUnit);
+        sb.append(", deleted=").append(deleted);
+        sb.append(", model=").append(model);
+        sb.append(", describeUrl=").append(describeUrl);
+        sb.append("]");
+        return sb.toString();
+    }
 }

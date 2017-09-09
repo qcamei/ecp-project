@@ -30,6 +30,9 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="discount_price" jdbcType="DECIMAL" property="discountPrice" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="parms" jdbcType="VARCHAR" property="parms" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -38,7 +41,7 @@
     id, activites_detail_id, area_id, cid, contract_no, coupon_discount, create_time, 
     delivery_type, integral, integral_discount, item_id, num, order_id, pay_price, pay_price_total, 
     primitive_price, promotion_discount, promotion_id, promotion_type, shop_freight_template_id, 
-    sku_id, sku_name, update_time, discount_price, deleted
+    sku_id, sku_name, update_time, discount_price, deleted, model, brand_name, parms
   </sql>
   <select id="selectItemsByContractNo" resultType="map">
   	 select * from contract_items as o left join item_sku_picture as p
