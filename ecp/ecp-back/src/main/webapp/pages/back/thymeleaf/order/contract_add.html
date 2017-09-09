@@ -93,12 +93,17 @@
 							<div class="form-group">
 								<label for="delivery_time" class="col-sm-3 control-label">交货时间</label>
 								<div class="col-sm-6">
-									<input class="datetimepicker datetime  form-control" 
+									<!-- 交货时间,用户输入  -->
+									<!-- <input class="datetimepicker datetime  form-control" 
 											readonly="readonly" 
 											id="delivery_time" 
 											name="delivery_time" 
 											type="text"
 											onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});" 
+											/> -->
+									<input class="form-control"											 
+											id="delivery_time" 	name="delivery_time" 
+											type="text"											 
 											/>
 								</div>
 							</div>
@@ -165,7 +170,7 @@
 								<div class="form-group">
 									<label for="balance_amount" class="col-sm-offset-2 col-sm-3 control-label">余款</label>
 									<div class="col-sm-4">
-										<input class="form-control" id="balance_amount" name="balance_amount"
+										<input class="form-control" id="balance_amount" name="balance_amount" readonly="readonly"
 											type="text" />
 									</div>
 									<label for="balance_amount" class="control-label" style="vertical-aline:middle">元</label>
@@ -173,12 +178,16 @@
 								
 								<!-- 余款日期 -->
 								<div class="form-group">
-									<label for="balance_date" class="col-sm-offset-2 col-sm-3 control-label">余款付清日期</label>
+									<label for="balance_date" class="col-sm-offset-2 col-sm-3 control-label">余款付清条件</label>
 									<div class="col-sm-4">
-										<input class="datetimepicker datetime form-control" 
+										<!-- 余额结算时间由用户自行输入 -->
+										<!-- <input class="datetimepicker datetime form-control" 
 											id="balance_date" name="balance_date"										 
 											readonly="readonly" 
 											onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});"
+											type="text" /> -->
+										<input class="form-control" 
+											id="balance_date" name="balance_date"				 
 											type="text" />
 									</div>
 								</div>
@@ -189,11 +198,12 @@
 							<div class="form-group">
 								<label for="pay_type_2" class="col-sm-3 control-label">付款方式2</label>
 								<div class="col-sm-1">
-									<input id="pay_type_2" name="pay_type" type="checkbox" value="2"/>
+									<input id="pay_type_2" name="pay_type" type="checkbox" value="2" style="vertical-aline:middle"/>
 								</div>
 							</div>
 							
-							<span id="group_pay_type_2">
+							<!-- 付款方式2-可变项 -->
+							<div class="" id="group_pay_type_2"  >
 								<div class="form-group">
 									<label for="days_signed" class="col-sm-offset-2 col-sm-3 control-label">签定后多少日付全部货款</label>
 									<div class="col-sm-4">
@@ -227,7 +237,7 @@
 									</datalist>	
 									</div>
 								</div>							
-							</span>
+							</div>
 
 							<div class="form-group">
 								<label for="voucher" class="col-sm-3 control-label">全款到帐后乙方开据</label>
@@ -238,6 +248,26 @@
     									<option>等额普通发票</option>
     									<option>等额收据</option>
 									</datalist>									
+								</div>
+							</div>
+							
+							<!-- <input class="datetimepicker datetime  form-control" 
+											readonly="readonly" 
+											id="delivery_time" 
+											name="delivery_time" 
+											type="text"
+											onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});" 
+							/> -->
+							
+							<div class="form-group ">
+								<label for="voucher" class="col-sm-3 control-label">合同签定日期</label>
+								<div class="col-sm-6">
+									<input class="form-control datetimepicker datetime"
+										readonly="readonly" 
+										id="contract_signed_date" name="contract_signed_date"  
+										type="text"  placeholder="选择合同签定日期"
+										onClick="WdatePicker({dateFmt:'yyyy-MM-dd'});" 
+										/>
 								</div>
 							</div>
 

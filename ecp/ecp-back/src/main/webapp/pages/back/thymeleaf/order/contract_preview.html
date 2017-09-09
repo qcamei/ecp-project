@@ -111,53 +111,58 @@
 							<td
 								style="width: 73px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="73" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.skuName}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.skuName}">&nbsp;</span>
 								</p></td>
 							
+							<!-- 品牌 -->
 							<td
 								style="width: 54px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="54" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" >&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.brandName}" >&nbsp;</span>
 								</p></td>
+								
+							<!-- 型号 -->								
 							<td
 								style="width: 78px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="78" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.model}">&nbsp;</span>
 								</p></td>
+								
+							<!-- 基本参数 -->
 							<td
 								style="width: 92px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="92" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.parms}">&nbsp;</span>
 								</p></td>
 							<!-- 网示单价 -->
 							<td
 								style="width: 59px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="59" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.primitivePrice}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.primitivePrice}">&nbsp;</span>
 								</p></td>
 							<!-- 折减 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.discountPrice}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.discountPrice}">&nbsp;</span>
 								</p></td>
 							<!-- 成交单价 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.payPrice}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.payPrice}">&nbsp;</span>
 								</p></td>
 							<!-- 数量 -->
 							<td
 								style="width: 25px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="38" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.Num}">&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.Num}">&nbsp;</span>
 								</p></td>
 							<!-- 小计 -->
 							<td
 								style="width: 50px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="76" valign="top"><p>
-									<span style="font-family: 'Calibri', sans-serif" th:text=${contractItem.payPriceTotal}>&nbsp;</span>
+									<span style="font-family: 'Calibri', sans-serif" th:text=${contractItem.contractItem.payPriceTotal}>&nbsp;</span>
 								</p></td>
 								 
 						</tr>
@@ -205,7 +210,7 @@
 				</p>
 				<p style="text-indent: 21px">
 					<span>4.1</span><span><span style="font-family: 宋体">时</span><span><span>&nbsp;&nbsp;&nbsp;
-						</span></span></span><span><span style="font-family: 宋体">间：<u th:text=${attrValue.delivery_time} class="cndate">选择时钟，自动生成</u></span><u></u></span>
+						</span></span></span><span><span style="font-family: 宋体">间：<u th:text=${attrValue.delivery_time} >用户手工输入</u></span><u></u></span>
 				</p>
 				<p style="text-indent: 21px">
 					<span><span>4.2</span></span><span><span
@@ -228,8 +233,17 @@
 						 	<span th:case='1' style="font-family: 宋体">☑<span><span	style="font-family: 宋体">合同签订后甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_signed}">&nbsp;&nbsp;
 								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_signed}">&nbsp;&nbsp; </span></span>元）。
 								发货前，甲方支付合同金额的<u><span><span th:text="${attrValue.payment_percent_delivery}">&nbsp;&nbsp;
-								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_delivery}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>元）。余额<u><span th:text="${attrValue.balance_amount}"></span></u>元，需在<u><span th:text="${attrValue.balance_date}" class="cndate">年&nbsp;&nbsp;月&nbsp;&nbsp;日</span></u>前付清。
-							</span></span></span>
+								</span >%</span></u>（即<span><span th:text="${attrValue.payment_amount_delivery}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>元）。
+								
+								<span th:if="${attrValue.balance_amount} neq '0.00'" th:remove="tag">									
+									<span>
+										余额<u><span th:text="${attrValue.balance_amount}"></span></u>元，需在<u><span th:text="${attrValue.balance_date}" >&nbsp;&nbsp;&nbsp;&nbsp;</span></u>付清。
+									</span>
+								</span>
+								
+								</span></span>
+							</span>
+							
 						 	<span th:case='2' style="font-family: 宋体"><span style="text-indent: 19px">
 								<span><span style="font-family: 宋体">
 									<span th:switch="${attrValue.pay_type}"  th:remove="tag">
@@ -254,9 +268,8 @@
 				</p>
 				<p style="text-indent: 19px">
 					<span><span>5.2</span></span><span><span
-						style="font-family: 宋体">乙方收款账户：<u th:text="${companyInfo.companyName}">河北菱美信息技术有限公司</u>，开户行：<u th:text="${companyInfo.bankName}">中信石家庄体育北大街支行</u><span
-							style="color: black">，</span></span><span style="color: black"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						</span><span>&nbsp;&nbsp;&nbsp;</span></span></span><span><span
+						style="font-family: 宋体" color="black">乙方收款账户：<u th:text="${companyInfo.companyName}">河北菱美信息技术有限公司</u>，开户行：<u th:text="${companyInfo.bankName}">中信石家庄体育北大街支行</u><span
+							style="color: black">，</span></span><span style="color: black"><span>&nbsp;&nbsp;&nbsp;</span></span></span><span><span
 						style="font-family: 宋体; color: black">账号：</span><u><span th:text="${companyInfo.bankAccount}">7241510182600080029</span></u></span>
 				</p>
 				<p style="text-indent: 21px">
@@ -298,10 +311,12 @@
 				</p>
 				<p style="margin-left: 14px">
 					<span style="font-family: 宋体;width:350px;display:inline-block">
-						日期：<span th:text="${#calendars.format(now,'yyyy-MM-dd')}" class="cndate">2017年10月10日 </span>
+						日期：<!-- <span th:text="${#calendars.format(now,'yyyy-MM-dd')}" class="cndate">2017年10月10日 </span> -->
+						<span th:text="${attrValue.contract_signed_date}" class="cndate">2017年10月10日 </span>
 					</span>					 
 					<span style="font-family: 宋体">
-						日期：<span th:text="${#calendars.format(now,'yyyy-MM-dd')}"  class="cndate">2017年10月10日 </span>
+						日期：<!-- <span th:text="${#calendars.format(now,'yyyy-MM-dd')}"  class="cndate">2017年10月10日 </span> -->
+						<span th:text="${attrValue.contract_signed_date}" class="cndate">2017年10月10日 </span>
 					</span>
 				</p>
 				<p style="margin-left: 14px">

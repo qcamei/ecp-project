@@ -1,6 +1,7 @@
 package com.ecp.back.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,27 +21,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONArray;
 import com.ecp.bean.ContractAttrValueBean;
 import com.ecp.bean.ContractOrderItemBean;
+import com.ecp.bean.ContractOrderItemDisplayBean;
 import com.ecp.bean.ContractStateType;
 import com.ecp.bean.UserBean;
 import com.ecp.common.util.NumberToCN;
 import com.ecp.common.util.RequestResultUtil;
+import com.ecp.entity.Brand;
 import com.ecp.entity.CompanyInfo;
 import com.ecp.entity.Contract;
 import com.ecp.entity.ContractAttrValue;
 import com.ecp.entity.ContractAttribute;
 import com.ecp.entity.ContractItems;
+import com.ecp.entity.Item;
 import com.ecp.entity.Orders;
+import com.ecp.entity.Sku;
 import com.ecp.entity.UserExtends;
+import com.ecp.service.back.IAttributeValueService;
 import com.ecp.service.back.ICompanyInfoService;
+import com.ecp.service.front.IAttributeService;
+import com.ecp.service.front.IBrandService;
 import com.ecp.service.front.IContractAttrValueService;
 import com.ecp.service.front.IContractAttributeService;
 import com.ecp.service.front.IContractItemsService;
 import com.ecp.service.front.IContractService;
+import com.ecp.service.front.IItemService;
 import com.ecp.service.front.IOrderItemService;
 import com.ecp.service.front.IOrderService;
+import com.ecp.service.front.ISkuService;
 import com.ecp.service.front.IUserAgentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
+import tk.mybatis.mapper.util.StringUtil;
 
 
 
@@ -78,6 +90,16 @@ public class ContractController {
 	IUserAgentService userAgentService;
 	@Autowired
 	ICompanyInfoService companyInfoService;
+	@Autowired
+	IBrandService brandService;
+	@Autowired
+	IItemService itemService;
+	@Autowired
+	ISkuService skuService;
+	@Autowired
+	IAttributeService attributeService;
+	@Autowired
+	IAttributeValueService attributeValueService;	
 	
 	
 	/**
@@ -233,6 +255,50 @@ public class ContractController {
 		//(2)合同商品列表
 		List<ContractOrderItemBean> contractOrderItemBeanList=getEntity2(orderItems);
 		
+		//(3)获取合同商品条目的品牌,型号,基本参数
+		List<ContractOrderItemDisplayBean> contractOrderItemDispList=new ArrayList<ContractOrderItemDisplayBean>();
+		for(ContractOrderItemBean contractItem:contractOrderItemBeanList){
+			ContractOrderItemDisplayBean dispBean=new ContractOrderItemDisplayBean();
+			//(1)加入contractOrderBean
+			dispBean.setContractItem(contractItem);			
+			
+			//(2)查询SPU 准备查询数据
+			Item spu=itemService.selectByPrimaryKey(contractItem.getItemId());
+			//(3)查询型号			
+			//dispBean.setModel(item.getModel());
+			dispBean.setModel("加入字段");
+			//(2)查询品牌
+			Brand brand=brandService.selectByPrimaryKey(spu.getBrand());
+			dispBean.setBrandName(brand.getBrandName());			
+			//(4)查询基本参数
+			String spuNormAttr=spu.getAttributes();  //关键属性
+			//String spuSaleAttr=spu.getAttrSale();  //销售属性
+			String normAttrStr=getAttrStr(spuNormAttr);
+			
+			Sku sku=skuService.selectByPrimaryKey(contractItem.getSkuId());
+			String skuAttr=sku.getAttributes();
+			String saleAttrStr=getAttrStr(skuAttr);
+			
+			String parmStr="";
+			if(StringUtil.isNotEmpty(normAttrStr)){
+				parmStr=parmStr+normAttrStr;
+				if(StringUtil.isNotEmpty(saleAttrStr)){
+					parmStr=parmStr+","+saleAttrStr;
+				}
+			}
+			else{
+				parmStr=saleAttrStr;
+			}
+			
+			dispBean.setParms(parmStr); //设置技术参数
+			
+			
+			
+			contractOrderItemDispList.add(dispBean);
+		}
+		
+		
+		
 		
 		
 		//计算合同总额
@@ -252,14 +318,41 @@ public class ContractController {
 		model.addAttribute("agent", agent);
 		
 		model.addAttribute("attrValue", attrValueMap);  //合同属性
-		model.addAttribute("contractItemList", contractOrderItemBeanList);  //合同商品列表
-		model.addAttribute("contractItemTotal",contractItemTotal);
-		model.addAttribute("contractItemTotalCN",totalCN);
+		model.addAttribute("contractItemList", contractOrderItemDispList);  //合同商品列表
+		model.addAttribute("contractItemTotal",contractItemTotal);  //合同总金额 
+		model.addAttribute("contractItemTotalCN",totalCN);  //合同中文金额
 		model.addAttribute("now", new Date());
 		
 		
 		return RESPONSE_THYMELEAF_BACK_ORDER+"contract_preview";
 	}
+	
+	
+	/**
+	 * @Description 根据属性:属性值对返回属性名:属性值名  字符串
+	 * @param attrs  属性id:属性值id,属性id:属性值id pairs
+	 * @return 返回  属性名:属性值名,属性名:属性值名
+	 */
+	private String getAttrStr(String attrs){
+		if(StringUtil.isEmpty(attrs)) return  "";		
+		//先按","号进行分隔
+		String parmStr="";
+		String[] keyValues=attrs.split(",");
+		for(String keyValue:keyValues){
+			//按":"进行分隔
+			String[] ids=keyValue.split(":");
+			String keyName=attributeService.selectByPrimaryKey(Long.parseLong(ids[0])).getAttrName();
+			String valueName=attributeValueService.selectByPrimaryKey(Long.parseLong(ids[1])).getValueName();
+			if(StringUtil.isEmpty(parmStr)){
+				parmStr=keyName+":"+valueName;
+			}
+			else{
+				parmStr=parmStr+","+keyName+":"+valueName;
+			}
+		}
+		return parmStr;
+	}
+	
 	
 	/**
 	 * @Description 打开合同(打开已经生成的合同)
