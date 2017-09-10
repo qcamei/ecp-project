@@ -114,7 +114,7 @@
   
   <select id="selectOrderBySelfField" resultType="map">
   	 SELECT * FROM trade_orders <where>
-  	 	deleted=1
+  	 	deleted=1 AND yn=1 
   	 	AND
   	 	create_time&gt;=DATE_ADD(create_time,INTERVAL #{orderTimeCond} MONTH)
   	 	<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
@@ -141,7 +141,7 @@
   
   <select id="selectOrderByAgent" resultType="map">
   	 select o.*,a.company_name,a.artificial_person_name,a.contact_phone from trade_orders o LEFT JOIN   user_extends a on(o.buyer_id=a.user_id) <where>
-  	 	o.deleted=1
+  	 	o.deleted=1 AND o.yn=1
   	 	AND
   	 	o.create_time&gt;=DATE_ADD(o.create_time,INTERVAL #{orderTimeCond} MONTH)
   	 	<if test="dealStateCond!=null and dealStateCond!='' and dealStateCond!='0'.toString()">
