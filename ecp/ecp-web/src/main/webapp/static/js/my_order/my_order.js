@@ -239,13 +239,28 @@ $(function(){
 	/*【删除】订单 -click */
 	$(".order-del").on('click',function(){		
 		var orderId=$(this).attr("data-id");  //获取订单ID
-		util.delConfirm("确认删除？", orderId, "deleteOrder");		
+		var contractState=$(this).attr("contract-state");   //获取订单中合同状态
+		if(contractState=='1') {
+			util.delConfirm("确认删除？", orderId, "deleteOrder");
+		}
+		else{
+			util.message("己建立合同,不可删除(只有未建合同的订单可删除)！");
+		}
+			
+				
 	});
 	
 	/*【取消】订单 -click */
 	$(".btn-cancel").on('click',function(){		
 		var orderId=$(this).attr("data-id");  //获取订单ID
-		cancelOrder(orderId);		
+		var contractState=$(this).attr("contract-state");  //获取订单合同状态
+		if(contractState=='1') {
+			cancelOrder(orderId);
+		}
+		else{
+			util.message("己建立合同,不可取消(只有未建合同的订单可取消)！");
+		}
+				
 	});
 	
 	/*【恢复】订单 -click */

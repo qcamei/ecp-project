@@ -223,7 +223,7 @@
 								<div class="tr-operate" style="float: right">
 									 <a href="javascript:void(0)"										
 										class="order-del" 
-										th:attr="data-id=${orderx.order.id}"
+										th:attr="data-id=${orderx.order.id},contract-state=${orderx.order.contractState}"
 										title="删除">删除</a>
 
 								</div></td>
@@ -322,7 +322,7 @@
 										<!-- 如是未取消状态 -->
 										<span th:case='1' th:remove="tag">
 											<div th:attr="id='cancel-button-'+${orderx.order.id}" >
-												<a	href="javascript:void(0);"  th:attr="data-id=${orderx.order.id}" class="btn-cancel" >
+												<a	href="javascript:void(0);"  th:attr="data-id=${orderx.order.id},contract-state=${orderx.order.contractState}" class="btn-cancel" >
 													<b>取消订单</b> 
 												</a>
 												<br>
