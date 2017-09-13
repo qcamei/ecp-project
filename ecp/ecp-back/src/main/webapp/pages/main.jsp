@@ -4,9 +4,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="shortcut icon" href="pages/shopdmp/favicon.ico">
+<!-- <link rel="shortcut icon" href="pages/shopdmp/favicon.ico"> -->
 <%@ include file="common/headCss.jsp"%>
-<link href="pages/css/style.css?v=4.1.0" rel="stylesheet">
+<link href="static/css/main.css" rel="stylesheet">
 <script type="text/javascript">
 /*
  * 点击左侧菜单时，在右侧iframe中加载相关内容
@@ -28,99 +28,114 @@ function iframeLoaded(){
 }
 
 </script>
+<style type="text/css">
+body {
+     overflow-x : hidden;   /* 去掉横条 */
+     overflow-y : auto;   /* 去掉竖条 */
+}
+</style>
 </head>
 
-<body class="fixed-sidebar full-height-layout gray-bg"
-	style="overflow: hidden">
-	<div id="wrapper">
-		<!--左侧导航开始-->
-		<div id="leftmenu-div">
-			<%@ include file="leftmenu.jsp" %>
-		</div>
-		<!--左侧导航结束-->
-		<!--右侧部分开始-->
-		<div id="page-wrapper" class="gray-bg dashbard-1">
-			<div class="row border-bottom">
-				<ul class="nav nav-tabs">
-					<li>
-						<a class="navbar-minimalize minimalize-styl-2 btn btn-info "
-							href="javascript:void(0);"><i class="fa fa-bars"></i> </a>
-					</li>
-					<li class="dropdown pull-right">
-						 <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i> <b>${user.nickname}</b><strong class="caret"></strong></a>
-						<ul class="dropdown-menu">
-							<li>
-								 <a href="javascript:void(0);" onclick="javascript:iframeLoading('pages/back/jsp/user/update_password.jsp');">修改密码</a>
-							</li>
-							<li class="divider">
-							</li>
-							<li>
-								 <a href="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<%-- <nav class="navbar navbar-static-top" role="navigation"
-					style="margin-bottom: 0">
-				<div class="navbar-header">
-					<a class="navbar-minimalize minimalize-styl-2 btn btn-info "
-						href="javascript:void(0);"><i class="fa fa-bars"></i> </a>
-				</div>
-				<div class="nav-footer">
-					<div class='pull-right' style="font-size:14px;padding:18px 8px 0 0;">
-						<a class=" waves-effect waves-dark active" href="javascript:void(0);"><i class="fa fa-user fa-fw"></i> <b>${user.nickname}</b></a>&nbsp;&nbsp;
-						<a href="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
-					
-					</div>	
-				</div>	
-				
-				</nav> --%>
-			</div>
-			<div class="row J_mainContent" id="content-main">
-				<iframe  id="J_iframe" name="J_iframe" width="100%" height="100%"
-					src="pages/welcome.jsp" frameborder="0" seamless></iframe>
-
-			</div>
-		</div>
-		<!--右侧部分结束-->
-	</div>
+<body style="overflow: hidden">
+	<!--左侧导航部分-->
+	<%@ include file="leftmenu.jsp" %>
+    <div class="rightSide">
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse" role="navigation">
+                    <!-- <ul class="nav navbar-nav">
+                        <li><a href="#">-</a></li>
+                    </ul> -->
+                    <div class="navbar-form navbar-left">
+                        <button class="btn btn-xs btn-default"> = </button>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-fw"></i> <b>${user.nickname}</b><strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0);" onclick="javascript:iframeLoading('pages/back/jsp/user/update_password.jsp');">修改密码</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="logout">退出登录</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mainContent">
+				<iframe  id="J_iframe" name="J_iframe" src="pages/welcome.jsp" width="100%" height="100%" scrolling="yes"
+					frameborder="0" seamless></iframe>
+        </div>
+    </div>
 
 	<%@ include file="common/headJs.jsp"%>
-	
-	<script type="text/javascript" src="static/bootstrap/3.3.5/js/bootstrap-switch.min.js"></script>
-	<link href="static/bootstrap/3.3.5/css/bootstrap-switch.min.css" rel="stylesheet">
-	
-	<script type="text/javascript" src="pages/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-	<script type="text/javascript" src="pages/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-	<script type="text/javascript" id="main-js" src="pages/js/main.js"></script>
-	
-	<!-- <script type="text/javascript">
-		/* 初始化 */
-		$("#scrm-ecp-switch").bootstrapSwitch({
-			onColor: 'primary',
-		    offColor: 'info',
-	        onText:'SCRM',  
-	        offText:'ECP',
-	        onSwitchChange:function(event,state){  
-	            if(state==true){  
-	                $(this).val("1");
-	              	//加载SCRM左侧菜单，加载完成后在右侧iframe中加载welcome.jsp页面
-	                util.loading();
-	                $("#leftmenu-div").load("pages/scrm/leftmenu.jsp", function(){
-	                	iframeLoading("pages/welcome.jsp");
-	                });
-	            }else{  
-	                $(this).val("2");
-	                //加载ECP左侧菜单，加载完成后在右侧iframe中加载welcome.jsp页面
-	                util.loading();
-	                $("#leftmenu-div").load("pages/ecp/leftmenu.jsp", function(){
-	                	iframeLoading("pages/welcome.jsp");
-	                });
-	            }
-	            //$("#main-js").attr("src", "pages/shopdmp/js/main.js");//重新加载main.js
-	            $.getScript("pages/js/main.js");
-	        }
-	    });
-	</script> -->
+	<script src="//cdn.bootcss.com/jQuery-slimScroll/1.3.6/jquery.slimscroll.min.js"></script>
+	<script type="text/javascript">
+		//固定菜单栏
+		$(document).ready(function () {
+			var leftHeight = $(window).height();
+			console.log("height:"+leftHeight);
+			$(".leftSide .panel-group").css("height", leftHeight-50);
+			/* $("#J_iframe").css("height", leftHeight-50);
+		    $("#J_iframe").slimScroll({
+		    	width: '100%', //可滚动区域宽度
+		        height: '100%', //可滚动区域高度
+		        size: '10px', //组件宽度
+		        color: '#fff', //滚动条颜色
+		        position: 'right', //组件位置：left/right
+		        distance: '0px', //组件与侧边之间的距离
+		        start: 'top', //默认滚动位置：top/bottom
+		        opacity: .4, //滚动条透明度
+		        alwaysVisible: true, //是否 始终显示组件
+		        disableFadeOut: false, //是否 鼠标经过可滚动区域时显示组件，离开时隐藏组件
+		        railVisible: true, //是否 显示轨道
+		        railColor: '#333', //轨道颜色
+		        railOpacity: .2, //轨道透明度
+		        railDraggable: true, //是否 滚动条可拖动
+		        railClass: 'slimScrollRail', //轨道div类名 
+		        barClass: 'slimScrollBar', //滚动条div类名
+		        wrapperClass: 'slimScrollDiv', //外包div类名
+		        allowPageScroll: true, //是否 使用滚轮到达顶端/底端时，滚动窗口
+		        wheelStep: 20, //滚轮滚动量
+		        touchScrollStep: 200, //滚动量当用户使用手势
+		        borderRadius: '7px', //滚动条圆角
+		        railBorderRadius: '7px' //轨道圆角 
+		    }); */
+			setScroll();
+		});
+		
+		/**
+		 * 初始化滚动条
+		 */
+		function setScroll(){
+			console.log("setScroll");
+			$(".leftSide .panel-group").slimScroll({
+				width: 'auto', //可滚动区域宽度
+		        height: '100%', //可滚动区域高度
+		        size: '10px', //组件宽度
+		        color: '#000', //滚动条颜色
+		        position: 'right', //组件位置：left/right
+		        distance: '0px', //组件与侧边之间的距离
+		        start: 'top', //默认滚动位置：top/bottom
+		        opacity: .4, //滚动条透明度
+		        alwaysVisible: false, //是否 始终显示组件
+		        disableFadeOut: true, //是否 鼠标经过可滚动区域时显示组件，离开时隐藏组件
+		        railVisible: true, //是否 显示轨道
+		        railColor: '#333', //轨道颜色
+		        railOpacity: .2, //轨道透明度
+		        railDraggable: true, //是否 滚动条可拖动
+		        railClass: 'slimScrollRail', //轨道div类名 
+		        barClass: 'slimScrollBar', //滚动条div类名
+		        wrapperClass: 'slimScrollDiv', //外包div类名
+		        allowPageScroll: false, //是否 使用滚轮到达顶端/底端时，滚动窗口
+		        wheelStep: 20, //滚轮滚动量
+		        touchScrollStep: 200, //滚动量当用户使用手势
+		        borderRadius: '7px', //滚动条圆角
+		        railBorderRadius: '7px' //轨道圆角 
+			});
+		}
+		
+		$(window).on("resize",setScroll);
+	</script>
 </body>
 </html>
