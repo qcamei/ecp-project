@@ -74,6 +74,13 @@
 													</div>
 												</div>
 												<div class="form-group">
+													<label class="col-sm-2 control-label">型号<b style="color:red;">&nbsp;*</b></label>
+													<div class="col-sm-10">
+														<input type="text" id="item-model" name="model"
+															class="form-control" placeholder="型号" />
+													</div>
+												</div>
+												<div class="form-group">
 													<label class="col-sm-2 control-label">关键字<b style="color:red;">&nbsp;*</b></label>
 													<div class="col-sm-10">
 														<input type="text" id="keywords" name="keywords"

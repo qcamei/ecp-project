@@ -244,10 +244,10 @@ public class ItemController {
 	 */
 	@RequestMapping("/updateById")
 	@ResponseBody
-	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson) {
+	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, boolean isSaveSku) {
 		log.info("update item:"+item);
 		try {
-			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson);
+			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson, isSaveSku);
 			if(rows>0){
 				return RequestResultUtil.getResultUpdateSuccess();
 			}
@@ -365,6 +365,59 @@ public class ItemController {
 			return RequestResultUtil.getResultDeleteSuccess();
 		}
 		return RequestResultUtil.getResultDeleteWarn();
+	}
+	
+	/**
+	 * 查询要修改的sku规格
+	 * @param request
+	 * @param response
+	 * @param skuId
+	 * @return
+	 */
+	@RequestMapping("/selectSkuBySkuId")
+	@ResponseBody
+	public Map<String, Object> selectSkuBySkuId(HttpServletRequest request, HttpServletResponse response, Long skuId) {
+		try {
+			Sku sku = skuService.selectByPrimaryKey(skuId);
+			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
+			if(sku!=null){
+				respM.put("skuSpec", sku.getSkuSpec());
+			}else{
+				respM.put("skuSpec", "");
+			}
+			return respM;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("查询sku信息异常");
+		}
+		
+		return RequestResultUtil.getResultSelectWarn();
+	}
+	
+	/**
+	 * 修改sku规格
+	 * @param request
+	 * @param response
+	 * @param skuId
+	 * @param skuSpec
+	 * @return
+	 */
+	@RequestMapping("/updateSkuSpecBySkuId")
+	@ResponseBody
+	public Map<String, Object> updateSkuBySkuId(HttpServletRequest request, HttpServletResponse response, Long skuId, String skuSpec) {
+		
+		if(skuId==null || skuId<=0 || StringUtils.isBlank(skuSpec)){
+			return RequestResultUtil.getResultUpdateWarn("参数不能为空!");
+		}
+		
+		Sku sku = new Sku();
+		sku.setSkuId(skuId);
+		sku.setSkuSpec(skuSpec);
+		int rows = skuService.updateByPrimaryKeySelective(sku);
+		if(rows>0){
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+		return RequestResultUtil.getResultUpdateWarn();
 	}
 	
 }

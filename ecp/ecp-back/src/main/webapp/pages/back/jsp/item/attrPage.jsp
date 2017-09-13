@@ -171,6 +171,7 @@ function getSaleAttr(){
  * 创建sku
  */
 function createSku(){
+	g_is_save_sku = true;//是否保存sku(skuPage.jsp)
 	//debugger;
 	/* 获取所有属性的ID */
 	var attrIds = new Array();
@@ -261,6 +262,7 @@ function createHeadHtml(arr){
 	htmlHead += "<th id=''>销售价</th>";
 	htmlHead += "<th id=''>体积</th>";
 	htmlHead += "<th id=''>重量</th>";
+	htmlHead += "<th id=''>规格</th>";
 	htmlHead += "</tr>";
 	return htmlHead;
 }
@@ -278,16 +280,22 @@ function createBodyHtml(arr){
 			+"</td>";
 		}
 		htmlBody += "<td id=''>"
+		htmlBody += "<input type='hidden' id='sku-price-id-"+i+"' value='' />"
 		htmlBody += "<input type='text' id='cost-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='成本价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='text' id='sell-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='销售价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
+		htmlBody += "<input type='hidden' id='sku-id-"+i+"' value='' />"
 		htmlBody += "<input type='text' id='volume-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='体积' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='text' id='weight-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='重量' />"
+		htmlBody += "</td>";
+		htmlBody += "<td id=''>"
+		htmlBody += "<input type='hidden' id='sku-spec-"+i+"' value='' />"
+		htmlBody += "<button type='button' id='spec-"+i+"' onclick='javascript:openSpecModel(0, "+i+");'>编辑</button>"
 		htmlBody += "</td>";
 		htmlBody += "</tr>";
 	}
@@ -333,35 +341,64 @@ function getSkuInfo(){
 		attrIds.push($(this).val());
 	});
 	console.log("attrIds:"+attrIds);
-		//获取sku body tr
-		$("#sku-table #sku-body tr").each(function(index){
-			//获取sku body attrVal
-			var attributes = "";
-			//$("#sku-table #sku-body tr input[name='saleAttrBody']").each(function(i){
-				$(this).find("input[name='saleAttrBody']").each(function(i){
-				console.log("coll 第n次循环："+i);
-				var attrId = attrIds[i];
-				var attrValId = $(this).val();
-				attributes += attrId+":"+attrValId+",";
-			});
-			attributes = attributes.substring(0, attributes.length-1);
-			var costPrice = $("#cost-price-"+index).val();//成本价
-			var sellPrice = $("#sell-price-"+index).val();//销售价
-			var volume = $("#volume-"+index).val();//体积
-			var weight = $("#weight-"+index).val();//重量
-			
-			var skuO = new Object();
-			skuO.attributes = attributes;
-			skuO.volume = volume;
-			skuO.weight = weight;
-			sku.push(skuO);
-			
-			var skuPriceO = new Object();
-			skuPriceO.costPrice = costPrice;
-			skuPriceO.sellPrice = sellPrice;
-			skuPrice.push(skuPriceO);
+	var isReturn = false;
+	//获取sku body tr
+	$("#sku-table #sku-body tr").each(function(index){
+		//获取sku body attrVal
+		var attributes = "";
+		//$("#sku-table #sku-body tr input[name='saleAttrBody']").each(function(i){
+			$(this).find("input[name='saleAttrBody']").each(function(i){
+			console.log("coll 第n次循环："+i);
+			var attrId = attrIds[i];
+			var attrValId = $(this).val();
+			attributes += attrId+":"+attrValId+",";
 		});
-	
+		attributes = attributes.substring(0, attributes.length-1);
+		var skuId = $("#sku-id-"+index).val();//skuId
+		var skuSpec = $("#sku-spec-"+index).val();//sku规格
+		var skuPriceId = $("#sku-price-id-"+index).val();//skuPriceId
+		var costPrice = $("#cost-price-"+index).val();//成本价
+		if(costPrice==null || costPrice==""){
+			util.message("第 "+index+" 行成本价不能为空!");
+			isReturn = true;
+			return false;
+		}
+		var sellPrice = $("#sell-price-"+index).val();//销售价
+		if(sellPrice==null || sellPrice==""){
+			util.message("第 "+index+" 行销售价不能为空!");
+			isReturn = true;
+			return false;
+		}
+		var volume = $("#volume-"+index).val();//体积
+		if(volume==null || volume==""){
+			util.message("第 "+index+" 行体积不能为空!");
+			isReturn = true;
+			return false;
+		}
+		var weight = $("#weight-"+index).val();//重量
+		if(weight==null || weight==""){
+			util.message("第 "+index+" 行重量不能为空!");
+			isReturn = true;
+			return false;
+		}
+		
+		var skuO = new Object();
+		skuO.skuId = skuId;
+		skuO.attributes = attributes;
+		skuO.volume = volume;
+		skuO.weight = weight;
+		skuO.skuSpec = skuSpec;
+		sku.push(skuO);
+		
+		var skuPriceO = new Object();
+		skuPriceO.id = skuPriceId;
+		skuPriceO.costPrice = costPrice;
+		skuPriceO.sellPrice = sellPrice;
+		skuPrice.push(skuPriceO);
+	});
+	if(isReturn){
+		return false;
+	}
 	console.log("sku:"+JSON.stringify(sku));
 	console.log("sku price:"+JSON.stringify(skuPrice));
 	var obj = new Object();

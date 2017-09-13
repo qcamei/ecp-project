@@ -249,7 +249,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	 */
 	@Override
 	@Transactional
-	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson) {
+	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku) {
 		try {
 			if(item.getItemId()==null || item.getItemId()<=0){
 				return 0;
@@ -277,6 +277,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					FileUploadUtil.deleteFile(request, pict.getPictureUrl());
 				}*/
 				
+				//逻辑删除商品图片
 				Example e = new Example(ItemPicture.class);
 				e.createCriteria().andEqualTo("itemId", item.getItemId());
 				ItemPicture pictureTemp = new ItemPicture();
@@ -290,16 +291,19 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					rows = itemPictureService.insertSelective(picture);
 				}
 			}else{
-				//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
-				filePathList = new ArrayList<String>();
-				
-				List<ItemPicture> pictureList = itemPictureService.getByItemId(item.getItemId());
-				//循环商品图片List集，获取商品图片信息并添加到缩略图集合（filePathList）
-				for(int i=0; i<pictureList.size(); i++){
-					ItemPicture picture = pictureList.get(i);
-					//商品图片不为空则添加到缩略图集合
-					if(StringUtils.isNotBlank(picture.getPictureUrl())){
-						filePathList.add(picture.getPictureUrl());
+				if(isSaveSku){//如果更新sku时
+					log.info("更新sku，且未上传图片；获取原来商品的图片作为sku图片");
+					//TODO 修改时如果未选择上传图片，则图片还是原来的图片，不修改
+					filePathList = new ArrayList<String>();
+					
+					List<ItemPicture> pictureList = itemPictureService.getByItemId(item.getItemId());
+					//循环商品图片List集，获取商品图片信息并添加到缩略图集合（filePathList）
+					for(int i=0; i<pictureList.size(); i++){
+						ItemPicture picture = pictureList.get(i);
+						//商品图片不为空则添加到缩略图集合
+						if(StringUtils.isNotBlank(picture.getPictureUrl())){
+							filePathList.add(picture.getPictureUrl());
+						}
 					}
 				}
 			}
@@ -316,26 +320,51 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					//TODO 如果销售属性为空时，是否添加？如何添加？
 				}
 				if(rows>0){
+					/*if(!isSaveSku){//如果不更新sku时
+						log.info("未重新选择sku，只更新sku信息");
+						//如果上传图片不为空时，更新sku图片
+						if(filePathList!=null && filePathList.size()>0){
+							log.info("已上传图片，更新sku图片");
+							rows = this.updateSkuInfo(skuJson, skuPriceJson, filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
+							if(rows<=0){
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							}
+						}
+						return rows;
+					}*/
 					//修改SKU相关信息
-					//添加新SKU相关信息前先删除该商品对应的SKU相关信息
-					this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
+					//添加新SKU相关信息前先删除该商品对应的SKU相关信息（删除sku相关信息放在处理sku相关信息方法中处理）
+					//this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
 					
 					//添加新SKU相关信息
-					if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
-						//TODO 如果没有SKU信息时，手动创建一个SKU，此处添加默认SKU；注：商品需要有默认图片和默认SKU
-						List<Sku> skuList = new ArrayList<Sku>();
-						Sku sku = new Sku();
-						sku.setVolume(item.getVolume());
-						sku.setWeight(item.getWeight());
-						skuList.add(sku);
-						skuJson = JSON.toJSONString(skuList);
-						List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
-						SkuPrice skuPrice = new SkuPrice();
-						skuPrice.setCostPrice(item.getMarketPrice2());
-						skuPrice.setMarketPrice(item.getMarketPrice());
-						skuPrice.setSellPrice(item.getMarketPrice());
-						skuPriceList.add(skuPrice);
-						skuPriceJson = JSON.toJSONString(skuPriceList);
+					if(isSaveSku){//如果更新sku时
+						if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
+							//TODO 如果没有SKU信息时，手动创建一个SKU，此处添加默认SKU；注：商品需要有默认图片和默认SKU
+							List<Sku> skuList = new ArrayList<Sku>();
+							Sku sku = new Sku();
+							sku.setVolume(item.getVolume());
+							sku.setWeight(item.getWeight());
+							skuList.add(sku);
+							skuJson = JSON.toJSONString(skuList);
+							List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
+							SkuPrice skuPrice = new SkuPrice();
+							skuPrice.setCostPrice(item.getMarketPrice2());
+							skuPrice.setMarketPrice(item.getMarketPrice());
+							skuPrice.setSellPrice(item.getMarketPrice());
+							skuPriceList.add(skuPrice);
+							skuPriceJson = JSON.toJSONString(skuPriceList);
+						}
+					}else{//如果不更新sku时
+						log.info("未重新选择sku，只更新sku信息");
+						//如果上传图片不为空时，更新sku图片
+						if(filePathList!=null && filePathList.size()>0){
+							log.info("已上传图片，更新sku图片");
+							rows = this.updateSkuPicture(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
+							if(rows<=0){
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							}
+						}
+						return rows;
 					}
 					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
 					if(rows>0){
@@ -352,6 +381,58 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("修改商品异常，事务回滚！", e);
+		}
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
+	}
+	
+	/**
+	 * 如果不更新sku信息时，且上传图片不为空时，更新sku图片
+	 * @param filePathList
+	 * @param itemId
+	 */
+	private int updateSkuPicture(List<String> filePathList, Long itemId){
+		try {
+			//如果上传图片不为空时，更新sku图片
+			List<Sku> skuListTemp = skuService.getByItemId(itemId);
+			List<Long> skuIds = new ArrayList<Long>();
+			for(int i=0; i<skuListTemp.size(); i++){
+				Sku sku = skuListTemp.get(i);
+				skuIds.add(sku.getSkuId());
+			}
+			if(skuIds!=null && skuIds.size()>0){
+				skuPictureService.deleteBySkuIds(skuIds);//逻辑删除SKU图片信息
+				
+				int rows = 0;
+				for(int j=0; j<skuIds.size(); j++){
+					Long skuId = skuIds.get(j);
+					for(String filePath : filePathList){
+						SkuPicture skuPicture = new SkuPicture();
+						skuPicture.setCreated(new Date());
+						skuPicture.setModified(new Date());
+						skuPicture.setPictureStatus((byte)1);
+						skuPicture.setSortNumber((byte)1);
+						skuPicture.setPictureUrl(filePath);
+						skuPicture.setSkuId(skuId);
+						rows = skuPictureService.insertSelective(skuPicture);
+						if(rows>0){
+							continue;
+						}else{
+							log.error("循环更新SKU图片 item_sku_picture 出错");
+							break;
+						}
+					}
+					if(rows<=0){
+						log.error("循环更新SKU图片 item_sku_picture 出错");
+						break;
+					}
+				}
+				return rows;
+			}
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("循环更新SKU图片 item_sku_picture 异常");
 		}
 		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		return 0;
@@ -405,6 +486,13 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	@Transactional
 	private int processSkuRelate(Item item, List<String> filePathList, String skuJson, String skuPriceJson){
 		try {
+			
+			List<Long> skuIds = new ArrayList<Long>();
+			List<Sku> skuListTemp = skuService.getByItemId(item.getItemId());
+			for(Sku skuTemp : skuListTemp){
+				skuIds.add(skuTemp.getSkuId());
+			}
+			
 			int rows = 0;
 			//添加sku item_sku
 			List<Sku> skuList = JSONArray.parseArray(skuJson, Sku.class);
@@ -416,7 +504,17 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				sku.setItemId(item.getItemId());
 				sku.setSkuStatus(1);
 				sku.setSkuType(1);
-				rows = skuService.insertSelective(sku);
+				if(sku.getSkuId()!=null && sku.getSkuId()>0){
+					rows = skuService.updateByPrimaryKeySelective(sku);
+				}else{
+					Example skuExample = new Example(Sku.class);
+					skuExample.createCriteria().andEqualTo("itemId", item.getItemId());
+					Sku skuTemp = new Sku();
+					skuTemp.setDeleted(DeletedType.YES);
+					skuService.updateByExampleSelective(skuTemp, skuExample);//逻辑删除SKU信息
+					
+					rows = skuService.insertSelective(sku);//添加新的sku信息
+				}
 				if(rows>0){
 					//添加sku价格 trade_sku_price
 					List<SkuPrice> skuPriceList = JSONArray.parseArray(skuPriceJson, SkuPrice.class);
@@ -425,13 +523,26 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					skuPrice.setUpdateTime(new Date());
 					skuPrice.setItemId(item.getItemId());
 					skuPrice.setSkuId(sku.getSkuId());
-					rows = skuPriceService.insertSelective(skuPrice);
+					skuPrice.setMarketPrice(item.getMarketPrice());
+					if(skuPrice.getId()!=null && skuPrice.getId()>0){
+						rows = skuPriceService.updateByPrimaryKeySelective(skuPrice);
+					}else{
+						Example priceExample = new Example(Sku.class);
+						priceExample.createCriteria().andEqualTo("itemId", item.getItemId());
+						SkuPrice priceTemp = new SkuPrice();
+						priceTemp.setDeleted(DeletedType.YES);
+						skuPriceService.updateByExampleSelective(priceTemp, priceExample);//逻辑删除SKU价格信息
+						
+						rows = skuPriceService.insertSelective(skuPrice);//添加新的sku价格信息
+					}
 					if(rows>0){
 						//添加sku图片 item_sku_picture
 						if(filePathList!=null && filePathList.size()>0){
+							if(skuIds!=null && skuIds.size()>0){
+								skuPictureService.deleteBySkuIds(skuIds);//逻辑删除SKU图片信息
+							}
 							for(String filePath : filePathList){
 								SkuPicture skuPicture = new SkuPicture();
-								skuPrice.setMarketPrice(item.getMarketPrice());
 								skuPicture.setCreated(new Date());
 								skuPicture.setModified(new Date());
 								skuPicture.setPictureStatus((byte)1);

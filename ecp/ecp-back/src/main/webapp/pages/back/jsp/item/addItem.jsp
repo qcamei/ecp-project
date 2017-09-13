@@ -32,8 +32,8 @@
 </head>
 <body class="gray-bg">
 	<div class="tabs-container" id="tabs-add-item">
-		<ul class="nav nav-tabs" id="top_tab">
-			<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-3"
+		<ul class="nav nav-tabs" id="top_tab_item_manage">
+			<li class="active" onclick="javascript:clickSelectCateTab();"><a data-toggle="tab" href="#tab-3"
 				aria-expanded="true">选择类目</a></li>
 			<li class="hide" id="item-info-li"><a
 				data-toggle="tab" href="#tab-4" aria-expanded="false">商品信息</a></li>
@@ -181,6 +181,13 @@
 																	<div class="col-sm-10">
 																		<input type="text" id="item-name" name="itemName"
 																			class="form-control" placeholder="商品名称" />
+																	</div>
+																</div>
+																<div class="form-group">
+																	<label class="col-sm-2 control-label">型号<b style="color:red;">&nbsp;*</b></label>
+																	<div class="col-sm-10">
+																		<input type="text" id="item-model" name="model"
+																			class="form-control" placeholder="型号" />
 																	</div>
 																</div>
 																<div class="form-group">

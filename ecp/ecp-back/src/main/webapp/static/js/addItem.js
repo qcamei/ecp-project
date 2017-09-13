@@ -170,6 +170,21 @@ function bootstrapValidateFun(){
                     }
 	            }
 	        },
+	        model: {
+	            validators: {
+	                notEmpty: {
+	                    message: "型号不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.()]+$",
+		                message: "请勿输入特殊符号"
+	                },*/
+	                stringLength: {
+                        max: 100,
+                        message: '长度不能超过50个字符'
+                    }
+	            }
+	        },
 	        keywords: {
 	        	validators: {
 	                notEmpty: {
@@ -323,7 +338,7 @@ function saveFun(){
 	
 	var url = "back/item/insert";
 	
-	var createTimeStr = $("#create-time-str").val();
+	/*var createTimeStr = $("#create-time-str").val();
 	var createtime = null;
 	if(createTimeStr==null || createTimeStr==""){
 		createtime = new Date();
@@ -352,7 +367,7 @@ function saveFun(){
 	console.log("insert sku:"+JSON.stringify(sku));
 	console.log("insert sku price:"+JSON.stringify(skuPrice));
 	params.skuJson = JSON.stringify(sku);
-	params.skuPriceJson = JSON.stringify(skuPrice);
+	params.skuPriceJson = JSON.stringify(skuPrice);*/
 	
 	//util.loading();
 	/*$("#save-form").ajaxSubmit({
@@ -372,12 +387,18 @@ function saveFun(){
 			}
 		},
 	});*/
+	
+	var params = getParams();
+	console.log("params:"+JSON.stringify(params));
+	if(!params){
+		return false;
+	}
 	$.ajaxFileUpload({
 		url: url, //用于文件上传的服务器端请求地址
         secureuri: false, //一般设置为false
         fileElementId: "picture-url", //文件上传空间的id属性  <input type="file" id="file" name="file" />
         dataType: "json", //返回值类型 一般设置为json
-        data: getParams(),
+        data: params,
         success: function (res, status){  //服务器成功响应处理函数
         	console.log(res);
         	if(res!=null){
@@ -408,6 +429,7 @@ function getParams(){
 	params.brand = $("#brand").val();//品牌
 	
 	params.itemName = $("#item-name").val();//商品名称
+	params.model = $("#item-model").val();//型号
 	params.keywords = $("#keywords").val();//关键字
 	params.guidePrice = $("#guide-price").val();//商城指导价格
 	params.marketPrice = $("#market-price").val();//市场价格
@@ -444,6 +466,10 @@ function getParams(){
 	
 	//sku
 	var skuObj = getSkuInfo();
+	console.log("skuObj:"+JSON.stringify(skuObj));
+	if(!skuObj){
+		return false;
+	}
 	var sku = skuObj.sku;
 	var skuPrice = skuObj.skuPrice;
 	console.log("insert sku:"+JSON.stringify(sku));
@@ -476,6 +502,22 @@ function validateImgFileSizeFun(file){
 	}
 }
 
+/**
+ * 点击选择类目选项卡时执行
+ * @returns
+ */
+function clickSelectCateTab(){
+	util.confirm("显示选择类目选项卡时，当前编辑的商品信息则会被重置，是否继续？", 0, "resetFun", "selectEditItemTab");
+}
+/**
+ * 选择添加/编辑商品选项卡
+ * @returns
+ */
+function selectEditItemTab(){
+	$('#tabs-edit-item a[href="#tab-4"]').tab('show');//显示添加/编辑商品选项卡
+	//$('#top_tab_item_manage li:eq(1) a').tab('show');
+}
+
 /*
  * 重置form表单
  */
@@ -498,8 +540,9 @@ function resetFun(){
 	setContent("item-ueditor", "");//商品详情（描述）
 	setContent("after-service", "");//售后服务
 	
+	$('#tabs-edit-item a[href="#tab-5"]').tab('show');//显示基本信息选项卡
 	$("#item-info-li").addClass("hide");//隐藏商品信息选项卡
-	$('#tabs-edit-item a[href="#tab-5"]').tab('show');
+	$('#tabs-edit-item a[href="#tab-3"]').tab('show');//显示选择类目选项卡
 }
 
 /**

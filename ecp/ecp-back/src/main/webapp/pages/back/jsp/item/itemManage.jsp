@@ -36,8 +36,8 @@
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="tabs-container" id="tabs-243687">
-						<ul class="nav nav-tabs" id="top_tab">
-							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
+						<ul class="nav nav-tabs" id="top_tab_item_manage">
+							<li class="active" onclick="javascript:clickItemTab();"><a data-toggle="tab" href="#tab-1"
 								aria-expanded="true"> 商品列表</a></li>
 							<li class="hide" id="edit-item-li"><a
 								data-toggle="tab" href="#tab-2" aria-expanded="false">编辑商品</a></li>
