@@ -136,7 +136,8 @@
   			</when>
   		</choose>		
   		  	 
-  	 </where>  
+  	 </where> 
+  	  order by create_time  DESC
   </select>
   
   <select id="selectOrderByAgent" resultType="map">
@@ -160,6 +161,8 @@
   			</when>  			
   		</choose>
   	 </where>  	 
+  	 	order by o.create_time DESC
+  	 
   </select>
   
   
