@@ -196,23 +196,28 @@ $("#spec-submit-btn").click(function(){
 	if(!skuSpec){
 		return false;
 	}
-	if(g_sku_id<=0){//添加sku
-		$("#sku-spec-"+g_sku_index).val(skuSpec);
-	}else{//编辑sku
-		var url = "back/item/updateSkuSpecBySkuId";
-		var params = {"skuId": g_sku_id, "skuSpec": skuSpec};
-		$.post(url, params, function(res){
-			console.log(res);
-			if(res!=null){
-				var obj = $.parseJSON(res);
-				if(obj.result_code=="success"){
-					util.message(obj.result_msg);
-				}else{
-					util.message(obj.result_err_msg);
+	if(skuSpec==null || skuSpec=="" || skuSpec=="[]"){
+		console.log("保存sku规格为空");
+	}else{
+		if(g_sku_id<=0){//添加sku
+			$("#sku-spec-"+g_sku_index).val(skuSpec);
+		}else{//编辑sku
+			var url = "back/item/updateSkuSpecBySkuId";
+			var params = {"skuId": g_sku_id, "skuSpec": skuSpec};
+			$.post(url, params, function(res){
+				console.log(res);
+				if(res!=null){
+					var obj = $.parseJSON(res);
+					if(obj.result_code=="success"){
+						util.message(obj.result_msg);
+					}else{
+						util.message(obj.result_err_msg);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
+	
 	g_group_num=0;
 	$('#sku-spec-modal').modal('hide');
 });
@@ -245,15 +250,16 @@ function openSpecModel(skuId, index){
 						var html = "";
 						$.each(skuSpecObj, function(index){
 							html += createSpecGroup(index, this);
+							g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
 						});
 						$("#spec-item").append(html);
 						return false;
 					}else{
-						alert("sku规格为空");
+						console.log("sku规格为空");
 					}
 					
 				}else{
-					alert("查询失败");
+					util.message("查询失败！");
 				}
 			}
 		});
@@ -265,7 +271,7 @@ function openSpecModel(skuId, index){
  */
 $("#add-spec-group-btn").click(function(){
 	var html = createSpecGroup(g_group_num, null);
-	g_group_num++;
+	g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
 	console.log(html);
 	$("#spec-item").append(html);
 	//addSpec(g_group_num+1);
