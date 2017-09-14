@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.SkuPictureMapper;
 import com.ecp.entity.SkuPicture;
 import com.ecp.service.front.ISkuPictureService;
@@ -26,7 +27,8 @@ public class SkuPictureServiceImpl extends AbstractBaseService<SkuPicture, Long>
 	@Override
 	public List<SkuPicture> getSkuPictureById(Long skuId) {
 		SkuPicture record=new SkuPicture();
-		record.setSkuId(skuId);
+		record.setSkuId(skuId);		
+		record.setDeleted(DeletedType.NO);  //增加在查询SKU图片时删除条件
 		return skuPictureMapper.select(record);		
 	}
 
