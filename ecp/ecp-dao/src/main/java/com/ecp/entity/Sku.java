@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
+import org.apache.commons.lang3.StringUtils;
+
 @Table(name = "item_sku")
 public class Sku {
     @Id
@@ -203,7 +205,7 @@ public class Sku {
      * @param skuSpec
      */
     public void setSkuSpec(String skuSpec) {
-        this.skuSpec = skuSpec == null ? null : skuSpec.trim();
+        this.skuSpec = StringUtils.isBlank(skuSpec) ? null : skuSpec.trim();
     }
 
     @Column(name = "deleted")

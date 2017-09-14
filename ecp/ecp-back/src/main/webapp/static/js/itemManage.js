@@ -330,6 +330,7 @@ function ajaxRequestGetItemInfo(id){
 				});
 				
 				createSku();
+				g_is_save_sku = false;//是否保存sku(skuPage.jsp)
 				//debugger;
 				var skuList = resp.skuList;//SKU
 				var skuPriceList = resp.skuPriceList;//SKU价格
@@ -351,6 +352,18 @@ function ajaxRequestGetItemInfo(id){
 					$("#weight-"+i).val(sku.weight);//重量
 					$("#spec-"+i).attr("onclick", "javascript:openSpecModel("+sku.skuId+", "+i+");");
 				}
+				
+				//如果没有销售属性或未选择销售属性
+				var sale_attr_arr = getSaleAttr();
+				if(sale_attr_arr==null || sale_attr_arr.length<=0){
+					showOpenDefaultSpecBtn(skuList[0].skuId);
+				}else{
+					hideOpenDefaultSpecBtn(0);
+				}
+				/*var skuHtml = $("#sku #sku-body").html().trim();
+				if(skuHtml==null || skuHtml==""){
+					showOpenDefaultSpecBtn();
+				}*/
 				
 				$('#tabs-243687 a[href="#tab-2"]').tab('show');
 				$('#tabs-edit-item a[href="#tab-5"]').tab('show');
@@ -652,6 +665,8 @@ function getParams(){
 	params.skuPriceJson = JSON.stringify(skuPrice);
 	
 	params.isSaveSku = g_is_save_sku;//是否保存sku（默认为false）(skuPage.jsp)
+	
+	params.skuSpec = $("#default-sku-spec").val();
 	
 	return params;
 }

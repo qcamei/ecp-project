@@ -109,7 +109,7 @@
 </div>
 <br>
 
-<div id="sku">
+<div id="sku-div">
 	<%@ include file="skuPage.jsp"%>
 </div>
 
@@ -171,6 +171,14 @@ function getSaleAttr(){
  * 创建sku
  */
 function createSku(){
+	
+	var sale_attr_arr = getSaleAttr();
+	if(sale_attr_arr==null || sale_attr_arr.length<=0){
+		showOpenDefaultSpecBtn(0);
+	}else{
+		hideOpenDefaultSpecBtn(0);
+	}
+	
 	g_is_save_sku = true;//是否保存sku(skuPage.jsp)
 	//debugger;
 	/* 获取所有属性的ID */

@@ -57,7 +57,11 @@ function getSaleAttr(){
 	return attrArr;
 }
 </script> -->
-<button type="button" class="btn btn-primary" id="open-btn">打开规格对话框</button>
+<!-- 用于保存默认sku规格 -->
+<div id="edit-default-sku-spec-div" class="hide">
+	<input type="hidden" id="default-sku-spec" value="" />
+</div>
+<button type="button" class="btn btn-primary" id="edit-default-sku-spec-btn" onclick="javascript:openDefaultSpecModel(0);">编辑默认sku规格</button>
 <!-- sku规格对话框 -->
 <div class="modal fade" id="sku-spec-modal" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true">
@@ -172,7 +176,8 @@ function getSaleAttr(){
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal" id="close-attr-value-btn">关闭</button>
-				<button type="button" class="btn btn-primary" id="spec-submit-btn">保存</button>
+				<button type="button" class="btn btn-primary hide" id="spec-submit-btn">保存</button>
+				<button type="button" class="btn btn-primary" id="default-spec-submit-btn" onclick="javascript:saveDefaultSpec(0);">保存默认sku规格</button>
 			</div>
 		</div>
 	</div>
@@ -181,10 +186,6 @@ function getSaleAttr(){
 var g_is_save_sku = false;//是否保存sku(skuPage.jsp)
 
 var g_group_num = 0;//记录sku规格个数
-$("#open-btn").click(function(){
-	$('#sku-spec-modal').modal('show');
-});
-
 var g_sku_id = 0;//sku的ID，>0时，表示是修改，保存时直接根据skuId直接更新数据库；<=0时，表示是添加，保存时在js中保存，添加商品随sku一起添加
 var g_sku_index = 0;//记录当前编辑的sku是哪一个
 
@@ -202,25 +203,34 @@ $("#spec-submit-btn").click(function(){
 		if(g_sku_id<=0){//添加sku
 			$("#sku-spec-"+g_sku_index).val(skuSpec);
 		}else{//编辑sku
-			var url = "back/item/updateSkuSpecBySkuId";
-			var params = {"skuId": g_sku_id, "skuSpec": skuSpec};
-			$.post(url, params, function(res){
-				console.log(res);
-				if(res!=null){
-					var obj = $.parseJSON(res);
-					if(obj.result_code=="success"){
-						util.message(obj.result_msg);
-					}else{
-						util.message(obj.result_err_msg);
-					}
-				}
-			});
+			ajaxPostSaveSkuSpec(g_sku_id, skuSpec);
 		}
 	}
 	
 	g_group_num=0;
 	$('#sku-spec-modal').modal('hide');
 });
+/**
+ * 显示打开默认sku规格对话框按钮
+ */
+function showOpenDefaultSpecBtn(skuId){
+	$("#edit-default-sku-spec-btn").removeClass("hide");//显示打开默认sku规格对话框按钮
+	$("#edit-default-sku-spec-btn").attr("onclick", "javascript:openDefaultSpecModel("+skuId+");");
+	$("#spec-submit-btn").addClass("hide");//隐藏sku规格对话框中保存按钮
+	$("#default-spec-submit-btn").removeClass("hide");////显示sku规格对话框中保存默认sku规格按钮
+	$("#default-spec-submit-btn").attr("onclick", "javascript:saveDefaultSpec("+skuId+");");
+}
+/**
+ * 隐藏打开默认sku规格对话框按钮
+ */
+function hideOpenDefaultSpecBtn(skuId){
+	$("#edit-default-sku-spec-btn").addClass("hide");//显示打开默认sku规格对话框按钮
+	$("#edit-default-sku-spec-btn").attr("onclick", "javascript:openDefaultSpecModel("+skuId+");");
+	$("#spec-submit-btn").removeClass("hide");//隐藏sku规格对话框中保存按钮
+	$("#default-spec-submit-btn").addClass("hide");////显示sku规格对话框中保存默认sku规格按钮
+	$("#default-spec-submit-btn").attr("onclick", "javascript:saveDefaultSpec("+skuId+");");
+	$("#default-sku-spec").val("");
+}
 
 /**
  * 打开编辑sku规格对话框
@@ -229,43 +239,114 @@ function openSpecModel(skuId, index){
 	console.log("skuId:"+skuId);
 	g_sku_id = skuId;//sku的ID，>0时，表示是修改，保存时直接根据skuId直接更新数据库；<=0时，表示是添加，保存时在js中保存，添加商品随sku一起添加
 	g_sku_index = index;//记录当前编辑的sku是哪一个
+	$("#spec-item").empty();//清空sku规格对话框中的sku规格内容
 	if(skuId<=0){
 		//TODO
 		//<=0时，表示是添加，不查询数据库中sku规格；保存时在js中保存，添加商品随sku一起添加
-		
 	}else{
 		//TODO
 		//>0时，表示是修改，先查询数据库中sku规格并在对话框中显示；保存时直接根据skuId修改更新数据库
-		$("#spec-item").empty();
-		var url = "back/item/selectSkuBySkuId";
-		var params = {"skuId": skuId};
-		$.get(url, params, function(res){
-			console.log(res);
-			if(res!=null){
-				var obj = $.parseJSON(res);
-				if(obj.result_code=="success"){
-					var skuSpec = obj.skuSpec;
-					if(skuSpec!=null && skuSpec!=""){
-						var skuSpecObj = $.parseJSON(skuSpec);
-						var html = "";
-						$.each(skuSpecObj, function(index){
-							html += createSpecGroup(index, this);
-							g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
-						});
-						$("#spec-item").append(html);
-						return false;
-					}else{
-						console.log("sku规格为空");
-					}
-					
-				}else{
-					util.message("查询失败！");
-				}
-			}
-		});
+		ajaxGetSkuSpec(skuId);
 	}
 	$('#sku-spec-modal').modal('show');
 }
+/**
+ * 打开默认sku规格对话框
+ */
+function openDefaultSpecModel(skuId){
+	console.log("skuId:"+skuId);
+	$("#spec-item").empty();//清空sku规格对话框中的sku规格内容
+	if(skuId>0){
+		//TODO
+		//>0时，表示是修改，先查询数据库中sku规格并在对话框中显示；保存时直接根据skuId修改更新数据库
+		ajaxGetSkuSpec(skuId);
+	}
+	$('#sku-spec-modal').modal('show');
+}
+/**
+ * 保存默认sku规格
+ */
+function saveDefaultSpec(skuId){
+	var skuSpec = getSkuSpec();//获取sku规格信息
+	if(!skuSpec){
+		return false;
+	}
+	if(skuSpec==null || skuSpec=="" || skuSpec=="[]"){
+		console.log("保存默认sku规格为空");
+	}else{
+		if(skuId<=0){//添加sku
+			$("#default-sku-spec").val(skuSpec);
+		}else{//编辑sku
+			ajaxPostSaveSkuSpec(skuId, skuSpec);
+		}
+	}
+	
+	g_group_num=0;
+	$('#sku-spec-modal').modal('hide');
+}
+
+/**
+ * ajax请求获取sku规格
+ */
+function ajaxGetSkuSpec(skuId){
+	var url = "back/item/selectSkuBySkuId";
+	var params = {"skuId": skuId};
+	$.get(url, params, function(res){
+		console.log(res);
+		if(res!=null){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				var skuSpec = obj.skuSpec;
+				if(skuSpec!=null && skuSpec!=""){
+					var skuSpecObj = $.parseJSON(skuSpec);
+					var html = "";
+					$.each(skuSpecObj, function(index){
+						html += createSpecGroup(index, this);
+						g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
+					});
+					$("#spec-item").append(html);
+					return false;
+				}else{
+					console.log("sku规格为空");
+				}
+				
+			}else{
+				util.message("查询失败！");
+			}
+		}
+	});
+}
+/**
+ * ajax请求保存sku规格
+ */
+function ajaxPostSaveSkuSpec(skuId, skuSpec){
+	var url = "back/item/updateSkuSpecBySkuId";
+	var params = {"skuId": skuId, "skuSpec": skuSpec};
+	$.post(url, params, function(res){
+		console.log(res);
+		if(res!=null){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				util.message(obj.result_msg);
+			}else{
+				util.message(obj.result_err_msg);
+			}
+		}
+	});
+}
+/**
+ * 设置默认sku规格保存时html
+ */
+/* function setDefaultSkuSpecHtml(){
+	var html = "<input type='hidden' id='sku-spec-0' value='' />";
+	$("#edit-default-sku-spec-div").html(html);
+} */
+/**
+ * 移除默认sku规格保存html
+ */
+/* function removeDefaultSkuSpecHtml(){
+	$("#edit-default-sku-spec-div").html("");
+} */
 /**
  * 添加规格分组
  */

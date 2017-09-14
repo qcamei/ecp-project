@@ -30,9 +30,10 @@ public interface IItemService extends IBaseService<Item, Long> {
 	 * @param item
 	 * @param skuJson
 	 * @param skuPriceJson
+	 * @param skuSpec
 	 * @return
 	 */
-	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson);
+	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, String skuSpec);
 	
 	/**
 	 * 修改商品
@@ -41,9 +42,10 @@ public interface IItemService extends IBaseService<Item, Long> {
 	 * @param skuJson
 	 * @param skuPriceJson
 	 * @param isSaveSku
+	 * @param skuSpec
 	 * @return
 	 */
-	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku);
+	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuSpec);
 	
 	/**
 	 * 批量修改商品状态

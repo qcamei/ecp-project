@@ -157,12 +157,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 
 	/**
-	 * @see com.ecp.service.back.IItemService#saveItem(com.ecp.entity.Item)
+	 * @see com.ecp.service.back.IItemService#saveItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String, java.lang.String)
 	 * 保存商品
 	 */
 	@Override
 	@Transactional
-	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson) {
+	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, String skuSpec) {
 		
 		try {
 			//添加商品 item
@@ -212,6 +212,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 						Sku sku = new Sku();
 						sku.setVolume(item.getVolume());
 						sku.setWeight(item.getWeight());
+						sku.setSkuSpec(skuSpec);
 						skuList.add(sku);
 						skuJson = JSON.toJSONString(skuList);
 						List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
@@ -244,12 +245,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	
 
 	/**
-	 * @see com.ecp.service.back.IItemService#updateItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String)
+	 * @see com.ecp.service.back.IItemService#updateItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String, boolean, java.lang.String)
 	 * 修改商品
 	 */
 	@Override
 	@Transactional
-	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku) {
+	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuSpec) {
 		try {
 			if(item.getItemId()==null || item.getItemId()<=0){
 				return 0;
@@ -344,6 +345,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							Sku sku = new Sku();
 							sku.setVolume(item.getVolume());
 							sku.setWeight(item.getWeight());
+							sku.setSkuSpec(skuSpec);
 							skuList.add(sku);
 							skuJson = JSON.toJSONString(skuList);
 							List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
@@ -354,6 +356,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							skuPriceList.add(skuPrice);
 							skuPriceJson = JSON.toJSONString(skuPriceList);
 						}
+						this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
 					}else{//如果不更新sku时
 						log.info("未重新选择sku，只更新sku信息");
 						//如果上传图片不为空时，更新sku图片
@@ -362,9 +365,9 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							rows = this.updateSkuPicture(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
 							if(rows<=0){
 								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								return rows;
 							}
 						}
-						return rows;
 					}
 					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
 					if(rows>0){
@@ -454,13 +457,13 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			}
 			if(skuIds!=null && skuIds.size()>0){
 				Example skuExample = new Example(Sku.class);
-				skuExample.createCriteria().andEqualTo("itemId", itemId);
+				skuExample.createCriteria().andEqualTo("itemId", itemId).andEqualTo("deleted", DeletedType.NO);
 				Sku skuTemp = new Sku();
 				skuTemp.setDeleted(DeletedType.YES);
 				skuService.updateByExampleSelective(skuTemp, skuExample);//逻辑删除SKU信息
 				
 				Example priceExample = new Example(Sku.class);
-				priceExample.createCriteria().andEqualTo("itemId", itemId);
+				priceExample.createCriteria().andEqualTo("itemId", itemId).andEqualTo("deleted", DeletedType.NO);
 				SkuPrice priceTemp = new SkuPrice();
 				priceTemp.setDeleted(DeletedType.YES);
 				skuPriceService.updateByExampleSelective(priceTemp, priceExample);//逻辑删除SKU价格信息
@@ -487,12 +490,6 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	private int processSkuRelate(Item item, List<String> filePathList, String skuJson, String skuPriceJson){
 		try {
 			
-			List<Long> skuIds = new ArrayList<Long>();
-			List<Sku> skuListTemp = skuService.getByItemId(item.getItemId());
-			for(Sku skuTemp : skuListTemp){
-				skuIds.add(skuTemp.getSkuId());
-			}
-			
 			int rows = 0;
 			//添加sku item_sku
 			List<Sku> skuList = JSONArray.parseArray(skuJson, Sku.class);
@@ -507,12 +504,6 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				if(sku.getSkuId()!=null && sku.getSkuId()>0){
 					rows = skuService.updateByPrimaryKeySelective(sku);
 				}else{
-					Example skuExample = new Example(Sku.class);
-					skuExample.createCriteria().andEqualTo("itemId", item.getItemId());
-					Sku skuTemp = new Sku();
-					skuTemp.setDeleted(DeletedType.YES);
-					skuService.updateByExampleSelective(skuTemp, skuExample);//逻辑删除SKU信息
-					
 					rows = skuService.insertSelective(sku);//添加新的sku信息
 				}
 				if(rows>0){
@@ -527,20 +518,11 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					if(skuPrice.getId()!=null && skuPrice.getId()>0){
 						rows = skuPriceService.updateByPrimaryKeySelective(skuPrice);
 					}else{
-						Example priceExample = new Example(Sku.class);
-						priceExample.createCriteria().andEqualTo("itemId", item.getItemId());
-						SkuPrice priceTemp = new SkuPrice();
-						priceTemp.setDeleted(DeletedType.YES);
-						skuPriceService.updateByExampleSelective(priceTemp, priceExample);//逻辑删除SKU价格信息
-						
 						rows = skuPriceService.insertSelective(skuPrice);//添加新的sku价格信息
 					}
 					if(rows>0){
 						//添加sku图片 item_sku_picture
 						if(filePathList!=null && filePathList.size()>0){
-							if(skuIds!=null && skuIds.size()>0){
-								skuPictureService.deleteBySkuIds(skuIds);//逻辑删除SKU图片信息
-							}
 							for(String filePath : filePathList){
 								SkuPicture skuPicture = new SkuPicture();
 								skuPicture.setCreated(new Date());
