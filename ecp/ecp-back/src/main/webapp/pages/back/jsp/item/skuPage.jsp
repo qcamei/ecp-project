@@ -436,7 +436,7 @@ function createSpecHtml(spec){
 	}
 	var time = new Date().getTime();
 	var random = Math.floor(Math.random()*89999)+1000;
-	var spec_item_id = random;
+	var spec_item_id = guid();
 	var html = ''
 		+ '<div class="input-spec-item" id="'+spec_item_id+'">'
 		+ '<div class="col-sm-5">'
@@ -451,6 +451,13 @@ function createSpecHtml(spec){
 		+ '<br><br>'
 		+ '</div>';
 	return html;
+}
+//用于生成uuid
+function S4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
+function guid() {
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
 /**
  * 移除sku规格html字符串
