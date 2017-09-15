@@ -435,16 +435,18 @@ function createSpecHtml(spec){
 		spec_val = spec.spec_val;
 	}
 	var time = new Date().getTime();
+	var random = Math.floor(Math.random()*89999)+1000;
+	var spec_item_id = random;
 	var html = ''
-		+ '<div class="input-spec-item" id="'+time+'">'
+		+ '<div class="input-spec-item" id="'+spec_item_id+'">'
 		+ '<div class="col-sm-5">'
-		+ '<input type="text" id="input-spec-key-'+time+'" value="'+spec_key+'" placeholder="规格属性" size="15" >'
+		+ '<input type="text" id="input-spec-key-'+spec_item_id+'" value="'+spec_key+'" placeholder="规格属性" size="15" >'
 		+ '</div>'
 		+ '<div class="col-sm-5">'
-		+ '<input type="text" id="input-spec-val-'+time+'" value="'+spec_val+'" placeholder="规格属性值" size="15" >'
+		+ '<input type="text" id="input-spec-val-'+spec_item_id+'" value="'+spec_val+'" placeholder="规格属性值" size="15" >'
 		+ '</div>'
 		+ '<div class="col-sm-2">'
-		+ '<button type="button" title="删除规格" onclick="javascript:removeSpec('+time+');">x</button>'
+		+ '<button type="button" title="删除规格" onclick="javascript:removeSpec('+spec_item_id+');">x</button>'
 		+ '</div>'
 		+ '<br><br>'
 		+ '</div>';
@@ -473,6 +475,7 @@ function getSkuSpec(){
 		var spec_arr = new Array();
 		$(this).find(".spec-div").find(".input-spec-item").each(function(currIndex){
 			var randomId = $(this).attr("id");
+			console.log("spec id:"+randomId);
 			var spec_key = $("#input-spec-key-"+randomId).val();
 			console.log("第 "+index+" 个规格分组的第 "+currIndex+" 个规格属性:"+spec_key);
 			if(spec_key==null || spec_key==""){
