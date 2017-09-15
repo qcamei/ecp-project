@@ -217,7 +217,7 @@ public class ItemController {
 	 */
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson) {
+	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, String skuSpec) {
 		
 		Subject subject = SecurityUtils.getSubject();
 		UserBean userBean = (UserBean)subject.getPrincipal();
@@ -225,7 +225,7 @@ public class ItemController {
 		log.info("insert item:"+item);
 		
 		if(userBean!=null){
-			int rows = iItemService.saveItem(request, item, skuJson, skuPriceJson);
+			int rows = iItemService.saveItem(request, item, skuJson, skuPriceJson, skuSpec);
 			if(rows>0){
 				return RequestResultUtil.getResultAddSuccess();
 			}else if(rows<0){
@@ -244,10 +244,10 @@ public class ItemController {
 	 */
 	@RequestMapping("/updateById")
 	@ResponseBody
-	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, boolean isSaveSku) {
+	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuSpec) {
 		log.info("update item:"+item);
 		try {
-			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson, isSaveSku);
+			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson, isSaveSku, skuSpec);
 			if(rows>0){
 				return RequestResultUtil.getResultUpdateSuccess();
 			}

@@ -477,6 +477,8 @@ function getParams(){
 	params.skuJson = JSON.stringify(sku);
 	params.skuPriceJson = JSON.stringify(skuPrice);
 	
+	params.skuSpec = $("#default-sku-spec").val();
+	
 	return params;
 }
 

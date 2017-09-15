@@ -437,7 +437,6 @@
 	$("#next-step-btn").click(function(){
 		$("#item-info-li").removeClass("hide");//显示商品信息选项卡
 		var cid = $("#item-cid").val();
-		
 		var url = "back/brand/selectByCid";
 		var params = {"cid": cid};
 		$.post(url, params, function(ret){//查询品牌
