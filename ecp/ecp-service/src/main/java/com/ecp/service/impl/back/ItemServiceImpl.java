@@ -361,10 +361,13 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 						log.info("未重新选择sku，只更新sku信息");
 						//如果上传图片不为空时，更新sku图片
 						if(filePathList!=null && filePathList.size()>0){
-							log.info("已上传图片，更新sku图片");
-							rows = this.updateSkuPicture(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
-							if(rows<=0){
-								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
+								log.info("已上传图片，更新sku图片");
+								rows = this.updateSkuPicture(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
+								if(rows<=0){
+									log.error("sku信息为空，只更新sku图片异常");
+									TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								}
 								return rows;
 							}
 						}
