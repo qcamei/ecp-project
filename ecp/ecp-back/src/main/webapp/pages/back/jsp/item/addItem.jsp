@@ -140,6 +140,19 @@
 				<div class="container-fluid" style="margin-top: 20px;">
 					<div class="row clearfix">
 						<div class="col-md-12 column">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-12" id="user-selected-category">
+										<!-- 显示用户选择类目 -->
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" style="margin-top: 20px;">
+					<div class="row clearfix">
+						<div class="col-md-12 column">
 							<div class="tabs-container" id="tabs-edit-item">
 								<ul class="nav nav-tabs" id="top_tab">
 									<li class="active"><a data-toggle="tab" href="#tab-5"
@@ -435,6 +448,10 @@
 	 * 点击下一步按钮时执行，显示添加商品基本信息选项卡
 	 */
 	$("#next-step-btn").click(function(){
+		var userSelectedCategoryHtml = $("#current-select-category").html();
+		console.log(userSelectedCategoryHtml);
+		$("#user-selected-category").html(userSelectedCategoryHtml);
+		
 		$("#item-info-li").removeClass("hide");//显示商品信息选项卡
 		var cid = $("#item-cid").val();
 		var url = "back/brand/selectByCid";
