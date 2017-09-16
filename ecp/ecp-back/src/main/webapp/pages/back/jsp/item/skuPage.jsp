@@ -190,27 +190,6 @@ var g_sku_id = 0;//sku的ID，>0时，表示是修改，保存时直接根据sku
 var g_sku_index = 0;//记录当前编辑的sku是哪一个
 
 /**
- * 点击sku对话框中的保存按钮时，保存sku规格
- */
-$("#spec-submit-btn").click(function(){
-	var skuSpec = getSkuSpec();//获取sku规格信息
-	if(!skuSpec){
-		return false;
-	}
-	if(skuSpec==null || skuSpec=="" || skuSpec=="[]"){
-		console.log("保存sku规格为空");
-	}else{
-		if(g_sku_id<=0){//添加sku
-			$("#sku-spec-"+g_sku_index).val(skuSpec);
-		}else{//编辑sku
-			ajaxPostSaveSkuSpec(g_sku_id, skuSpec);
-		}
-	}
-	
-	g_group_num=0;
-	$('#sku-spec-modal').modal('hide');
-});
-/**
  * 显示打开默认sku规格对话框按钮
  */
 function showOpenDefaultSpecBtn(skuId){
@@ -243,6 +222,16 @@ function openSpecModel(skuId, index){
 	if(skuId<=0){
 		//TODO
 		//<=0时，表示是添加，不查询数据库中sku规格；保存时在js中保存，添加商品随sku一起添加
+		var skuSpec = $("#sku-spec-"+index).val();
+		if(skuSpec!=null && skuSpec!=""){
+			var skuSpecObj = $.parseJSON(skuSpec);
+			var html = "";
+			$.each(skuSpecObj, function(index){
+				html += createSpecGroup(g_group_num, this);
+				g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
+			});
+			$("#spec-item").append(html);
+		}
 	}else{
 		//TODO
 		//>0时，表示是修改，先查询数据库中sku规格并在对话框中显示；保存时直接根据skuId修改更新数据库
@@ -251,12 +240,46 @@ function openSpecModel(skuId, index){
 	$('#sku-spec-modal').modal('show');
 }
 /**
+ * 点击sku对话框中的保存按钮时，保存sku规格
+ */
+$("#spec-submit-btn").click(function(){
+	var skuSpec = getSkuSpec();//获取sku规格信息
+	if(!skuSpec){
+		return false;
+	}
+	if(skuSpec==null || skuSpec=="" || skuSpec=="[]"){
+		console.log("保存sku规格为空");
+	}else{
+		if(g_sku_id<=0){//添加sku
+			$("#sku-spec-"+g_sku_index).val(skuSpec);
+		}else{//编辑sku
+			ajaxPostSaveSkuSpec(g_sku_id, skuSpec);
+		}
+	}
+	
+	g_group_num=0;
+	$('#sku-spec-modal').modal('hide');
+});
+/**
  * 打开默认sku规格对话框
  */
 function openDefaultSpecModel(skuId){
+	g_group_num=0;//记录sku规格个数，添加一个sku规格分组后把个数+1
 	console.log("skuId:"+skuId);
 	$("#spec-item").empty();//清空sku规格对话框中的sku规格内容
-	if(skuId>0){
+	if(skuId<=0){
+		var skuSpec = $("#default-sku-spec").val();
+		if(skuSpec!=null && skuSpec!=""){
+			var skuSpecObj = $.parseJSON(skuSpec);
+			var html = "";
+			$.each(skuSpecObj, function(index){
+				html += createSpecGroup(g_group_num, this);
+				g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
+			});
+			$("#spec-item").append(html);
+		}
+		
+	}else{
 		//TODO
 		//>0时，表示是修改，先查询数据库中sku规格并在对话框中显示；保存时直接根据skuId修改更新数据库
 		ajaxGetSkuSpec(skuId);
@@ -301,7 +324,7 @@ function ajaxGetSkuSpec(skuId){
 					var skuSpecObj = $.parseJSON(skuSpec);
 					var html = "";
 					$.each(skuSpecObj, function(index){
-						html += createSpecGroup(index, this);
+						html += createSpecGroup(g_group_num, this);
 						g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
 					});
 					$("#spec-item").append(html);
