@@ -205,10 +205,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "商城指导价格不能为空"
 	                },
-	                /*regexp: {
-		                regexp: "^((?:-?0)|(?:-?[1-9]\d*))(?:\.\d{1,2})?$",
-		                message: "请输入正数"
-	                },*/
+	                regexp: {
+		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+		                message: "请输入正确价格"
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
@@ -220,10 +220,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "市场价格不能为空"
 	                },
-	                /*regexp: {
-		                regexp: "^\\d+(\\.\\d+)?$",
-		                message: "请输入正数"
-	                },*/
+	                regexp: {
+		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+		                message: "请输入正确价格"
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
@@ -235,10 +235,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "成本价格不能为空"
 	                },
-	                /*regexp: {
-		                regexp: "^\\d+(\\.\\d+)?$",
-		                message: "请输入正数"
-	                },*/
+	                regexp: {
+		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+		                message: "请输入正确价格"
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
@@ -250,10 +250,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "库存不能为空"
 	                },
-	                /*regexp: {
-		                regexp: "^\\d+(\\.\\d+)?$",
-		                message: "请输入正数"
-	                },*/
+	                regexp: {
+		                regexp: "^[0-9]*[1-9][0-9]*$",
+		                message: "请输入正整数"
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
@@ -295,10 +295,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "商品体积不能为空"
 	                },
-	                /*regexp: {
-		                regexp: "^\\d+(\\.\\d+)?$",
-		                message: "请输入正数"
-	                },*/
+	                regexp: {
+		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+		                message: "请输入正确体积"
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
@@ -310,10 +310,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "商品毛重不能为空"
 	                },
-	                /*regexp: {
-		                regexp: "^\\d+(\\.\\d+)?$",
-		                message: "请输入正数"
-	                },*/
+	                regexp: {
+		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+		                message: "请输入正确重量"
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
