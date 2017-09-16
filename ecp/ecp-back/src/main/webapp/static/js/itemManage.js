@@ -199,8 +199,127 @@ function bootstrapValidateFun(){
                         message: '长度不能超过700个字符'
                     }
 	            }
-	        }
-	        
+	        },
+	        guidePrice: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "商城指导价格不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^((?:-?0)|(?:-?[1-9]\d*))(?:\.\d{1,2})?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        marketPrice: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "市场价格不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        marketPrice2: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "成本价格不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        inventory: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "库存不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        origin: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "商品产地不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        packingList: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "包装清单不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        volume: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "商品体积不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
+	        weight: {
+	        	validators: {
+	                notEmpty: {
+	                    message: "商品毛重不能为空"
+	                },
+	                /*regexp: {
+		                regexp: "^\\d+(\\.\\d+)?$",
+		                message: "请输入正数"
+	                },*/
+	                stringLength: {
+                        max: 10,
+                        message: '长度不能超过10个字符'
+                    }
+	            }
+	        },
 	    }
 	}).on('success.form.bv',function(e){
 	    e.preventDefault();
