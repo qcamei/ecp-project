@@ -39,6 +39,7 @@
 		i.item_status=4 AND 
 		i.deleted=1 AND
 		f.user_id=#{userId} 
+	group by itemId
   </select>
   
   <resultMap id="FavoriteMap" type="com.ecp.bean.FavouriteBean">    
