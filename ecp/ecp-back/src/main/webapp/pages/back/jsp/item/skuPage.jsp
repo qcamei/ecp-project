@@ -215,6 +215,7 @@ function hideOpenDefaultSpecBtn(skuId){
  * 打开编辑sku规格对话框
  */
 function openSpecModel(skuId, index){
+	g_group_num=0;//记录sku规格个数，添加一个sku规格分组后把个数+1
 	console.log("skuId:"+skuId);
 	g_sku_id = skuId;//sku的ID，>0时，表示是修改，保存时直接根据skuId直接更新数据库；<=0时，表示是添加，保存时在js中保存，添加商品随sku一起添加
 	g_sku_index = index;//记录当前编辑的sku是哪一个
