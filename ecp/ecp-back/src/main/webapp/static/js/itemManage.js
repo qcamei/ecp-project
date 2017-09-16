@@ -1014,6 +1014,16 @@ $("#search-submit-btn").click(function(){
 	params.pagehelperFun="filterItemFun";
 	filterItemFun(params);
 });
+/**
+ * 绑定查询表单的keydown事件
+ */
+$("#search-form").keydown(function(e){
+	var curKey = e.which;
+	if(curKey == 13){
+		$("#search-submit-btn").click();
+		return false;
+	}
+}); 
 
 /**
  * 点击查询面板中的重置按钮时执行
