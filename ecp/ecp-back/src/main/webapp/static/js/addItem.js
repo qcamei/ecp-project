@@ -667,6 +667,7 @@ function resetFun(){
 	$("#current-select-category #first").text("");//设置用户当前选择的一级类目为空
 	$("#current-select-category #second").text("");//设置用户当前选择的二级类目为空
 	$("#current-select-category #third").text("");//设置用户当前选择的三级类目为空
+	$("#next-step-btn").attr("disabled", true);//设置下一步按钮为不可点击
 	
 	$('#tabs-edit-item a[href="#tab-5"]').tab('show');//显示基本信息选项卡
 	$("#item-info-li").addClass("hide");//隐藏商品信息选项卡
