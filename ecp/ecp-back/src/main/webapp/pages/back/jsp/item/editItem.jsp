@@ -137,15 +137,14 @@
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-sm-2 control-label">商品体积</label>
+													<label class="col-sm-2 control-label">商品体积<b style="color:red;">&nbsp;*</b></label>
 													<div class="col-sm-10">
 														<input type="text" id="volume" name="volume"
 															class="form-control" placeholder="商品体积">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-sm-2 control-label">商品毛重</label>
-
+													<label class="col-sm-2 control-label">商品毛重<b style="color:red;">&nbsp;*</b></label>
 													<div class="col-sm-10">
 														<input type="text" id="weight" name="weight"
 															class="form-control" placeholder="商品毛重">

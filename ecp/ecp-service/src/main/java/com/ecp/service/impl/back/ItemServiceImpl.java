@@ -372,7 +372,11 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							}
 						}
 					}
-					rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
+					if((filePathList==null || filePathList.size()<=0) && (StringUtils.isBlank(skuJson) || skuJson.equals("[]"))){
+						//图片和sku都为空时不做任何操作
+					}else{
+						rows = this.processSkuRelate(item, filePathList, skuJson, skuPriceJson);
+					}
 					if(rows>0){
 						return rows;
 					}else{
