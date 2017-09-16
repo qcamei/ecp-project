@@ -53,7 +53,7 @@
   
   <select id="getFavouriteStatistic" resultMap="StatisticMap">
   	SELECT
-			count(DISTINCT i.cid)  AS count ,
+			count(DISTINCT i.item_id)  AS count ,
 			c.c_name  AS c_name
 	FROM
 			base_user_favorite AS f left join 
