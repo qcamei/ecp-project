@@ -656,6 +656,7 @@ function resetFun(){
 	} else {
 	    $('#picture-url').val('');
 	}
+	
 	$("#thumbnail-portrait").empty();
 	$("#attr-page").empty();
 	setContent("item-ueditor", "");//商品详情（描述）
