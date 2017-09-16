@@ -338,7 +338,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					//this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
 					
 					//添加新SKU相关信息
-					if(isSaveSku){//如果更新sku时
+					if(isSaveSku){//如果重新更新sku时
 						if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
 							//TODO 如果没有SKU信息时，手动创建一个SKU，此处添加默认SKU；注：商品需要有默认图片和默认SKU
 							List<Sku> skuList = new ArrayList<Sku>();
@@ -357,19 +357,24 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							skuPriceJson = JSON.toJSONString(skuPriceList);
 						}
 						this.deleteSkuRelateByItemId(item.getItemId());//逻辑删除SKU相关信息
-					}else{//如果不更新sku时
+					}else{//如果不重新更新sku时
 						log.info("未重新选择sku，只更新sku信息");
-						//如果上传图片不为空时，更新sku图片
-						if(filePathList!=null && filePathList.size()>0){
-							if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
+						if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
+							//更新默认sku价格和重量等
+							rows = this.updateDefaultSkuByItemId(item);
+							if(rows<=0){
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							}
+							//如果上传图片不为空时，更新sku图片
+							if(filePathList!=null && filePathList.size()>0){
 								log.info("已上传图片，更新sku图片");
 								rows = this.updateSkuPictureByItemId(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
 								if(rows<=0){
 									log.error("sku信息为空，只更新sku图片异常");
 									TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 								}
-								return rows;
 							}
+							return rows;
 						}
 					}
 					if((filePathList==null || filePathList.size()<=0) && (StringUtils.isBlank(skuJson) || skuJson.equals("[]"))){
@@ -394,6 +399,53 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 		}
 		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		return 0;
+	}
+	
+	/**
+	 * 修改默认sku相关信息
+	 * @param item
+	 * @return
+	 */
+	@Transactional
+	private int updateDefaultSkuByItemId(Item item){
+		log.info("修改默认sku相关信息");
+		int rows = 1;
+		List<Sku> skuListTemp = skuService.getByItemId(item.getItemId());
+		List<Long> skuIds = new ArrayList<Long>();
+		for(int i=0; i<skuListTemp.size(); i++){
+			Sku sku = skuListTemp.get(i);
+			skuIds.add(sku.getSkuId());
+		}
+		if(skuIds!=null && skuIds.size()>0){
+			for(int j=0; j<skuIds.size(); j++){
+				Example example = new Example(Sku.class);
+				example.createCriteria().andEqualTo("skuId", skuIds.get(j));
+				Sku sku = new Sku();
+				sku.setVolume(item.getVolume());
+				sku.setWeight(item.getWeight());
+				rows = skuService.updateByExampleSelective(sku, example);
+				if(rows>0){
+					example = new Example(SkuPrice.class);
+					example.createCriteria().andEqualTo("skuId", skuIds.get(j));
+					SkuPrice skuPrice = new SkuPrice();
+					skuPrice.setCostPrice(item.getMarketPrice2());
+					skuPrice.setMarketPrice(item.getMarketPrice());
+					skuPrice.setSellPrice(item.getMarketPrice());
+					rows = skuPriceService.updateByExampleSelective(skuPrice, example);
+					if(rows<=0){
+						log.error("更新sku价格等异常");
+						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						break;
+					}
+				}else{
+					log.error("更新sku重量等异常");
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					break;
+				}
+				
+			}
+		}
+		return rows;
 	}
 	
 	/**

@@ -901,7 +901,7 @@ function resetFun(){
 	
 	$('#tabs-edit-item a[href="#tab-5"]').tab('show');//显示基本信息选项卡
 	$("#edit-item-li").addClass("hide");//隐藏商品信息选项卡
-	$('#tabs-edit-item a[href="#tab-3"]').tab('show');//显示选择类目选项卡
+	$('#tabs-243687 a[href="#tab-1"]').tab('show');//显示商品列表选项卡
 }
 
 /**
@@ -938,8 +938,7 @@ function clickItemTab(){
  * @returns
  */
 function selectEditItemTab(){
-	//$('#tabs-edit-item a[href="#tab-4"]').tab('show');//显示选择类目选项卡
-	$('#top_tab_item_manage li:eq(1) a').tab('show');
+	$('#tabs-243687 a[href="#tab-2"]').tab('show');//显示编辑商品选项卡
 }
 
 /**

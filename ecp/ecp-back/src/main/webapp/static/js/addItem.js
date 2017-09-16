@@ -636,8 +636,7 @@ function clickSelectCateTab(){
  * @returns
  */
 function selectEditItemTab(){
-	$('#tabs-edit-item a[href="#tab-4"]').tab('show');//显示添加/编辑商品选项卡
-	//$('#top_tab_item_manage li:eq(1) a').tab('show');
+	$('#tabs-add-item a[href="#tab-4"]').tab('show');//显示编辑商品选项卡
 }
 
 /*
@@ -662,9 +661,17 @@ function resetFun(){
 	setContent("item-ueditor", "");//商品详情（描述）
 	setContent("after-service", "");//售后服务
 	
+	$("#second-category").html("");//设置二级类目列表为空
+	$("#third-category").html("");//设置三级类目列表为空
+	$(".item-category ul#first-category li").removeClass("current");//设置一级类目未选中
+	$("#current-select-category #first").text("");//设置用户当前选择的一级类目为空
+	$("#current-select-category #second").text("");//设置用户当前选择的二级类目为空
+	$("#current-select-category #third").text("");//设置用户当前选择的三级类目为空
+	
 	$('#tabs-edit-item a[href="#tab-5"]').tab('show');//显示基本信息选项卡
 	$("#item-info-li").addClass("hide");//隐藏商品信息选项卡
-	$('#tabs-edit-item a[href="#tab-3"]').tab('show');//显示选择类目选项卡
+	$('#tabs-add-item a[href="#tab-3"]').tab('show');//显示选择类目选项卡
+	
 }
 
 /**
