@@ -363,7 +363,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 						if(filePathList!=null && filePathList.size()>0){
 							if(StringUtils.isBlank(skuJson) || skuJson.equals("[]")){
 								log.info("已上传图片，更新sku图片");
-								rows = this.updateSkuPicture(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
+								rows = this.updateSkuPictureByItemId(filePathList, item.getItemId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
 								if(rows<=0){
 									log.error("sku信息为空，只更新sku图片异常");
 									TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -393,11 +393,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 	
 	/**
-	 * 如果不更新sku信息时，且上传图片不为空时，更新sku图片
+	 * 如果不更新sku信息时，且上传图片不为空时，更新sku图片，根据商品id
 	 * @param filePathList
 	 * @param itemId
 	 */
-	private int updateSkuPicture(List<String> filePathList, Long itemId){
+	@Transactional
+	private int updateSkuPictureByItemId(List<String> filePathList, Long itemId){
 		try {
 			//如果上传图片不为空时，更新sku图片
 			List<Sku> skuListTemp = skuService.getByItemId(itemId);
@@ -436,6 +437,53 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 				return rows;
 			}
 			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("循环更新SKU图片 item_sku_picture 异常");
+		}
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		return 0;
+	}
+	
+	/**
+	 * 如果不更新sku信息时，且上传图片不为空时，更新sku图片，根据skuid
+	 * @param filePathList
+	 * @param itemId
+	 * @param skuId
+	 * @return
+	 */
+	@Transactional
+	private int updateSkuPictureBySkuId(List<String> filePathList, Long skuId){
+		try {
+			int rows = 1;
+			//如果上传图片不为空时，更新sku图片
+			if(skuId!=null && skuId>0){
+				
+				Example example = new Example(SkuPicture.class);
+				example.createCriteria().andEqualTo("skuId", skuId).andEqualTo("deleted", DeletedType.NO);
+				SkuPicture skuPicture = new SkuPicture();
+				skuPicture.setDeleted(DeletedType.YES);
+				skuPictureService.updateByExampleSelective(skuPicture, example);//逻辑删除SKU图片信息
+				
+				for(String filePath : filePathList){
+					SkuPicture temp = new SkuPicture();
+					temp.setCreated(new Date());
+					temp.setModified(new Date());
+					temp.setPictureStatus((byte)1);
+					temp.setSortNumber((byte)1);
+					temp.setPictureUrl(filePath);
+					temp.setSkuId(skuId);
+					rows = skuPictureService.insertSelective(temp);
+					if(rows>0){
+						continue;
+					}else{
+						log.error("循环更新SKU图片 item_sku_picture 出错");
+						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						break;
+					}
+				}
+			}
+			return rows;
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("循环更新SKU图片 item_sku_picture 异常");
@@ -526,7 +574,14 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					if(rows>0){
 						//添加sku图片 item_sku_picture
 						if(filePathList!=null && filePathList.size()>0){
-							for(String filePath : filePathList){
+							rows = this.updateSkuPictureBySkuId(filePathList, sku.getSkuId());//如果未重新选择sku，只更新sku信息时，且上传图片不为空时，更新sku图片
+							if(rows>0){
+								continue;
+							}else{
+								log.error("循环添加SKU图片 item_sku_picture 异常");
+								break;
+							}
+							/*for(String filePath : filePathList){
 								SkuPicture skuPicture = new SkuPicture();
 								skuPicture.setCreated(new Date());
 								skuPicture.setModified(new Date());
@@ -541,7 +596,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 									log.error("循环添加SKU图片 item_sku_picture 异常");
 									break;
 								}
-							}
+							}*/
 						}
 						if(rows>0){
 							continue;
