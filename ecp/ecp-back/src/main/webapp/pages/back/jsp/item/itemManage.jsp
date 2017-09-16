@@ -53,7 +53,7 @@
 														查询面板
 													</h3>
 												</div>
-												<div class="panel-body">
+												<div class="panel-body" id="">
 													<form class="form-horizontal" id="search-form">
 														<div class="form-group">
 															<label class="col-md-2 control-label">关键字</label>
