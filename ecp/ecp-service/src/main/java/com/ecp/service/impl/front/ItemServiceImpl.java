@@ -41,9 +41,9 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 
 	@Override
-	public List<Item> getItemByKeywords(String keywords,int itemStatus) {
-		// 读取关键字 分词
-		List<Word> words = WordSegmenter.seg(keywords);
+	public List<Item> getItemByKeywords(String keywords,int itemStatus) {		
+		//List<Word> words = WordSegmenter.seg(keywords);  //不使用停用词
+		List<Word> words = WordSegmenter.segWithStopWords(keywords);  //使用停用词
 		List<String> keywordList = new ArrayList<String>();
 		for (Word word : words) {
 			keywordList.add(word.toString());
@@ -68,7 +68,8 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	@Override
 	public List<Item> getItemByKeywordsAndBrandAndCid(String keywords, List<Long> brands, List<Long> cids,int itemStatus) {
 		// 读取关键字 分词
-		List<Word> words = WordSegmenter.seg(keywords);
+		//List<Word> words = WordSegmenter.seg(keywords);  //不使用停用词
+		List<Word> words = WordSegmenter.segWithStopWords(keywords);  //使用停用词
 		List<String> keywordList = new ArrayList<String>();
 		for (Word word : words) {
 			keywordList.add(word.toString());

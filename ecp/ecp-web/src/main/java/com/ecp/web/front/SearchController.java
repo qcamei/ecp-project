@@ -791,7 +791,8 @@ public class SearchController {
 	 *            查询字符串
 	 */
 	private void displayKeywords(String searchStr) {
-		List<Word> words = WordSegmenter.seg(searchStr);
+		List<Word> words = WordSegmenter.seg(searchStr);  //未使用停用词
+		//List<Word> words WordSegmenter.segWithStopWords(searchStr);  //使用信用词
 		for (Word word : words) {
 			System.out.println("---------------分词结果是：" + word.toString());
 		}
