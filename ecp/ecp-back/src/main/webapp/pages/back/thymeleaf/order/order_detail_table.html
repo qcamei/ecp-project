@@ -129,7 +129,12 @@
 							<tr th:each="orderItem,iterStat:${orderItems}">
 								<td th:text="${iterStat.count}">序号</td>
 								<td>
-									<a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
+									<img class=""
+											th:src="${orderItem.picture_url}"
+											th:title="${orderItem.sku_name}"											
+											data-lazy-img="done" height="60" width="60">
+											
+									<!-- <a th:href="@{/front/product/detail/{itemId}/{skuId}(itemId=${orderItem.item_id},skuId=${orderItem.sku_id})}"
 											target="_blank">
 											 
 											<img class=""
@@ -137,7 +142,7 @@
 											th:title="${orderItem.sku_name}"											
 											data-lazy-img="done" height="60" width="60">
 
-										</a>
+										</a> -->
 								</td>
 								<td th:text="${orderItem.sku_name}">名称</td>
 								<td th:text="'￥'+${orderItem.primitive_price}">价格</td>
