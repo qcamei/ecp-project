@@ -434,6 +434,7 @@ $(function() {
 
 	/* 【合同确认】 按钮 click process */
 	$(".btn-create").on('click', function(e) {
+		$(this).attr('disabled',true); 
 		contractCreate();
 	});
 	
