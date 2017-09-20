@@ -15,6 +15,7 @@ public class SkuPriceBean implements Serializable {
 	private BigDecimal volume;
 	private BigDecimal weight;
 	private BigDecimal sell_price;
+	private BigDecimal market_price;  //市场价
 	
 	public String getAttributes() {
 		return attributes;
@@ -62,6 +63,14 @@ public class SkuPriceBean implements Serializable {
 
 	public void setSell_price(BigDecimal sell_price) {
 		this.sell_price = sell_price;
+	}
+
+	public BigDecimal getMarket_price() {
+		return market_price;
+	}
+
+	public void setMarket_price(BigDecimal market_price) {
+		this.market_price = market_price;
 	}
 
 }

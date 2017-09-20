@@ -47,7 +47,8 @@
 		s.sku_id,
 		s.volume,
 		s.weight,
-		p.sell_price
+		p.sell_price,
+		p.market_price
   	 from item_sku s left join trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
   	 where s.item_id=#{itemId} and s.sku_type=#{skuType} and s.deleted=1 and p.deleted=1
   
@@ -60,7 +61,8 @@
 		s.sku_id,
 		s.volume,
 		s.weight,
-		p.sell_price
+		p.sell_price,
+		p.market_price
   	 from item_sku s left join trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
   	 where s.item_id=#{itemId} and s.attributes=#{skuAttribute} and s.deleted=1 and p.deleted=1 
   
@@ -73,7 +75,8 @@
 		s.sku_id,
 		s.volume,
 		s.weight,
-		p.sell_price
+		p.sell_price,
+		p.market_price
   	 FROM item_sku s left JOIN trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
   	 WHERE s.sku_id=#{skuId} and s.deleted=1 and p.deleted=1
   
@@ -89,6 +92,7 @@
   	<result column="volume" jdbcType="DECIMAL" property="volume" />
     <result column="weight" jdbcType="DECIMAL" property="weight" />
     <result column="sell_price" jdbcType="DECIMAL" property="sell_price" />
+    <result column="market_price" jdbcType="DECIMAL" property="market_price" />
   </resultMap>
   
   <!-- getSkuIntroduce -->

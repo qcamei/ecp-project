@@ -135,17 +135,25 @@ a:hover { text-decoration:none; }
 										</thead>
 										<tbody>
 											<tr class="">
-												<td>价 格</td>
-												<td th:text="${sku.sell_price}"></td>
+												<td>型号</td>
+												<td th:text="${item.model}"></td>
 											</tr>
 											<tr class="">
+												<td>市场价</td>
+												<td th:text="${sku.market_price}"></td>
+											</tr>
+											<tr class="">
+												<td>成交价</td>
+												<td th:text="${sku.sell_price}"></td>
+											</tr>
+											<!-- <tr class="">
 												<td>体积</td>
 												<td th:text="${sku.volume}"></td>
 											</tr>
 											<tr class="">
 												<td>重量</td>
 												<td th:text="${sku.weight}">3.8kg</td>
-											</tr>
+											</tr> -->
 										</tbody>
 									</table>
 								</div>
@@ -162,7 +170,7 @@ a:hover { text-decoration:none; }
 											</thead>
 											<tbody>
 												<tr class="" th:each="attrValue : ${attrValueList}">
-													<td th:text="${attrValue.attrName}">选择颜色</td>
+													<td th:text="'选择'+${attrValue.attrName}">选择颜色</td>
 													<td><ul>
 															<li th:each="value : ${attrValue.valueList}"
 																class="attrValue"
