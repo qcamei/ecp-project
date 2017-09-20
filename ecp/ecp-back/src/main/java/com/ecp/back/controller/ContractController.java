@@ -726,9 +726,9 @@ public class ContractController {
 			
 			//(1)查询SPU 准备查询数据
 			Item spu=itemService.selectByPrimaryKey(orderItem.getItemId());
-			//(2)查询型号			
-			//dispBean.setModel(item.getModel());
-			record.setModel("加入字段");
+			
+			//(2)查询型号		
+			record.setModel(spu.getModel());			
 			//(3)查询品牌
 			Brand brand=brandService.selectByPrimaryKey(spu.getBrand());
 			record.setBrandName(brand.getBrandName());			

@@ -69,20 +69,24 @@
 									<span style="font-family: 宋体">型号</span>
 								</p></td>
 							<td
-								style="width: 92px; border: solid windowtext 1px; border-left: none; padding: 0 7px 0 7px"
-								width="92"><p style="text-align: center">
+								style="width: 200px; border: solid windowtext 1px; border-left: none; padding: 0 7px 0 7px"
+								width="200"><p style="text-align: center">
 									<span style="font-family: 宋体">基本参数</span>
 								</p></td>
-							<td
+								
+							<!-- <td
 								style="width: 59px; border: solid windowtext 1px; border-left: none; padding: 0 7px 0 7px"
 								width="59"><p style="text-align: center">
 									<span style="font-family: 宋体">网示单价</span>
-								</p></td>
+								</p>
+							</td>
 							<td
 								style="width: 57px; border: solid windowtext 1px; border-left: none; padding: 0 7px 0 7px"
 								width="57"><p style="text-align: center">
 									<span style="font-family: 宋体">折减</span>
-								</p></td>
+								</p>
+							</td> -->
+								
 							<td
 								style="width: 57px; border: solid windowtext 1px; border-left: none; padding: 0 7px 0 7px"
 								width="57"><p style="text-align: center">
@@ -129,22 +133,22 @@
 								
 							<!-- 基本参数 -->
 							<td
-								style="width: 92px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
-								width="92" valign="top"><p>
+								style="width: 200px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
+								width="200" valign="top"><p>
 									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.parms}">&nbsp;</span>
 								</p></td>
 							<!-- 网示单价 -->
-							<td
+							<!-- <td
 								style="width: 59px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="59" valign="top"><p>
 									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.primitivePrice}">&nbsp;</span>
-								</p></td>
+								</p></td> -->
 							<!-- 折减 -->
-							<td
+							<!-- <td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="57" valign="top"><p>
 									<span style="font-family: 'Calibri', sans-serif" th:text="${contractItem.contractItem.discountPrice}">&nbsp;</span>
-								</p></td>
+								</p></td> -->
 							<!-- 成交单价 -->
 							<td
 								style="width: 57px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
@@ -171,7 +175,7 @@
 								width="43" valign="top"><p>
 									<span style="font-family: 宋体">实付</span>
 								</p></td>
-							<td colspan="8"
+							<td colspan="6"
 								style="width: 507px; border-top: none; border-left: none; border-bottom: solid windowtext 1px; border-right: solid windowtext 1px; padding: 0 7px 0 7px"
 								width="507" valign="top"><p>
 									<span style="font-family: 宋体" th:text="'大写：'+${contractItemTotalCN}">大写：</span>
