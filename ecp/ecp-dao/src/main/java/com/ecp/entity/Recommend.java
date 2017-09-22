@@ -22,6 +22,11 @@ public class Recommend {
     private String url;
 
     /**
+     * 类型：1=商品；2=类目；默认=1
+     */
+    private Integer type;
+
+    /**
      * 是否在前端显示（1-显示，2-不显示，默认1）
      */
     private Integer showed;
@@ -93,6 +98,24 @@ public class Recommend {
      */
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
+    }
+
+    /**
+     * 获取类型：1=商品；2=类目；默认=1
+     *
+     * @return type - 类型：1=商品；2=类目；默认=1
+     */
+    public Integer getType() {
+        return type;
+    }
+
+    /**
+     * 设置类型：1=商品；2=类目；默认=1
+     *
+     * @param type 类型：1=商品；2=类目；默认=1
+     */
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     /**
@@ -176,6 +199,7 @@ public class Recommend {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", url=").append(url);
+        sb.append(", type=").append(type);
         sb.append(", showed=").append(showed);
         sb.append(", created=").append(created);
         sb.append(", updated=").append(updated);
