@@ -11,12 +11,14 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="showed" property="showed" jdbcType="INTEGER" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
     <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
     -->
-    id, img_url, title, type, url, showed, deleted
+    id, img_url, title, type, url, showed, created, updated, deleted
   </sql>
 </mapper>

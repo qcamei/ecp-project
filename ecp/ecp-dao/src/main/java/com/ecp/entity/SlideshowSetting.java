@@ -1,5 +1,6 @@
 package com.ecp.entity;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "slideshow_setting")
@@ -36,6 +37,16 @@ public class SlideshowSetting {
      * 是否在前端显示（1-显示，2-不显示，默认1）
      */
     private Integer showed;
+
+    /**
+     * 创建时间
+     */
+    private Date created;
+
+    /**
+     * 更新时间
+     */
+    private Date updated;
 
     /**
      * 是否删除（1-未删除，2-删除，默认1）
@@ -151,6 +162,42 @@ public class SlideshowSetting {
     }
 
     /**
+     * 获取创建时间
+     *
+     * @return created - 创建时间
+     */
+    public Date getCreated() {
+        return created;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param created 创建时间
+     */
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return updated - 更新时间
+     */
+    public Date getUpdated() {
+        return updated;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updated 更新时间
+     */
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
+    /**
      * 获取是否删除（1-未删除，2-删除，默认1）
      *
      * @return deleted - 是否删除（1-未删除，2-删除，默认1）
@@ -180,6 +227,8 @@ public class SlideshowSetting {
         sb.append(", type=").append(type);
         sb.append(", url=").append(url);
         sb.append(", showed=").append(showed);
+        sb.append(", created=").append(created);
+        sb.append(", updated=").append(updated);
         sb.append(", deleted=").append(deleted);
         sb.append("]");
         return sb.toString();
