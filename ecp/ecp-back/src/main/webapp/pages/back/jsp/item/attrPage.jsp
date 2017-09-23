@@ -267,6 +267,7 @@ function createHeadHtml(arr){
 		+"</th>";
 	}
 	htmlHead += "<th id=''>成本价</th>";
+	htmlHead += "<th id=''>指导价</th>";
 	htmlHead += "<th id=''>销售价</th>";
 	htmlHead += "<th id=''>体积</th>";
 	htmlHead += "<th id=''>重量</th>";
@@ -275,6 +276,11 @@ function createHeadHtml(arr){
 	return htmlHead;
 }
 function createBodyHtml(arr){
+	var guidePrice = $("#guide-price").val();//商城指导价格
+	var marketPrice = $("#market-price").val();//市场价格
+	var marketPrice2 = $("#market-price2").val();//成本价格
+	var volume = $("#volume").val();//商品体积
+	var weight = $("#weight").val();//商品毛重
 	var checkInput = "onkeydown='javascript:var keynum = window.event ? event.keyCode : event.which;if((keynum>=48 && keynum<=57) || (keynum>=96 && keynum<=105) || (keynum>=37 && keynum<=40) || keynum==110 || keynum==190 || keynum==8 || keynum==9 || keynum==46){return true;}return false;'";
 	var htmlBody = ""
 	for(var i=0; i<arr.length; i++){
@@ -289,17 +295,20 @@ function createBodyHtml(arr){
 		}
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='hidden' id='sku-price-id-"+i+"' value='' />"
-		htmlBody += "<input type='text' id='cost-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='成本价' />"
+		htmlBody += "<input type='text' id='cost-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+marketPrice2+"' placeholder='成本价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='sell-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='销售价' />"
+		htmlBody += "<input type='text' id='market-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+guidePrice+"' placeholder='指导价' />"
+		htmlBody += "</td>";
+		htmlBody += "<td id=''>"
+		htmlBody += "<input type='text' id='sell-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+marketPrice+"' placeholder='销售价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='hidden' id='sku-id-"+i+"' value='' />"
-		htmlBody += "<input type='text' id='volume-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='体积' />"
+		htmlBody += "<input type='text' id='volume-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+volume+"' placeholder='体积' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='weight-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='' placeholder='重量' />"
+		htmlBody += "<input type='text' id='weight-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+weight+"' placeholder='重量' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='hidden' id='sku-spec-"+i+"' value='' />"
@@ -371,6 +380,12 @@ function getSkuInfo(){
 			isReturn = true;
 			return false;
 		}
+		var marketPrice = $("#market-price-"+index).val();//指导价
+		if(marketPrice==null || marketPrice==""){
+			util.message("第 "+index+" 行指导价不能为空!");
+			isReturn = true;
+			return false;
+		}
 		var sellPrice = $("#sell-price-"+index).val();//销售价
 		if(sellPrice==null || sellPrice==""){
 			util.message("第 "+index+" 行销售价不能为空!");
@@ -401,6 +416,7 @@ function getSkuInfo(){
 		var skuPriceO = new Object();
 		skuPriceO.id = skuPriceId;
 		skuPriceO.costPrice = costPrice;
+		skuPriceO.marketPrice = marketPrice;
 		skuPriceO.sellPrice = sellPrice;
 		skuPrice.push(skuPriceO);
 	});

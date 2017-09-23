@@ -295,10 +295,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "商品体积不能为空"
 	                },
-	                /*regexp: {
+	                regexp: {
 		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
 		                message: "请输入正确体积"
-	                },*/
+	                },
 	                stringLength: {
                         max: 15,
                         message: '长度不能超过15个字符'
@@ -310,10 +310,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "商品毛重不能为空"
 	                },
-	                /*regexp: {
+	                regexp: {
 		                regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
 		                message: "请输入正确重量"
-	                },*/
+	                },
 	                stringLength: {
                         max: 10,
                         message: '长度不能超过10个字符'
@@ -460,12 +460,14 @@ function ajaxRequestGetItemInfo(id){
 						if(sku.skuId==skuPrice.skuId){
 							sku.skuPriceId = skuPrice.id;
 							sku.costPrice = skuPrice.costPrice;
+							sku.marketPrice = skuPrice.marketPrice;
 							sku.sellPrice = skuPrice.sellPrice;
 						}
 					}
 					$("#sku-id-"+i).val(sku.skuId);//skuId
 					$("#sku-price-id-"+i).val(sku.skuPriceId);//skuPriceId
 					$("#cost-price-"+i).val(sku.costPrice);//成本价
+					$("#market-price-"+i).val(sku.marketPrice);//指导价
 					$("#sell-price-"+i).val(sku.sellPrice);//销售价
 					$("#volume-"+i).val(sku.volume);//体积
 					$("#weight-"+i).val(sku.weight);//重量

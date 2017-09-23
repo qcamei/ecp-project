@@ -34,6 +34,11 @@ function openItemDialog(){
 	$("#common-item").load(action, params, function(){
 		//加载完成
 		$("#item-modal").modal("show");
+		$('#item-modal').on('shown.bs.modal', function () {
+			  // 执行一些动作...
+			$("#search-keywords").focus();
+		});
+		
 	});
 	
 }
