@@ -18,6 +18,9 @@ public class StaticConstants {
 	public static String ITEM_MANAGE_PAGE = "back/jsp/item/itemManage";//商品管理页面
 	public static String ITEM_MANAGE_TABLE_PAGE = "back/jsp/item/itemManageTable";//商品管理页面
 	
+	public static String ITEM_DIALOG_PAGE = "back/jsp/common/item";//对话框中商品页面
+	public static String ITEM_DIALOG_TABLE_PAGE = "back/jsp/common/item_table";//对话框中商品列表页面
+	
 	public static String ATTR_PAGE = "back/jsp/item/attrPage";//商品属性或销售属性页面
 	
 	public static String BRAND_MANAGE_PAGE = "back/jsp/brand/brandManage";//品牌管理页面
@@ -30,5 +33,11 @@ public class StaticConstants {
 	public static String ROLE_MANAGE_TABLE_PAGE = "back/jsp/role/role_table";//角色管理列表页面
 	
 	public static String MENU_MANAGE_TABLE_PAGE = "back/jsp/menu/menu_manage";//菜单管理列表页面
+	
+	public static String RECOMMEND_MANAGE_PAGE = "back/jsp/recommend/recommend";//推荐管理页面
+	public static String RECOMMEND_MANAGE_TABLE_PAGE = "back/jsp/recommend/recommend_table";//推荐管理列表页面
+	
+	public static String SLIDESHOW_MANAGE_PAGE = "back/jsp/slideshow/slideshow";//轮播图管理页面
+	public static String SLIDESHOW_MANAGE_TABLE_PAGE = "back/jsp/slideshow/slideshow_table";//轮播图管理列表页面
 	
 }
