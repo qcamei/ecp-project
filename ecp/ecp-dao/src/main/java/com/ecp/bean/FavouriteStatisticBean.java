@@ -10,6 +10,7 @@ package com.ecp.bean;
 public class FavouriteStatisticBean {
 	private int count;  //所属类目 数量
 	private String c_name; //类目名称
+	private long cid; //类目id
 	
 	public int getCount() {
 		return count;
@@ -22,5 +23,11 @@ public class FavouriteStatisticBean {
 	}
 	public void setC_name(String c_name) {
 		this.c_name = c_name;
+	}
+	public long getCid() {
+		return cid;
+	}
+	public void setCid(long cid) {
+		this.cid = cid;
 	}
 }

@@ -46,7 +46,7 @@
   <select id="selectItemsByContractNo" resultType="map">
   	 select * from contract_items as o left join item_sku_picture as p
   	 on(o.sku_id=p.sku_id) 
-	where  o.contract_no=#{contractNo}  GROUP BY p.sku_id
+	where  o.contract_no=#{contractNo}  GROUP BY sku_id
   </select>
   
   
