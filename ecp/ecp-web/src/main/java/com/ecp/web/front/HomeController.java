@@ -1,6 +1,5 @@
 package com.ecp.web.front;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.CategoryTreeNode;
 import com.ecp.common.SessionConstants;
-import com.ecp.entity.Favourite;
+import com.ecp.entity.Recommend;
+import com.ecp.entity.SlideshowSetting;
 import com.ecp.entity.User;
+import com.ecp.service.back.IRecommendService;
+import com.ecp.service.back.ISlideshowService;
 import com.ecp.service.front.ICategoryAttrService;
 import com.ecp.service.front.ICategoryService;
 
@@ -40,6 +42,11 @@ public class HomeController {
 
 	@Autowired
 	ICategoryAttrService categoryAttrService;
+	
+	@Autowired
+	ISlideshowService slidesShowService;  //轮播图操作服务
+	@Autowired
+	IRecommendService recommentService;  //首页推荐服务
 
 	/**
 	 * @Description 导航->主页 显示分类目录
@@ -61,6 +68,15 @@ public class HomeController {
 	public String header(Model model,HttpServletRequest request){
 		List<CategoryTreeNode> categoryList = categoryService.getCategoryTree();
 		model.addAttribute("categoryList", categoryList); // 返回类目树列表
+		
+		//(1)查询首页推荐
+		List<Recommend> recommentList=recommentService.getAll();
+		model.addAttribute("recommentList", recommentList);
+		
+		//(2)查询轮播图设置
+		List<SlideshowSetting> slidesShowSettingList=slidesShowService.getAll();
+		model.addAttribute("slidesShowSettingList", slidesShowSettingList);
+		
 		
 		//查询用户是否已经登录
 		HttpSession session = request.getSession();
