@@ -21,4 +21,11 @@
     -->
     id, img_url, title, type, url, showed, created, updated, deleted
   </sql>
+  <!-- 根据id集合删除 -->
+  <update id="deleteByIds">
+  	update slideshow_setting set deleted=2 where id in
+  	<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+  		#{item}
+  	</foreach>
+  </update>
 </mapper>

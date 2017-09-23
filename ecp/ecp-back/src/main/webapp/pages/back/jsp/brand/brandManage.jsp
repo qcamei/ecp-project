@@ -90,7 +90,7 @@
 															<div class="col-md-5 ">
 																<input type="file" id="brand-logo-file" name="logo"
 																	onchange="javascript:validateImgFileSizeFun(this);"
-																	accept="image/jpeg" /> <input type="hidden"
+																	accept="image/*" /> <input type="hidden"
 																	id="brand-logo-url" name="brandLogoUrl" />
 															</div>
 															<!-- <div class="col-md-5">

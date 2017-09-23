@@ -155,6 +155,43 @@ public class ItemController {
 	}
 	
 	/**
+	 * 查询商品列表页面（对话框中显示）
+	 * @param request
+	 * @param response
+	 * @param clickPageBtn
+	 * @param pageBean
+	 * @param pagehelperFun
+	 * @param search_keywords
+	 * @return
+	 */
+	@RequestMapping("/getItems")
+	public ModelAndView selectItems(HttpServletRequest request, HttpServletResponse response, Boolean clickPageBtn, PageBean pageBean, String pagehelperFun, String search_keywords) {
+		ModelAndView mav = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		UserBean user = (UserBean)subject.getPrincipal();
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		if(StringUtils.isNotBlank(search_keywords)){
+			param.put("search_keywords", search_keywords);
+		}else{
+			param = null;
+		}
+		PageHelper.startPage(pageBean.getPageNum(), pageBean.getPageSize());
+		List<Map<String, Object>> itemList = iItemService.selectItemsByCondition(param);
+		PageInfo<Map<String, Object>> pagehelper = new PageInfo<Map<String, Object>>(itemList);
+		mav.addObject("pagehelper", pagehelper);
+		
+		if(clickPageBtn!=null && clickPageBtn){
+			mav.setViewName(StaticConstants.ITEM_DIALOG_TABLE_PAGE);
+		}else{
+			mav.setViewName(StaticConstants.ITEM_DIALOG_PAGE);
+		}
+		
+		mav.addObject("pagehelperFun", pagehelperFun);
+		return mav;
+	}
+	
+	/**
 	 * List排序
 	 * @param categoryList
 	 * @param cid
