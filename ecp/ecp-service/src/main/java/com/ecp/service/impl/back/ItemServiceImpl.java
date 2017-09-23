@@ -218,7 +218,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 						List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
 						SkuPrice skuPrice = new SkuPrice();
 						skuPrice.setCostPrice(item.getMarketPrice2());
-						skuPrice.setMarketPrice(item.getMarketPrice());
+						skuPrice.setMarketPrice(item.getGuidePrice());
 						skuPrice.setSellPrice(item.getMarketPrice());
 						skuPriceList.add(skuPrice);
 						skuPriceJson = JSON.toJSONString(skuPriceList);
@@ -351,7 +351,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							List<SkuPrice> skuPriceList = new ArrayList<SkuPrice>();
 							SkuPrice skuPrice = new SkuPrice();
 							skuPrice.setCostPrice(item.getMarketPrice2());
-							skuPrice.setMarketPrice(item.getMarketPrice());
+							skuPrice.setMarketPrice(item.getGuidePrice());
 							skuPrice.setSellPrice(item.getMarketPrice());
 							skuPriceList.add(skuPrice);
 							skuPriceJson = JSON.toJSONString(skuPriceList);
@@ -429,7 +429,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 					example.createCriteria().andEqualTo("skuId", skuIds.get(j));
 					SkuPrice skuPrice = new SkuPrice();
 					skuPrice.setCostPrice(item.getMarketPrice2());
-					skuPrice.setMarketPrice(item.getMarketPrice());
+					skuPrice.setMarketPrice(item.getGuidePrice());
 					skuPrice.setSellPrice(item.getMarketPrice());
 					rows = skuPriceService.updateByExampleSelective(skuPrice, example);
 					if(rows<=0){
@@ -603,28 +603,27 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 			int size = skuList.size();
 			for(int i=0; i<size; i++){
 				Sku sku = skuList.get(i);
-				sku.setCreated(new Date());
-				sku.setModified(new Date());
 				sku.setItemId(item.getItemId());
 				sku.setSkuStatus(1);
 				sku.setSkuType(1);
 				if(sku.getSkuId()!=null && sku.getSkuId()>0){
+					sku.setModified(new Date());
 					rows = skuService.updateByPrimaryKeySelective(sku);
 				}else{
+					sku.setCreated(new Date());
 					rows = skuService.insertSelective(sku);//添加新的sku信息
 				}
 				if(rows>0){
 					//添加sku价格 trade_sku_price
 					List<SkuPrice> skuPriceList = JSONArray.parseArray(skuPriceJson, SkuPrice.class);
 					SkuPrice skuPrice = skuPriceList.get(i);
-					skuPrice.setCreateTime(new Date());
-					skuPrice.setUpdateTime(new Date());
 					skuPrice.setItemId(item.getItemId());
 					skuPrice.setSkuId(sku.getSkuId());
-					skuPrice.setMarketPrice(item.getMarketPrice());
 					if(skuPrice.getId()!=null && skuPrice.getId()>0){
+						skuPrice.setUpdateTime(new Date());
 						rows = skuPriceService.updateByPrimaryKeySelective(skuPrice);
 					}else{
+						skuPrice.setCreateTime(new Date());
 						rows = skuPriceService.insertSelective(skuPrice);//添加新的sku价格信息
 					}
 					if(rows>0){
