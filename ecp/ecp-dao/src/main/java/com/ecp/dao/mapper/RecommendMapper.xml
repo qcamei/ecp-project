@@ -8,6 +8,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
     <result column="showed" property="showed" jdbcType="INTEGER" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
     <result column="updated" property="updated" jdbcType="TIMESTAMP" />
@@ -17,6 +18,6 @@
     <!--
       WARNING - @mbggenerated
     -->
-    id, name, url, showed, created, updated, deleted
+    id, name, url, type, showed, created, updated, deleted
   </sql>
 </mapper>
