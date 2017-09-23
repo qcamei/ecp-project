@@ -43,7 +43,7 @@
   <select id="selectItemsByOrderId" resultType="map">
   	select * from trade_order_items as o left join item_sku_picture as p
   	 on(o.sku_id=p.sku_id) 
-	where  o.order_id=#{orderId} GROUP BY p.sku_id
+	where  o.order_id=#{orderId} GROUP BY o.sku_id
   </select>
     
   

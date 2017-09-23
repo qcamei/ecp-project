@@ -33,7 +33,7 @@
 		item	AS i  on(f.favorite_id=i.item_id)  left join
 		item_picture as p on(p.item_id=i.item_id)
 	WHERE		 
-		P.sort_number=1 AND
+		p.sort_number=1 AND
 		f.`status`='1' AND
 		p.sort_number=1 AND
 		i.item_status=4 AND 
@@ -54,7 +54,8 @@
   <select id="getFavouriteStatistic" resultMap="StatisticMap">
   	SELECT
 			count(DISTINCT i.item_id)  AS count ,
-			c.c_name  AS c_name
+			c.c_name  AS c_name,
+			i.cid AS cid
 	FROM
 			base_user_favorite AS f left join 
 			item AS i on(f.favorite_id=i.item_id) left join
@@ -65,8 +66,8 @@
 			i.item_status=4 AND 
 			i.deleted=1
 	GROUP BY
-			i.cid,
-			c.c_name
+			cid,
+			c_name
   </select>  
   
   <resultMap id="StatisticMap" type="com.ecp.bean.FavouriteStatisticBean">   
