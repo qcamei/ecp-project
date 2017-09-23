@@ -3,6 +3,7 @@ package com.ecp.entity;
 import java.util.Date;
 import javax.persistence.*;
 
+@Table(name = "recommend")
 public class Recommend {
     /**
      * 自增ID
