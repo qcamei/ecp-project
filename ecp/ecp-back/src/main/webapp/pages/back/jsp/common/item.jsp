@@ -70,6 +70,17 @@ $("#search-submit-btn").click(function(){
 	filterItemFun(params);
 });
 /**
+ * 绑定查询表单的keydown事件
+ */
+$("#search-form").keydown(function(e){
+	var curKey = e.which;
+	if(curKey == 13){
+		$("#search-submit-btn").click();
+		return false;
+	}
+});
+
+/**
  * 点击查询面板中的重置按钮时执行
  * 		功能：重置查询面板中的form表单
  */
