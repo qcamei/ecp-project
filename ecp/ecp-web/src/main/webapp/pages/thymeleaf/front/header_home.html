@@ -51,7 +51,7 @@
                     </li>
                     <i>|</i>
                     <li>
-                        <div><a th:href="@{/front/personalcenter/orders}" target="_blank">我的订单 <!-- <span class="badge">3</span> --> </a></div>
+                        <div><a th:href="@{/front/personalcenter/orders}" target="_blank">我的订单 <!-- <span class="badge">3</span> --></a></div>
                     </li>
                 </ul>
             </nav>
@@ -87,12 +87,12 @@
                		</div>
                	</a>
                 <div class="popover bottom dropdownCart">
-                    <div class="popMask"></div>
-                    <!-- <h3 class="popover-title">最新加入的商品<span>共7件</span></h3> -->
+                    <div class="popMask"></div>                    
                     <h3 class="popover-title">
 						最新加入的商品<span>共<span id="itemNum">X</span>件</span>
 					</h3>
-                    <div class="popover-content" id="popover-content">                    
+					<!-- quick cart item table -->
+                    <div class="popover-content" id="popover-content">          
                     </div>
                     <div class="popover-footer">
                         <p>共计：<span id="cartItemTotalPrice">X</span>元</p>
@@ -113,7 +113,7 @@
             <div class="main-sort">
                 <div class="all-sort">
                     <a href="#">全部商品分类</a>
-                    <div id="classification" class="classification">
+                    <div id="classification-index" class="classification" style="display:block">
                         <!-- 一级类目 -->
                         <div th:each="level1 : ${categoryList}" class="firstClass">
                             <h3>
@@ -152,6 +152,63 @@
             </div>
         </div>
     </div>
+    <!-- content start  -->
+    <div class="container homePage">
+        <div class="mainBanner">
+            <div id="homeBanner" class="carousel slide" data-ride="carousel" data-interval="5000">
+                <!-- Indicators -->
+                <ol class="carousel-indicators carousel-img">
+                	<span th:each="slide,iter:${slidesShowSettingList}" th:remove="tag">
+                		<span th:switch="${iter.index}" th:remove="tag">                		
+                			<li th:case="0" data-target="#homeBanner" th:attr="data-slide-to=${iter.index}" class="active"></li>               		
+               				<li th:case="*" data-target="#homeBanner" th:attr="data-slide-to=${iter.index}" ></li>
+               			</span>
+                	</span>
+                	<!-- <li th:each="slide,iter:slidesShowSettingList" data-target="#homeBanner" th:attr="data-slide-to:${item}-1" class="active"></li>
+                	
+                    <li data-target="#homeBanner" data-slide-to="0" class="active"></li>
+					<li data-target="#homeBanner" data-slide-to="1"></li>
+					<li data-target="#homeBanner" data-slide-to="2"></li>
+					<li data-target="#homeBanner" data-slide-to="3"></li> -->
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                
+                	<span th:each="slide,iter:${slidesShowSettingList}" th:remove="tag">
+                		<span th:switch="${iter.index}" th:remove="tag">
+	                		<div th:case="0" class="item active">
+	                        	<a th:href="@{'/'+${slide.url}}" target="_blank"><img th:src="${slide.imgUrl}" alt=""> </a>
+	                        	<!-- <img class="img-responsive" th:src="${slide.imgUrl}" alt=""> -->	                        	
+	                    	</div>	                    	
+	                    	<div th:case="*" class="item">
+	                        	<a th:href="@{'/'+${slide.url}}"  target="_blank"><img th:src="${slide.imgUrl}" alt=""> </a>
+	                        	<!-- <img class="img-responsive" th:src="${slide.imgUrl}" alt=""> -->
+	                    	</div>
+                    	</span> 
+                	</span>
+                
+                </div>
+            </div><!-- /.homeBanner -->
+            <div class="newCompany">
+                <div class="companyLogo"></div>
+                <div class="companyText">
+                    <h5>合作伙伴</h5>
+                    <div class="company-img"><img th:src="@{/static/images/cooperation.jpg}"></div>
+                    <div id="companyScroll" class="companyDetail">
+                        <div id="scrollContent">
+                        	<div th:each="company:${userExtendsList}">
+                        		<a href="javascript:void(0);"><span th:text="${company.companyName}">新公司名称</span></a>
+                        	</div>                     
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    
+    
+    
     <!-- 修改用户口令 -->
     <div id="changePassword" th:replace="thymeleaf/common/change_password_dialog::dialog"></div>
     <!-- 占位图片 不属于header  -->
@@ -160,7 +217,7 @@
     </div> -->
     <!-- 占位图片 不属于header end  -->
     <script type="text/javascript" th:src="@{/static/iconfont/iconfont.js}"></script>
-    <script type="text/javascript" th:src="@{/static/js/header/js.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/home/js.js}"></script>
     
     <script type="text/javascript" th:src="@{/static/js/header/change_password.js}"></script>
     

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <div th:include="/thymeleaf/common/_head2::headx('智慧教育-电子商务平台')"	th:remove="tag"></div>
 <!-- other css -->
-<link th:href="@{/static/css/wu/default.css}"	rel="stylesheet" /> 
+<link th:href="@{/static/css/wu/default.css}"	rel="stylesheet" />
 <!-- other style -->
 <style type="text/css">
-	a:hover { text-decoration:none; } 
+	a:hover { text-decoration:none; }  
 </style>
 <!-- other script -->
 </head>
@@ -41,7 +41,7 @@
 		<!-- <div id="footer" class="col-md-12 column"></div> -->
 	</div>
 	<!-- load header and footer -->
-	<script type="text/javascript" th:src="@{/static/js/loadHeaderFooter.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/home/loadHeaderFooter.js}"></script>
 	<script type="text/javascript">
 		/* 加载channel-one */
 		function loadChannelOne() {
@@ -62,7 +62,7 @@
 		}
 		
 		$(function(){
-			loadChannelOne();	
+			//loadChannelOne();	
 			//loadChannelTwo();
 		});
 		

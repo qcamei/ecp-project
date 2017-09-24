@@ -18,10 +18,12 @@ import com.ecp.common.SessionConstants;
 import com.ecp.entity.Recommend;
 import com.ecp.entity.SlideshowSetting;
 import com.ecp.entity.User;
+import com.ecp.entity.UserExtends;
 import com.ecp.service.back.IRecommendService;
 import com.ecp.service.back.ISlideshowService;
 import com.ecp.service.front.ICategoryAttrService;
 import com.ecp.service.front.ICategoryService;
+import com.ecp.service.front.IUserAgentService;
 
 /**
  * @ClassName HomeController
@@ -47,6 +49,8 @@ public class HomeController {
 	ISlideshowService slidesShowService;  //轮播图操作服务
 	@Autowired
 	IRecommendService recommentService;  //首页推荐服务
+	@Autowired
+	IUserAgentService userAgentService; //代理商服务
 
 	/**
 	 * @Description 导航->主页 显示分类目录
@@ -61,7 +65,7 @@ public class HomeController {
 	}
 	
 	/**
-	 * @Description 加载页头
+	 * @Description 加载非主面页头
 	 * @return
 	 */
 	@RequestMapping(value = "/header")
@@ -73,11 +77,6 @@ public class HomeController {
 		List<Recommend> recommentList=recommentService.getAll();
 		model.addAttribute("recommentList", recommentList);
 		
-		//(2)查询轮播图设置
-		List<SlideshowSetting> slidesShowSettingList=slidesShowService.getAll();
-		model.addAttribute("slidesShowSettingList", slidesShowSettingList);
-		
-		
 		//查询用户是否已经登录
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute(SessionConstants.USER);
@@ -88,6 +87,41 @@ public class HomeController {
 		
 		return RESPONSE_THYMELEAF + "header";
 	}
+	
+	
+	/**
+	 * @Description 加载主面页头
+	 * @return
+	 */
+	@RequestMapping(value = "/header_home")
+	public String header_home(Model model,HttpServletRequest request){
+		List<CategoryTreeNode> categoryList = categoryService.getCategoryTree();
+		model.addAttribute("categoryList", categoryList); // 返回类目树列表
+		
+		//(1)查询首页推荐
+		List<Recommend> recommentList=recommentService.getAll();
+		model.addAttribute("recommentList", recommentList);
+		
+		//(2)查询轮播图设置
+		List<SlideshowSetting> slidesShowSettingList=slidesShowService.getAll();
+		model.addAttribute("slidesShowSettingList", slidesShowSettingList);
+		
+		//(3)公司名称显示
+		List<UserExtends> userExtendsList=userAgentService.getAllUserAgent();
+		model.addAttribute("userExtendsList", userExtendsList);
+		
+		
+		//查询用户是否已经登录
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SessionConstants.USER);
+		model.addAttribute("user", user);
+		
+		
+		
+		
+		return RESPONSE_THYMELEAF + "header_home";
+	}
+	
 
 	/**
 	 * @Description 加载页尾
