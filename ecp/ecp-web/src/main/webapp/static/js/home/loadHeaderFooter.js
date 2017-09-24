@@ -5,7 +5,7 @@
 function loadHeader() {
 	var url = "/front/home/header_home";
 	var parms = null;
-	var callbackFunc = null; //header load 完毕后再load footer
+	var callbackFunc = loadFooter; //header load 完毕后再load footer
 	var containerId = "#header";
 	loadPage(containerId, url, parms, callbackFunc);
 }
@@ -25,7 +25,7 @@ function loadFooter() {
 // =============页面加载初始化部分==================
 function initPage() {
 	loadHeader();
-	loadFooter();
+	//loadFooter();
 }
 
 // =============current page loaded ready===============

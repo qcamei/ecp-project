@@ -17,7 +17,7 @@
 		<!-- <div id="header" class="col-md-12 column"></div> -->
 	</div>
 	<!-- content -->
-	<div class="container">
+	<div class="container homePage">
 		<div id="content" class="row clearfix">
 			<div id="content" class="col-md-12 column content">
 				<!-- 在此处加入频道内容 -->
@@ -25,14 +25,12 @@
 			    <div  id="channel-one" ></div>
 			    
 			    <!-- 主页商品展示2 -->
-			    <div  id="channel-two" ></div>
-			    <br>
-			    <hr>	
-			    <br>
-			    <div class="banner-order">
+			    <div  id="channel-two" ></div>   
+			</div>			
+			<div class="homeAD1">
                 	<img th:src="@{/static/images/banner-order.png}" >
-            	</div>			    			
-			</div>
+                	<div class="closeAd">X</div>
+            </div>
 		</div>
 		
 	</div>
@@ -44,22 +42,22 @@
 	<script type="text/javascript" th:src="@{/static/js/home/loadHeaderFooter.js}"></script>
 	<script type="text/javascript">
 		/* 加载channel-one */
-		function loadChannelOne() {
+		/* function loadChannelOne() {
 			var url = "/front/home/channel/?cid=67";
 			var parms = null;
 			var callbackFunc = loadChannelTwo; //load页面 完毕后加调函数
 			var containerId = "#channel-one";
 			loadPage(containerId, url, parms, callbackFunc);
-		}
+		} */
 		
 		/* 加载channel-two */
-		function loadChannelTwo() {
+		/* function loadChannelTwo() {
 			var url = "/front/home/channel2?cid=49";
 			var parms = null;
 			var callbackFunc = null; //load页面 完毕后加调函数
 			var containerId = "#channel-two";
 			loadPage(containerId, url, parms, callbackFunc);
-		}
+		} */
 		
 		$(function(){
 			//loadChannelOne();	
