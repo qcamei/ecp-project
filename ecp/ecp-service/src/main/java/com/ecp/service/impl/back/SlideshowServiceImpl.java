@@ -60,4 +60,16 @@ public class SlideshowServiceImpl extends AbstractBaseService<SlideshowSetting, 
 		return slideshowSettingMapper.deleteByIds(ids);
 	}
 
+	/**
+	 * Description:按showed状态读取轮播图列表
+	 * @see com.ecp.service.back.ISlideshowService#getAllByShowed(java.lang.Integer)
+	 */
+	@Override
+	public List<SlideshowSetting> getAllByShowed(Integer showed) {
+		SlideshowSetting record=new SlideshowSetting();
+		record.setShowed(showed);
+		return slideshowSettingMapper.select(record);
+		
+	}
+
 }

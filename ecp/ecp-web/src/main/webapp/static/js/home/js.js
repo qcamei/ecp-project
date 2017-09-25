@@ -41,12 +41,46 @@ function displayCartItemTotalPrice(){
 	$("#cartItemTotalPrice").text(g_cartItemTotalPrice);
 }
 
+var Index ={
 
+		switchProNav : function(that){
+			$(that).parent(".floorGuide").children(".guideItem").removeClass("active");
+			$(that).addClass("active");
+		},
+
+		//文字滚动
+		autoScroll : function(top){
+			var height = $("#scrollContent").height(),
+				pos = $("#scrollContent").offset(),
+				setTop = pos.top,
+				isOver = false;
+
+			var scroll = function(){
+				$("#scrollContent").offset({top:setTop});
+				setTop -= 1;
+				if(setTop <= (pos.top - height)){
+					setTop = pos.top + height;
+				}
+				if(!isOver){
+					setTimeout(scroll, 50);
+				}
+			}
+			scroll();
+
+			$("#scrollContent").hover(function(){
+				isOver = true;
+			},function(){
+				isOver = false;
+				setTimeout(scroll, 50);
+			});
+		}
+	};
 
 /* page loaded ready */
 $(function() {
 	
 	$("a").focus(function(){this.blur()});
+	$("#homeBanner").carousel();  //播放幻灯片
 
 	// 购物车
 	$("#myCart").hover(
@@ -93,6 +127,17 @@ $(function() {
 	$(".footerContent .row>div").each(function() {
 		$(this).height($(".footerContent .row").height())
 	});
+	
+	Index.autoScroll(0);
+
+	$(".company-img").on("click",function(){
+		var text = $("#scrollContent").offset();
+		text.top-=10;
+		$("#scrollContent").offset({top:text.top});
+		var text1 = $("#scrollContent").height();
+		console.log(text.top + ","+text1);
+	});
+	
 	
 	//==============业务逻辑=============
 	

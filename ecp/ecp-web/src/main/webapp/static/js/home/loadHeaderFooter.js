@@ -1,9 +1,9 @@
 
 // =================业务部分===============
 
-/* 加载主页页头 */
+/* 加载页头 */
 function loadHeader() {
-	var url = "/front/home/header";
+	var url = "/front/home/header_home";
 	var parms = null;
 	var callbackFunc = loadFooter; //header load 完毕后再load footer
 	var containerId = "#header";
@@ -28,7 +28,7 @@ function initPage() {
 	//loadFooter();
 }
 
-// =============current page loaded ready=============
+// =============current page loaded ready===============
 $(function() {
 	initPage();
 });

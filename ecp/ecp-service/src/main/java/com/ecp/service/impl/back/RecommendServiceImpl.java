@@ -59,4 +59,16 @@ public class RecommendServiceImpl extends AbstractBaseService<Recommend, Long> i
 		return recommendMapper.deleteByIds(ids);
 	}
 
+	/**
+	 * Description:按showed状态读取推荐列表
+	 * @see com.ecp.service.back.IRecommendService#getAllByShowed(java.lang.Integer)
+	 */
+	@Override
+	public List<Recommend> getAllByShowed(Integer showed) {
+		Recommend record=new Recommend();
+		record.setShowed(showed);
+		return	recommendMapper.select(record);
+		
+	}
+
 }

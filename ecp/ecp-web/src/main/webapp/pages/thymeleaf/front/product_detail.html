@@ -2,9 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" th:href="@{/static/css/slideImg/base.css}">
-<div th:include="/thymeleaf/common/_head2::headx('商品详情')"	th:remove="tag"></div>
 
+<div th:include="/thymeleaf/common/_head2::headx('商品详情')"	th:remove="tag"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/static/css/slideImg/base.css}">
 <style>
 li {
 	list-style-type: none;
@@ -79,7 +79,7 @@ a:hover { text-decoration:none; }
 			</div>
 			<!-- end of 弹出窗口 -->
 
-			<div class="row clearfix">
+			<div class="">
 				<div class="col-md-12 column">
 					<div class="row clearfix">
 						<H4>产品详情</H4>
