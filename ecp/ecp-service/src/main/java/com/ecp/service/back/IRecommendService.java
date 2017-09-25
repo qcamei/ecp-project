@@ -24,4 +24,12 @@ public interface IRecommendService extends IBaseService<Recommend, Long> {
 	 * @return
 	 */
 	public int deleteByIds(List<Long> ids);
+	
+	
+	/**
+	 * @Description 按showed状态读取推荐列表
+	 * @param showed showed状态: 是否在前端显示（1-显示，2-不显示，默认1）
+	 * @return 推荐列表
+	 */
+	public List<Recommend> getAllByShowed(Integer showed);
 }

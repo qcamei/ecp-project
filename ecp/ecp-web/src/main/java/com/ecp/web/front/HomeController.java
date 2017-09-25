@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ecp.bean.CategoryTreeNode;
+import com.ecp.bean.ShowedStateType;
 import com.ecp.common.SessionConstants;
 import com.ecp.entity.Recommend;
 import com.ecp.entity.SlideshowSetting;
@@ -74,7 +75,7 @@ public class HomeController {
 		model.addAttribute("categoryList", categoryList); // 返回类目树列表
 		
 		//(1)查询首页推荐
-		List<Recommend> recommentList=recommentService.getAll();
+		List<Recommend> recommentList=recommentService.getAllByShowed(ShowedStateType.SHOWED_YES);
 		model.addAttribute("recommentList", recommentList);
 		
 		//查询用户是否已经登录
@@ -99,11 +100,11 @@ public class HomeController {
 		model.addAttribute("categoryList", categoryList); // 返回类目树列表
 		
 		//(1)查询首页推荐
-		List<Recommend> recommentList=recommentService.getAll();
+		List<Recommend> recommentList=recommentService.getAllByShowed(ShowedStateType.SHOWED_YES);
 		model.addAttribute("recommentList", recommentList);
 		
 		//(2)查询轮播图设置
-		List<SlideshowSetting> slidesShowSettingList=slidesShowService.getAll();
+		List<SlideshowSetting> slidesShowSettingList=slidesShowService.getAllByShowed(ShowedStateType.SHOWED_YES);
 		model.addAttribute("slidesShowSettingList", slidesShowSettingList);
 		
 		//(3)公司名称显示

@@ -14,6 +14,14 @@ public interface ISlideshowService extends IBaseService<SlideshowSetting, Long> 
 	public List<SlideshowSetting> getAll();
 	
 	/**
+	 * @Description 按showed状态读取轮播图列表
+	 * @param showed showed状态: 是否在前端显示（1-显示，2-不显示，默认1）
+	 * @return  轮播图列表
+	 */
+	public List<SlideshowSetting> getAllByShowed(Integer showed);
+	
+	
+	/**
 	 * 删除（逻辑删除）
 	 * @return
 	 */
