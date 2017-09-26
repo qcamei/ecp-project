@@ -2,6 +2,7 @@ package com.ecp.entity;
 
 import javax.persistence.*;
 
+@Table(name = "role")
 public class Role {
     /**
      * 角色自增ID

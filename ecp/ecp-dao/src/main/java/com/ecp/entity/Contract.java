@@ -3,6 +3,7 @@ package com.ecp.entity;
 import java.util.Date;
 import javax.persistence.*;
 
+@Table(name = "contract")
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

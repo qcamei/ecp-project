@@ -2,6 +2,7 @@ package com.ecp.entity;
 
 import javax.persistence.*;
 
+@Table(name = "menu")
 public class Menu {
     /**
      * 菜单自增ID
