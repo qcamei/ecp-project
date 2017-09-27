@@ -198,7 +198,7 @@ public class ItemController {
 	 */
 	private void sortList(List<Category> categoryList,Long cid) {  
         for(Category category :categoryList){
-            if(category.getParentCid()==cid){
+            if(category.getParentCid().equals(cid)){
                 resultList.add(category);
                 sortList(categoryList,category.getCid());
             }
