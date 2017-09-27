@@ -7,7 +7,6 @@
     -->
     <id column="item_id" jdbcType="BIGINT" property="itemId" />
     <result column="ad" jdbcType="VARCHAR" property="ad" />
-    <result column="after_service" jdbcType="VARCHAR" property="afterService" />
     <result column="attr_sale" jdbcType="VARCHAR" property="attrSale" />
     <result column="attributes" jdbcType="VARCHAR" property="attributes" />
     <result column="brand" jdbcType="BIGINT" property="brand" />
@@ -42,6 +41,7 @@
       WARNING - @mbggenerated
     -->
     <result column="describe_url" jdbcType="LONGVARCHAR" property="describeUrl" />
+    <result column="after_service" jdbcType="LONGVARCHAR" property="afterService" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -57,7 +57,7 @@
     <!--
       WARNING - @mbggenerated
     -->
-    describe_url
+    describe_url, after_service
   </sql>
 
 	<!-- 通过品牌及类目属性查询 -->
