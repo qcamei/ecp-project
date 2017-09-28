@@ -7,13 +7,15 @@
  * @version 
 **/
 html{
-  height: 100%;  
+  height: 100%;
 }
 body {
-	font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"微软雅黑";
+  height: 100%;
+  font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"微软雅黑";
 }
 .container {
     width: 1200px;
+    min-height: calc(100% - 315px);
 }
 .text-green{
 	color: #71b247;
@@ -129,6 +131,12 @@ i {
     position: relative;
 }
 
+.banner-img img {
+    width: 1200px;
+    height: 70px;
+    
+}
+
 .closeAd {
 	background-color: rgba(0,0,0,.1);
 	border-radius: 50%;
@@ -163,7 +171,6 @@ i {
 
 .logo img{
     height: 100%;
-    width: 100%;
 }
 
 .search {
@@ -219,6 +226,7 @@ i {
 .quick.quickRight {
     width: 126px;
     position: relative;
+    margin-right: 0;
 }
 
 .quick.quickRight .cart {
@@ -232,7 +240,7 @@ i {
     background-color: #f7f7f7;
     height: 34px;
     border: 2px solid #efefef;
-    line-height: 34px;
+    line-height: 32px;
     text-align: center;
     color: #2d2d2d;
     cursor: pointer;
@@ -277,7 +285,7 @@ i {
     top: 100%;
     left: inherit;
     right: 0;
-    width: 240px;
+    width: 245px;
     background-color: rgba(65,65,65,.8);
     border-radius: 0;
     color: #f6f6f6;
@@ -461,7 +469,8 @@ i {
 }
 
 .classification {
-    height: 385px;
+    min-height: 385px;
+    _height:385px;
     width: 210px;
     background: #f6f6f6;
     margin-top: 44px;
@@ -483,7 +492,7 @@ i {
     font-size: 14px;
     line-height: inherit;
     margin: 0;
-    padding: 6px 15px;
+    padding: 4px 15px;
 }
 
 .firstClass span {
@@ -508,20 +517,22 @@ i {
     position: absolute;
     left: 209px;
     top: 45px;
-    background: rgba(65,65,65,.8);
+    background: rgba(240,240,240,.8);
     display: none;
     z-index: 99;
 }
 
 .item-sub {
     display: none;
-    background-color:  rgba(65,65,65,.8);
+    background-color:  rgba(240,240,240,.8);
+    /* height: 385px; */
+    min-height:385px;                
+	_height:385px;
 }
 
 .subitem {
     width: 790px;
-    height:385px;
-    padding: 6px 0 0 20px;
+    padding: 6px 0 0 10px;
     overflow: hidden;
     display: inline-block;
 }
@@ -534,7 +545,7 @@ i {
 }
 
 .subitem dt {
-	width: 90px;
+	width: 142px;
     padding: 8px 30px 0 0;
     text-align: right;
     position: relative;
@@ -544,7 +555,7 @@ i {
 .subitem dt a {
     height: 16px;
     line-height: 16px;
-    color: white;
+    color: #333;
     font-weight: 700;
 }
 
@@ -557,13 +568,13 @@ i {
 
 .subitem dt i {
     position: absolute;
-    top: 13px;
-    right: 18px;
-    color: white;
+    top: 10px;
+    right: 15px;
+    color: #333;
 }
 
 .subitem dd {
-    width: 620px;
+    width: 600px;
     padding: 6px 0;
     float: left;
     border-bottom: 1px solid #666;
@@ -574,7 +585,7 @@ i {
     padding: 0 8px;
     border-left: 1px solid #888;
     margin: 4px 0;
-    color: white;
+    color: #333;
 }
 
 .subitem dd a:hover {
@@ -863,7 +874,7 @@ i {
 }
 .homePage .mainBanner .carousel-img {
   text-align: right;
-  padding-right: 20px;
+  padding-right: 20px;  
   left: initial;
   right: 0;
 }
@@ -910,7 +921,6 @@ i {
   width: 100%;
   height: 80px;
 }
-
 .homePage .mainBanner .newCompany .companyText .companyDetail {
   height: calc(100% - 115px);
   margin-top: 10px;
@@ -922,7 +932,6 @@ i {
 .homePage .mainBanner .newCompany .companyText .companyDetail a:hover {
   color: #f63131;
 }
-
 .homePage .showPro1 {
   display: flex;
 }
