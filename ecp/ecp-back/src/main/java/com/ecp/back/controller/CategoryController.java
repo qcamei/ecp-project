@@ -85,9 +85,11 @@ public class CategoryController {
 		for(int i=0; i<categoryList.size(); i++){
 			Category category = categoryList.get(i);
 			if(category.getParentCid()==0){
+				System.out.println(category.getLev()+","+category.getcName());
 				resultList.add(category);
 				sortList(categoryList,category.getCid());
 			}
+			
 		}
 		
 		mav.addObject("categoryList", resultList);
@@ -102,9 +104,11 @@ public class CategoryController {
 	 * @param categoryList
 	 * @param cid
 	 */
-	private void sortList(List<Category> categoryList,Long cid) {  
-        for(Category category :categoryList){
-            if(category.getParentCid()==cid){
+	private void sortList(List<Category> categoryList,Long cid) {
+		
+		for(int i=0; i<categoryList.size(); i++){
+			Category category = categoryList.get(i);
+        	if(category.getParentCid().equals(cid)){
                 resultList.add(category);
                 sortList(categoryList,category.getCid());
             }
