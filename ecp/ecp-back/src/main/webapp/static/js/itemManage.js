@@ -471,15 +471,18 @@ function ajaxRequestGetItemInfo(id){
 					$("#sell-price-"+i).val(sku.sellPrice);//销售价
 					$("#volume-"+i).val(sku.volume);//体积
 					$("#weight-"+i).val(sku.weight);//重量
-					$("#spec-"+i).attr("onclick", "javascript:openSpecModel("+sku.skuId+", "+i+");");
+					$("#short-spec-"+i).attr("onclick", "javascript:openShortSpecModel("+sku.skuId+", "+i+");");//设置简单sku规格点击事件
+					$("#spec-"+i).attr("onclick", "javascript:openSpecModel("+sku.skuId+", "+i+");");//设置标准sku规格点击事件
 				}
 				
 				//如果没有销售属性或未选择销售属性
 				var sale_attr_arr = getSaleAttr();
 				if(sale_attr_arr==null || sale_attr_arr.length<=0){
 					showOpenDefaultSpecBtn(skuList[0].skuId);
+					showOpenDefaultShortSpecBtn(skuList[0].skuId);
 				}else{
 					hideOpenDefaultSpecBtn(0);
+					hideOpenDefaultShortSpecBtn(0);
 				}
 				/*var skuHtml = $("#sku #sku-body").html().trim();
 				if(skuHtml==null || skuHtml==""){
@@ -787,6 +790,7 @@ function getParams(){
 	
 	params.isSaveSku = g_is_save_sku;//是否保存sku（默认为false）(skuPage.jsp)
 	
+	params.skuShortSpec = $("#default-sku-short-spec").val();
 	params.skuSpec = $("#default-sku-spec").val();
 	
 	return params;

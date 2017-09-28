@@ -157,12 +157,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	}
 
 	/**
-	 * @see com.ecp.service.back.IItemService#saveItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.ecp.service.back.IItemService#saveItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 * 保存商品
 	 */
 	@Override
 	@Transactional
-	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, String skuSpec) {
+	public int saveItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, String skuShortSpec, String skuSpec) {
 		
 		try {
 			//添加商品 item
@@ -212,6 +212,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 						Sku sku = new Sku();
 						sku.setVolume(item.getVolume());
 						sku.setWeight(item.getWeight());
+						sku.setSkuShortSpec(skuShortSpec);
 						sku.setSkuSpec(skuSpec);
 						skuList.add(sku);
 						skuJson = JSON.toJSONString(skuList);
@@ -245,12 +246,12 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 	
 
 	/**
-	 * @see com.ecp.service.back.IItemService#updateItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String, boolean, java.lang.String)
+	 * @see com.ecp.service.back.IItemService#updateItem(javax.servlet.http.HttpServletRequest, com.ecp.entity.Item, java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String)
 	 * 修改商品
 	 */
 	@Override
 	@Transactional
-	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuSpec) {
+	public int updateItem(HttpServletRequest request, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuShortSpec, String skuSpec) {
 		try {
 			if(item.getItemId()==null || item.getItemId()<=0){
 				return 0;
@@ -345,6 +346,7 @@ public class ItemServiceImpl extends AbstractBaseService<Item, Long> implements 
 							Sku sku = new Sku();
 							sku.setVolume(item.getVolume());
 							sku.setWeight(item.getWeight());
+							sku.setSkuShortSpec(skuShortSpec);
 							sku.setSkuSpec(skuSpec);
 							skuList.add(sku);
 							skuJson = JSON.toJSONString(skuList);

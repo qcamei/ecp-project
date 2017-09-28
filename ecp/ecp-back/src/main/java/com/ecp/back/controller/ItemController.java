@@ -254,7 +254,7 @@ public class ItemController {
 	 */
 	@RequestMapping("/insert")
 	@ResponseBody
-	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, String skuSpec) {
+	public Map<String, Object> insertContent(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, String skuShortSpec, String skuSpec) {
 		
 		Subject subject = SecurityUtils.getSubject();
 		UserBean userBean = (UserBean)subject.getPrincipal();
@@ -262,7 +262,7 @@ public class ItemController {
 		log.info("insert item:"+item);
 		
 		if(userBean!=null){
-			int rows = iItemService.saveItem(request, item, skuJson, skuPriceJson, skuSpec);
+			int rows = iItemService.saveItem(request, item, skuJson, skuPriceJson, skuShortSpec, skuSpec);
 			if(rows>0){
 				return RequestResultUtil.getResultAddSuccess();
 			}else if(rows<0){
@@ -281,10 +281,10 @@ public class ItemController {
 	 */
 	@RequestMapping("/updateById")
 	@ResponseBody
-	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuSpec) {
+	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Item item, String skuJson, String skuPriceJson, boolean isSaveSku, String skuShortSpec, String skuSpec) {
 		log.info("update item:"+item);
 		try {
-			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson, isSaveSku, skuSpec);
+			int rows = iItemService.updateItem(request, item, skuJson, skuPriceJson, isSaveSku, skuShortSpec, skuSpec);
 			if(rows>0){
 				return RequestResultUtil.getResultUpdateSuccess();
 			}
@@ -411,7 +411,7 @@ public class ItemController {
 	 * @param skuId
 	 * @return
 	 */
-	@RequestMapping("/selectSkuBySkuId")
+	@RequestMapping("/selectSkuSpecBySkuId")
 	@ResponseBody
 	public Map<String, Object> selectSkuBySkuId(HttpServletRequest request, HttpServletResponse response, Long skuId) {
 		try {
@@ -450,6 +450,59 @@ public class ItemController {
 		Sku sku = new Sku();
 		sku.setSkuId(skuId);
 		sku.setSkuSpec(skuSpec);
+		int rows = skuService.updateByPrimaryKeySelective(sku);
+		if(rows>0){
+			return RequestResultUtil.getResultUpdateSuccess();
+		}
+		return RequestResultUtil.getResultUpdateWarn();
+	}
+	
+	/**
+	 * 查询要修改的sku规格
+	 * @param request
+	 * @param response
+	 * @param skuId
+	 * @return
+	 */
+	@RequestMapping("/selectSkuShortSpecBySkuId")
+	@ResponseBody
+	public Map<String, Object> selectSkuShortSpecBySkuId(HttpServletRequest request, HttpServletResponse response, Long skuId) {
+		try {
+			Sku sku = skuService.selectByPrimaryKey(skuId);
+			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
+			if(sku!=null){
+				respM.put("skuShortSpec", sku.getSkuShortSpec());
+			}else{
+				respM.put("skuShortSpec", "");
+			}
+			return respM;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("查询sku信息异常");
+		}
+		
+		return RequestResultUtil.getResultSelectWarn();
+	}
+	
+	/**
+	 * 修改sku简单规格
+	 * @param request
+	 * @param response
+	 * @param skuId
+	 * @param skuShortSpec
+	 * @return
+	 */
+	@RequestMapping("/updateSkuShortSpecBySkuId")
+	@ResponseBody
+	public Map<String, Object> updateSkuShortSpecBySkuId(HttpServletRequest request, HttpServletResponse response, Long skuId, String skuShortSpec) {
+		
+		if(skuId==null || skuId<=0 || StringUtils.isBlank(skuShortSpec)){
+			return RequestResultUtil.getResultUpdateWarn("参数不能为空!");
+		}
+		
+		Sku sku = new Sku();
+		sku.setSkuId(skuId);
+		sku.setSkuShortSpec(skuShortSpec);
 		int rows = skuService.updateByPrimaryKeySelective(sku);
 		if(rows>0){
 			return RequestResultUtil.getResultUpdateSuccess();
