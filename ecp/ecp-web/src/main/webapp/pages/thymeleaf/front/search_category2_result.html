@@ -136,7 +136,7 @@ a:hover { text-decoration:none; }
 									</a>
 									<p class="proname" th:text="${item.item.itemName}">产品名称</p>
 									<!-- <p class="prointr" th:text="${item.item.itemId}">商品简介</p> -->
-									<p class="price" th:text="${item.item.marketPrice}">999.00</p>
+									<p class="price" th:text="'￥'+${item.item.marketPrice}">999.00</p>
 								</li>
 								
 							</ul>
