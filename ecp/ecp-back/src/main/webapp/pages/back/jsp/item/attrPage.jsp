@@ -175,8 +175,10 @@ function createSku(){
 	var sale_attr_arr = getSaleAttr();
 	if(sale_attr_arr==null || sale_attr_arr.length<=0){
 		showOpenDefaultSpecBtn(0);
+		showOpenDefaultShortSpecBtn(0);
 	}else{
 		hideOpenDefaultSpecBtn(0);
+		hideOpenDefaultShortSpecBtn(0);
 	}
 	
 	g_is_save_sku = true;//是否保存sku(skuPage.jsp)
@@ -271,7 +273,8 @@ function createHeadHtml(arr){
 	htmlHead += "<th id=''>销售价</th>";
 	htmlHead += "<th id=''>体积</th>";
 	htmlHead += "<th id=''>重量</th>";
-	htmlHead += "<th id=''>规格</th>";
+	htmlHead += "<th id=''>简单规格</th>";
+	htmlHead += "<th id=''>标准规格</th>";
 	htmlHead += "</tr>";
 	return htmlHead;
 }
@@ -309,6 +312,10 @@ function createBodyHtml(arr){
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='text' id='weight-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+weight+"' placeholder='重量' />"
+		htmlBody += "</td>";
+		htmlBody += "<td id=''>"
+		htmlBody += "<input type='hidden' id='sku-short-spec-"+i+"' value='' />"
+		htmlBody += "<button type='button' id='short-spec-"+i+"' onclick='javascript:openShortSpecModel(0, "+i+");'>编辑</button>"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='hidden' id='sku-spec-"+i+"' value='' />"
@@ -372,7 +379,8 @@ function getSkuInfo(){
 		});
 		attributes = attributes.substring(0, attributes.length-1);
 		var skuId = $("#sku-id-"+index).val();//skuId
-		var skuSpec = $("#sku-spec-"+index).val();//sku规格
+		var skuSpec = $("#sku-spec-"+index).val();//标准sku规格
+		var skuShortSpec = $("#sku-short-spec-"+index).val();//简单sku规格
 		var skuPriceId = $("#sku-price-id-"+index).val();//skuPriceId
 		var costPrice = $("#cost-price-"+index).val();//成本价
 		if(costPrice==null || costPrice==""){
@@ -405,12 +413,20 @@ function getSkuInfo(){
 			return false;
 		}
 		
+		//判断简单sku规格不能为空
+		if(skuShortSpec==null || skuShortSpec==""){
+			util.message("第 "+index+" 行简单SKU规格不能为空!");
+			isReturn = true;
+			return false;
+		}
+		
 		var skuO = new Object();
 		skuO.skuId = skuId;
 		skuO.attributes = attributes;
 		skuO.volume = volume;
 		skuO.weight = weight;
 		skuO.skuSpec = skuSpec;
+		skuO.skuShortSpec = skuShortSpec;
 		sku.push(skuO);
 		
 		var skuPriceO = new Object();

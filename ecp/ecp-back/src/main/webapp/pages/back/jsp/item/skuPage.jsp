@@ -57,6 +57,7 @@ function getSaleAttr(){
 	return attrArr;
 }
 </script> -->
+<!-- 标准sku规格部分 start -->
 <!-- 用于保存默认sku规格 -->
 <div id="edit-default-sku-spec-div" class="hide">
 	<input type="hidden" id="default-sku-spec" value="" />
@@ -81,109 +82,22 @@ function getSaleAttr(){
 						</div>
 					</div>
 					<div class="form-group" id="spec-item">
-						<!-- <div class="col-sm-6" id="group-1">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										Panel title
-									</h3>
-								</div>
-								<div class="panel-body" id="group-value-1">
-									Panel content
-								</div>
-								<div class="panel-footer">
-									Panel footer
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6" id="group-2">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										Panel title
-									</h3>
-								</div>
-								<div class="panel-body" id="group-value-2">
-									Panel content
-								</div>
-								<div class="panel-footer">
-									Panel footer
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6" id="group-2">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										Panel title
-									</h3>
-								</div>
-								<div class="panel-body" id="group-value-2">
-									Panel content
-								</div>
-								<div class="panel-footer">
-									Panel footer
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6" id="group-2">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										Panel title
-									</h3>
-								</div>
-								<div class="panel-body" id="group-value-2">
-									Panel content
-								</div>
-								<div class="panel-footer">
-									Panel footer
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6" id="group-2">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										Panel title
-									</h3>
-								</div>
-								<div class="panel-body" id="group-value-2">
-									Panel content
-								</div>
-								<div class="panel-footer">
-									Panel footer
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6" id="group-2">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										Panel title
-									</h3>
-								</div>
-								<div class="panel-body" id="group-value-2">
-									Panel content
-								</div>
-								<div class="panel-footer">
-									Panel footer
-								</div>
-							</div>
-						</div> -->
+						<!-- 此处为sku规格列表区域 -->
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal" id="close-attr-value-btn">关闭</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="">关闭</button>
 				<button type="button" class="btn btn-primary hide" id="spec-submit-btn">保存</button>
 				<button type="button" class="btn btn-primary" id="default-spec-submit-btn" onclick="javascript:saveDefaultSpec(0);">保存默认sku规格</button>
 			</div>
 		</div>
 	</div>
 </div>
-<script>
-var g_is_save_sku = false;//是否保存sku(skuPage.jsp)
+<!-- 标准sku规格部分 end -->
+<!-- 标准sku规格js部分 -->
+<script type="text/javascript">
+var g_is_save_sku = false;//是否重新保存sku(skuPage.jsp)
 
 var g_group_num = 0;//记录sku规格个数
 var g_sku_id = 0;//sku的ID，>0时，表示是修改，保存时直接根据skuId直接更新数据库；<=0时，表示是添加，保存时在js中保存，添加商品随sku一起添加
@@ -313,7 +227,7 @@ function saveDefaultSpec(skuId){
  * ajax请求获取sku规格
  */
 function ajaxGetSkuSpec(skuId){
-	var url = "back/item/selectSkuBySkuId";
+	var url = "back/item/selectSkuSpecBySkuId";
 	var params = {"skuId": skuId};
 	$.get(url, params, function(res){
 		console.log(res);
@@ -539,3 +453,201 @@ function getSkuSpec(){
 	return specJson;
 }
 </script>
+<!-- 标准sku规格js部分 end -->
+
+<!-- 标准sku简单规格部分 start -->
+<!-- 用于保存默认sku规格 -->
+<div id="edit-default-sku-short-spec-div" class="hide">
+	<input type="hidden" id="default-sku-short-spec" value="" />
+</div>
+<button type="button" class="btn btn-primary" id="edit-default-sku-short-spec-btn" onclick="javascript:openDefaultShortSpecModel(0);">编辑默认sku简单规格</button>
+<!-- 简单sku规格对话框 -->
+<div class="modal fade" id="sku-short-spec-modal" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:50%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title" id="">简单SKU规格</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<form class="form-horizontal" id="sku-short-spec-form">				
+							<div class="form-group">
+								<div class="col-sm-12">
+									<!-- <label class="col-sm-2 control-label">简单SKU规格<b style="color:red;">&nbsp;*</b></label> -->
+									<div class="col-sm-12">
+										<textarea class="form-control" id="sku-short-spec-area" rows="3" cols="" placeholder="简单SKU规格内容（必填）"></textarea>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="">关闭</button>
+				<button type="button" class="btn btn-primary hide" id="short-spec-submit-btn">保存</button>
+				<button type="button" class="btn btn-primary" id="default-short-spec-submit-btn" onclick="javascript:saveDefaultShortSpec(0);">保存默认简单sku规格</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 简单sku简单部分 end -->
+<!-- 简单sku规格js部分 -->
+<script type="text/javascript">
+
+/**
+ * 显示打开默认的简单sku规格对话框按钮
+ */
+function showOpenDefaultShortSpecBtn(skuId){
+	$("#edit-default-sku-short-spec-btn").removeClass("hide");//显示打开默认的简单sku规格对话框按钮
+	$("#edit-default-sku-short-spec-btn").attr("onclick", "javascript:openDefaultShortSpecModel("+skuId+");");
+	$("#short-spec-submit-btn").addClass("hide");//隐藏简单sku规格对话框中保存按钮
+	$("#default-short-spec-submit-btn").removeClass("hide");////显示简单sku规格对话框中保存默认简单sku规格按钮
+	$("#default-short-spec-submit-btn").attr("onclick", "javascript:saveDefaultShortSpec("+skuId+");");
+}
+/**
+ * 隐藏打开默认的简单sku规格对话框按钮
+ */
+function hideOpenDefaultShortSpecBtn(skuId){
+	$("#edit-default-sku-short-spec-btn").addClass("hide");//显示打开默认的简单sku规格对话框按钮
+	$("#edit-default-sku-short-spec-btn").attr("onclick", "javascript:openDefaultShortSpecModel("+skuId+");");
+	$("#short-spec-submit-btn").removeClass("hide");//隐藏简单sku规格对话框中保存按钮
+	$("#default-short-spec-submit-btn").addClass("hide");////显示简单sku规格对话框中保存默认简单sku规格按钮
+	$("#default-short-spec-submit-btn").attr("onclick", "javascript:saveDefaultShortSpec("+skuId+");");
+	$("#default-sku-short-spec").val("");
+}
+
+/**
+ * 打开编辑简单sku规格对话框
+ */
+function openShortSpecModel(skuId, index){
+	g_sku_id = skuId;//sku的ID，>0时，表示是修改，保存时直接根据skuId直接更新数据库；<=0时，表示是添加，保存时在js中保存，添加商品随sku一起添加
+	g_sku_index = index;//记录当前编辑的sku是哪一个
+	$("#sku-short-spec-area").val("");//清空简单sku规格对话框中的规格内容
+	if(skuId<=0){
+		//TODO
+		//<=0时，表示是添加，不查询数据库中sku规格；保存时在js中保存，添加商品随sku一起添加
+		var skuShortSpec = $("#sku-short-spec-"+index).val();
+		if(skuShortSpec!=null && skuShortSpec!=""){
+			$("#sku-short-spec-area").val(skuShortSpec);
+		}
+	}else{
+		//TODO
+		//>0时，表示是修改，先查询数据库中sku规格并在对话框中显示；保存时直接根据skuId修改更新数据库
+		ajaxGetSkuShortSpec(skuId);
+	}
+	$('#sku-short-spec-modal').modal('show');
+}
+/**
+ * 点击sku对话框中的保存按钮时，保存sku规格
+ */
+$("#short-spec-submit-btn").click(function(){
+	var skuShortSpec = $("#sku-short-spec-area").val();//获取sku简单规格信息
+	if(skuShortSpec==null || skuShortSpec==""){
+		util.message("简单SKU规格不能为空！");
+		return false;
+	}
+	if(skuShortSpec.length>500){
+		util.message("简单SKU规格内容不能大于500个字符！");
+		return false;
+	}
+	
+	if(g_sku_id<=0){//添加sku
+		$("#sku-short-spec-"+g_sku_index).val(skuShortSpec);
+	}else{//编辑sku
+		ajaxPostSaveSkuShortSpec(g_sku_id, skuShortSpec);
+	}
+	
+	$('#sku-short-spec-modal').modal('hide');
+});
+/**
+ * 打开默认sku简单规格对话框
+ */
+function openDefaultShortSpecModel(skuId){
+	console.log("skuId:"+skuId);
+	$("#sku-short-spec-area").val("");//清空简单sku规格对话框中的简单规格内容
+	if(skuId<=0){
+		var skuShortSpec = $("#default-sku-short-spec").val();
+		if(skuShortSpec!=null && skuShortSpec!=""){
+			$("#sku-short-spec-area").val(skuShortSpec);
+		}
+	}else{
+		//TODO
+		//>0时，表示是修改，先查询数据库中sku规格并在对话框中显示；保存时直接根据skuId修改更新数据库
+		ajaxGetSkuShortSpec(skuId);
+	}
+	$('#sku-short-spec-modal').modal('show');
+}
+/**
+ * 保存默认sku简单规格
+ */
+function saveDefaultShortSpec(skuId){
+	var skuShortSpec = $("#sku-short-spec-area").val();//获取sku简单规格信息
+	if(skuShortSpec==null || skuShortSpec==""){
+		util.message("简单SKU规格不能为空！");
+		return false;
+	}
+	if(skuShortSpec.length>500){
+		util.message("简单SKU规格内容不能大于500个字符！");
+		return false;
+	}
+	
+	if(skuId<=0){//添加sku
+		$("#default-sku-short-spec").val(skuShortSpec);
+	}else{//编辑sku
+		ajaxPostSaveSkuShortSpec(skuId, skuShortSpec);
+	}
+	
+	$('#sku-short-spec-modal').modal('hide');
+}
+
+/**
+ * ajax请求获取简单sku规格
+ */
+function ajaxGetSkuShortSpec(skuId){
+	var url = "back/item/selectSkuShortSpecBySkuId";
+	var params = {"skuId": skuId};
+	$.get(url, params, function(res){
+		console.log(res);
+		if(res!=null){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				var skuShortSpec = obj.skuShortSpec;
+				if(skuShortSpec!=null && skuShortSpec!=""){
+					$("#sku-short-spec-area").val(skuShortSpec);
+					return false;
+				}else{
+					console.log("简单sku规格为空");
+				}
+				
+			}else{
+				util.message("查询失败！");
+			}
+		}
+	});
+}
+/**
+ * ajax请求保存简单sku规格
+ */
+function ajaxPostSaveSkuShortSpec(skuId, skuShortSpec){
+	var url = "back/item/updateSkuShortSpecBySkuId";
+	var params = {"skuId": skuId, "skuShortSpec": skuShortSpec};
+	$.post(url, params, function(res){
+		console.log(res);
+		if(res!=null){
+			var obj = $.parseJSON(res);
+			if(obj.result_code=="success"){
+				util.message(obj.result_msg);
+			}else{
+				util.message(obj.result_err_msg);
+			}
+		}
+	});
+}
+</script>
+<!-- 简单sku规格js部分 end -->
+

@@ -37,8 +37,11 @@ public class Sku {
 
     private BigDecimal weight;
 
+    @Column(name = "sku_short_spec")
+    private String skuShortSpec;//简单sku规格
+    
     @Column(name = "sku_spec")
-    private String skuSpec;
+    private String skuSpec;//sku规格
 
     /**
      * @return sku_id
@@ -195,6 +198,20 @@ public class Sku {
     }
 
     /**
+     * @return sku_short_spec
+     */
+    public String getSkuShortSpec() {
+		return skuShortSpec;
+	}
+    
+    /**
+     * @param skuShortSpec
+     */
+	public void setSkuShortSpec(String skuShortSpec) {
+		this.skuShortSpec = StringUtils.isBlank(skuShortSpec) ? null : skuShortSpec.trim();
+	}
+
+	/**
      * @return sku_spec
      */
     public String getSkuSpec() {
