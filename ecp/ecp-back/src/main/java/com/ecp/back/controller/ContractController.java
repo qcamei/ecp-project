@@ -271,7 +271,7 @@ public class ContractController {
 			Brand brand=brandService.selectByPrimaryKey(spu.getBrand());
 			dispBean.setBrandName(brand.getBrandName());			
 			//(4)查询基本参数
-			String spuNormAttr=spu.getAttributes();  //关键属性
+			/*String spuNormAttr=spu.getAttributes();  //关键属性
 			//String spuSaleAttr=spu.getAttrSale();  //销售属性
 			String normAttrStr=getAttrStr(spuNormAttr);
 			
@@ -291,9 +291,12 @@ public class ContractController {
 			}
 			
 			dispBean.setParms(parmStr); //设置技术参数
+			*/
+			Sku sku=skuService.selectByPrimaryKey(contractItem.getSkuId());			
+			dispBean.setParms(sku.getSkuShortSpec()); //设置简单技术参数
 			
 			
-			
+			//(5)加入列表
 			contractOrderItemDispList.add(dispBean);
 		}
 		
@@ -733,7 +736,7 @@ public class ContractController {
 			Brand brand=brandService.selectByPrimaryKey(spu.getBrand());
 			record.setBrandName(brand.getBrandName());			
 			//(4)查询基本参数
-			String spuNormAttr=spu.getAttributes();  //关键属性
+			/*String spuNormAttr=spu.getAttributes();  //关键属性
 			//String spuSaleAttr=spu.getAttrSale();  //销售属性
 			String normAttrStr=getAttrStr(spuNormAttr);
 			
@@ -750,8 +753,11 @@ public class ContractController {
 			}
 			else{
 				parmStr=saleAttrStr;
-			}			
+			}
 			record.setParms(parmStr); //设置技术参数
+			*/
+			Sku sku=skuService.selectByPrimaryKey(orderItem.getSkuId());
+			record.setParms(sku.getSkuShortSpec()); //设置简单技术参数
 			
 			
 			record.setCreateTime(new Date());

@@ -456,6 +456,13 @@ $(function() {
 			percent=percent / 100;
 			var val=percent*amount;
 			$("#payment_amount_delivery").val(val.toFixed(2));
+			
+			//计算余额
+			var percent_signed=parseFloat($("#payment_percent_signed").val());
+			if(!isNaN(percent_signed)){
+				var balance_amount=amount-(percent_signed/100+percent)*amount;
+				$("#balance_amount").val(balance_amount.toFixed(2));
+			}
 		}
 	});
 	
