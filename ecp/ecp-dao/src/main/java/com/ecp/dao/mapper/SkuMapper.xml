@@ -48,7 +48,7 @@
 		s.sku_id,
 		s.volume,
 		s.weight,
-		s.sku_short_spec
+		s.sku_short_spec,
 		p.sell_price,
 		p.market_price
   	 from item_sku s left join trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
@@ -62,8 +62,7 @@
 		s.item_id,
 		s.sku_id,
 		s.volume,
-		s.weight,
-		s.sku_short_spec
+		s.weight,		
 		p.sell_price,
 		p.market_price
   	 from item_sku s left join trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
@@ -77,8 +76,7 @@
 		s.item_id,
 		s.sku_id,
 		s.volume,
-		s.weight,
-		s.sku_short_spec
+		s.weight,		
 		p.sell_price,
 		p.market_price
   	 FROM item_sku s left JOIN trade_sku_price p on(s.item_id=p.item_id and s.sku_id=p.sku_id) 
@@ -104,7 +102,7 @@
   	SELECT 	 	
   	 	s.item_id,
 		s.sku_id,
-		s.sku_short_spec
+		s.sku_short_spec,
 		s.sku_spec,
 		i.after_service,
 		i.packing_list,
