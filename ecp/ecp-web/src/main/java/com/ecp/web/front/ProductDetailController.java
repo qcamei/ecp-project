@@ -18,8 +18,10 @@ import com.ecp.bean.SkuPriceBean;
 import com.ecp.bean.SkuSpecBean;
 import com.ecp.bean.SkuType;
 import com.ecp.bean.constants.AttributeType;
+import com.ecp.entity.Brand;
 import com.ecp.entity.Item;
 import com.ecp.entity.SkuPicture;
+import com.ecp.service.front.IBrandService;
 import com.ecp.service.front.ICategoryAttrService;
 import com.ecp.service.front.IItemAttrService;
 import com.ecp.service.front.IItemService;
@@ -51,6 +53,8 @@ public class ProductDetailController {
 	ISkuPictureService skuPictureService;
 	/*@Autowired
 	IFavouriteService userFavourite;*/ //用户收藏
+	@Autowired
+	IBrandService brandService;
 
 	/**
 	 * @Description 按spuId 导航到 产品详情
@@ -64,20 +68,24 @@ public class ProductDetailController {
 		// (1)读取SPU信息
 		Item item = itemService.getItemById(itemId);
 		model.addAttribute("item", item);
+		
+		//(2)查询品牌
+		Brand brand=brandService.selectByPrimaryKey(item.getBrand());
+		model.addAttribute("brand",brand);
 
-		// (2)读取SPU所属类目的销售属性,此处只使用属性的名称、个数
+		// (3)读取SPU所属类目的销售属性,此处只使用属性的名称、个数
 		getItemSaleAttr(item,model);
 
-		// (3)读取主sku信息 包括三个方面的内容 :sku信息、价格、图片
+		// (4)读取主sku信息 包括三个方面的内容 :sku信息、价格、图片
 		List<SkuPriceBean> skuList = skuService.getSkuByIdAndType(item.getItemId(), SkuType.PRIMARY);
 		model.addAttribute("sku", skuList.get(0)); // 由于返回的是list类型
 
-		// (4)读取主sku图片
+		// (5)读取主sku图片
 		SkuPriceBean tempSku = skuList.get(0);
 		List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById(tempSku.getSku_id());
 		model.addAttribute("skuPicts", skuPicts);
 
-		// (5)产品介绍、规则包装、售后保障。
+		// (6)产品介绍、规则包装、售后保障。
 		getSkuSpec(tempSku.getSku_id(),model);
 		return RESPONSE_THYMELEAF + "product_detail";
 	}
@@ -112,16 +120,20 @@ public class ProductDetailController {
 
 		// (2)读取SPU所属类目的销售属性,此处只使用属性的名称、个数
 		getItemSaleAttr(item,model);
+		
+		//(3)查询品牌
+		Brand brand=brandService.selectByPrimaryKey(item.getBrand());
+		model.addAttribute("brand",brand);
 
-		// (3)读取sku信息 包括三个方面的内容 :sku信息、价格、图片
+		// (4)读取sku信息 包括三个方面的内容 :sku信息、价格、图片
 		SkuPriceBean sku = skuService.getSkuBySkuId(skuId);
 		model.addAttribute("sku", sku);
 
-		// (4)读取sku图片
+		// (5)读取sku图片
 		List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById(sku.getSku_id());
 		model.addAttribute("skuPicts", skuPicts);
 
-		// (5)产品介绍、规则包装、售后保障、用户评论。
+		// (6)产品介绍、规则包装、售后保障、用户评论。
 		getSkuSpec(skuId,model);
 
 		return RESPONSE_THYMELEAF + "product_detail";
@@ -155,17 +167,21 @@ public class ProductDetailController {
 
 		// (2)读取SPU所属类目的销售属性,此处只使用属性的名称、个数
 		getItemSaleAttr(item,model);
+		
+		//(3)查询品牌
+		Brand brand=brandService.selectByPrimaryKey(item.getBrand());
+		model.addAttribute("brand",brand);
 
-		// (3)读取sku信息 包括三个方面的内容 :sku信息、价格、图片
+		// (4)读取sku信息 包括三个方面的内容 :sku信息、价格、图片
 		List<SkuPriceBean> skuList = skuService.getSkuByIdAndAttr(item.getItemId(), skuAttribute);
 		model.addAttribute("sku", skuList.get(0)); // 由于返回的是list类型
 
-		// (4)读取主sku图片
+		// (5)读取主sku图片
 		SkuPriceBean tempSku = skuList.get(0);
 		List<SkuPicture> skuPicts = skuPictureService.getSkuPictureById(tempSku.getSku_id());
 		model.addAttribute("skuPicts", skuPicts);
 
-		// (5)产品介绍、规则包装、售后保障、用户评论。
+		// (6)产品介绍、规则包装、售后保障、用户评论。
 		getSkuSpec(tempSku.getSku_id(),model);
 
 		return RESPONSE_THYMELEAF + "product_detail";

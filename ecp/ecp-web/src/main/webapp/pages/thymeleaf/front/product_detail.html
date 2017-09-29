@@ -28,6 +28,13 @@ li.selected {
 	border: 1px solid red;
 }
 
+li.brand{
+	float: left;
+	margin-right: 5px;
+	margin-left:5px;
+	list-style-type: none;		
+}
+
 a:hover { text-decoration:none; } 
 
 </style>
@@ -137,11 +144,20 @@ a:hover { text-decoration:none; }
 									<table class="table"> 
 										<thead>
 											<tr>
-												<th></th> <!--  商品销售属性 -->
+												<th style="width:150px"></th> <!--  商品销售属性 -->
 												<th></th>  <!-- 商品销售属性值 -->
 											</tr>
 										</thead>
 										<tbody>
+											<tr>
+												<td>品牌</td>
+												<td>
+													<ul>
+														<li class="brand"><img th:src="${brand.brandLogoUrl}"><span th:text="${brand.brandName}" class="brand"></span></li>
+																												
+													</ul>
+												</td>
+											</tr>
 											<tr>
 												<td>型号</td>
 												<td>
@@ -176,8 +192,8 @@ a:hover { text-decoration:none; }
     									onafterpaste="paste_check(this)" /> 
 									<a
 										href="javascript:void(0);" onclick="return false;"
-										class="submit-btn btn btn-primary" data-bind="1" id="cartAdd">
-										加入购物车<b></b>
+										class="submit-btn btn btn-primary" data-bind="1" id="cartAdd" >
+										加入购物车<b></b>  <!-- style="background-color:#e4393c;border-color: #e4393c;" -->
 									</a> 
 									<!-- <a href="javascript:void(0);" onclick="return false;"
 										class="submit-btn btn btn-primary" data-bind="1"> 一键购<b></b></a> -->
@@ -208,7 +224,7 @@ a:hover { text-decoration:none; }
 			                       <table class="table">
 											<thead>
 												<tr>
-													<th>组名称</th>
+													<th>组名</th>
 													<th>指标</th>
 												</tr>
 											</thead>
