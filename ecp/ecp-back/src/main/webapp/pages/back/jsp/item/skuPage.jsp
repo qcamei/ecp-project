@@ -559,6 +559,7 @@ $("#short-spec-submit-btn").click(function(){
 	if(g_sku_id<=0){//添加sku
 		$("#sku-short-spec-"+g_sku_index).val(skuShortSpec);
 	}else{//编辑sku
+		$("#sku-short-spec-"+g_sku_index).val(skuShortSpec);
 		ajaxPostSaveSkuShortSpec(g_sku_id, skuShortSpec);
 	}
 	
