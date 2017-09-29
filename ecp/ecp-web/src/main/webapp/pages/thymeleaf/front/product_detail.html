@@ -121,15 +121,15 @@ a:hover { text-decoration:none; }
 						<div class="col-md-7 column product_info">								
 							<div class="pro_title" >
                     			<h5 id="itemName" th:text="${item.itemName}">思杰桌面虚拟化 XenDesktop VDI版本(用户/设备数) </h5>
-                    			<p class="subtitle" >【商品特性】<span th:text="${skuIntroduce.sku_short_spec}">【i5 独立显卡】全高清窄边框 8G内存 256G固态硬盘 支持SSD硬盘扩容 薄至14.8mm 轻至1.28kg</span></p>
+                    			<p class="subtitle" >【基础参数】<span th:text="${skuIntroduce.sku_short_spec}">【i5 独立显卡】全高清窄边框 8G内存 256G固态硬盘 支持SSD硬盘扩容 薄至14.8mm 轻至1.28kg</span></p>
                 			</div>		
 							<!-- 价格及关注-->
 							<div class="pro_price">
                     			<div class="price_detail">
-                        			<div class="market">市场价：
+                        			<div class="market">预算价格：
                             			<del th:text="'￥'+${sku.market_price}">￥3099</del>
                         			</div>
-                        		<div class="platform">平台价：<span th:text="'￥'+${sku.sell_price}">￥2099</span></div>
+                        		<div class="platform">商城价格：<span th:text="'￥'+${sku.sell_price}">￥2099</span></div>
                     			</div>
                     			<div class="favorite" id="myFavourite" th:attr="data-id=${item.itemId}">
                     				
