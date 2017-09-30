@@ -460,7 +460,7 @@ function getSkuSpec(){
 <div id="edit-default-sku-short-spec-div" class="hide">
 	<input type="hidden" id="default-sku-short-spec" value="" />
 </div>
-<button type="button" class="btn btn-primary" id="edit-default-sku-short-spec-btn" onclick="javascript:openDefaultShortSpecModel(0);">编辑默认sku简单规格</button>
+<button type="button" class="btn btn-primary" id="edit-default-sku-short-spec-btn" onclick="javascript:openDefaultShortSpecModel(0);">编辑默认sku商品参数</button>
 <!-- 简单sku规格对话框 -->
 <div class="modal fade" id="sku-short-spec-modal" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true">
@@ -559,6 +559,7 @@ $("#short-spec-submit-btn").click(function(){
 	if(g_sku_id<=0){//添加sku
 		$("#sku-short-spec-"+g_sku_index).val(skuShortSpec);
 	}else{//编辑sku
+		$("#sku-short-spec-"+g_sku_index).val(skuShortSpec);
 		ajaxPostSaveSkuShortSpec(g_sku_id, skuShortSpec);
 	}
 	

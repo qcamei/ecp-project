@@ -471,6 +471,7 @@ function ajaxRequestGetItemInfo(id){
 					$("#sell-price-"+i).val(sku.sellPrice);//销售价
 					$("#volume-"+i).val(sku.volume);//体积
 					$("#weight-"+i).val(sku.weight);//重量
+					$("#sku-short-spec-"+i).val(sku.skuShortSpec);//简单sku规格
 					$("#short-spec-"+i).attr("onclick", "javascript:openShortSpecModel("+sku.skuId+", "+i+");");//设置简单sku规格点击事件
 					$("#spec-"+i).attr("onclick", "javascript:openSpecModel("+sku.skuId+", "+i+");");//设置标准sku规格点击事件
 				}
