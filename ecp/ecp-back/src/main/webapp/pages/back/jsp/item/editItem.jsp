@@ -95,17 +95,17 @@
 											</div>
 										</div> -->
 												<div class="form-group">
-													<label class="col-sm-2 control-label">商城指导价格<b style="color:red;">&nbsp;*</b></label>
+													<label class="col-sm-2 control-label">预算价格<b style="color:red;">&nbsp;*</b></label>
 													<div class="col-sm-10">
 														<input type="text" id="guide-price" name="guidePrice"
-															class="form-control" placeholder="商城指导价格">
+															class="form-control" placeholder="预算价格">
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-sm-2 control-label">市场价格<b style="color:red;">&nbsp;*</b></label>
+													<label class="col-sm-2 control-label">商城价格<b style="color:red;">&nbsp;*</b></label>
 													<div class="col-sm-10">
 														<input type="text" id="market-price" name="marketPrice"
-															class="form-control" placeholder="市场价格">
+															class="form-control" placeholder="商城价格">
 													</div>
 												</div>
 												<div class="form-group">
