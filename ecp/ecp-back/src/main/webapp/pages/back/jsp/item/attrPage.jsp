@@ -268,9 +268,9 @@ function createHeadHtml(arr){
 		+arr[i].attrName
 		+"</th>";
 	}
-	htmlHead += "<th id=''>成本价</th>";
-	htmlHead += "<th id=''>指导价</th>";
-	htmlHead += "<th id=''>销售价</th>";
+	htmlHead += "<th id=''>成本价格</th>";
+	htmlHead += "<th id=''>预算价格</th>";
+	htmlHead += "<th id=''>商城价格</th>";
 	htmlHead += "<th id=''>体积</th>";
 	htmlHead += "<th id=''>重量</th>";
 	htmlHead += "<th id=''>简单规格</th>";
@@ -279,8 +279,8 @@ function createHeadHtml(arr){
 	return htmlHead;
 }
 function createBodyHtml(arr){
-	var guidePrice = $("#guide-price").val();//商城指导价格
-	var marketPrice = $("#market-price").val();//市场价格
+	var guidePrice = $("#guide-price").val();//商城指导价格，预算价格
+	var marketPrice = $("#market-price").val();//市场价格，商城价格
 	var marketPrice2 = $("#market-price2").val();//成本价格
 	var volume = $("#volume").val();//商品体积
 	var weight = $("#weight").val();//商品毛重
@@ -301,10 +301,10 @@ function createBodyHtml(arr){
 		htmlBody += "<input type='text' id='cost-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+marketPrice2+"' placeholder='成本价' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='market-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+guidePrice+"' placeholder='指导价' />"
+		htmlBody += "<input type='text' id='market-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+guidePrice+"' placeholder='预算价格' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
-		htmlBody += "<input type='text' id='sell-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+marketPrice+"' placeholder='销售价' />"
+		htmlBody += "<input type='text' id='sell-price-"+i+"' "+checkInput+" onkeyup='javascript:checkInput(this, event);' maxlength='10' value='"+marketPrice+"' placeholder='商城价格' />"
 		htmlBody += "</td>";
 		htmlBody += "<td id=''>"
 		htmlBody += "<input type='hidden' id='sku-id-"+i+"' value='' />"
@@ -390,13 +390,13 @@ function getSkuInfo(){
 		}
 		var marketPrice = $("#market-price-"+index).val();//指导价
 		if(marketPrice==null || marketPrice==""){
-			util.message("第 "+index+" 行指导价不能为空!");
+			util.message("第 "+index+" 行预算价格不能为空!");
 			isReturn = true;
 			return false;
 		}
 		var sellPrice = $("#sell-price-"+index).val();//销售价
 		if(sellPrice==null || sellPrice==""){
-			util.message("第 "+index+" 行销售价不能为空!");
+			util.message("第 "+index+" 行商城价格不能为空!");
 			isReturn = true;
 			return false;
 		}
