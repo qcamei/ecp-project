@@ -209,7 +209,7 @@ a:hover { text-decoration:none; }
 			            <ul class="nav nav-pills" role="tablist">
 			                <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">商品介绍</a></li>
 			                <li role="presentation"><a href="#specification" aria-controls="specification" role="tab" data-toggle="tab">规格包装</a></li>
-			                <li role="presentation"><a href="#ensure" aria-controls="ensure" role="tab" data-toggle="tab">售后保障</a></li>
+			                <li role="presentation"><a href="#ensure" aria-controls="ensure" role="tab" data-toggle="tab">售后服务</a></li>
 			                <li role=""><a href="#comment" aria-controls="comment" role="" data-toggle="">&nbsp</a></li>
 			            </ul>
             			<!-- Tab panes -->
@@ -222,12 +222,12 @@ a:hover { text-decoration:none; }
 			                <div role="tabpanel" class="tab-pane" id="specification">
 			                    <div class="desc_common">
 			                       <table class="table">
-											<thead>
+											<!-- <thead>
 												<tr>
 													<th>组名</th>
 													<th>指标</th>
 												</tr>
-											</thead>
+											</thead> -->
 											<tbody>
 												<tr th:each="skuSpec:${skuSpecList}">
 													<td th:text="${skuSpec.spec_group}">组名称</td>
