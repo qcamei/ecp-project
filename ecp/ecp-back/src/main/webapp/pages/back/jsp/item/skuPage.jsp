@@ -331,17 +331,19 @@ function createSpecGroup(groupNum, skuSpec){
 			}
 		}
 	}
+	var random = Math.floor(Math.random()*89999)+1000;
+	var spec_group_id = guid()+"-"+random;
 	var html = ''
-		+ '<div class="col-sm-4 spec-group-div" id="spec-group-'+groupNum+'">'
+		+ '<div class="col-sm-4 spec-group-div" id="'+spec_group_id+'">'
 		+ '<div class="panel panel-default">'
 		+ '<div class="panel-heading">'
 		+ '<h3 class="panel-title">'
-		+ '<input type="text" id="input-spec-group-'+groupNum+'" value="'+spec_group+'" placeholder="规格分组名称" >'
-		+ '&nbsp;<button type="button" title="增加规格" onclick="javascript:addSpec('+groupNum+');">+</button>'
-		+ '&nbsp;<button type="button" title="删除规格分组" onclick="javascript:removeSpecGroup('+groupNum+');">x</button>'
+		+ '<input type="text" id="input-spec-group-'+spec_group_id+'" value="'+spec_group+'" placeholder="规格分组名称" >'
+		+ '&nbsp;<button type="button" title="增加规格" onclick="javascript:addSpec(&quot;'+spec_group_id+'&quot;);">+</button>'
+		+ '&nbsp;<button type="button" title="删除规格分组" onclick="javascript:removeSpecGroup(&quot;'+spec_group_id+'&quot;);">x</button>'
 		+ '</h3>'
 		+ '</div>'
-		+ '<div class="panel-body spec-div" id="group-value-'+groupNum+'">'
+		+ '<div class="panel-body spec-div" id="group-value-'+spec_group_id+'">'
 		+ specHtml
 		+ '</div>'
 		+ '</div>'
@@ -351,16 +353,16 @@ function createSpecGroup(groupNum, skuSpec){
 /**
  * 移除sku规格分组html字符串
  */
-function removeSpecGroup(groupNum){
-	$("#spec-group-"+groupNum).remove();
+function removeSpecGroup(groupId){
+	$("#"+groupId).remove();
 }
 /**
  * 添加sku规格html字符串
  */
-function addSpec(groupNum){
+function addSpec(groupId){
 	var html = createSpecHtml(null);
 	console.log(html);
-	$("#group-value-"+groupNum).append(html);
+	$("#group-value-"+groupId).append(html);
 }
 /**
  * 创建sku规格html字符串
@@ -410,13 +412,18 @@ function getSkuSpec(){
 	var isReturn = true;
 	var spec_group_Arr = new Array();
 	$("#spec-item .spec-group-div").each(function(index){
-		var spec_group = $("#input-spec-group-"+index).val();
+		//var spec_group = $("#input-spec-group-"+index).val();
+		var spec_group_id = $(this).attr("id");
+		console.log("spec_group_id:"+spec_group_id);
+		var spec_group = $("#input-spec-group-"+spec_group_id).val();
+		console.log("spec_group id:"+spec_group);
 		console.log("第 "+index+" 个规格分组的分组名称:"+spec_group);
 		if(spec_group==null || spec_group==""){
 			util.message("第 "+index+" 个规格分组的分组名称不能为空!");
 			isReturn = false;
 			return false;
 		}
+		var specIsReturn = false;
 		var spec_arr = new Array();
 		$(this).find(".spec-div").find(".input-spec-item").each(function(currIndex){
 			var randomId = $(this).attr("id");
@@ -426,6 +433,7 @@ function getSkuSpec(){
 			if(spec_key==null || spec_key==""){
 				util.message("第 "+index+" 个规格分组的第 "+currIndex+" 个规格属性不能为空!");
 				isReturn = false;
+				specIsReturn = true;
 				return false;
 			}
 			var spec_val = $("#input-spec-val-"+randomId).val();
@@ -433,6 +441,7 @@ function getSkuSpec(){
 			if(spec_val==null || spec_val==""){
 				util.message("第 "+index+" 个规格分组的第 "+currIndex+" 个规格属性值不能为空!");
 				isReturn = false;
+				specIsReturn = true;
 				return false;
 			}
 			var spec_obj = new Object();
@@ -440,10 +449,14 @@ function getSkuSpec(){
 			spec_obj.spec_val = spec_val;
 			spec_arr.push(spec_obj);
 		});
+		if(specIsReturn){
+			return false;
+		}
 		var spec_group_obj = new Object();
 		spec_group_obj.spec_group = spec_group;
 		spec_group_obj.spec = spec_arr;
 		spec_group_Arr.push(spec_group_obj);
+		console.log("spec_group_Arr:"+JSON.stringify(spec_group_Arr));
 	});
 	if(!isReturn){
 		return false
