@@ -384,7 +384,7 @@ function createSpecHtml(spec){
 		+ '<input type="text" id="input-spec-val-'+spec_item_id+'" value="'+spec_val+'" placeholder="规格属性值" size="15" >'
 		+ '</div>'
 		+ '<div class="col-sm-2">'
-		+ '<button type="button" title="删除规格" onclick="javascript:removeSpec('+spec_item_id+');">x</button>'
+		+ '<button type="button" title="删除规格" onclick="javascript:removeSpec(&quot;'+spec_item_id+'&quot;);">x</button>'
 		+ '</div>'
 		+ '<br><br>'
 		+ '</div>';
