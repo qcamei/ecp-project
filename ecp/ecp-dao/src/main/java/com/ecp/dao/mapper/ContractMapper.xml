@@ -59,9 +59,9 @@
 				<when test="searchTypeValue==5">
 					AND contact_phone LIKE concat(concat('%',#{condValue}),'%')
 				</when>
-			</choose>
+			</choose>			
 		</where>
-
+		ORDER BY c.create_date DESC
 
 	</select>
 
