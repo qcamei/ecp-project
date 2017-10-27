@@ -78,7 +78,8 @@ function getSaleAttr(){
 					<div class="form-group">
 						<div class="col-sm-12">
 							<button type="button" class="btn btn-primary" id="add-spec-group-btn">增加规格</button>
-							<!-- <button type="button" class="btn btn-primary" id="add-spec-btn">添加规格</button> -->
+							<button type="button" class="btn btn-primary" id="get-spec-btn">获取规格</button>
+							<button type="button" class="btn btn-primary" id="set-spec-btn">设置规格</button>
 						</div>
 					</div>
 					<div class="form-group" id="spec-item">
@@ -95,6 +96,128 @@ function getSaleAttr(){
 	</div>
 </div>
 <!-- 标准sku规格部分 end -->
+<!-- 获取sku规格对话框 -->
+<div class="modal fade" id="get-sku-spec-modal" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:50%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title" id="">获取SKU规格</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="get-sku-spec-form">
+					<div class="form-group">				
+						<label class="col-sm-2 control-label">规格内容<b style="color:red;">&nbsp;*</b></label>
+						<div class="col-sm-10">
+							<input type="text" id="get-sku-spec-input" name=""
+								class="form-control" placeholder="SKU规格字符串">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="">关闭</button>
+				<button type="button" class="btn btn-primary" id="get-spec-content-btn">复制到剪贴板</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 获取sku规格部分 end -->
+<!-- 设置sku规格对话框 -->
+<div class="modal fade" id="set-sku-spec-modal" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:50%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title" id="">设置SKU规格</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="set-sku-spec-form">
+					<div class="form-group">				
+						<label class="col-sm-2 control-label">规格内容<b style="color:red;">&nbsp;*</b></label>
+						<div class="col-sm-10">
+							<input type="text" id="set-sku-spec-input" name=""
+								class="form-control" placeholder="输入SKU规格字符串">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="">关闭</button>
+				<button type="button" class="btn btn-primary" id="set-spec-content-btn">生成SKU规格</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 设置sku规格部分 end -->
+<script type="text/javascript">
+/**
+ * 点击sku规格对话框中的获取规格按钮时执行
+ * 		函数功能：打开获取sku规格对话框并把sku规格字符串设置到input中
+ */
+$("#get-spec-btn").click(function(){
+	var skuSpecJson = getSkuSpec();
+	if(skuSpecJson!=null && skuSpecJson!=""){
+		$("#get-sku-spec-input").val(skuSpecJson);
+		$('#get-sku-spec-modal').modal('show');
+	}
+});
+/**
+ * 点击获取sku规格对话框中的复制到剪贴板按钮时执行
+ * 		函数功能：把input中的sku规格字符串内容copy到剪贴板
+ */
+$("#get-spec-content-btn").click(function(){
+	$("#get-sku-spec-input").focus();
+	$("#get-sku-spec-input").select();
+	var bool = document.execCommand("copy"); // 执行浏览器复制命令
+	if(bool){
+		$('#get-sku-spec-modal').modal('hide');
+		util.message("已复制到剪贴板！");
+	}else{
+		util.message("复制到剪贴板失败，请手动复制！");
+	}
+});
+/**
+ * 点击sku规格对话框中的设置规格按钮时执行
+ * 		函数功能：打开设置sku规格对话框
+ */
+$("#set-spec-btn").click(function(){
+	$("#set-sku-spec-input").val("");
+		$('#set-sku-spec-modal').modal('show');
+});
+/**
+ * 点击设置sku规格对话框中的设置sku规格按钮时执行
+ * 		函数功能：根据用户输入的sku规格内容生成sku规格
+ */
+$("#set-spec-content-btn").click(function(){
+	var skuSpecJson = $("#set-sku-spec-input").val();
+	if(skuSpecJson!=null && skuSpecJson!=""){
+		try{
+			$("#spec-item").empty();//清空sku规格对话框中的sku规格内容
+			var skuSpecObj = $.parseJSON(skuSpecJson);
+			var html = "";
+			$.each(skuSpecObj, function(index){
+				html += createSpecGroup(g_group_num, this);
+				g_group_num++;//记录sku规格个数，添加一个sku规格分组后把个数+1
+			});
+			$("#spec-item").append(html);
+			$('#set-sku-spec-modal').modal('hide');
+			return false;
+		}catch(e){
+			 console.log(e.name + ": " + e.message);
+			 util.message(e.name + ": " + e.message+"，SKU规格内容格式不正确！");
+		}
+		
+	}else{
+		util.message("SKU规格内容不能为空！");
+	}
+	
+});
+</script>
 <!-- 标准sku规格js部分 -->
 <script type="text/javascript">
 var g_is_save_sku = false;//是否重新保存sku(skuPage.jsp)
