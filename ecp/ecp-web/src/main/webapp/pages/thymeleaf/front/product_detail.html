@@ -230,7 +230,7 @@ a:hover { text-decoration:none; }
 											</thead> -->
 											<tbody>
 												<tr th:each="skuSpec:${skuSpecList}">
-													<td th:text="${skuSpec.spec_group}">组名称</td>
+													<td th:text="${skuSpec.spec_group}" style="width:20%;">组名称</td>
 													<td>
 														<ul  class="p-parameter-list">
 															<li th:each="spec:${skuSpec.spec}" th:text="${spec.spec_key}+':'+${spec.spec_val}"></li>
