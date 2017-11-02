@@ -33,7 +33,9 @@ public class UserRoleServiceImpl extends AbstractBaseService<UserRole, Long> imp
 	public int deleteByUserId(Long userId) {
 		Example example = new Example(UserRole.class);
 		example.createCriteria().andEqualTo("userId", userId);
-		return userRoleMapper.deleteByExample(example);
+		UserRole userRole = new UserRole();
+		userRole.setDeleted(2);//deleted 是否删除（1-未删除，2-删除，默认1）
+		return userRoleMapper.updateByExampleSelective(userRole, example);
 	}
 
 	/**
@@ -43,7 +45,7 @@ public class UserRoleServiceImpl extends AbstractBaseService<UserRole, Long> imp
 	@Override
 	public List<UserRole> getByUserId(Long userId) {
 		Example example = new Example(UserRole.class);
-		example.createCriteria().andEqualTo("userId", userId);
+		example.createCriteria().andEqualTo("userId", userId).andEqualTo("deleted", 1);//deleted 是否删除（1-未删除，2-删除，默认1）
 		return userRoleMapper.selectByExample(example);
 	}
 

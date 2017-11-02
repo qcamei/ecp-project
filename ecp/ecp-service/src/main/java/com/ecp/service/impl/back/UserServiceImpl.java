@@ -87,7 +87,7 @@ public class UserServiceImpl extends AbstractBaseService<User, Long> implements 
 		try {
 			User user = new User();
 			user.setId(id);
-			user.setDeleted(1);//0：默认（未删除），1：已删除
+			user.setDeleted(2);//是否删除（1-未删除，2-删除，默认1）
 			int rows = userMapper.updateByPrimaryKeySelective(user);
 			if(rows>0){
 				userRoleService.deleteByUserId(id);

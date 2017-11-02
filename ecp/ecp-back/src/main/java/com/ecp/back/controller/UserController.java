@@ -268,10 +268,14 @@ public class UserController {
 	 */
 	@RequestMapping("/checkUsernameValid")
 	@ResponseBody
-	public Map<String, Boolean> checkUsernameValid(HttpServletRequest request, HttpServletResponse response, String username) {
+	public Map<String, Boolean> checkUsernameValid(HttpServletRequest request, HttpServletResponse response, Long userid, String username) {
 		
 		Map<String, Boolean> map = new HashMap<String, Boolean>();
 		try {
+			if(userid!=null && userid>0){
+				map.put("valid", true);
+				return map;
+			}
 			List<User> userList = userService.getByUsername(username);
 			if(userList.isEmpty()){
 				map.put("valid", true);
