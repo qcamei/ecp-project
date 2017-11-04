@@ -24,7 +24,7 @@ import com.ecp.service.impl.AbstractBaseService;
 import tk.mybatis.mapper.entity.Example;
 
 @Service("categoryServiceBean")
-public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> implements ICategoryService {
+public class CategoryServiceImpl extends AbstractBaseService<Category, Long> implements ICategoryService {
 
 	private CategoryMapper categoryMapper;
 
@@ -258,6 +258,63 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Integer> 
 		example.createCriteria().andEqualTo("deleted", DeletedType.NO);
 		example.setOrderByClause(sort);
 		return categoryMapper.selectByExample(example);
+	}
+
+	/**
+	 * @see com.ecp.service.back.ICategoryService#updateById(com.ecp.entity.Category)
+	 * 根据类目id修改类目信息及类目品牌关联表信息
+	 */
+	@Override
+	@Transactional
+	public int updateById(Category category) {
+		try {
+			Long cid = category.getCid();
+			Long pid = category.getParentCid();
+			Category temp = null;
+			boolean isUpdatePid = false;
+			if(cid!=null && cid>0){
+				temp = categoryMapper.selectByPrimaryKey(cid);
+				Category ptemp = categoryMapper.selectByPrimaryKey(temp.getParentCid());
+				Category ptemp1 = categoryMapper.selectByPrimaryKey(pid);
+				if(!temp.getParentCid().equals(pid)){
+					isUpdatePid = true;
+					category.setLev(ptemp1.getLev()+1);
+				}
+			}
+			
+			if(category.getLev()!=null && category.getLev()==3){
+				category.setHasLeaf(1);
+			}else{
+				category.setHasLeaf(2);
+			}
+			int rows = categoryMapper.updateByPrimaryKeySelective(category);
+			if(rows>0){
+				if(isUpdatePid){//修改类目节点（修改父id）
+					if(temp.getLev()==3){//原来级别为3
+						if(temp.getLev()==category.getLev()){//修改前级别和修改后级别相等
+							Example example = new Example(CategoryBrand.class);
+							example.createCriteria().andEqualTo("thirdLevCid", category.getCid()).andEqualTo("deleted", 1);
+							CategoryBrand cb = new CategoryBrand();
+							cb.setSecondLevCid(category.getParentCid());
+							int row = iCategoryBrandService.updateByExampleSelective(cb, example);
+						}else{
+							Example example = new Example(CategoryBrand.class);
+							example.createCriteria().andEqualTo("thirdLevCid", category.getCid()).andEqualTo("deleted", 1);
+							CategoryBrand cb = new CategoryBrand();
+							cb.setDeleted(DeletedType.YES);
+							int row = iCategoryBrandService.updateByExampleSelective(cb, example);
+						}
+						
+					}
+				}
+			}
+			return rows;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("修改类目信息和类目品牌关联信息异常，事务回滚");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		return 0;
 	}
 
 }

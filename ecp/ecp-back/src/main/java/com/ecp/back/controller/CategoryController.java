@@ -168,7 +168,7 @@ public class CategoryController {
 	 */
 	@RequestMapping("/selectUpdateById")
 	@ResponseBody
-	public Map<String, Object> selectUpdateById(HttpServletRequest request, HttpServletResponse response, Integer id) {
+	public Map<String, Object> selectUpdateById(HttpServletRequest request, HttpServletResponse response, Long id) {
 		try {
 			Category category = iCategoryService.selectByPrimaryKey(id);
 			Map<String, Object> respM = RequestResultUtil.getResultSelectSuccess();
@@ -236,12 +236,24 @@ public class CategoryController {
 	public Map<String, Object> updateById(HttpServletRequest request, HttpServletResponse response, Category category) {
 
 		try {
+			int rows = iCategoryService.updateById(category);
+			/*Long cid = category.getCid();
+			Long pid = category.getParentCid();
+			if(cid!=null && cid>0){
+				Category temp = iCategoryService.selectByPrimaryKey(cid);
+				Category ptemp = iCategoryService.selectByPrimaryKey(temp.getParentCid());
+				Category ptemp1 = iCategoryService.selectByPrimaryKey(pid);
+				if(!ptemp.getParentCid().equals(category.getParentCid())){
+					category.setLev(ptemp1.getLev()+1);
+				}
+			}
+			
 			if(category.getLev()!=null && category.getLev()==3){
 				category.setHasLeaf(1);
 			}else{
 				category.setHasLeaf(2);
 			}
-			int rows = iCategoryService.updateByPrimaryKeySelective(category);
+			int rows = iCategoryService.updateByPrimaryKeySelective(category);*/
 			if (rows > 0) {
 				return RequestResultUtil.getResultUpdateSuccess();
 			}

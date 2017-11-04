@@ -8,7 +8,7 @@ import com.ecp.bean.CategoryTreeNode;
 import com.ecp.entity.Category;
 import com.ecp.service.IBaseService;
 
-public interface ICategoryService extends IBaseService<Category, Integer> {
+public interface ICategoryService extends IBaseService<Category, Long> {
 	
 	/**
 	 * 根据主键删除（如果删除节点中有子节点一起删除）
@@ -45,5 +45,12 @@ public interface ICategoryService extends IBaseService<Category, Integer> {
 	 * @return
 	 */
 	public List<Category> getAll(String sort);
+	
+	/**
+	 * 根据类目id修改类目信息及类目品牌关联表信息
+	 * @param category
+	 * @return
+	 */
+	public int updateById(Category category);
 	
 }
