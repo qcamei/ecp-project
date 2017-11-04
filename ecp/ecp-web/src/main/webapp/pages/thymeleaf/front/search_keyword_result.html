@@ -99,7 +99,7 @@ a:hover { text-decoration:none; }
 								</ul>
 							</td>
 						</tr>
-						<tr class="categoryrow" th:each="cateCond : ${filterList}">
+						<tr class="categoryrow" th:each="cateCond : ${filterList}" th:if="${not #lists.isEmpty(cateCond.secondCategory)}">
 							<td th:text="${cateCond.secondCategory.cName}">条件名称</td>
 							<td><ul>
 									<li th:each="thirdCate : ${cateCond.thirdCategoryList}"
