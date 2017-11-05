@@ -160,10 +160,10 @@ function bootstrapValidateFun(){
 	                notEmpty: {
 	                    message: "商品名称不能为空"
 	                },
-	                regexp: {
+	                /*regexp: {
 		                regexp: "^[\u4e00-\u9fa5A-Za-z0-9_\\s+\-\.()（）]+$",
 		                message: "请勿输入特殊符号"
-	                },
+	                },*/
 	                stringLength: {
                         max: 100,
                         message: '长度不能超过100个字符'
