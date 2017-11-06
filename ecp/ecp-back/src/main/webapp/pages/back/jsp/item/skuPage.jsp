@@ -596,7 +596,7 @@ function getSkuSpec(){
 <div id="edit-default-sku-short-spec-div" class="hide">
 	<input type="hidden" id="default-sku-short-spec" value="" />
 </div>
-<button type="button" class="btn btn-primary" id="edit-default-sku-short-spec-btn" onclick="javascript:openDefaultShortSpecModel(0);">编辑默认sku商品参数</button>
+<button type="button" class="btn btn-primary" id="edit-default-sku-short-spec-btn" onclick="javascript:openDefaultShortSpecModel(0);">编辑默认参数</button>
 <!-- 简单sku规格对话框 -->
 <div class="modal fade" id="sku-short-spec-modal" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true">
@@ -605,7 +605,7 @@ function getSkuSpec(){
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">×</button>
-				<h4 class="modal-title" id="">简单SKU规格</h4>
+				<h4 class="modal-title" id="">默认参数</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row clearfix">
@@ -615,7 +615,7 @@ function getSkuSpec(){
 								<div class="col-sm-12">
 									<!-- <label class="col-sm-2 control-label">简单SKU规格<b style="color:red;">&nbsp;*</b></label> -->
 									<div class="col-sm-12">
-										<textarea class="form-control" id="sku-short-spec-area" rows="3" cols="" placeholder="简单SKU规格内容（必填）"></textarea>
+										<textarea class="form-control" id="sku-short-spec-area" rows="3" cols="" placeholder="默认参数（必填）"></textarea>
 									</div>
 								</div>
 							</div>
@@ -626,7 +626,7 @@ function getSkuSpec(){
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal" id="">关闭</button>
 				<button type="button" class="btn btn-primary hide" id="short-spec-submit-btn">保存</button>
-				<button type="button" class="btn btn-primary" id="default-short-spec-submit-btn" onclick="javascript:saveDefaultShortSpec(0);">保存默认简单sku规格</button>
+				<button type="button" class="btn btn-primary" id="default-short-spec-submit-btn" onclick="javascript:saveDefaultShortSpec(0);">保存默认参数</button>
 			</div>
 		</div>
 	</div>
