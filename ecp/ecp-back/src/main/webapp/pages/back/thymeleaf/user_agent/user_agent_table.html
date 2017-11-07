@@ -167,7 +167,14 @@ tr:hover{
 							th:attr="data-bind=${agent.extendId},data-company-name=${agent.companyName},data-contact-phone=${agent.contactPhone},data-artificialPersonName=${agent.artificialPersonName},data-user-id=${agent.userId}"
 							class="dispatch-account" title="分配帐号"> <i
 								class="icon-user icon-large"></i>
-						</a></td>
+						</a>
+						<a type="button"
+							th:attr="data-bind=${agent.extendId},data-company-name=${agent.companyName},data-contact-phone=${agent.contactPhone},data-artificialPersonName=${agent.artificialPersonName},data-user-id=${agent.userId},data-account-state=${agent.accountState}"
+							class="reset-password" title="重置密码"> <i
+								class="icon-retweet icon-large"></i>
+						</a>
+						
+						</td>
 
 					</tr>
 

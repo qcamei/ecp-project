@@ -3,6 +3,7 @@ package com.ecp.back.controller;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,6 +43,8 @@ import com.github.pagehelper.PageInfo;
 public class UserAgentController {
 	final String RESPONSE_THYMELEAF_BACK = "back/thymeleaf/user_agent/";
 	final String RESPONSE_JSP = "jsps/front/";
+	
+	final String DEFAULT_PASSWORD="123456";
 
 	private final int PAGE_SIZE = 8;
 
@@ -166,6 +169,33 @@ public class UserAgentController {
 		return RequestResultUtil.getResultUpdateSuccess();
 		
 	}
+	
+	
+	/**
+	 * @Description 重置口令 (ajax请求)	 
+	 * @param userId 用户ID 代理商所分配的用户ID
+	 * @return 返回相应的MAP.(成功/警告)
+	 */
+	@RequestMapping(value="/reset_password")
+	@ResponseBody
+	public Object user_agent_reset_password(long userId){
+		
+		//(1)读取原来的登录用户名称
+		User user=userService.selectByPrimaryKey(userId);
+		String loginName=user.getUsername();
+		//(2)计算默认口令的加密结果
+		String password=genMD5Password(loginName,DEFAULT_PASSWORD);
+		user.setPassword(password);
+		//(3)采用默认口令进行更新
+		int row=userService.updateByPrimaryKeySelective(user);
+		if (row==1){			
+			return RequestResultUtil.getResultUpdateWarn("此用户口令已经重置.用户登录名称:"+loginName+";口令:123456");
+		}
+		else
+			return RequestResultUtil.getResultUpdateWarn();
+		
+	}
+	
 	
 	/**
 	 * @Description 查询是否有相同的登录帐号

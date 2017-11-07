@@ -89,6 +89,37 @@ function setAccountState(agentId, userId, accountState) {
 	});
 }
 
+//===================重置帐号口令====================
+/**
+ * 
+ * @param agentId  签约客户ID
+ * @param userId 签约客户分配的用户ID
+ * @returns 
+ */
+function resetPassword(userId) {
+	var url = BASE_CONTEXT_PATH + "/back/agent/reset_password"; // 需要提交的 url
+	$.ajax({
+		type : "post", // 提交方式 get/post
+		url : url, // 需要提交的 url
+		// dataType: "application/json",
+		data : {			
+			'userId' : userId			
+		},
+		success : function(res) { // data 保存提交后返回的数据，一般为 json 数据
+			console.log(res);
+			if (res != null && res != "") {
+				var obj = $.parseJSON(res);
+				if (obj.result_code == "success") {
+					util.message(obj.result_msg);					
+				} else {
+					util.message(obj.result_err_msg);
+				}
+			}
+		}
+
+	});
+}
+
 /**
  * 设置当前订单时间名称及值
  * @param selectedTxt  订单时间条件名称
@@ -306,7 +337,32 @@ $(function() {
 		hasSameLoginName();  //判定登录名称是否重复
 	});
 	
+	// ===================重置帐号密码====================
+	/* 设置帐号为有效 */
+	$(".reset-password").on("click", function(e) {
+		var agentId = $(this).attr("data-bind");
+		var userId = $(this).attr("data-user-id");
+		var accountState = $(this).attr("data-account-state");
+		if (userId == 0) {
+			util.message("尚未分配帐号！");
+		} else {
+			if (accountState == 2) {
+				util.message("此帐号己为无效,无需重置口令！");
+			} else {
+				//显示提示对话框(是否重置口令)
+				util.confirm("确认重置口令?",userId,"resetPassword","");
+				//resetPassword(agentId, userId);
+			}
+		}
 
+	});
+	
+	function doNothing(){
+		
+	}
+	
+	
+	
 	// ===================设置帐号状态（有效、无效）======================
 	/* 设置帐号为有效 */
 	$(".set-valid").on("click", function(e) {
