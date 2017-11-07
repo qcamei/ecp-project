@@ -81,6 +81,8 @@
 				</foreach>
 			</if>
 		</where>
+		
+		ORDER BY cid,brand,market_price
 	</select>
 
 	<!-- 通过品牌及类目属性查询 -->
@@ -103,6 +105,8 @@
 				</foreach>
 			</if>
 		</where>
+		
+		ORDER BY cid,brand,market_price
 	</select>
 
 	<!-- 通过关键字查询 查询字段：SPU关键字，SPU名称 -->
@@ -126,7 +130,7 @@
 				AND item_status=#{itemStatus} AND deleted=1
 			</if>
 		</where>
-
+		ORDER BY cid,brand,market_price
 	</select>
 
 	<!-- 通过关键字查询 查询字段：SPU关键字，SPU名称；品牌；类目 -->
@@ -163,6 +167,7 @@
 				AND item_status=#{itemStatus} AND deleted=1
 			</if>
 		</where>
+		ORDER BY cid,brand,market_price
 	</select>
 
 	<select id="getItemByBrandIds" resultMap="BaseResultMap">
@@ -176,6 +181,7 @@
 				AND item_status=#{itemStatus} AND deleted=1
 			</if>
 		</where>
+		ORDER BY cid,brand,market_price
 	</select>
 
 	<!-- 根据条件（map中的参数）查询商品 -->
