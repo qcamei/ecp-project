@@ -42,6 +42,7 @@
                             </label>
                             <!-- <a class="forgetPW pull-right" href="#">忘记密码</a> -->
                         </div>
+                        <input id="publicKey" th:value="${publicKey}" type="hidden" />
                         <button type="button" id="btn-login" class="btn btn-block btn-danger">登 &nbsp; &nbsp; &nbsp; &nbsp; 录</button>
                     </form>
                     <!-- <a class="register" href=""><span class="iconfont">&#xe6ab;</span>去注册 &gt;&gt;&gt;</a> -->
@@ -56,6 +57,8 @@
 	<script th:src="@{/static/bootstrap/3.3.5/js/bootstrap.min.js}"></script>  
 	<script th:src="@{/static/iconfont/iconfont.js}"></script>
 	<script th:src="@{/static/jquery/jquery.form.js}"></script>
+	<!-- jsencrypt JS前端加密 -->
+	<script th:src="@{/static/js/jsencrypt/jsencrypt.min.js}"></script>
 	<!-- <script th:src="@{/static/js/common/ajaxSetup.js}"></script> -->
 	<script th:src="@{/static/js/common/util.js}"></script>	
 	

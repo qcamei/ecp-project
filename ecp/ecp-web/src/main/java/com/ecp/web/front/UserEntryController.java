@@ -1,8 +1,18 @@
 package com.ecp.web.front;
 
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.List;
+
+import javax.crypto.Cipher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ecp.common.RsaUtil;
 import com.ecp.common.SessionConstants;
 import com.ecp.common.util.RequestResultUtil;
 import com.ecp.entity.User;
@@ -61,16 +72,47 @@ public class UserEntryController {
 	 * @param loginName
 	 * @param password
 	 * @return
+	
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Object login(HttpServletRequest request, String loginName, String password) {
-		User user = verifyUser(loginName, password);
+	public Object login(HttpServletRequest request, String loginName, String password)  {
+		
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+		//自session读取公钥与私钥
+		HttpSession session=request.getSession();
+		
+        String strpk = ((List<String>)session.getAttribute(SessionConstants.KEY_LIST)).get(RsaUtil.PUBLIC_KEY_INDEX);  //公钥        
+        String strprivk =((List<String>)session.getAttribute(SessionConstants.KEY_LIST)).get(RsaUtil.PRIVATE_KEY_INDEX) ; //私钥
+
+        X509EncodedKeySpec pubX509 = new X509EncodedKeySpec(Base64.decodeBase64(strpk.getBytes()));
+        PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.decodeBase64(strprivk.getBytes()));
+
+        KeyFactory keyf;
+        String decryptLoginName="";
+        String decryptPassword="";
+		try {
+			keyf = KeyFactory.getInstance("RSA", "BC");
+			PublicKey pubKey = keyf.generatePublic(pubX509);
+	        PrivateKey privKey = keyf.generatePrivate(priPKCS8);
+	        //对接收的数据使用私钥进行解密处理
+			decryptLoginName= RsaUtil.decryptData(loginName,privKey);
+			decryptPassword=RsaUtil.decryptData(password,privKey);
+			
+		} catch (Exception  e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		
+		User user = verifyUser(decryptLoginName, decryptPassword);
 		if (user!=null) { // 如果校难正确
 			
 			//将用户信息加入到session
-			HttpSession session = request.getSession();    		
+			session = request.getSession();    		
     		session.setAttribute(SessionConstants.USER, user);
+    		session.removeAttribute(SessionConstants.KEY_LIST);
     		
 			//return "redirect:/front/home/home"; // 导航到主页
     		return RequestResultUtil.getResultSelectSuccess();
@@ -80,13 +122,23 @@ public class UserEntryController {
 
 	}
 	
+	
+	
+	
 	/**
 	 * @Description 导航->登录页
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/gologin")
-	public String login(Model model) {
+	public String login(HttpServletRequest request,Model model) {
+		//(1)在此处生成私钥与公钥并置于session中
+		List<String> keyList= RsaUtil.createKeyPairs();
+		HttpSession session=request.getSession();
+		session.setAttribute(SessionConstants.KEY_LIST, keyList);
+		//(2)将公钥发送到前台页面
+		model.addAttribute("publicKey",keyList.get(RsaUtil.PUBLIC_KEY_INDEX));	
+		
 		return RESPONSE_THYMELEAF + "login";
 	}
 	
