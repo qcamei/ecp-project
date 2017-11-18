@@ -27,6 +27,17 @@ $(function() {
 			util.message('验证码还没填呢！');
 			$('#kaptcha').focus();
 		} else {
+			
+			var username = $('#username').val();
+			var password = $('#password').val();
+			
+			var publicKey = $('#public-key').val();  //获取PUBLIC_KEY
+			var encrypt = new JSEncrypt();
+		    encrypt.setPublicKey(publicKey);
+		    
+		    $('#encrypt-username').val(encrypt.encrypt(username));
+		    $('#encrypt-password').val(encrypt.encrypt(password));
+			
 			$('#login_form').submit();
 			/*// window.location.href="index.html";
 			var username = $('#username').val();

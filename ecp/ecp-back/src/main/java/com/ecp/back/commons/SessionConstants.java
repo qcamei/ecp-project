@@ -14,4 +14,7 @@ public class SessionConstants {
 	public static String SYSTEM_LOGO_IMG = "system_logo";
 	public static String SYSTEM_LOGO_IMG_PATH = "static/images/logo.jpg";
 	
+	/*RSA密钥列表 常量*/
+	public static String KEY_LIST="key_list";
+	
 }

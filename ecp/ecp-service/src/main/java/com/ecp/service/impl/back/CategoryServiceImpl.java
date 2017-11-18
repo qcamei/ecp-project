@@ -293,13 +293,13 @@ public class CategoryServiceImpl extends AbstractBaseService<Category, Long> imp
 					if(temp.getLev()==3){//原来级别为3
 						if(temp.getLev()==category.getLev()){//修改前级别和修改后级别相等
 							Example example = new Example(CategoryBrand.class);
-							example.createCriteria().andEqualTo("thirdLevCid", category.getCid()).andEqualTo("deleted", 1);
+							example.createCriteria().andEqualTo("thirdLevCid", temp.getCid()).andEqualTo("secondLevCid", temp.getParentCid()).andEqualTo("deleted", 1);
 							CategoryBrand cb = new CategoryBrand();
 							cb.setSecondLevCid(category.getParentCid());
 							int row = iCategoryBrandService.updateByExampleSelective(cb, example);
 						}else{
 							Example example = new Example(CategoryBrand.class);
-							example.createCriteria().andEqualTo("thirdLevCid", category.getCid()).andEqualTo("deleted", 1);
+							example.createCriteria().andEqualTo("thirdLevCid", temp.getCid()).andEqualTo("secondLevCid", temp.getParentCid()).andEqualTo("deleted", 1);
 							CategoryBrand cb = new CategoryBrand();
 							cb.setDeleted(DeletedType.YES);
 							int row = iCategoryBrandService.updateByExampleSelective(cb, example);

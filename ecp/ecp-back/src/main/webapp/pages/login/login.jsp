@@ -40,8 +40,11 @@
 				<form id="login_form" action="login" method="post">
 					<h4 class="no-margins">登录</h4>
 					<p class="m-t-md">登录到...</p>
-					<input type="text" class="form-control uname" id="username" name="username" placeholder="用户名" />
-					<input type="password" class="form-control pword m-b" id="password" name="password" placeholder="密码" /> 
+					<input type="text" class="form-control uname" id="username" name="" placeholder="用户名" />
+					<input type="password" class="form-control pword m-b" id="password" name="" placeholder="密码" />
+					<input type="hidden" id="public-key" value="${publicKey}" />
+					<input type="hidden" id="encrypt-username" name="username" placeholder="加密后的用户名" />
+					<input type="hidden" id="encrypt-password" name="password" placeholder="加密后的密码" />
 					<!-- <a href="">忘记密码了？</a> -->
 					<div style="position:relative;">
 						<input id="kaptcha" value="" name="kaptcha_code" type="text" class="form-control x164 in" placeholder="请输入验证码" /> 
@@ -56,6 +59,8 @@
 		</div>
 	</div>
 	<%@ include file="../common/headJs.jsp"%>
+	<!-- jsencrypt JS前端加密 -->
+	<script type="text/javascript" src="static/js/jsencrypt/jsencrypt.min.js"></script>
 	<script type="text/javascript" src="static/js/login.js"></script>
 	<script type="text/javascript">
 		/*

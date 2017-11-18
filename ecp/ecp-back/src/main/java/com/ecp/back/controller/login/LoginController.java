@@ -1,6 +1,7 @@
 package com.ecp.back.controller.login;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import com.ecp.back.commons.SessionConstants;
 import com.ecp.back.commons.StaticConstants;
 import com.ecp.back.commons.TipInfoConstants;
 import com.ecp.bean.UserBean;
+import com.ecp.common.util.RsaUtil;
 import com.ecp.entity.User;
 import com.ecp.service.back.IUserService;
 
@@ -41,6 +43,12 @@ public class LoginController {
 	 */
 	@RequestMapping("/goLogin")
 	public String backLogin(HttpServletRequest request, HttpServletResponse response, String error) {
+		//(1)在此处生成私钥与公钥并置于session中
+		List<String> keyList= RsaUtil.createKeyPairs();
+		HttpSession session=request.getSession();
+		session.setAttribute(SessionConstants.KEY_LIST, keyList);
+		//(2)将公钥发送到前台页面
+		request.setAttribute("publicKey",keyList.get(RsaUtil.PUBLIC_KEY_INDEX));	
 		request.setAttribute("error", error);
 		return StaticConstants.LOGIN;
 	}
@@ -109,6 +117,13 @@ public class LoginController {
 		}
 		
 		request.setAttribute("error_msg", error_msg);
+		
+		//(1)在此处生成私钥与公钥并置于session中
+		List<String> keyList= RsaUtil.createKeyPairs();
+		HttpSession session=request.getSession();
+		session.setAttribute(SessionConstants.KEY_LIST, keyList);
+		//(2)将公钥发送到前台页面
+		request.setAttribute("publicKey",keyList.get(RsaUtil.PUBLIC_KEY_INDEX));
 		
 		//此方法不处理登陆成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
 		//登陆失败还到login页面
