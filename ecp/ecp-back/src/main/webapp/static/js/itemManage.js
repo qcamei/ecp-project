@@ -363,7 +363,10 @@ function getAttrAndValueFun(id, cid){
 			$("#attr-page").load(url, params, function(){
 				console.log("加载属性页面完成");
 				//$('#tabs-edit-item a[href="#tab-7"]').tab('show');
-				ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
+				if(id!=null && id!=undefined){
+					console.log("ajax请求获取商品信息");
+					ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
+				}
 			});
 		}
 	});
@@ -952,12 +955,48 @@ function selectEditItemTab(){
  * 根据类目ID重新加载品牌、属性和属性值
  */
 function reloadAttrAndValuePage(cid){
+	getAttrAndValueFun(null, cid);
+	/*getBrandByCid(cid);//根据类目查询品牌
 	var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
 	var params = {"cid": cid};
 	$("#attr-page").load(url, params, function(){
 		console.log("加载属性页面完成");
-	});
+	});*/
 };
+
+/**
+ * 根据类目查询品牌
+ * @returns
+ */
+/*function getBrandByCid(cid){
+	var url = "back/brand/selectByCid";
+	var params = {"cid": cid};
+	$.post(url, params, function(ret){//查询品牌
+		var obj = $.parseJSON(ret);
+		if(obj.result_code=="success"){
+			var brandList = obj.brandList;
+			console.log(JSON.stringify(brandList));
+			if(brandList!=null){
+				$("#brand").empty();
+				var htmlStr = "<option value='0'>请选择</option>";
+				$.each(brandList,function(i,n){
+					htmlStr += "<option value='"+this.brand_id+"'>"+this.brand_name+"</option>";
+				});
+				$("#brand").append(htmlStr);
+			}else{
+				util.message("类目品牌为空！");
+			}
+			
+			var url = "back/category/selectBrandAndAttr";//查询品牌、属性和属性值
+			var params = {"cid": cid};
+			$("#attr-page").load(url, params, function(){
+				console.log("加载属性页面完成");
+				//$('#tabs-edit-item a[href="#tab-7"]').tab('show');
+				ajaxRequestGetItemInfo(id);//ajax请求获取商品信息
+			});
+		}
+	});
+}*/
 
 /**
  * 取消改为商品原类目ID

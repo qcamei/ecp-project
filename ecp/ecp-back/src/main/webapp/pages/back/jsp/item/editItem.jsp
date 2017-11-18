@@ -319,12 +319,12 @@
  * 绑定类目父节点的change事件
  */
 $("#item-cid").bind("change",function(){
-	var cid = $(this).val();
+	var curr_item_cid = $("#curr-item-cid").val();
     //获取自定义属性的值
     var lev = $(this).find("option:selected").attr("level");
     console.log("level:"+lev);
 	if(lev!=3){
-		$(this).val(cid);
+		$(this).val(curr_item_cid);
 		util.message("请选择三级类目！");
 	}else{
 		changeItemCategory();
