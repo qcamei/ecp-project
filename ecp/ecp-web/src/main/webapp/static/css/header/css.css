@@ -531,7 +531,7 @@ i {
 }
 
 .subitem {
-    width: 790px;
+    width: 735px;
     padding: 6px 0 0 10px;
     overflow: hidden;
     display: inline-block;
@@ -574,7 +574,7 @@ i {
 }
 
 .subitem dd {
-    width: 600px;
+    width: 545px;
     padding: 6px 0;
     float: left;
     border-bottom: 1px solid #666;
@@ -870,7 +870,7 @@ i {
   position: relative;
 }
 .homePage .mainBanner .carousel {
-  width: 785px;
+  width: 730px;
 }
 .homePage .mainBanner .carousel-img {
   text-align: right;
@@ -898,15 +898,20 @@ i {
 .homePage .mainBanner .newCompany {
   border: 1px solid #f6f6f6;
   height: 429px;
-  width: 190px;
+  width: 244px;
   position: absolute;
   top: -44px;
   right: 0;
 }
 .homePage .mainBanner .newCompany .companyLogo {
   background-image: url("../../images/company.jpg");
-  width: 100%;
+  width: 100%; 
   height: 130px;
+  background-repeat:no-repeat;
+  
+  filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";  
+	-moz-background-size:100% 130px;  
+    background-size:100% 130px;  
 }
 .homePage .mainBanner .newCompany .companyText {
   width: 100%;
