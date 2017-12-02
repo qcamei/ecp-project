@@ -216,7 +216,7 @@ i {
 }
 
 .quick {
-    width: 106px;
+    width: 116px;
     height: 36px;
     float: right;
     margin-top: 25px;
@@ -224,7 +224,7 @@ i {
 }
 
 .quick.quickRight {
-    width: 126px;
+    width: 116px;
     position: relative;
     margin-right: 0;
 }
@@ -305,7 +305,7 @@ i {
     padding: 0;
 }
 .popover.bottom.dropdownCart>.popMask{
-    width: 126px;
+    width: 116px;
     height: 2px;
     right: 0px;
     background: #484848;
