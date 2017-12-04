@@ -902,6 +902,7 @@ i {
   position: absolute;
   top: -44px;
   right: 0;
+  background-image: url("../../images/new-company.jpg");
 }
 .homePage .mainBanner .newCompany .companyLogo {
   background-image: url("../../images/company.jpg");
@@ -915,9 +916,9 @@ i {
 }
 .homePage .mainBanner .newCompany .companyText {
   width: 100%;
-  height: calc(100% - 130px);
-  padding: 15px;
-  padding-top: 5px;
+  height: calc(100% - 200px);  
+  padding: 10px;
+  margin-top: 190px;
 }
 .homePage .mainBanner .newCompany .companyText .company-img {
   width: 100%;
@@ -927,7 +928,7 @@ i {
   height: 80px;
 }
 .homePage .mainBanner .newCompany .companyText .companyDetail {
-  height: calc(100% - 115px);
+  height: calc(100% - 0px);
   margin-top: 10px;
   overflow: hidden;
 }

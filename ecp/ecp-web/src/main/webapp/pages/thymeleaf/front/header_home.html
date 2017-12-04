@@ -14,7 +14,7 @@
     <script src="iconfont/iconfont.js"></script>
     <script src="js/js.js"></script> -->
     
-    
+
     
 </head>
 
@@ -190,15 +190,19 @@
                 </div>
             </div><!-- /.homeBanner -->
             <div class="newCompany">
-                <div class="companyLogo"></div>
+                <!-- <div class="companyLogo"></div> -->
                 <div class="companyText">
-                    <h5>合作伙伴</h5>
-                    <div class="company-img"><img th:src="@{/static/images/cooperation.jpg}"></div>
+                    <!-- <h5>合作伙伴</h5> -->
+                    <!-- <div class="company-img"><img th:src="@{/static/images/cooperation.jpg}"></div> -->
                     <div id="companyScroll" class="companyDetail">
                         <div id="scrollContent">
-                        	<div th:each="company:${userExtendsList}">
-                        		<a href="javascript:void(0);"><span th:text="${company.companyName}">新公司名称</span></a>
-                        	</div>                     
+                        	<ul class="company-list">                        	
+	                        	<li th:each="company:${userExtendsList}">
+	                        		<div>
+	                        			<a href="javascript:void(0);"><span th:text="${company.companyName}">新公司名称</span></a>
+	                        		</div>
+	                        	</li>
+                        	</ul>                     
                             
                         </div>
                     </div>
@@ -208,7 +212,7 @@
         
         <div class="homeAD1">
            <img th:src="@{/static/images/banner-order.jpg}" >
-           <div class="closeAd">X</div>
+           <!-- <div class="closeAd">X</div> -->
         </div>
       </div>
     
