@@ -106,7 +106,7 @@ a:hover { text-decoration:none; }
 									<!--缩图开始-->
 									<div class="spec-scroll"> <a class="prev">&lt;</a> <a class="next">&gt;</a>
 	 										<div class="items">
-											<ul>
+											<ul style="left:0px;padding:0px;">
 												<li th:each="pict : ${skuPicts}" th:attr="data-bind=${pict.pictureId}+':'+${pict.skuId}">
 													<img  th:src="${pict.pictureUrl}" th:attr="bimg=${pict.pictureUrl}"	onmousemove="preview(this);" />
 												</li>
