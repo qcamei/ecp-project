@@ -108,7 +108,9 @@ public class HomeController {
 		model.addAttribute("slidesShowSettingList", slidesShowSettingList);
 		
 		//(3)公司名称显示
-		List<UserExtends> userExtendsList=userAgentService.getAllUserAgent();
+		/*List<UserExtends> userExtendsList=userAgentService.getAllUserAgent();*/
+		/*暂时屏蔽公司名称显示*/
+		List<UserExtends> userExtendsList=null;
 		model.addAttribute("userExtendsList", userExtendsList);
 		
 		
