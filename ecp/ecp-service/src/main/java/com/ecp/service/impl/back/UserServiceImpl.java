@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.ecp.bean.DeletedType;
 import com.ecp.dao.UserMapper;
 import com.ecp.entity.Menu;
 import com.ecp.entity.RolePermission;
@@ -72,7 +73,7 @@ public class UserServiceImpl extends AbstractBaseService<User, Long> implements 
 	@Override
 	public List<User> getByUsername(String username) {
 		Example example=new Example(User.class);
-		example.createCriteria().andEqualTo("username", username);
+		example.createCriteria().andEqualTo("username", username).andEqualTo("deleted", DeletedType.NO);
 		List<User> list=userMapper.selectByExample(example);
 		return list;
 	}
