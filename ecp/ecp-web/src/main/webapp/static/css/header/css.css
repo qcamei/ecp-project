@@ -482,7 +482,7 @@ i {
 
 .firstClass {
     width: 210px;
-    line-height: 36px;
+    line-height: 25px;
     color: #5f5f5f;
     padding: 0 15px;
 }
@@ -496,7 +496,7 @@ i {
 }
 
 .firstClass span {
-    line-height: 36px;
+    line-height: 25px;
     padding-right: 8px;
     float: right;
 }
