@@ -41,9 +41,9 @@
 					<div class="tabs-container" id="tabs-243687">
 						<ul class="nav nav-tabs" id="top_tab">
 							<li class="active" onclick="javascript:resetFun();"><a data-toggle="tab" href="#tab-1"
-								aria-expanded="true">类目列表</a></li>
+								aria-expanded="true">类目品牌-类目列表</a></li>
 							<li class="hide" id="edit-category-brand-li"><a data-toggle="tab" href="#tab-2"
-								aria-expanded="true">编辑类目品牌</a></li>
+								aria-expanded="true">类目品牌-编辑品牌</a></li>
 						</ul>
 						<div class="tab-content">
 							<div id="tab-1" class="tab-pane active">
@@ -53,7 +53,7 @@
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h3 class="panel-title">
-														类目列表
+														类目品牌-类目列表
 													</h3>
 												</div>
 												<div class="panel-body" id="item-div">
@@ -71,7 +71,7 @@
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h3 class="panel-title">
-														类目品牌
+														类目品牌-编辑品牌
 													</h3>
 												</div>
 												<div class="panel-body">
@@ -231,7 +231,7 @@
 			 * 初始化未选择的品牌HTML字符串
 			 */
 			function innerHtmlNoAuth(brand){
-				var html = '<li id="'+brand.brandId+'"  onclick="addBrand(this,&quot;'+brand.brandId+'&quot;);"><i class="fa fa-building">'+brand.brandName+'</i></li>';
+				var html = '<li id="'+brand.brandId+'"  onclick="addBrand(this,&quot;'+brand.brandId+'&quot;);"><img src="'+brand.brandLogoUrl+'" style="height:14px;">&nbsp;&nbsp;'+brand.brandName+'</i></li>';
 				return html;
 			}
 			/*
@@ -264,7 +264,7 @@
 					+'</label>'
 					+'</section>';
 				var html='';
-				html+='<li id="'+brandMap.brand_id+'" onclick="delBrand(this,\''+brandMap.brand_id+'\');"><i class="fa fa-building">'+brandMap.brand_name+'</i></li>';
+				html+='<li id="'+brandMap.brand_id+'" onclick="delBrand(this,\''+brandMap.brand_id+'\');"><img src="'+brandMap.brand_logo_url+'" style="height:14px;">&nbsp;&nbsp;'+brandMap.brand_name+'</i></li>';
 				html+=htmlStr;
 				return html;
 			}
@@ -289,7 +289,7 @@
 					+'</label>'
 					+'</section>';
 				var html='';
-				html+='<li id="'+brandId+'" onclick="delBrand(this,\''+brandId+'\');"><i class="fa fa-building">'+$(thisObj).text()+'</i></li>';
+				html+='<li id="'+brandId+'" onclick="delBrand(this,\''+brandId+'\');">'+$(thisObj).html()+'</i></li>';
 				html+=htmlStr;
 				var html=$("#associate-yes").find("ul").append(html);
 				$(thisObj).remove();
@@ -299,7 +299,7 @@
 			 */
 			function delBrand(thisObj,brandId){
 				var html='';
-				html+='<li id="'+brandId+'"  onclick="addBrand(this,\''+brandId+'\');"><i class="fa fa-building">'+$(thisObj).text()+'</i></li>';
+				html+='<li id="'+brandId+'"  onclick="addBrand(this,\''+brandId+'\');">'+$(thisObj).html()+'</i></li>';
 				var html=$("#associate-no").find("ul").append(html);
 				$(thisObj).remove();
 				$("#selection-"+thisObj.id).remove();
